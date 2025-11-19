@@ -1,0 +1,32 @@
+<header>
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">SD</div>
+      <div>
+        <div class="brand-text-main">STL Soccer Dev Lab</div>
+        <div class="brand-text-sub">Enjoyment   Development   Winning</div>
+      </div>
+    </div>
+    <div class="nav-toggle" onclick="toggleNav()">☰</div>
+    <nav>
+      <ul id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="philosophy.html">Philosophy</a></li>
+        <li><a href="game-model.html">Game model</a></li>
+        <li><a href="training-model.html">Training model</a></li>
+        <li><a href="player-pathway.html">Player pathway</a></li>
+        <li><a href="coach-education.html">Coach education</a></li>
+        <li><a href="articles.html">Articles</a></li>
+        <li><a href="resources.html">Resources</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  function toggleNav() {
+    const menu = document.getElementById("navMenu");
+    menu.classList.toggle("show");
+  }
+</script>

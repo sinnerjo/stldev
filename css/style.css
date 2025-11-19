@@ -81,6 +81,8 @@ nav a {
   padding: 0.3rem 0.5rem;
   border-radius: 999px;
   transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 nav a:hover {

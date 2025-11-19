@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Articles and insights   STL Soccer Dev Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="site-wrapper">
+
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-mark">SD</div>
+        <div>
+          <div class="brand-text-main">STL Soccer Dev Lab</div>
+          <div class="brand-text-sub">Enjoyment   Development   Winning</div>
+        </div>
+      </div>
+      <div class="nav-toggle" onclick="toggleNav()">☰</div>
+      <nav>
+        <ul id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="philosophy.html">Philosophy</a></li>
+          <li><a href="game-model.html">Game model</a></li>
+          <li><a href="player-pathway.html">Player pathway</a></li>
+          <li><a href="coach-education.html">Coach education</a></li>
+          <li><a href="articles.html" class="active">Articles</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page">
+      <h1 class="page-title">Articles and insights</h1>
+      <p class="page-subtitle">
+        Short pieces on coaching, player development, and the game model, written with the St Louis youth game in mind.
+      </p>
+
+      <section class="section">
+        <h2 class="section-heading">Featured pieces</h2>
+        <div class="article-list">
+          <article class="article-card">
+            <div class="article-meta">Coaching insight</div>
+            <div class="article-title">Why enjoyment can not be optional at younger ages</div>
+            <p class="article-excerpt">
+              A look at how joy and fun support long term development, and why chasing wins too early can actually slow players down.
+            </p>
+          </article>
+
+          <article class="article-card">
+            <div class="article-meta">Player development</div>
+            <div class="article-title">Decision making, creativity, technical   the order matters</div>
+            <p class="article-excerpt">
+              How putting decision making first, creativity second, and technical work third creates smarter, braver players by U15.
+            </p>
+          </article>
+
+          <article class="article-card">
+            <div class="article-meta">Game model</div>
+            <div class="article-title">Using transitions as teaching moments</div>
+            <p class="article-excerpt">
+              Practical ways to turn moments of winning and losing the ball into learning chances that match the STL Soccer Dev Lab model.
+            </p>
+          </article>
+
+          <article class="article-card">
+            <div class="article-meta">Parent education</div>
+            <div class="article-title">What success looks like before high school</div>
+            <p class="article-excerpt">
+              A guide for families on how to measure progress beyond the scoreboard and why patient growth matters.
+            </p>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> STL Soccer Dev Lab</div>
+      <div>St Louis player and coach development for U15 and younger</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  function toggleNav() {
+    const menu = document.getElementById("navMenu");
+    menu.classList.toggle("show");
+  }
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

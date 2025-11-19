@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About   STL Soccer Dev Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="site-wrapper">
+
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-mark">SD</div>
+        <div>
+          <div class="brand-text-main">STL Soccer Dev Lab</div>
+          <div class="brand-text-sub">Enjoyment   Development   Winning</div>
+        </div>
+      </div>
+      <div class="nav-toggle" onclick="toggleNav()">☰</div>
+      <nav>
+        <ul id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="philosophy.html">Philosophy</a></li>
+          <li><a href="game-model.html">Game model</a></li>
+          <li><a href="player-pathway.html">Player pathway</a></li>
+          <li><a href="coach-education.html">Coach education</a></li>
+          <li><a href="articles.html">Articles</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="about.html" class="active">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page">
+      <h1 class="page-title">About STL Soccer Dev Lab</h1>
+      <p class="page-subtitle">
+        A personal project focused on helping St Louis players and coaches grow through enjoyment, creativity, and intelligent football.
+      </p>
+
+      <section class="section">
+        <h2 class="section-heading">Purpose</h2>
+        <p>
+          STL Soccer Dev Lab exists to give players, coaches, and families in St Louis a clear framework for development.
+          It is not a club or academy.
+          It is a learning space built around a consistent philosophy and game model.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">What makes this space different</h2>
+        <div class="grid-three">
+          <div class="card">
+            <div class="card-title">Fun and engaging</div>
+            <div class="card-body">
+              Training and match ideas are designed to be enjoyable and energetic.
+              Players should look forward to being on the ball and being with their team.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Long term focus</div>
+            <div class="card-body">
+              The project looks beyond this weekend to where a player can be in several years.
+              Growth is measured by decisions, habits, and love for the game.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Individual skills first</div>
+            <div class="card-body">
+              While team play matters, individual skill and understanding are the foundation.
+              The aim is to build players who can fit into many systems and styles.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">Coaching identity behind the lab</h2>
+        <p class="section-lead">
+          The project reflects a coaching personality that is positive, engaging, and attacking.
+        </p>
+        <p>
+          Training favors the ball, attacking intent, and moments that require players to make choices.
+          The coach role is to guide, challenge, and support rather than control every action on the field.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> STL Soccer Dev Lab</div>
+      <div>St Louis player and coach development for U15 and younger</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  function toggleNav() {
+    const menu = document.getElementById("navMenu");
+    menu.classList.toggle("show");
+  }
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

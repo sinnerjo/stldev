@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resources   STL Soccer Dev Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="site-wrapper">
+
+ <header>
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">SD</div>
+      <div>
+        <div class="brand-text-main">STL Soccer Dev Lab</div>
+        <div class="brand-text-sub">Enjoyment   Development   Winning</div>
+      </div>
+    </div>
+    <div class="nav-toggle" onclick="toggleNav()">☰</div>
+    <nav>
+      <ul id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="philosophy.html">Philosophy</a></li>
+        <li><a href="game-model.html">Game model</a></li>
+        <li><a href="player-pathway.html">Player pathway</a></li>
+        <li><a href="coach-education.html">Coach education</a></li>
+        <li><a href="articles.html">Articles</a></li>
+        <li><a href="resources.html" class="active">Resources</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+  <main>
+    <div class="page">
+      <h1 class="page-title">Resources</h1>
+      <p class="page-subtitle">
+        Printable tools and templates that support the philosophy and game model.
+        You can adapt these for your team or club in the St Louis area.
+      </p>
+
+      <section class="section">
+        <h2 class="section-heading">For coaches</h2>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">Session planning template</div>
+            <div class="card-body">
+              A simple layout for goals, key coaching points, activities, and reflection.
+              Keeps the session connected to the player pathway and game model.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Principles of play one page</div>
+            <div class="card-body">
+              A single sheet view of the main ideas with and without the ball, plus key transition cues.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">For players</h2>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">Player self check</div>
+            <div class="card-body">
+              A short self reflection sheet that asks about effort, decision making, creativity, and enjoyment each week.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Personal goals sheet</div>
+            <div class="card-body">
+              A simple tool for players to set one or two goals for the next few weeks and track progress.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">For families</h2>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">What to watch for on game day</div>
+            <div class="card-body">
+              A guide for parents on how to notice development behaviors such as decisions, effort, and attitude, not just the final score.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Questions for the car ride home</div>
+            <div class="card-body">
+              A list of gentle, player centered questions that help kids reflect without pressure after games.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <p>
+          As the project grows, this page can host downloadable PDFs, diagrams, and links to videos or presentations.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> STL Soccer Dev Lab</div>
+      <div>St Louis player and coach development for U15 and younger</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  function toggleNav() {
+    const menu = document.getElementById("navMenu");
+    menu.classList.toggle("show");
+  }
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Coach education   STL Soccer Dev Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="site-wrapper">
+
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-mark">SD</div>
+        <div>
+          <div class="brand-text-main">STL Soccer Dev Lab</div>
+          <div class="brand-text-sub">Enjoyment   Development   Winning</div>
+        </div>
+      </div>
+      <div class="nav-toggle" onclick="toggleNav()">☰</div>
+      <nav>
+        <ul id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="philosophy.html">Philosophy</a></li>
+          <li><a href="game-model.html">Game model</a></li>
+          <li><a href="player-pathway.html">Player pathway</a></li>
+          <li><a href="coach-education.html" class="active">Coach education</a></li>
+          <li><a href="articles.html">Articles</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page">
+      <h1 class="page-title">Coach education</h1>
+      <p class="page-subtitle">
+        Practical help for St Louis coaches who want fun, engaging, long term focused environments built on clear principles.
+      </p>
+
+      <section class="section">
+        <h2 class="section-heading">Training session design</h2>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">Principles for session planning</div>
+            <ul class="list">
+              <li>Every activity should connect to the game model or player pathway</li>
+              <li>Players should make decisions, not just repeat patterns</li>
+              <li>Most of the work should involve the ball and real game pictures</li>
+              <li>Challenge can rise as players understand the idea</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Simple session outline</div>
+            <ul class="list">
+              <li>Arrival activity   light touches and fun</li>
+              <li>Rondo or small sided game linked to the main theme</li>
+              <li>Main game   bigger space or numbers with real decisions</li>
+              <li>Short reflection   what did we notice and learn</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">Principles of play</h2>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">With the ball</div>
+            <ul class="list">
+              <li>Play forward when it is on and supported</li>
+              <li>Use width and depth to create options</li>
+              <li>Protect the ball and keep it with purpose when space is not available</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Without the ball</div>
+            <ul class="list">
+              <li>Stay compact and connected</li>
+              <li>Always have someone pressing the ball</li>
+              <li>Cover and balance behind the first defender</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">Coaching behaviors</h2>
+        <p class="section-lead">
+          How we speak and behave as coaches shapes the environment more than any formation.
+        </p>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">On the field</div>
+            <ul class="list">
+              <li>Use clear and simple language that players understand</li>
+              <li>Ask questions instead of giving all the answers</li>
+              <li>Coach the player, not only the result</li>
+              <li>Stay positive and calm when mistakes happen</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Around the team</div>
+            <ul class="list">
+              <li>Share clear expectations with players and families</li>
+              <li>Focus on effort, attitude, and growth in feedback</li>
+              <li>Model respect for referees, opponents, and teammates</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">Practice libraries</h2>
+        <p class="section-lead">
+          A few example themes that link directly to the philosophy and game model.
+        </p>
+        <div class="grid-three">
+          <div class="card">
+            <div class="card-title">Rondos and possession games</div>
+            <div class="card-body">
+              Small numbers around a central space.
+              These activities build first touch, decision making, and awareness of support angles.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Finishing from transitions</div>
+            <div class="card-body">
+              Games that start from recovery of the ball and move quickly to goal.
+              Players learn to attack at speed with support and pressure from behind.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Positional games</div>
+            <div class="card-body">
+              Set ups that mirror the shapes used in matches, such as 3 v 2 or 4 v 3 in channels.
+              Helps players link decisions to their future roles.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> STL Soccer Dev Lab</div>
+      <div>St Louis player and coach development for U15 and younger</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  function toggleNav() {
+    const menu = document.getElementById("navMenu");
+    menu.classList.toggle("show");
+  }
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

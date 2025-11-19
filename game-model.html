@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Game model   STL Soccer Dev Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="site-wrapper">
+
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-mark">SD</div>
+        <div>
+          <div class="brand-text-main">STL Soccer Dev Lab</div>
+          <div class="brand-text-sub">Enjoyment   Development   Winning</div>
+        </div>
+      </div>
+      <div class="nav-toggle" onclick="toggleNav()">☰</div>
+      <nav>
+        <ul id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="philosophy.html">Philosophy</a></li>
+          <li><a href="game-model.html" class="active">Game model</a></li>
+          <li><a href="player-pathway.html">Player pathway</a></li>
+          <li><a href="coach-education.html">Coach education</a></li>
+          <li><a href="articles.html">Articles</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page">
+      <h1 class="page-title">Game model</h1>
+      <p class="page-subtitle">
+        A clear way of playing that matches the philosophy.
+        The model favors purposeful possession, strong transitions, and compact defending with steady pressure on the ball.
+      </p>
+
+      <section class="section">
+        <h2 class="section-heading">Formations by format</h2>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Game format</th>
+            <th>Preferred shape</th>
+            <th>Notes</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>7v7</td>
+            <td>2   3   1</td>
+            <td>Two central defenders, three across the middle, one central forward</td>
+          </tr>
+          <tr>
+            <td>9v9</td>
+            <td>3   4   1</td>
+            <td>Back three, flexible midfield four, one central striker</td>
+          </tr>
+          <tr>
+            <td>11v11</td>
+            <td>4   3   3</td>
+            <td>Back four, three in midfield, three forwards with wide threats</td>
+          </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">In possession</h2>
+        <p class="section-lead">
+          The ball is used on purpose.
+          Possession is not just keeping it, it is keeping it to create chances.
+        </p>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">Principles in possession</div>
+            <ul class="list">
+              <li>Play forward when it makes sense and has support</li>
+              <li>Use the first pass after winning the ball to attack quickly when possible</li>
+              <li>Keep the ball with intent rather than passing without a plan</li>
+              <li>Support the ball with smart angles and distances</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Transitions into attack</div>
+            <div class="card-body">
+              When the team wins the ball, the first thought is to move forward and attack with support.
+              Players look to break lines, combine, and reach the goal with purpose, while teammates give options around the ball.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">Out of possession</h2>
+        <p class="section-lead">
+          The team stays compact and always applies pressure on the ball.
+        </p>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">Defensive shape</div>
+            <div class="card-body">
+              The team defends in a compact block that protects central spaces.
+              Lines move together and the gap between defenders and midfielders stays small.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Pressure on the ball</div>
+            <div class="card-body">
+              There is always at least one player pressing the ball carrier.
+              Teammates provide cover and balance, ready to step in if the first defender is beaten or if the ball is passed.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">Transitions</h2>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">Attack transition</div>
+            <div class="card-body">
+              On winning the ball, the priority is to move forward with support.
+              Players recognize space behind or between opponents and look to use it quickly, while keeping enough help near the ball
+              to keep the attack alive if the first option closes.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Defense transition</div>
+            <div class="card-body">
+              When possession is lost, the team gets compact and applies pressure on the new ball carrier immediately.
+              This slows the opponent, gives time to recover shape, and can create chances to win the ball back in good areas.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">Link to training</h2>
+        <p>
+          The game model does not sit on a whiteboard.
+          It guides how sessions are built, which scenarios are used in practice, and the language coaches use with players.
+          Activities mirror the decisions and pictures players will see on match day.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> STL Soccer Dev Lab</div>
+      <div>St Louis player and coach development for U15 and younger</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  function toggleNav() {
+    const menu = document.getElementById("navMenu");
+    menu.classList.toggle("show");
+  }
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

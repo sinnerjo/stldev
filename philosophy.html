@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Coaching philosophy   STL Soccer Dev Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="site-wrapper">
+
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-mark">SD</div>
+        <div>
+          <div class="brand-text-main">STL Soccer Dev Lab</div>
+          <div class="brand-text-sub">Enjoyment   Development   Winning</div>
+        </div>
+      </div>
+      <div class="nav-toggle" onclick="toggleNav()">☰</div>
+      <nav>
+        <ul id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="philosophy.html" class="active">Philosophy</a></li>
+          <li><a href="game-model.html">Game model</a></li>
+          <li><a href="player-pathway.html">Player pathway</a></li>
+          <li><a href="coach-education.html">Coach education</a></li>
+          <li><a href="articles.html">Articles</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page">
+      <h1 class="page-title">Coaching philosophy</h1>
+      <p class="page-subtitle">
+        The work starts with enjoyment, grows through development, and lets winning take care of itself.
+        The goal is creative and intelligent players who love the game and want to keep improving.
+      </p>
+
+      <section class="section">
+        <h2 class="section-heading">Core belief</h2>
+        <p>
+          The guiding order of priorities is simple  
+          enjoyment is greater than development, and development is greater than winning.
+        </p>
+        <p style="margin-top:0.75rem;">
+          Players who enjoy coming to the field stay longer, work harder, and become more creative.
+          When the environment is positive and supportive, development speeds up and results follow as a natural outcome.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">What we value in players</h2>
+        <p class="section-lead">
+          Three qualities sit at the center of the approach, in a clear order.
+        </p>
+        <div class="grid-three">
+          <div class="card">
+            <div class="card-title">Decision making</div>
+            <div class="card-tagline">Brains before boots</div>
+            <div class="card-body">
+              Players learn how to see the picture, choose from options, and solve problems.
+              The game constantly asks questions.
+              Good training lets players practice answering those questions on their own.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Creativity</div>
+            <div class="card-tagline">Freedom to try things</div>
+            <div class="card-body">
+              Creativity shows up in dribbling, passing, movement, and solutions in tight spaces.
+              Players are encouraged to be brave, try new ideas, and trust that risk taking is welcome.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Technical quality</div>
+            <div class="card-tagline">Tools for the ideas</div>
+            <div class="card-body">
+              Technique supports decisions and creativity.
+              Passing, receiving, striking the ball, and first touch are trained so that the player can carry out the ideas they see.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">How we treat mistakes</h2>
+        <p>
+          Mistakes are part of long term learning.
+          A poor choice is not a real mistake until it is repeated without any change or reflection.
+        </p>
+        <p style="margin-top:0.75rem;">
+          Players are allowed to fail today in order to grow tomorrow.
+          The focus is on what the player saw, what they tried to do, and what they might try next time.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">What success looks like at U15 and younger</h2>
+        <p class="section-lead">
+          Success does not start with trophies or league tables.
+        </p>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">Internal love for the game</div>
+            <div class="card-body">
+              The main target is a player who chooses to keep playing, practicing, and watching the game because they enjoy it.
+              When players own their love for soccer, they push themselves further.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Ready for the next step</div>
+            <div class="card-body">
+              By the end of U15, players should be in a position to step into high school soccer and beyond with confidence,
+              understanding their strengths and what they want to improve next.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-heading">What this means for training and matches</h2>
+        <p class="section-lead">
+          The philosophy shows up in the way sessions are planned, how coaches speak, and how teams are asked to play.
+        </p>
+        <div class="grid-two">
+          <div class="card">
+            <div class="card-title">Training environment</div>
+            <ul class="list">
+              <li>Sessions are fun, engaging, and challenging</li>
+              <li>Activities ask players to make decisions instead of repeating patterns without thought</li>
+              <li>Individual growth is prioritized over team trophies at younger ages</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Match environment</div>
+            <ul class="list">
+              <li>Coaching from the sideline supports learning instead of controlling every action</li>
+              <li>Players are encouraged to try things in real game moments</li>
+              <li>Post game reflection focuses on decisions, effort, and growth, not only the score</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> STL Soccer Dev Lab</div>
+      <div>St Louis player and coach development for U15 and younger</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  function toggleNav() {
+    const menu = document.getElementById("navMenu");
+    menu.classList.toggle("show");
+  }
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

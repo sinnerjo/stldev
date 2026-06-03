@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)file:///C:/Users/josep/Downloads/index_7.html -->
+<!-- saved from url=(0045)file:///C:/Users/josep/Downloads/index_9.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -74,7 +74,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .game-wrap{display:flex;gap:0;align-items:flex-start;position:relative}
 
 /* FIELD */
-.field-wrap{flex:1;min-width:0;background:var(--gf);overflow:hidden;border-right:1px solid var(--br);position:relative;user-select:none;touch-action:pan-y}
+.field-wrap{flex:1;min-width:0;background:var(--gf);overflow:hidden;border-right:1px solid var(--br);position:relative;user-select:none}
 .field-svg{display:block;width:100%;touch-action:pan-y}
 .field-svg.dragging{touch-action:none}
 
@@ -85,9 +85,15 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .panel-toggle:active{color:var(--ac)}
 
 @media(max-width:640px){
-  .game-wrap{flex-direction:column}
-  .field-wrap{width:100%;border-right:none;border-bottom:1px solid var(--br)}
-  .bench-col{width:100%;border-left:none;padding:.65rem .75rem;flex-direction:row;flex-wrap:wrap;gap:.6rem}
+  /* Lock the game view to the screen height — no page scroll needed */
+  #view-game{height:calc(100dvh - 96px);display:flex;flex-direction:column;overflow:hidden}
+  #view-game .game-top{flex-shrink:0}
+  .game-wrap{flex:1;flex-direction:column;overflow:hidden;min-height:0}
+  /* Field takes up available space but no more */
+  .field-wrap{flex:1;min-height:0;overflow:hidden;width:100%;border-right:none;border-bottom:1px solid var(--br)}
+  .field-svg{width:100%;height:100%;object-fit:contain}
+  /* Bench scrolls internally */
+  .bench-col{flex-shrink:0;width:100%;max-height:42vh;border-left:none;padding:.5rem .75rem;flex-direction:row;flex-wrap:wrap;gap:.5rem;overflow-y:auto}
   .bench-col > .pbox{flex:1;min-width:140px}
   .bench-col > .pending-box{flex:0 0 100%}
   .panel-toggle{display:none}

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)file:///C:/Users/josep/Downloads/index_9.html -->
+<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_11.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Soccer Tracker</title>
+<title>Soccer Tracker1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link href="./index_files/css2" rel="stylesheet">
 <style>
@@ -85,17 +85,49 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .panel-toggle:active{color:var(--ac)}
 
 @media(max-width:640px){
-  /* Lock the game view to the screen height — no page scroll needed */
-  #view-game{height:calc(100dvh - 96px);display:flex;flex-direction:column;overflow:hidden}
-  #view-game .game-top{flex-shrink:0}
-  .game-wrap{flex:1;flex-direction:column;overflow:hidden;min-height:0}
-  /* Field takes up available space but no more */
-  .field-wrap{flex:1;min-height:0;overflow:hidden;width:100%;border-right:none;border-bottom:1px solid var(--br)}
-  .field-svg{width:100%;height:100%;object-fit:contain}
-  /* Bench scrolls internally */
-  .bench-col{flex-shrink:0;width:100%;max-height:42vh;border-left:none;padding:.5rem .75rem;flex-direction:row;flex-wrap:wrap;gap:.5rem;overflow-y:auto}
-  .bench-col > .pbox{flex:1;min-width:140px}
-  .bench-col > .pending-box{flex:0 0 100%}
+  /* Entire game view fits on screen — no scrolling needed */
+  #view-game{
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    padding-top:calc(96px + env(safe-area-inset-top,0px));
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    z-index:1;
+  }
+  #view-game .game-top{flex-shrink:0;padding:.4rem .75rem .2rem}
+  .game-wrap{flex:1;min-height:0;flex-direction:row;overflow:hidden}
+  /* Field on left, bench on right — landscape style */
+  .field-wrap{
+    flex:1;min-width:0;min-height:0;
+    border-right:1px solid var(--br);
+    border-bottom:none;
+    overflow:hidden;
+  }
+  .field-svg{
+    /* Rotate the portrait SVG to fill landscape space */
+    width:auto;
+    height:100%;
+    max-height:100%;
+    display:block;
+    margin:0 auto;
+  }
+  /* Bench on right side, scrolls vertically */
+  .bench-col{
+    width:160px;
+    flex-shrink:0;
+    border-left:1px solid var(--br);
+    padding:.4rem .4rem .4rem .4rem;
+    flex-direction:column;
+    flex-wrap:nowrap;
+    overflow-y:auto;
+    max-height:100%;
+  }
+  .bench-col > .pbox{flex:none;min-width:unset;width:100%}
+  .bench-col > .pending-box{flex:none;width:100%}
+  .bench-chips{max-height:120px}
+  .onfield-list{max-height:120px}
   .panel-toggle{display:none}
   .bench-col.hidden-panel{display:flex}
 }
@@ -1111,6 +1143,19 @@ function esc(s){
 
 renderRoster();
 renderGame();
+
+// Set accurate top offset for fixed game view on mobile
+function setGameViewOffset(){
+  if(window.innerWidth<=640){
+    const h=document.querySelector('header').offsetHeight;
+    const n=document.querySelector('nav').offsetHeight;
+    document.getElementById('view-game').style.paddingTop=(h+n)+'px';
+  } else {
+    document.getElementById('view-game').style.paddingTop='';
+  }
+}
+setGameViewOffset();
+window.addEventListener('resize',setGameViewOffset);
 </script>
 
 

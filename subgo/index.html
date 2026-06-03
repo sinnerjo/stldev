@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_11.html -->
+<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_12.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Soccer Tracker111</title>
+<title>Soccer Tracker</title>
+<link rel="manifest" href="file:///C:/Users/josep/Downloads/manifest.json">
+<meta name="theme-color" content="#0a2a0f">
+<link rel="apple-touch-icon" href="file:///C:/Users/josep/Downloads/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link href="./index_files/css2" rel="stylesheet">
 <style>
@@ -18,7 +21,7 @@
   --pending:#f0a030;--pending-dim:#7a5010;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--wh);min-height:100%;font-size:15px}
+html,body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--wh);min-height:100%;font-size:15px;overscroll-behavior:none}
 
 /* HEADER */
 header{background:var(--gd);border-bottom:2px solid var(--ac);padding:.6rem 1rem;padding-top:calc(.6rem + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:.6rem;position:sticky;top:0;z-index:200}
@@ -85,49 +88,11 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .panel-toggle:active{color:var(--ac)}
 
 @media(max-width:640px){
-  /* Entire game view fits on screen — no scrolling needed */
-  #view-game{
-    position:fixed;
-    top:0;left:0;right:0;bottom:0;
-    padding-top:calc(96px + env(safe-area-inset-top,0px));
-    padding-bottom:env(safe-area-inset-bottom,0px);
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-    z-index:1;
-  }
-  #view-game .game-top{flex-shrink:0;padding:.4rem .75rem .2rem}
-  .game-wrap{flex:1;min-height:0;flex-direction:row;overflow:hidden}
-  /* Field on left, bench on right — landscape style */
-  .field-wrap{
-    flex:1;min-width:0;min-height:0;
-    border-right:1px solid var(--br);
-    border-bottom:none;
-    overflow:hidden;
-  }
-  .field-svg{
-    /* Rotate the portrait SVG to fill landscape space */
-    width:auto;
-    height:100%;
-    max-height:100%;
-    display:block;
-    margin:0 auto;
-  }
-  /* Bench on right side, scrolls vertically */
-  .bench-col{
-    width:160px;
-    flex-shrink:0;
-    border-left:1px solid var(--br);
-    padding:.4rem .4rem .4rem .4rem;
-    flex-direction:column;
-    flex-wrap:nowrap;
-    overflow-y:auto;
-    max-height:100%;
-  }
-  .bench-col > .pbox{flex:none;min-width:unset;width:100%}
-  .bench-col > .pending-box{flex:none;width:100%}
-  .bench-chips{max-height:120px}
-  .onfield-list{max-height:120px}
+  .game-wrap{flex-direction:column}
+  .field-wrap{width:100%;border-right:none;border-bottom:1px solid var(--br)}
+  .bench-col{width:100%;border-left:none;padding:.65rem .75rem;flex-direction:row;flex-wrap:wrap;gap:.6rem}
+  .bench-col > .pbox{flex:1;min-width:140px}
+  .bench-col > .pending-box{flex:0 0 100%}
   .panel-toggle{display:none}
   .bench-col.hidden-panel{display:flex}
 }
@@ -135,7 +100,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .pbox{background:var(--cb);border:1px solid var(--br);border-radius:8px;padding:.65rem}
 .pbox h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gr);margin-bottom:.5rem}
 
-/* ── PENDING SUBS BOX ── */
+/* PENDING SUBS BOX */
 .pending-box{background:#1a1200;border:1px solid var(--pending-dim);border-radius:8px;padding:.65rem;display:none}
 .pending-box.has-pending{display:block}
 .pending-box h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--pending);margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
@@ -150,7 +115,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .pending-row .pr-cancel:active{color:var(--rd)}
 .pending-actions{display:flex;gap:.4rem}
 
-/* ── SUB SHOUTOUT OVERLAY ── */
+/* SUB SHOUTOUT OVERLAY */
 .shoutout-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(5,15,7,.92);align-items:center;justify-content:center;padding:1.5rem}
 .shoutout-overlay.active{display:flex}
 .shoutout-card{background:#0d1f10;border:2px solid var(--ac);border-radius:14px;padding:1.5rem;max-width:480px;width:100%;max-height:90vh;overflow-y:auto}
@@ -158,13 +123,13 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .shoutout-section{margin-bottom:1.1rem}
 .shoutout-section h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid var(--br)}
 .shoutout-section.off h3{color:var(--rd)}
-.shoutout-section.on  h3{color:#6eee80}
+.shoutout-section.on h3{color:#6eee80}
 .shoutout-player{display:flex;align-items:center;gap:.75rem;padding:.55rem .6rem;border-radius:6px;margin-bottom:.35rem}
 .shoutout-player.off-row{background:rgba(232,74,74,.1);border:1px solid rgba(232,74,74,.25)}
-.shoutout-player.on-row {background:rgba(110,238,128,.08);border:1px solid rgba(110,238,128,.2)}
+.shoutout-player.on-row{background:rgba(110,238,128,.08);border:1px solid rgba(110,238,128,.2)}
 .shoutout-player .sp-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.6rem;min-width:36px;text-align:center}
 .shoutout-player.off-row .sp-num{color:var(--rd)}
-.shoutout-player.on-row  .sp-num{color:#6eee80}
+.shoutout-player.on-row .sp-num{color:#6eee80}
 .shoutout-player .sp-name{font-weight:600;font-size:1.05rem;flex:1}
 .shoutout-player .sp-pos{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--gr);background:var(--gm);padding:2px 7px;border-radius:3px}
 .shoutout-close{display:flex;gap:.5rem;margin-top:1.25rem}
@@ -174,7 +139,6 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .bchip{display:flex;align-items:center;gap:.45rem;padding:.5rem .6rem;border-radius:6px;cursor:grab;border:1px solid var(--br);background:var(--gm);min-height:44px;transition:opacity .15s,border-color .15s;touch-action:pan-y;user-select:none}
 .bchip.dragging{touch-action:none}
 .bchip:active{cursor:grabbing}
-.bchip.dragging{opacity:.35}
 .bchip.was-on{border-color:#1a4a22}
 .bchip.pending-in{border-color:var(--pending);background:#221800}
 .bchip .cn{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--ac);min-width:20px}
@@ -208,7 +172,6 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .mbar-f{height:100%;background:var(--ac);border-radius:3px}
 .empty{color:var(--grd);font-size:.9rem;text-align:center;padding:2rem 1rem}
 
-/* SVG pending ring animation */
 @keyframes pulse-ring{0%{opacity:.9}50%{opacity:.4}100%{opacity:.9}}
 .pending-ring{animation:pulse-ring 1.4s ease-in-out infinite}
 
@@ -302,11 +265,10 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <input type="text" id="gameOpponent" placeholder="Opponent name">
       <button class="btn btn-ac" onclick="newGame()">New Game</button>
     </div>
-    <div class="game-lbl" id="gameLabel">No active game1 — create one above</div>
+    <div class="game-lbl" id="gameLabel">No active game — create one above</div>
   </div>
 
   <div class="game-wrap" id="gameWrap">
-    <!-- Field -->
     <div class="field-wrap" id="fieldWrap">
       <svg class="field-svg" id="fieldSvg" viewBox="0 0 340 520" xmlns="http://www.w3.org/2000/svg">
         <rect width="340" height="520" fill="#2d7a3a"></rect>
@@ -333,59 +295,46 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
         <path d="M318 10 A12 12 0 0 1 330 22" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
         <path d="M10 498 A12 12 0 0 0 22 510" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
         <path d="M318 510 A12 12 0 0 0 330 498" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
-        <g id="slotLayer">
-      <g data-slot="0" style="cursor:default" onclick="">
-        <circle cx="170" cy="468" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="170" y="473" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">GK</text>
-      </g>
-      <g data-slot="1" style="cursor:default" onclick="">
-        <circle cx="62" cy="400" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="62" y="405" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">LB</text>
-      </g>
-      <g data-slot="2" style="cursor:default" onclick="">
-        <circle cx="122" cy="395" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="122" y="400" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CB</text>
-      </g>
-      <g data-slot="3" style="cursor:default" onclick="">
-        <circle cx="218" cy="395" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="218" y="400" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CB</text>
-      </g>
-      <g data-slot="4" style="cursor:default" onclick="">
-        <circle cx="278" cy="400" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="278" y="405" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">RB</text>
-      </g>
-      <g data-slot="5" style="cursor:default" onclick="">
-        <circle cx="170" cy="330" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="170" y="335" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CDM</text>
-      </g>
-      <g data-slot="6" style="cursor:default" onclick="">
-        <circle cx="110" cy="272" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="110" y="277" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CM</text>
-      </g>
-      <g data-slot="7" style="cursor:default" onclick="">
-        <circle cx="230" cy="272" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="230" y="277" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CM</text>
-      </g>
-      <g data-slot="8" style="cursor:default" onclick="">
-        <circle cx="170" cy="210" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="170" y="215" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CAM</text>
-      </g>
-      <g data-slot="9" style="cursor:default" onclick="">
-        <circle cx="72" cy="148" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="72" y="153" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">LW</text>
-      </g>
-      <g data-slot="10" style="cursor:default" onclick="">
-        <circle cx="268" cy="148" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="268" y="153" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">RW</text>
-      </g>
-      <g data-slot="11" style="cursor:default" onclick="">
-        <circle cx="125" cy="88" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="125" y="93" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">ST</text>
-      </g>
-      <g data-slot="12" style="cursor:default" onclick="">
-        <circle cx="215" cy="88" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-        <text x="215" y="93" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">ST</text>
-      </g></g>
+        <g id="slotLayer"><g data-slot="0" style="cursor:default" onclick="">
+      <circle cx="170" cy="468" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="170" y="473" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">GK</text>
+    </g><g data-slot="1" style="cursor:default" onclick="">
+      <circle cx="62" cy="400" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="62" y="405" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">LB</text>
+    </g><g data-slot="2" style="cursor:default" onclick="">
+      <circle cx="122" cy="395" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="122" y="400" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CB</text>
+    </g><g data-slot="3" style="cursor:default" onclick="">
+      <circle cx="218" cy="395" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="218" y="400" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CB</text>
+    </g><g data-slot="4" style="cursor:default" onclick="">
+      <circle cx="278" cy="400" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="278" y="405" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">RB</text>
+    </g><g data-slot="5" style="cursor:default" onclick="">
+      <circle cx="170" cy="330" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="170" y="335" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CDM</text>
+    </g><g data-slot="6" style="cursor:default" onclick="">
+      <circle cx="110" cy="272" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="110" y="277" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CM</text>
+    </g><g data-slot="7" style="cursor:default" onclick="">
+      <circle cx="230" cy="272" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="230" y="277" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CM</text>
+    </g><g data-slot="8" style="cursor:default" onclick="">
+      <circle cx="170" cy="210" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="170" y="215" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CAM</text>
+    </g><g data-slot="9" style="cursor:default" onclick="">
+      <circle cx="72" cy="148" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="72" y="153" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">LW</text>
+    </g><g data-slot="10" style="cursor:default" onclick="">
+      <circle cx="268" cy="148" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="268" y="153" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">RW</text>
+    </g><g data-slot="11" style="cursor:default" onclick="">
+      <circle cx="125" cy="88" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="125" y="93" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">ST</text>
+    </g><g data-slot="12" style="cursor:default" onclick="">
+      <circle cx="215" cy="88" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+      <text x="215" y="93" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">ST</text>
+    </g></g>
         <g id="playerLayer"></g>
         <g id="pendingLayer"></g>
         <g id="dragGhost" style="display:none;pointer-events:none">
@@ -398,10 +347,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 
     <button class="panel-toggle" id="panelToggle" onclick="togglePanel()" title="Hide/show bench">◀</button>
 
-    <!-- Bench panel -->
     <div class="bench-col" id="benchCol">
-
-      <!-- Pending subs -->
       <div class="pbox pending-box" id="pendingBox">
         <h3>Pending Subs <span class="pending-badge" id="pendingBadge">0</span></h3>
         <div class="pending-list" id="pendingList"></div>
@@ -410,14 +356,10 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
           <button class="btn btn-ac btn-sm" style="flex:1" onclick="confirmAllSubs()">✓ Confirm</button>
         </div>
       </div>
-
-      <!-- On field -->
       <div class="pbox">
         <h3>On Field <span id="onCount" style="color:var(--ac)">0</span></h3>
         <div class="onfield-list" id="onFieldList"><p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Drag bench players onto field positions</p></div>
       </div>
-
-      <!-- Bench -->
       <div class="pbox">
         <h3>Bench <span id="offCount" style="color:var(--gr)">9</span></h3>
         <div class="bench-chips" id="benchChips"><div class="bchip" draggable="true" data-id="1780432442512" onmousedown="startDragMouse(event,1780432442512)" ontouchstart="startDragTouch(event,1780432442512)">
@@ -458,7 +400,6 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
         <span style="font-size:.7rem;color:var(--ac)">⠿</span>
       </div></div>
       </div>
-
     </div>
   </div>
 </div>
@@ -489,14 +430,11 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 </div>
 
 <script>
-// ── STATE ──────────────────────────────────────────────────
 let roster = JSON.parse(localStorage.getItem('sc_roster')||'[]');
 let games  = JSON.parse(localStorage.getItem('sc_games') ||'[]');
 let currentGame = null;
 let timerSec = 0, timerRunning = false, timerInterval = null;
 let panelVisible = true;
-
-// pendingSubs: array of { slotIdx, outRosterId, inRosterId }
 let pendingSubs = [];
 
 const SLOTS = [
@@ -516,7 +454,6 @@ const SLOTS = [
 ];
 
 function slotLabel(pos){ return pos.replace(/\d+$/,''); }
-
 let fieldSlots = new Array(SLOTS.length).fill(null);
 
 const POS_COLORS = {
@@ -534,20 +471,14 @@ function saveData(){
   localStorage.setItem('sc_games',  JSON.stringify(games));
 }
 
-// ── TIMER ──────────────────────────────────────────────────
 function toggleTimer(){
-  timerRunning = !timerRunning;
-  const btn=document.getElementById('timerBtn'), clk=document.getElementById('clock');
-  if(timerRunning){
-    btn.textContent='Pause'; clk.classList.add('run');
-    timerInterval=setInterval(()=>{timerSec++;updateClock();},1000);
-  } else {
-    btn.textContent='Resume'; clk.classList.remove('run');
-    clearInterval(timerInterval);
-  }
+  timerRunning=!timerRunning;
+  const btn=document.getElementById('timerBtn'),clk=document.getElementById('clock');
+  if(timerRunning){btn.textContent='Pause';clk.classList.add('run');timerInterval=setInterval(()=>{timerSec++;updateClock();},1000);}
+  else{btn.textContent='Resume';clk.classList.remove('run');clearInterval(timerInterval);}
 }
 function resetTimer(){
-  clearInterval(timerInterval); timerRunning=false; timerSec=0;
+  clearInterval(timerInterval);timerRunning=false;timerSec=0;
   document.getElementById('timerBtn').textContent='Start';
   document.getElementById('clock').classList.remove('run');
   updateClock();
@@ -556,26 +487,23 @@ function updateClock(){
   const m=Math.floor(timerSec/60),s=timerSec%60;
   document.getElementById('clock').textContent=`${m}:${s.toString().padStart(2,'0')}`;
 }
-function getMinute(){ return Math.floor(timerSec/60); }
+function getMinute(){return Math.floor(timerSec/60);}
 
-// ── NAV ────────────────────────────────────────────────────
 function showView(name,btn){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
-  if(btn) btn.classList.add('active');
-  if(name==='summary') renderSummary();
-  if(name==='game')    renderGame();
+  if(btn)btn.classList.add('active');
+  if(name==='summary')renderSummary();
+  if(name==='game')renderGame();
 }
 
-// ── PANEL TOGGLE ───────────────────────────────────────────
 function togglePanel(){
   panelVisible=!panelVisible;
   document.getElementById('benchCol').classList.toggle('hidden-panel',!panelVisible);
   document.getElementById('panelToggle').textContent=panelVisible?'▶':'◀';
 }
 
-// ── ROSTER ─────────────────────────────────────────────────
 function addPlayer(){
   const num=document.getElementById('addNum').value.trim();
   const name=document.getElementById('addName').value.trim();
@@ -607,7 +535,6 @@ function renderRoster(){
     </div>`).join('');
 }
 
-// ── GAME ───────────────────────────────────────────────────
 function newGame(){
   const opp=document.getElementById('gameOpponent').value.trim()||'Opponent';
   const dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -638,101 +565,69 @@ function recordOff(slotIdx){
   if(!rosterId)return;
   const minute=getMinute();
   const stats=currentGame.playerStats[rosterId];
-  if(stats&&stats.length){
-    const last=stats[stats.length-1];
-    if(last.offMin===null)last.offMin=minute;
-  }
+  if(stats&&stats.length){const last=stats[stats.length-1];if(last.offMin===null)last.offMin=minute;}
   currentGame.events.push({type:'off',playerId:rosterId,minute});
 }
 
-// Called when a bench player is dropped onto a slot
 function assignSlot(rosterId,slotIdx){
   if(!currentGame){alert('Start a new game first.');return;}
-
   const outRosterId=fieldSlots[slotIdx];
-
-  // If slot is empty: place directly (no pending needed)
   if(outRosterId===null){
-    // Also remove from any other slot if already placed
     const existing=fieldSlots.indexOf(rosterId);
-    if(existing!==-1){
-      recordOff(existing);
-      fieldSlots[existing]=null;
-    }
+    if(existing!==-1){recordOff(existing);fieldSlots[existing]=null;}
     fieldSlots[slotIdx]=rosterId;
     recordOn(rosterId,slotIdx);
-    saveData();
-    renderGame();
+    saveData();renderGame();
     return;
   }
-
-  // Slot is occupied — queue as pending sub
-  // Cancel any existing pending for this slot first
   pendingSubs=pendingSubs.filter(p=>p.slotIdx!==slotIdx);
-  // Also cancel any pending that already lists this inRosterId
   pendingSubs=pendingSubs.filter(p=>p.inRosterId!==rosterId);
-
-  pendingSubs.push({slotIdx, outRosterId, inRosterId:rosterId});
+  pendingSubs.push({slotIdx,outRosterId,inRosterId:rosterId});
   renderGame();
 }
 
-// Cancel one pending sub
 function cancelPending(slotIdx){
   pendingSubs=pendingSubs.filter(p=>p.slotIdx!==slotIdx);
   renderGame();
 }
 
-// Execute all pending subs
 function confirmAllSubs(){
   if(!pendingSubs.length)return;
   for(const ps of pendingSubs){
-    // Remove in-player from any other slot they might be on
     const existing=fieldSlots.indexOf(ps.inRosterId);
-    if(existing!==-1&&existing!==ps.slotIdx){
-      recordOff(existing);
-      fieldSlots[existing]=null;
-    }
+    if(existing!==-1&&existing!==ps.slotIdx){recordOff(existing);fieldSlots[existing]=null;}
     recordOff(ps.slotIdx);
     fieldSlots[ps.slotIdx]=ps.inRosterId;
     recordOn(ps.inRosterId,ps.slotIdx);
   }
   pendingSubs=[];
-  saveData();
-  renderGame();
+  saveData();renderGame();
 }
 
 function renderGame(){
   renderField();
   renderBenchPanel();
   renderPendingBox();
-  if(currentGame)
-    document.getElementById('gameLabel').textContent=`vs. ${currentGame.opponent} — ${currentGame.date}`;
+  if(currentGame)document.getElementById('gameLabel').textContent=`vs. ${currentGame.opponent} — ${currentGame.date}`;
 }
 
-// ── FIELD SVG RENDER ───────────────────────────────────────
 function renderField(){
-  const slotLayer  =document.getElementById('slotLayer');
+  const slotLayer=document.getElementById('slotLayer');
   const playerLayer=document.getElementById('playerLayer');
   const pendingLayer=document.getElementById('pendingLayer');
   if(!slotLayer)return;
-
   const pendingOutSlots=new Set(pendingSubs.map(p=>p.slotIdx));
-
-  // Empty slots
   slotLayer.innerHTML=SLOTS.map((s,i)=>{
     const occupied=fieldSlots[i]!==null;
     const label=slotLabel(s.pos);
     const fill=occupied?'none':'rgba(255,255,255,0.08)';
     const stroke=occupied?'none':'rgba(255,255,255,0.35)';
     const dash=occupied?'':'stroke-dasharray="4 3"';
-    return `
-      <g data-slot="${i}" style="cursor:${occupied?'pointer':'default'}" onclick="${occupied?'removeFromSlot('+i+')':''}">
-        <circle cx="${s.x}" cy="${s.y}" r="24" fill="${fill}" stroke="${stroke}" stroke-width="1.5" ${dash}/>
-        ${!occupied?`<text x="${s.x}" y="${s.y+5}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">${label}</text>`:''}
-      </g>`;
+    return `<g data-slot="${i}" style="cursor:${occupied?'pointer':'default'}" onclick="${occupied?'removeFromSlot('+i+')':''}">
+      <circle cx="${s.x}" cy="${s.y}" r="24" fill="${fill}" stroke="${stroke}" stroke-width="1.5" ${dash}/>
+      ${!occupied?`<text x="${s.x}" y="${s.y+5}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">${label}</text>`:''}
+    </g>`;
   }).join('');
-
-  // Players on field
   playerLayer.innerHTML=SLOTS.map((s,i)=>{
     const rid=fieldSlots[i];
     if(!rid)return'';
@@ -741,33 +636,26 @@ function renderField(){
     const col=POS_COLORS[s.pos]||'#4a7a50';
     const firstName=player.name.split(' ')[0];
     const dname=firstName.length>8?firstName.substring(0,7)+'.':firstName;
-    const hasPending=pendingOutSlots.has(i);
-    // Dim the player slightly if they have a pending sub out
-    const opacity=hasPending?'0.6':'1';
-    return `
-      <g style="cursor:pointer;opacity:${opacity}" onclick="removeFromSlot(${i})">
-        <circle cx="${s.x}" cy="${s.y}" r="24" fill="${col}" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
-        <text x="${s.x}" y="${s.y-3}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="11" fill="white">${esc(dname)}</text>
-        <text x="${s.x}" y="${s.y+10}" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="rgba(255,255,255,0.85)">${player.num!=='—'?'#'+player.num:''}</text>
-        <text x="${s.x}" y="${s.y+21}" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="rgba(255,255,255,0.65)">${slotLabel(s.pos)}</text>
-      </g>`;
+    const opacity=pendingOutSlots.has(i)?'0.6':'1';
+    return `<g style="cursor:pointer;opacity:${opacity}" onclick="removeFromSlot(${i})">
+      <circle cx="${s.x}" cy="${s.y}" r="24" fill="${col}" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+      <text x="${s.x}" y="${s.y-3}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="11" fill="white">${esc(dname)}</text>
+      <text x="${s.x}" y="${s.y+10}" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="rgba(255,255,255,0.85)">${player.num!=='—'?'#'+player.num:''}</text>
+      <text x="${s.x}" y="${s.y+21}" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="rgba(255,255,255,0.65)">${slotLabel(s.pos)}</text>
+    </g>`;
   }).join('');
-
-  // Pending rings — pulsing orange ring + incoming player name arc
   pendingLayer.innerHTML=pendingSubs.map(ps=>{
     const s=SLOTS[ps.slotIdx];
     const inPlayer=roster.find(p=>p.id===ps.inRosterId);
     const inName=inPlayer?inPlayer.name.split(' ')[0].substring(0,8):'?';
     const inNum=inPlayer&&inPlayer.num!=='—'?'#'+inPlayer.num:'';
-    return `
-      <g>
-        <circle cx="${s.x}" cy="${s.y}" r="30" fill="none" stroke="#f0a030" stroke-width="2.5" stroke-dasharray="6 3" class="pending-ring"/>
-        <text x="${s.x}" y="${s.y-33}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="10" fill="#f0a030">${esc(inName)} ${inNum}</text>
-      </g>`;
+    return `<g>
+      <circle cx="${s.x}" cy="${s.y}" r="30" fill="none" stroke="#f0a030" stroke-width="2.5" stroke-dasharray="6 3" class="pending-ring"/>
+      <text x="${s.x}" y="${s.y-33}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="10" fill="#f0a030">${esc(inName)} ${inNum}</text>
+    </g>`;
   }).join('');
 }
 
-// ── BENCH PANEL RENDER ─────────────────────────────────────
 function renderBenchPanel(){
   const onIds=new Set(fieldSlots.filter(Boolean));
   const pendingInIds=new Set(pendingSubs.map(p=>p.inRosterId));
@@ -775,8 +663,6 @@ function renderBenchPanel(){
   const onCount=fieldSlots.filter(Boolean).length;
   document.getElementById('onCount').textContent=onCount;
   document.getElementById('offCount').textContent=roster.length-onCount;
-
-  // On-field list
   const onList=document.getElementById('onFieldList');
   const onPlayers=fieldSlots.map((rid,i)=>{
     if(!rid)return null;
@@ -788,9 +674,8 @@ function renderBenchPanel(){
     const hasSub=pendingOutIds.has(rid);
     const pendingSub=pendingSubs.find(ps=>ps.outRosterId===rid);
     const inPlayer=pendingSub?roster.find(pl=>pl.id===pendingSub.inRosterId):null;
-    return {p,i,onMin,pos:slotLabel(SLOTS[i].pos),hasSub,inPlayer};
+    return{p,i,onMin,pos:slotLabel(SLOTS[i].pos),hasSub,inPlayer};
   }).filter(Boolean);
-
   if(!onPlayers.length){
     onList.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Drag bench players onto field positions</p>';
   } else {
@@ -802,8 +687,6 @@ function renderBenchPanel(){
         <span class="ct">${onMin}'</span>
       </div>`).join('');
   }
-
-  // Bench chips
   const benchPlayers=roster.filter(p=>!onIds.has(p.id));
   const chips=document.getElementById('benchChips');
   if(!roster.length){
@@ -826,39 +709,31 @@ function renderBenchPanel(){
   }
 }
 
-// ── PENDING BOX RENDER ─────────────────────────────────────
 function renderPendingBox(){
   const box=document.getElementById('pendingBox');
   const list=document.getElementById('pendingList');
-  const badge=document.getElementById('pendingBadge');
-
-  badge.textContent=pendingSubs.length;
+  document.getElementById('pendingBadge').textContent=pendingSubs.length;
   box.classList.toggle('has-pending',pendingSubs.length>0);
-
   list.innerHTML=pendingSubs.map(ps=>{
     const outPlayer=roster.find(p=>p.id===ps.outRosterId);
-    const inPlayer =roster.find(p=>p.id===ps.inRosterId);
+    const inPlayer=roster.find(p=>p.id===ps.inRosterId);
     const pos=slotLabel(SLOTS[ps.slotIdx].pos);
     const outName=outPlayer?outPlayer.name.split(' ')[0]:'?';
-    const inName =inPlayer ?inPlayer.name.split(' ')[0]:'?';
+    const inName=inPlayer?inPlayer.name.split(' ')[0]:'?';
     const outNum=outPlayer&&outPlayer.num!=='—'?'#'+outPlayer.num:'';
-    const inNum =inPlayer &&inPlayer.num!=='—' ?'#'+inPlayer.num:'';
-    return `
-      <div class="pending-row">
-        <span class="pr-pos">${pos}</span>
-        <span class="pr-out">${outNum} ${esc(outName)}</span>
-        <span class="pr-arrow">→</span>
-        <span class="pr-in">${inNum} ${esc(inName)}</span>
-        <button class="pr-cancel" onclick="cancelPending(${ps.slotIdx})" title="Cancel">✕</button>
-      </div>`;
+    const inNum=inPlayer&&inPlayer.num!=='—'?'#'+inPlayer.num:'';
+    return `<div class="pending-row">
+      <span class="pr-pos">${pos}</span>
+      <span class="pr-out">${outNum} ${esc(outName)}</span>
+      <span class="pr-arrow">→</span>
+      <span class="pr-in">${inNum} ${esc(inName)}</span>
+      <button class="pr-cancel" onclick="cancelPending(${ps.slotIdx})">✕</button>
+    </div>`;
   }).join('');
 }
 
-// ── SHOUTOUT OVERLAY ───────────────────────────────────────
 function showShoutout(){
   if(!pendingSubs.length)return;
-  const content=document.getElementById('shoutoutContent');
-
   const offRows=pendingSubs.map(ps=>{
     const p=roster.find(pl=>pl.id===ps.outRosterId);
     const pos=slotLabel(SLOTS[ps.slotIdx].pos);
@@ -869,7 +744,6 @@ function showShoutout(){
       <span class="sp-pos">${pos}</span>
     </div>`;
   }).join('');
-
   const onRows=pendingSubs.map(ps=>{
     const p=roster.find(pl=>pl.id===ps.inRosterId);
     const pos=slotLabel(SLOTS[ps.slotIdx].pos);
@@ -880,15 +754,9 @@ function showShoutout(){
       <span class="sp-pos">${pos}</span>
     </div>`;
   }).join('');
-
-  content.innerHTML=`
-    <div class="shoutout-section off">
-      <h3>Coming Off</h3>${offRows}
-    </div>
-    <div class="shoutout-section on">
-      <h3>Coming On</h3>${onRows}
-    </div>`;
-
+  document.getElementById('shoutoutContent').innerHTML=`
+    <div class="shoutout-section off"><h3>Coming Off</h3>${offRows}</div>
+    <div class="shoutout-section on"><h3>Coming On</h3>${onRows}</div>`;
   document.getElementById('shoutoutOverlay').classList.add('active');
 }
 
@@ -896,24 +764,15 @@ function closeShoutout(){
   document.getElementById('shoutoutOverlay').classList.remove('active');
 }
 
-// Remove player from field (tap occupied slot)
 function removeFromSlot(slotIdx){
   if(fieldSlots[slotIdx]===null)return;
-  // If this slot has a pending sub, just cancel the pending instead
   const pendingIdx=pendingSubs.findIndex(p=>p.slotIdx===slotIdx);
-  if(pendingIdx!==-1){
-    pendingSubs.splice(pendingIdx,1);
-    renderGame();
-    return;
-  }
+  if(pendingIdx!==-1){pendingSubs.splice(pendingIdx,1);renderGame();return;}
   if(!confirm('Remove this player from the field?'))return;
-  recordOff(slotIdx);
-  fieldSlots[slotIdx]=null;
-  saveData();
-  renderGame();
+  recordOff(slotIdx);fieldSlots[slotIdx]=null;
+  saveData();renderGame();
 }
 
-// ── DRAG AND DROP ──────────────────────────────────────────
 let drag=null;
 
 function getSvgPoint(svgEl,clientX,clientY){
@@ -951,13 +810,9 @@ function moveDragGhost(clientX,clientY){
   const nearest=nearestSlot(pt.x,pt.y);
   document.querySelectorAll('#slotLayer circle').forEach((c,i)=>{
     if(i===nearest&&fieldSlots[i]===null){
-      c.setAttribute('stroke','var(--ac)');
-      c.setAttribute('stroke-width','2.5');
-      c.setAttribute('fill','rgba(232,255,71,0.15)');
+      c.setAttribute('stroke','var(--ac)');c.setAttribute('stroke-width','2.5');c.setAttribute('fill','rgba(232,255,71,0.15)');
     } else if(fieldSlots[i]===null){
-      c.setAttribute('stroke','rgba(255,255,255,0.35)');
-      c.setAttribute('stroke-width','1.5');
-      c.setAttribute('fill','rgba(255,255,255,0.08)');
+      c.setAttribute('stroke','rgba(255,255,255,0.35)');c.setAttribute('stroke-width','1.5');c.setAttribute('fill','rgba(255,255,255,0.08)');
     }
   });
 }
@@ -969,11 +824,9 @@ function endDrag(clientX,clientY){
   const slot=nearestSlot(pt.x,pt.y);
   document.getElementById('dragGhost').style.display='none';
   document.querySelectorAll('#slotLayer circle').forEach(c=>{
-    c.setAttribute('stroke','rgba(255,255,255,0.35)');
-    c.setAttribute('stroke-width','1.5');
-    c.setAttribute('fill','rgba(255,255,255,0.08)');
+    c.setAttribute('stroke','rgba(255,255,255,0.35)');c.setAttribute('stroke-width','1.5');c.setAttribute('fill','rgba(255,255,255,0.08)');
   });
-  if(slot!==null) assignSlot(drag.rosterId,slot);
+  if(slot!==null)assignSlot(drag.rosterId,slot);
   drag=null;
 }
 
@@ -987,9 +840,8 @@ function startDragMouse(e,rosterId){
 }
 
 function startDragTouch(e,rosterId){
-  // Don't preventDefault yet — let scroll happen unless user holds or moves horizontally
   const t=e.touches[0];
-  const startX=t.clientX, startY=t.clientY;
+  const startX=t.clientX,startY=t.clientY;
   const chip=e.currentTarget;
   let dragStarted=false;
   let holdTimer=null;
@@ -998,51 +850,36 @@ function startDragTouch(e,rosterId){
     dragStarted=true;
     startDrag(rosterId,clientX,clientY);
     document.getElementById('fieldSvg').classList.add('dragging');
-    if(chip) chip.classList.add('dragging');
+    if(chip)chip.classList.add('dragging');
   }
 
   function cleanup(){
     clearTimeout(holdTimer);
     document.getElementById('fieldSvg').classList.remove('dragging');
-    if(chip) chip.classList.remove('dragging');
+    if(chip)chip.classList.remove('dragging');
   }
 
-  // Start drag after holding finger still for 300ms
-  holdTimer=setTimeout(()=>{
-    beginDrag(startX,startY);
-  },300);
+  holdTimer=setTimeout(()=>{ beginDrag(startX,startY); },300);
 
   const onMove=ev=>{
     const tc=ev.touches[0];
     const dx=Math.abs(tc.clientX-startX);
     const dy=Math.abs(tc.clientY-startY);
     if(!dragStarted){
-      // If they moved vertically more than horizontally, it's a scroll — cancel
-      if(dy>dx && dy>8){
-        clearTimeout(holdTimer);
-        cleanup();
+      if(dy>dx&&dy>8){
+        clearTimeout(holdTimer);cleanup();
         document.removeEventListener('touchmove',onMove);
         document.removeEventListener('touchend',onEnd);
         return;
       }
-      // If they moved horizontally or enough in any direction, start drag immediately
-      if(dx>8 || dy>8){
-        clearTimeout(holdTimer);
-        beginDrag(startX,startY);
-      }
+      if(dx>8||dy>8){clearTimeout(holdTimer);beginDrag(startX,startY);}
     }
-    if(dragStarted){
-      ev.preventDefault();
-      moveDragGhost(tc.clientX,tc.clientY);
-    }
+    if(dragStarted){ev.preventDefault();moveDragGhost(tc.clientX,tc.clientY);}
   };
 
   const onEnd=ev=>{
     clearTimeout(holdTimer);
-    if(dragStarted){
-      const tc=ev.changedTouches[0];
-      endDrag(tc.clientX,tc.clientY);
-    }
+    if(dragStarted){const tc=ev.changedTouches[0];endDrag(tc.clientX,tc.clientY);}
     cleanup();
     document.removeEventListener('touchmove',onMove);
     document.removeEventListener('touchend',onEnd);
@@ -1052,7 +889,6 @@ function startDragTouch(e,rosterId){
   document.addEventListener('touchend',onEnd);
 }
 
-// ── SUMMARY ────────────────────────────────────────────────
 const POSITIONS=['GK','LB','CB','RB','CDM','CM','CAM','LM','RM','LW','RW','ST','CF'];
 
 function renderSummary(){
@@ -1082,10 +918,7 @@ function showGameSummary(idx){
       rows.push({name,num,pos:st.pos,onMin:st.onMin,offMin,mins});
     }
   }
-  rows.sort((a,b)=>{
-    const pa=POSITIONS.indexOf(a.pos),pb=POSITIONS.indexOf(b.pos);
-    return(pa<0?99:pa)-(pb<0?99:pb)||a.name.localeCompare(b.name);
-  });
+  rows.sort((a,b)=>{const pa=POSITIONS.indexOf(a.pos),pb=POSITIONS.indexOf(b.pos);return(pa<0?99:pa)-(pb<0?99:pb)||a.name.localeCompare(b.name);});
   const maxM=Math.max(...rows.filter(r=>typeof r.mins==='number').map(r=>r.mins),1);
   document.getElementById('summaryContent').innerHTML=`
     <div class="pbox">
@@ -1143,19 +976,13 @@ function esc(s){
 
 renderRoster();
 renderGame();
-
-// Set accurate top offset for fixed game view on mobile
-function setGameViewOffset(){
-  if(window.innerWidth<=640){
-    const h=document.querySelector('header').offsetHeight;
-    const n=document.querySelector('nav').offsetHeight;
-    document.getElementById('view-game').style.paddingTop=(h+n)+'px';
-  } else {
-    document.getElementById('view-game').style.paddingTop='';
-  }
+</script>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  });
 }
-setGameViewOffset();
-window.addEventListener('resize',setGameViewOffset);
 </script>
 
 

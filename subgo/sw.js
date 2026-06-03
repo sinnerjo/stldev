@@ -1,11 +1,10 @@
-const CACHE = 'soccer-tracker-v1';
+const CACHE = 'subgo-v4';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png',
-  'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500&display=swap'
+  './icon-512.png'
 ];
 
 self.addEventListener('install', e => {
@@ -22,8 +21,9 @@ self.addEventListener('activate', e => {
   );
 });
 
+// Network first — always try to get fresh files, fall back to cache when offline
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('./index.html')))
+    fetch(e.request).catch(() => caches.match(e.request))
   );
 });

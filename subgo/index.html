@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_13.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Soccer Tracker</title>
-<link rel="manifest" href="file:///C:/Users/josep/Downloads/manifest.json">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a2a0f">
-<link rel="apple-touch-icon" href="file:///C:/Users/josep/Downloads/icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link href="./Soccer Tracker_files/css2" rel="stylesheet">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --gd:#0a2a0f;--gm:#1a4a22;--gf:#2d7a3a;
@@ -209,9 +209,9 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 <header>
   <h1>⚽ Soccer Tracker</h1>
   <div class="hdr-score" id="hdrScore" style="display:none">
-    <button class="score-btn us" id="scoreUs" onclick="goalScored(&#39;us&#39;)" title="We scored">0</button>
+    <button class="score-btn us" id="scoreUs" onclick="goalScored('us')" title="We scored">0</button>
     <span class="score-sep">—</span>
-    <button class="score-btn" id="scoreThem" onclick="goalScored(&#39;them&#39;)" title="They scored">0</button>
+    <button class="score-btn" id="scoreThem" onclick="goalScored('them')" title="They scored">0</button>
     <button class="score-undo" onclick="undoGoal()" title="Undo last goal">↩</button>
   </div>
   <div class="hdr-timer">
@@ -234,9 +234,9 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 </div>
 
 <nav>
-  <button class="active" onclick="showView(&#39;roster&#39;,this)">Roster</button>
-  <button onclick="showView(&#39;game&#39;,this)">Game</button>
-  <button onclick="showView(&#39;summary&#39;,this)">Summary</button>
+  <button class="active" onclick="showView('roster',this)">Roster</button>
+  <button onclick="showView('game',this)">Game</button>
+  <button onclick="showView('summary',this)">Summary</button>
 </nav>
 
 <!-- ROSTER -->
@@ -248,7 +248,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   <div class="add-form">
     <div class="add-row">
       <input type="number" id="addNum" placeholder="#" min="1" max="99" inputmode="numeric">
-      <input type="text" id="addName" placeholder="Player name" style="flex:1" onkeydown="if(event.key===&#39;Enter&#39;)addPlayer()">
+      <input type="text" id="addName" placeholder="Player name" style="flex:1" onkeydown="if(event.key==='Enter')addPlayer()">
     </div>
     <button class="btn btn-ac" onclick="addPlayer()" style="width:100%">Add Player</button>
   </div>
@@ -268,37 +268,37 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   <div class="game-wrap" id="gameWrap">
     <div class="field-wrap" id="fieldWrap">
       <svg class="field-svg" id="fieldSvg" viewBox="0 0 340 520" xmlns="http://www.w3.org/2000/svg">
-        <rect width="340" height="520" fill="#2d7a3a"></rect>
-        <rect x="0" y="0" width="340" height="52" fill="#33883f" opacity=".5"></rect>
-        <rect x="0" y="104" width="340" height="52" fill="#33883f" opacity=".5"></rect>
-        <rect x="0" y="208" width="340" height="52" fill="#33883f" opacity=".5"></rect>
-        <rect x="0" y="312" width="340" height="52" fill="#33883f" opacity=".5"></rect>
-        <rect x="0" y="416" width="340" height="52" fill="#33883f" opacity=".5"></rect>
-        <rect x="10" y="10" width="320" height="500" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" rx="2"></rect>
-        <line x1="10" y1="260" x2="330" y2="260" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></line>
-        <circle cx="170" cy="260" r="50" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></circle>
-        <circle cx="170" cy="260" r="3" fill="rgba(255,255,255,.7)"></circle>
-        <rect x="85" y="10" width="170" height="70" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></rect>
-        <rect x="125" y="10" width="90" height="30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></rect>
-        <circle cx="170" cy="65" r="2.5" fill="rgba(255,255,255,.6)"></circle>
-        <path d="M133 80 A42 42 0 0 1 207 80" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></path>
-        <rect x="85" y="440" width="170" height="70" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></rect>
-        <rect x="125" y="480" width="90" height="30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></rect>
-        <circle cx="170" cy="455" r="2.5" fill="rgba(255,255,255,.6)"></circle>
-        <path d="M133 440 A42 42 0 0 0 207 440" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></path>
-        <rect x="140" y="0" width="60" height="12" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2"></rect>
-        <rect x="140" y="508" width="60" height="12" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2"></rect>
-        <path d="M10 22 A12 12 0 0 1 22 10" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
-        <path d="M318 10 A12 12 0 0 1 330 22" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
-        <path d="M10 498 A12 12 0 0 0 22 510" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
-        <path d="M318 510 A12 12 0 0 0 330 498" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
+        <rect width="340" height="520" fill="#2d7a3a"/>
+        <rect x="0" y="0"   width="340" height="52" fill="#33883f" opacity=".5"/>
+        <rect x="0" y="104" width="340" height="52" fill="#33883f" opacity=".5"/>
+        <rect x="0" y="208" width="340" height="52" fill="#33883f" opacity=".5"/>
+        <rect x="0" y="312" width="340" height="52" fill="#33883f" opacity=".5"/>
+        <rect x="0" y="416" width="340" height="52" fill="#33883f" opacity=".5"/>
+        <rect x="10" y="10" width="320" height="500" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" rx="2"/>
+        <line x1="10" y1="260" x2="330" y2="260" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
+        <circle cx="170" cy="260" r="50" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
+        <circle cx="170" cy="260" r="3" fill="rgba(255,255,255,.7)"/>
+        <rect x="85"  y="10"  width="170" height="70" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
+        <rect x="125" y="10"  width="90"  height="30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
+        <circle cx="170" cy="65"  r="2.5" fill="rgba(255,255,255,.6)"/>
+        <path d="M133 80 A42 42 0 0 1 207 80" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
+        <rect x="85"  y="440" width="170" height="70" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
+        <rect x="125" y="480" width="90"  height="30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
+        <circle cx="170" cy="455" r="2.5" fill="rgba(255,255,255,.6)"/>
+        <path d="M133 440 A42 42 0 0 0 207 440" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
+        <rect x="140" y="0"   width="60" height="12" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2"/>
+        <rect x="140" y="508" width="60" height="12" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2"/>
+        <path d="M10 22 A12 12 0 0 1 22 10"    fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+        <path d="M318 10 A12 12 0 0 1 330 22"  fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+        <path d="M10 498 A12 12 0 0 0 22 510"  fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+        <path d="M318 510 A12 12 0 0 0 330 498" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
         <g id="slotLayer"></g>
         <g id="playerLayer"></g>
         <g id="pendingLayer"></g>
         <g id="dragGhost" style="display:none;pointer-events:none">
-          <circle r="24" fill="rgba(232,255,71,.25)" stroke="var(--ac)" stroke-width="2"></circle>
+          <circle r="24" fill="rgba(232,255,71,.25)" stroke="var(--ac)" stroke-width="2"/>
           <text id="ghostName" y="-3" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="11" fill="white"></text>
-          <text id="ghostNum" y="11" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="rgba(255,255,255,.85)"></text>
+          <text id="ghostNum"  y="11" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="rgba(255,255,255,.85)"></text>
         </g>
       </svg>
     </div>
@@ -329,7 +329,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 <!-- SUMMARY -->
 <div class="view" id="view-summary">
   <div class="sum-hdr">
-    <h2 style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gr)">Game History</h2>
+    <h2 style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gr)">Game History</h2>
     <div style="display:flex;gap:.4rem">
       <button class="btn btn-ol btn-sm" onclick="exportCSV()">CSV</button>
       <button class="btn btn-rd btn-sm" onclick="clearGames()">Clear</button>
@@ -880,14 +880,14 @@ function startDragTouch(e,rosterId){
 const POSITIONS=['GK','LB','CB','RB','CDM','CM','CAM','LM','RM','LW','RW','ST','CF'];
 
 function renderSummary(){
-  const gl=document.getElementById('gameList');
+  const gameListEl=document.getElementById('gameList');
   const sc=document.getElementById('summaryContent');
-  if(!games.length){gl.innerHTML='<p class="empty">No games yet.</p>';sc.innerHTML='';return;}
-  gl.innerHTML=games.map((g,i)=>{
-    const goals=g.goals||[];
-    const us=goals.filter(gl=>gl.side==='us').length;
-    const them=goals.filter(gl=>gl.side==='them').length;
-    const scoreStr=goals.length?`<span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--ac);margin-left:.3rem">${us}—${them}</span>`:'';
+  if(!games.length){gameListEl.innerHTML='<p class="empty">No games yet.</p>';sc.innerHTML='';return;}
+  gameListEl.innerHTML=games.map((g,i)=>{
+    const ggoals=g.goals||[];
+    const us=ggoals.filter(x=>x.side==='us').length;
+    const them=ggoals.filter(x=>x.side==='them').length;
+    const scoreStr=ggoals.length?`<span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--ac);margin-left:.3rem">${us}—${them}</span>`:'';
     return `<div class="gitem${currentGame&&g.id===currentGame.id?' active-g':''}" onclick="showGameSummary(${i})">
       <span style="font-size:.7rem;color:var(--ac);font-family:'DM Mono',monospace">#${games.length-i}</span>
       <span class="gname">vs. ${esc(g.opponent)}</span>
@@ -917,8 +917,8 @@ function showGameSummary(idx){
 
   // Score & goal log
   const goals=g.goals||[];
-  const usScore=goals.filter(gl=>gl.side==='us').length;
-  const themScore=goals.filter(gl=>gl.side==='them').length;
+  const usScore=goals.filter(x=>x.side==='us').length;
+  const themScore=goals.filter(x=>x.side==='them').length;
   const goalLog=goals.map(gl=>{
     const scorer=gl.scorerId?roster.find(p=>p.id===gl.scorerId):null;
     const scorerTxt=gl.ownGoal?'Own Goal':scorer?`${scorer.num!=='—'?'#'+scorer.num+' ':''}${scorer.name}`:'Opponent';
@@ -1002,6 +1002,5 @@ if("serviceWorker" in navigator){
   });
 }
 </script>
-
-
-</body></html>
+</body>
+</html>

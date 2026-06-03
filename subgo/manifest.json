@@ -1,6 +1,6 @@
 {
   "name": "Soccer Tracker",
-  "short_name": "Soccer",
+  "short_name": "SubGo",
   "description": "Track player positions, substitutions, and minutes during soccer games.",
   "start_url": "./index.html",
   "display": "standalone",

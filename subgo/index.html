@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)file:///C:/Users/josep/Downloads/index_8.html -->
+<!-- saved from url=(0045)file:///C:/Users/josep/Downloads/index_9.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -307,7 +307,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 
 <header>
   <h1>⚽ SubGo</h1>
-  <button class="team-btn" id="teamBtn" onclick="openTeamOverlay()">Spain</button>
+  <button class="team-btn" id="teamBtn" onclick="openTeamOverlay()">Team</button>
   <div class="hdr-score" id="hdrScore" style="display:none">
     <button class="score-btn us" id="scoreUs" onclick="goalScored(&#39;us&#39;)" title="We scored">0</button>
     <span class="score-sep">—</span>
@@ -357,7 +357,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 <!-- ROSTER -->
 <div class="view active" id="view-roster">
   <div class="sec-hdr">
-    <h2>Roster <span id="playerCount" style="color:var(--grd);font-size:.82rem;font-weight:400;text-transform:none;letter-spacing:0">(9)</span></h2>
+    <h2>Roster <span id="playerCount" style="color:var(--grd);font-size:.82rem;font-weight:400;text-transform:none;letter-spacing:0"></span></h2>
     <button class="btn btn-ol btn-sm" onclick="clearRoster()">Clear All</button>
   </div>
   <div class="add-form">
@@ -367,53 +367,8 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     </div>
     <button class="btn btn-ac" onclick="addPlayer()" style="width:100%">Add Player</button>
   </div>
-  <div class="roster-list" id="rosterList">
-    <div class="pcard">
-      <div class="pnum">—</div>
-      <div class="pinfo"><div class="pname">Delaney</div></div>
-      <button class="del" onclick="deletePlayer(1780432442512)">✕</button>
-    </div>
-    <div class="pcard">
-      <div class="pnum">—</div>
-      <div class="pinfo"><div class="pname">Olivia L</div></div>
-      <button class="del" onclick="deletePlayer(1780432507570)">✕</button>
-    </div>
-    <div class="pcard">
-      <div class="pnum">—</div>
-      <div class="pinfo"><div class="pname">Peyton</div></div>
-      <button class="del" onclick="deletePlayer(1780432514398)">✕</button>
-    </div>
-    <div class="pcard">
-      <div class="pnum">—</div>
-      <div class="pinfo"><div class="pname">Shelby</div></div>
-      <button class="del" onclick="deletePlayer(1780432516443)">✕</button>
-    </div>
-    <div class="pcard">
-      <div class="pnum">—</div>
-      <div class="pinfo"><div class="pname">Harper</div></div>
-      <button class="del" onclick="deletePlayer(1780432520066)">✕</button>
-    </div>
-    <div class="pcard">
-      <div class="pnum">—</div>
-      <div class="pinfo"><div class="pname">Finley</div></div>
-      <button class="del" onclick="deletePlayer(1780432535347)">✕</button>
-    </div>
-    <div class="pcard">
-      <div class="pnum">—</div>
-      <div class="pinfo"><div class="pname">Alivia</div></div>
-      <button class="del" onclick="deletePlayer(1780432538947)">✕</button>
-    </div>
-    <div class="pcard">
-      <div class="pnum">—</div>
-      <div class="pinfo"><div class="pname">Evelyn</div></div>
-      <button class="del" onclick="deletePlayer(1780432544627)">✕</button>
-    </div>
-    <div class="pcard">
-      <div class="pnum">5</div>
-      <div class="pinfo"><div class="pname">Josephine</div></div>
-      <button class="del" onclick="deletePlayer(1780492548190)">✕</button>
-    </div></div>
-  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v2.8</p>
+  <div class="roster-list" id="rosterList"></div>
+  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v3.0</p>
 </div>
 
 <!-- GAME -->
@@ -453,46 +408,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
         <path d="M318 10 A12 12 0 0 1 330 22" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
         <path d="M10 498 A12 12 0 0 0 22 510" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
         <path d="M318 510 A12 12 0 0 0 330 498" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
-        <g id="slotLayer"><g data-slot="0" style="cursor:default" onclick="">
-      <circle cx="170" cy="468" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="170" y="473" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">GK</text>
-    </g><g data-slot="1" style="cursor:default" onclick="">
-      <circle cx="62" cy="400" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="62" y="405" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">LB</text>
-    </g><g data-slot="2" style="cursor:default" onclick="">
-      <circle cx="122" cy="395" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="122" y="400" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CB</text>
-    </g><g data-slot="3" style="cursor:default" onclick="">
-      <circle cx="218" cy="395" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="218" y="400" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CB</text>
-    </g><g data-slot="4" style="cursor:default" onclick="">
-      <circle cx="278" cy="400" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="278" y="405" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">RB</text>
-    </g><g data-slot="5" style="cursor:default" onclick="">
-      <circle cx="170" cy="330" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="170" y="335" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CDM</text>
-    </g><g data-slot="6" style="cursor:default" onclick="">
-      <circle cx="110" cy="272" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="110" y="277" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CM</text>
-    </g><g data-slot="7" style="cursor:default" onclick="">
-      <circle cx="230" cy="272" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="230" y="277" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CM</text>
-    </g><g data-slot="8" style="cursor:default" onclick="">
-      <circle cx="170" cy="210" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="170" y="215" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CAM</text>
-    </g><g data-slot="9" style="cursor:default" onclick="">
-      <circle cx="72" cy="148" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="72" y="153" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">LW</text>
-    </g><g data-slot="10" style="cursor:default" onclick="">
-      <circle cx="268" cy="148" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="268" y="153" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">RW</text>
-    </g><g data-slot="11" style="cursor:default" onclick="">
-      <circle cx="125" cy="88" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="125" y="93" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">ST</text>
-    </g><g data-slot="12" style="cursor:default" onclick="">
-      <circle cx="215" cy="88" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
-      <text x="215" y="93" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">ST</text>
-    </g></g>
+        <g id="slotLayer"></g>
         <g id="playerLayer"></g>
         <g id="pendingLayer"></g>
         <g id="dragGhost" style="display:none;pointer-events:none">
@@ -516,70 +432,27 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       </div>
       <div class="pbox">
         <h3>On Field <span id="onCount" style="color:var(--ac)">0</span></h3>
-        <div class="onfield-list" id="onFieldList"><p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Drag bench players onto field positions</p></div>
+        <div class="onfield-list" id="onFieldList"></div>
       </div>
       <div class="pbox">
-        <h3>Bench <span id="offCount" style="color:var(--gr)">9</span></h3>
+        <h3>Bench <span id="offCount" style="color:var(--gr)">0</span></h3>
         <div class="bench-alert-bar">
           <label>⏱ Alert after</label>
           <input type="number" id="benchAlertMin" value="5" min="1" max="90" inputmode="numeric">
           <label>min</label>
         </div>
-        <div class="bench-chips" id="benchChips"><div class="bchip" draggable="true" data-id="1780432442512" onmousedown="startDragMouse(event,1780432442512)" ontouchstart="startDragTouch(event,1780432442512)">
-        <span class="cn">—</span>
-        <span class="cname">Delaney</span>
-        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div><div class="bchip" draggable="true" data-id="1780432507570" onmousedown="startDragMouse(event,1780432507570)" ontouchstart="startDragTouch(event,1780432507570)">
-        <span class="cn">—</span>
-        <span class="cname">Olivia L</span>
-        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div><div class="bchip" draggable="true" data-id="1780432514398" onmousedown="startDragMouse(event,1780432514398)" ontouchstart="startDragTouch(event,1780432514398)">
-        <span class="cn">—</span>
-        <span class="cname">Peyton</span>
-        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div><div class="bchip" draggable="true" data-id="1780432516443" onmousedown="startDragMouse(event,1780432516443)" ontouchstart="startDragTouch(event,1780432516443)">
-        <span class="cn">—</span>
-        <span class="cname">Shelby</span>
-        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div><div class="bchip" draggable="true" data-id="1780432520066" onmousedown="startDragMouse(event,1780432520066)" ontouchstart="startDragTouch(event,1780432520066)">
-        <span class="cn">—</span>
-        <span class="cname">Harper</span>
-        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div><div class="bchip" draggable="true" data-id="1780432535347" onmousedown="startDragMouse(event,1780432535347)" ontouchstart="startDragTouch(event,1780432535347)">
-        <span class="cn">—</span>
-        <span class="cname">Finley</span>
-        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div><div class="bchip" draggable="true" data-id="1780432538947" onmousedown="startDragMouse(event,1780432538947)" ontouchstart="startDragTouch(event,1780432538947)">
-        <span class="cn">—</span>
-        <span class="cname">Alivia</span>
-        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div><div class="bchip" draggable="true" data-id="1780432544627" onmousedown="startDragMouse(event,1780432544627)" ontouchstart="startDragTouch(event,1780432544627)">
-        <span class="cn">—</span>
-        <span class="cname">Evelyn</span>
-        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div><div class="bchip" draggable="true" data-id="1780492548190" onmousedown="startDragMouse(event,1780492548190)" ontouchstart="startDragTouch(event,1780492548190)">
-        <span class="cn">#5</span>
-        <span class="cname">Josephine</span>
-        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div></div>
+        <div class="bench-chips" id="benchChips"></div>
       </div>
       <div class="unavail-box" id="unavailBox">
         <h3>
           <span>Unavailable</span>
           <button class="btn btn-ol btn-sm" onclick="resetUnavailable()" style="font-size:.65rem;min-height:24px;padding:.2rem .5rem">Reset</button>
         </h3>
-        <div id="unavailList"><div class="unavail-drop-hint" id="unavailHint" ondragover="unavailDragOver(event)" ondragleave="unavailDragLeave(event)" ondrop="unavailDrop(event)">
-    Drop players here
-  </div></div>
+        <div id="unavailList">
+          <div class="unavail-drop-hint" id="unavailHint" ondragover="unavailDragOver(event)" ondragleave="unavailDragLeave(event)" ondrop="unavailDrop(event)" ontouchend="unavailTouchDrop(event)">
+            Drop players here
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -775,6 +648,7 @@ let pendingSubs = [];
 let pendingGoalSide = null;
 let unavailablePlayers = [];
 let benchSinceMinute = {};
+let isSecondHalf = false;
 
 function saveData(){
   localStorage.setItem('sc_teams', JSON.stringify(teams));
@@ -798,6 +672,9 @@ function switchTeam(teamId){
   pendingSubs=[];
   unavailablePlayers=[];
   benchSinceMinute={};
+  isSecondHalf=false;
+  const htBtn=document.getElementById('halfBtn');
+  if(htBtn){htBtn.textContent='HT';htBtn.classList.remove('btn-rd');htBtn.classList.add('btn-ol');}
 
   document.getElementById('hdrScore').style.display='none';
   document.getElementById('gameLabel').childNodes[0].textContent='No active game — create one above ';
@@ -910,6 +787,14 @@ function resetTimer(){
 
 function halftime(){
   if(!currentGame){alert('No active game.');return;}
+
+  if(isSecondHalf){
+    // Second half — button is now End Game
+    if(!confirm('End the game? This will close all player stints and stop the clock.'))return;
+    endGame();
+    return;
+  }
+
   if(!confirm('Start halftime? The clock will reset to 0:00 and player minutes will carry into the 2nd half.'))return;
 
   // Pause the clock
@@ -920,25 +805,62 @@ function halftime(){
 
   const endOfHalf=getMinute();
 
-  // For every on-field player: close their current stint and open a new one at minute 0
-  // This preserves their accumulated minutes and lets the 2nd half count from 0
+  // Close each on-field player's first half stint and open a new one at minute 0
   fieldSlots.forEach((rid,i)=>{
     if(!rid)return;
     const stats=currentGame.playerStats[rid];
     if(!stats||!stats.length)return;
     const last=stats[stats.length-1];
     if(last.offMin===null){
-      last.offMin=endOfHalf; // close out first half stint
-      // Open new stint starting at minute 0 of 2nd half
+      last.offMin=endOfHalf;
       stats.push({pos:last.pos, onMin:0, offMin:null});
     }
   });
 
-  // Reset clock to 0
+  // Reset clock and bench timers for 2nd half
   timerSec=0;
-  // Reset bench timers so 2nd half bench time starts fresh
   benchSinceMinute={};
+  // Re-initialize bench timers for bench players at minute 0
+  const onIds=new Set(fieldSlots.filter(Boolean));
+  roster.forEach(p=>{ if(!onIds.has(p.id)) benchSinceMinute[p.id]=0; });
+
+  isSecondHalf=true;
+  const btn=document.getElementById('halfBtn');
+  btn.textContent='End';
+  btn.title='End game — closes all player stints';
+  btn.classList.remove('btn-ol');
+  btn.classList.add('btn-rd');
+
   updateClock();
+  saveData();
+  renderGame();
+}
+
+function endGame(){
+  if(!currentGame)return;
+  clearInterval(timerInterval);
+  timerRunning=false;
+  document.getElementById('timerBtn').textContent='Start';
+  document.getElementById('clock').classList.remove('run');
+
+  // Close all open stints
+  const endMin=getMinute();
+  fieldSlots.forEach((rid)=>{
+    if(!rid)return;
+    const stats=currentGame.playerStats[rid];
+    if(!stats||!stats.length)return;
+    const last=stats[stats.length-1];
+    if(last.offMin===null)last.offMin=endMin;
+  });
+
+  // Reset button back to HT
+  const btn=document.getElementById('halfBtn');
+  btn.textContent='HT';
+  btn.title='Halftime';
+  btn.classList.remove('btn-rd');
+  btn.classList.add('btn-ol');
+  isSecondHalf=false;
+
   saveData();
   renderGame();
 }
@@ -1016,6 +938,13 @@ function newGame(){
   pendingSubs=[];
   unavailablePlayers=[];
   benchSinceMinute={};
+  isSecondHalf=false;
+  // All players start on bench at minute 0 — initialize bench timers now
+  roster.forEach(p=>{ benchSinceMinute[p.id]=0; });
+  document.getElementById('halfBtn').textContent='HT';
+  document.getElementById('halfBtn').title='Halftime — resets clock, keeps player minutes';
+  document.getElementById('halfBtn').classList.remove('btn-rd');
+  document.getElementById('halfBtn').classList.add('btn-ol');
   getTeam().games.unshift(currentGame);
   games=getGames();
   saveData();
@@ -1351,7 +1280,10 @@ function goalScored(side){
 function recordGoal(scorerId,ownGoal){
   if(!currentGame)return;
   if(!currentGame.goals)currentGame.goals=[];
-  const side=ownGoal?'them':pendingGoalSide;
+  // Own goal by your player still counts as a goal FOR you (it's their own goal against themselves)
+  // If pendingGoalSide is 'us': own goal = counts for us
+  // If pendingGoalSide is 'them': own goal by opponent = counts for us
+  const side=ownGoal?'us':pendingGoalSide;
   currentGame.goals.push({side,scorerId:scorerId||null,ownGoal,minute:getMinute()});
   saveData();renderScore();closeGoalSheet();
 }
@@ -1362,7 +1294,54 @@ function undoGoal(){
   saveData();renderScore();
 }
 
-function deleteGoal(gameIdx,goalIdx){
+function editGoalScorer(gameIdx,goalIdx){
+  const g=games[gameIdx];
+  if(!g||!g.goals)return;
+  const gl=g.goals[goalIdx];
+  if(!gl||gl.side!=='us')return;
+
+  // Build player list from the game's playerStats (who played in that game)
+  const playedIds=Object.keys(g.playerStats).map(id=>parseInt(id));
+  const players=playedIds.map(id=>roster.find(p=>p.id===id)).filter(Boolean);
+  // Fall back to full roster if no stats recorded yet
+  const listPlayers=players.length?players:roster;
+
+  document.getElementById('goalSheetTitle').textContent='✎ Edit Scorer';
+  const list=document.getElementById('goalPlayerList');
+  list.innerHTML=listPlayers.map(p=>`
+    <button class="goal-player-btn" onclick="applyEditScorer(${gameIdx},${goalIdx},${p.id},false)">
+      <span class="gpnum">${p.num!=='—'?'#'+p.num:'—'}</span>
+      <span class="gpname">${esc(p.name)}</span>
+      <span class="gppos" style="color:${gl.scorerId===p.id?'var(--ac)':'var(--gr)'}">${gl.scorerId===p.id?'✓ current':''}</span>
+    </button>`).join('');
+
+  // Override Own Goal button to apply edit
+  const ogBtn=document.querySelector('.goal-og-btn');
+  ogBtn.onclick=()=>applyEditScorer(gameIdx,goalIdx,null,true);
+
+  document.getElementById('goalOverlay').classList.add('active');
+}
+
+function applyEditScorer(gameIdx,goalIdx,scorerId,ownGoal){
+  const g=games[gameIdx];
+  if(!g||!g.goals)return;
+  g.goals[goalIdx].scorerId=scorerId||null;
+  g.goals[goalIdx].ownGoal=ownGoal;
+  saveData();
+  if(currentGame&&g.id===currentGame.id)renderScore();
+  closeGoalSheet();
+  // Re-render the card keeping it open
+  const el=document.getElementById('gitem-'+gameIdx);
+  if(el){
+    const wasOpen=el.classList.contains('open');
+    el.outerHTML=buildGameCard(g,gameIdx);
+    const newEl=document.getElementById('gitem-'+gameIdx);
+    if(newEl&&wasOpen)newEl.classList.add('open');
+  }
+  // Restore the Own Goal button to default behavior for future use
+  const ogBtn=document.querySelector('.goal-og-btn');
+  if(ogBtn)ogBtn.onclick=()=>recordGoal(null,true);
+}
   const g=games[gameIdx];
   if(!g||!g.goals)return;
   g.goals.splice(goalIdx,1);
@@ -1570,10 +1549,14 @@ function buildGameCard(g,i){
     const scorer=gl.scorerId?roster.find(p=>p.id===gl.scorerId):null;
     const scorerTxt=gl.ownGoal?'Own Goal':scorer?`${scorer.num!=='—'?'#'+scorer.num+' ':''}${scorer.name}`:'Opponent';
     const icon=gl.side==='us'?`<span style="color:var(--ac)">⚽</span>`:`<span style="color:var(--rd)">⚽</span>`;
+    const editBtn=gl.side==='us'
+      ?`<button class="gdel" onclick="event.stopPropagation();editGoalScorer(${i},${gi})" title="Edit scorer" style="color:var(--gr)">✎</button>`
+      :'';
     return `<div class="goal-row ${gl.side==='us'?'us-goal':'them-goal'}">
       <span class="gmin">${gl.minute}'</span>
       ${icon}
       <span class="gscorer">${esc(scorerTxt)}</span>
+      ${editBtn}
       <button class="gdel" onclick="event.stopPropagation();deleteGoal(${i},${gi})" title="Remove">✕</button>
     </div>`;
   }).join('');
@@ -1661,7 +1644,9 @@ function clearGames(){
   if(!confirm('Clear all game history?'))return;
   getTeam().games=[];
   games=getGames();
-  currentGame=null;fieldSlots=new Array(SLOTS.length).fill(null);pendingSubs=[];unavailablePlayers=[];benchSinceMinute={};
+  currentGame=null;fieldSlots=new Array(SLOTS.length).fill(null);pendingSubs=[];unavailablePlayers=[];benchSinceMinute={};isSecondHalf=false;
+  const htBtn=document.getElementById('halfBtn');
+  if(htBtn){htBtn.textContent='HT';htBtn.classList.remove('btn-rd');htBtn.classList.add('btn-ol');}
   saveData();renderSummary();
   document.getElementById('gameLabel').textContent='No active game';
 }
@@ -1696,10 +1681,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v2.8</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v3.0</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v2.8 [DEV]';
+  document.getElementById('verTag').textContent='v3.0 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

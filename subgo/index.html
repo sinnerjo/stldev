@@ -816,21 +816,67 @@ function startDragMouse(e,rosterId){
 }
 
 function startDragTouch(e,rosterId){
-  e.preventDefault();
+  // Don't preventDefault yet — let scroll happen unless user holds or moves horizontally
   const t=e.touches[0];
-  startDrag(rosterId,t.clientX,t.clientY);
-  document.getElementById('fieldSvg').classList.add('dragging');
-  e.currentTarget && e.currentTarget.classList && e.currentTarget.classList.add('dragging');
+  const startX=t.clientX, startY=t.clientY;
   const chip=e.currentTarget;
-  const onMove=ev=>{const tc=ev.touches[0];moveDragGhost(tc.clientX,tc.clientY);};
-  const onEnd=ev=>{
-    const tc=ev.changedTouches[0];
-    endDrag(tc.clientX,tc.clientY);
+  let dragStarted=false;
+  let holdTimer=null;
+
+  function beginDrag(clientX,clientY){
+    dragStarted=true;
+    startDrag(rosterId,clientX,clientY);
+    document.getElementById('fieldSvg').classList.add('dragging');
+    if(chip) chip.classList.add('dragging');
+  }
+
+  function cleanup(){
+    clearTimeout(holdTimer);
     document.getElementById('fieldSvg').classList.remove('dragging');
     if(chip) chip.classList.remove('dragging');
+  }
+
+  // Start drag after holding finger still for 300ms
+  holdTimer=setTimeout(()=>{
+    beginDrag(startX,startY);
+  },300);
+
+  const onMove=ev=>{
+    const tc=ev.touches[0];
+    const dx=Math.abs(tc.clientX-startX);
+    const dy=Math.abs(tc.clientY-startY);
+    if(!dragStarted){
+      // If they moved vertically more than horizontally, it's a scroll — cancel
+      if(dy>dx && dy>8){
+        clearTimeout(holdTimer);
+        cleanup();
+        document.removeEventListener('touchmove',onMove);
+        document.removeEventListener('touchend',onEnd);
+        return;
+      }
+      // If they moved horizontally or enough in any direction, start drag immediately
+      if(dx>8 || dy>8){
+        clearTimeout(holdTimer);
+        beginDrag(startX,startY);
+      }
+    }
+    if(dragStarted){
+      ev.preventDefault();
+      moveDragGhost(tc.clientX,tc.clientY);
+    }
+  };
+
+  const onEnd=ev=>{
+    clearTimeout(holdTimer);
+    if(dragStarted){
+      const tc=ev.changedTouches[0];
+      endDrag(tc.clientX,tc.clientY);
+    }
+    cleanup();
     document.removeEventListener('touchmove',onMove);
     document.removeEventListener('touchend',onEnd);
   };
+
   document.addEventListener('touchmove',onMove,{passive:false});
   document.addEventListener('touchend',onEnd);
 }

@@ -7,9 +7,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Soccer Tracker</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a2a0f">
-<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -78,7 +75,8 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 
 /* FIELD */
 .field-wrap{flex:1;min-width:0;background:var(--gf);overflow:hidden;border-right:1px solid var(--br);position:relative;user-select:none}
-.field-svg{display:block;width:100%;touch-action:none}
+.field-svg{display:block;width:100%;touch-action:pan-y}
+.field-svg.dragging{touch-action:none}
 
 /* BENCH PANEL */
 .bench-col{width:230px;flex-shrink:0;display:flex;flex-direction:column;gap:.6rem;padding:.6rem .6rem .6rem .5rem;background:var(--bg);border-left:1px solid var(--br);overflow-y:auto}
@@ -135,7 +133,8 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 
 /* BENCH CHIPS */
 .bench-chips{display:flex;flex-direction:column;gap:.3rem;max-height:200px;overflow-y:auto}
-.bchip{display:flex;align-items:center;gap:.45rem;padding:.5rem .6rem;border-radius:6px;cursor:grab;border:1px solid var(--br);background:var(--gm);min-height:44px;transition:opacity .15s,border-color .15s;touch-action:none;user-select:none}
+.bchip{display:flex;align-items:center;gap:.45rem;padding:.5rem .6rem;border-radius:6px;cursor:grab;border:1px solid var(--br);background:var(--gm);min-height:44px;transition:opacity .15s,border-color .15s;touch-action:pan-y;user-select:none}
+.bchip.dragging{touch-action:none}
 .bchip:active{cursor:grabbing}
 .bchip.dragging{opacity:.35}
 .bchip.was-on{border-color:#1a4a22}
@@ -820,8 +819,18 @@ function startDragTouch(e,rosterId){
   e.preventDefault();
   const t=e.touches[0];
   startDrag(rosterId,t.clientX,t.clientY);
+  document.getElementById('fieldSvg').classList.add('dragging');
+  e.currentTarget && e.currentTarget.classList && e.currentTarget.classList.add('dragging');
+  const chip=e.currentTarget;
   const onMove=ev=>{const tc=ev.touches[0];moveDragGhost(tc.clientX,tc.clientY);};
-  const onEnd=ev=>{const tc=ev.changedTouches[0];endDrag(tc.clientX,tc.clientY);document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);};
+  const onEnd=ev=>{
+    const tc=ev.changedTouches[0];
+    endDrag(tc.clientX,tc.clientY);
+    document.getElementById('fieldSvg').classList.remove('dragging');
+    if(chip) chip.classList.remove('dragging');
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('touchend',onEnd);
+  };
   document.addEventListener('touchmove',onMove,{passive:false});
   document.addEventListener('touchend',onEnd);
 }
@@ -917,13 +926,6 @@ function esc(s){
 
 renderRoster();
 renderGame();
-</script>
-<script>
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("./sw.js").catch(()=>{});
-  });
-}
 </script>
 </body>
 </html>

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0045)file:///C:/Users/josep/Downloads/index_7.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Soccer Tracker</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 :root {
   --gd:#0a2a0f;--gm:#1a4a22;--gf:#2d7a3a;
@@ -18,7 +18,7 @@
   --pending:#f0a030;--pending-dim:#7a5010;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--wh);min-height:100%;font-size:15px;overscroll-behavior:none}
+html,body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--wh);min-height:100%;font-size:15px}
 
 /* HEADER */
 header{background:var(--gd);border-bottom:2px solid var(--ac);padding:.6rem 1rem;padding-top:calc(.6rem + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:.6rem;position:sticky;top:0;z-index:200}
@@ -74,7 +74,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .game-wrap{display:flex;gap:0;align-items:flex-start;position:relative}
 
 /* FIELD */
-.field-wrap{flex:1;min-width:0;background:var(--gf);overflow:hidden;border-right:1px solid var(--br);position:relative;user-select:none}
+.field-wrap{flex:1;min-width:0;background:var(--gf);overflow:hidden;border-right:1px solid var(--br);position:relative;user-select:none;touch-action:pan-y}
 .field-svg{display:block;width:100%;touch-action:pan-y}
 .field-svg.dragging{touch-action:none}
 
@@ -191,25 +191,70 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 </header>
 
 <nav>
-  <button class="active" onclick="showView('roster',this)">Roster</button>
-  <button onclick="showView('game',this)">Game</button>
-  <button onclick="showView('summary',this)">Summary</button>
+  <button class="active" onclick="showView(&#39;roster&#39;,this)">Roster</button>
+  <button onclick="showView(&#39;game&#39;,this)">Game</button>
+  <button onclick="showView(&#39;summary&#39;,this)">Summary</button>
 </nav>
 
 <!-- ROSTER -->
 <div class="view active" id="view-roster">
   <div class="sec-hdr">
-    <h2>Roster <span id="playerCount" style="color:var(--grd);font-size:.82rem;font-weight:400;text-transform:none;letter-spacing:0"></span></h2>
+    <h2>Roster <span id="playerCount" style="color:var(--grd);font-size:.82rem;font-weight:400;text-transform:none;letter-spacing:0">(9)</span></h2>
     <button class="btn btn-ol btn-sm" onclick="clearRoster()">Clear All</button>
   </div>
   <div class="add-form">
     <div class="add-row">
       <input type="number" id="addNum" placeholder="#" min="1" max="99" inputmode="numeric">
-      <input type="text" id="addName" placeholder="Player name" style="flex:1" onkeydown="if(event.key==='Enter')addPlayer()">
+      <input type="text" id="addName" placeholder="Player name" style="flex:1" onkeydown="if(event.key===&#39;Enter&#39;)addPlayer()">
     </div>
     <button class="btn btn-ac" onclick="addPlayer()" style="width:100%">Add Player</button>
   </div>
-  <div class="roster-list" id="rosterList"></div>
+  <div class="roster-list" id="rosterList">
+    <div class="pcard">
+      <div class="pnum">—</div>
+      <div class="pinfo"><div class="pname">Delaney</div></div>
+      <button class="del" onclick="deletePlayer(1780432442512)">✕</button>
+    </div>
+    <div class="pcard">
+      <div class="pnum">—</div>
+      <div class="pinfo"><div class="pname">Josephine</div></div>
+      <button class="del" onclick="deletePlayer(1780432452513)">✕</button>
+    </div>
+    <div class="pcard">
+      <div class="pnum">—</div>
+      <div class="pinfo"><div class="pname">Olivia L</div></div>
+      <button class="del" onclick="deletePlayer(1780432507570)">✕</button>
+    </div>
+    <div class="pcard">
+      <div class="pnum">—</div>
+      <div class="pinfo"><div class="pname">Peyton</div></div>
+      <button class="del" onclick="deletePlayer(1780432514398)">✕</button>
+    </div>
+    <div class="pcard">
+      <div class="pnum">—</div>
+      <div class="pinfo"><div class="pname">Shelby</div></div>
+      <button class="del" onclick="deletePlayer(1780432516443)">✕</button>
+    </div>
+    <div class="pcard">
+      <div class="pnum">—</div>
+      <div class="pinfo"><div class="pname">Harper</div></div>
+      <button class="del" onclick="deletePlayer(1780432520066)">✕</button>
+    </div>
+    <div class="pcard">
+      <div class="pnum">—</div>
+      <div class="pinfo"><div class="pname">Finley</div></div>
+      <button class="del" onclick="deletePlayer(1780432535347)">✕</button>
+    </div>
+    <div class="pcard">
+      <div class="pnum">—</div>
+      <div class="pinfo"><div class="pname">Alivia</div></div>
+      <button class="del" onclick="deletePlayer(1780432538947)">✕</button>
+    </div>
+    <div class="pcard">
+      <div class="pnum">—</div>
+      <div class="pinfo"><div class="pname">Evelyn</div></div>
+      <button class="del" onclick="deletePlayer(1780432544627)">✕</button>
+    </div></div>
 </div>
 
 <!-- GAME -->
@@ -226,37 +271,89 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <!-- Field -->
     <div class="field-wrap" id="fieldWrap">
       <svg class="field-svg" id="fieldSvg" viewBox="0 0 340 520" xmlns="http://www.w3.org/2000/svg">
-        <rect width="340" height="520" fill="#2d7a3a"/>
-        <rect x="0" y="0"   width="340" height="52" fill="#33883f" opacity=".5"/>
-        <rect x="0" y="104" width="340" height="52" fill="#33883f" opacity=".5"/>
-        <rect x="0" y="208" width="340" height="52" fill="#33883f" opacity=".5"/>
-        <rect x="0" y="312" width="340" height="52" fill="#33883f" opacity=".5"/>
-        <rect x="0" y="416" width="340" height="52" fill="#33883f" opacity=".5"/>
-        <rect x="10" y="10" width="320" height="500" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" rx="2"/>
-        <line x1="10" y1="260" x2="330" y2="260" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
-        <circle cx="170" cy="260" r="50" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
-        <circle cx="170" cy="260" r="3" fill="rgba(255,255,255,.7)"/>
-        <rect x="85"  y="10"  width="170" height="70" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
-        <rect x="125" y="10"  width="90"  height="30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
-        <circle cx="170" cy="65"  r="2.5" fill="rgba(255,255,255,.6)"/>
-        <path d="M133 80 A42 42 0 0 1 207 80" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
-        <rect x="85"  y="440" width="170" height="70" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
-        <rect x="125" y="480" width="90"  height="30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
-        <circle cx="170" cy="455" r="2.5" fill="rgba(255,255,255,.6)"/>
-        <path d="M133 440 A42 42 0 0 0 207 440" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
-        <rect x="140" y="0"   width="60" height="12" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2"/>
-        <rect x="140" y="508" width="60" height="12" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2"/>
-        <path d="M10 22 A12 12 0 0 1 22 10"    fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
-        <path d="M318 10 A12 12 0 0 1 330 22"  fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
-        <path d="M10 498 A12 12 0 0 0 22 510"  fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
-        <path d="M318 510 A12 12 0 0 0 330 498" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
-        <g id="slotLayer"></g>
+        <rect width="340" height="520" fill="#2d7a3a"></rect>
+        <rect x="0" y="0" width="340" height="52" fill="#33883f" opacity=".5"></rect>
+        <rect x="0" y="104" width="340" height="52" fill="#33883f" opacity=".5"></rect>
+        <rect x="0" y="208" width="340" height="52" fill="#33883f" opacity=".5"></rect>
+        <rect x="0" y="312" width="340" height="52" fill="#33883f" opacity=".5"></rect>
+        <rect x="0" y="416" width="340" height="52" fill="#33883f" opacity=".5"></rect>
+        <rect x="10" y="10" width="320" height="500" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" rx="2"></rect>
+        <line x1="10" y1="260" x2="330" y2="260" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></line>
+        <circle cx="170" cy="260" r="50" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></circle>
+        <circle cx="170" cy="260" r="3" fill="rgba(255,255,255,.7)"></circle>
+        <rect x="85" y="10" width="170" height="70" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></rect>
+        <rect x="125" y="10" width="90" height="30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></rect>
+        <circle cx="170" cy="65" r="2.5" fill="rgba(255,255,255,.6)"></circle>
+        <path d="M133 80 A42 42 0 0 1 207 80" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></path>
+        <rect x="85" y="440" width="170" height="70" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></rect>
+        <rect x="125" y="480" width="90" height="30" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></rect>
+        <circle cx="170" cy="455" r="2.5" fill="rgba(255,255,255,.6)"></circle>
+        <path d="M133 440 A42 42 0 0 0 207 440" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></path>
+        <rect x="140" y="0" width="60" height="12" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2"></rect>
+        <rect x="140" y="508" width="60" height="12" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2"></rect>
+        <path d="M10 22 A12 12 0 0 1 22 10" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
+        <path d="M318 10 A12 12 0 0 1 330 22" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
+        <path d="M10 498 A12 12 0 0 0 22 510" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
+        <path d="M318 510 A12 12 0 0 0 330 498" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"></path>
+        <g id="slotLayer">
+      <g data-slot="0" style="cursor:default" onclick="">
+        <circle cx="170" cy="468" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="170" y="473" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">GK</text>
+      </g>
+      <g data-slot="1" style="cursor:default" onclick="">
+        <circle cx="62" cy="400" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="62" y="405" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">LB</text>
+      </g>
+      <g data-slot="2" style="cursor:default" onclick="">
+        <circle cx="122" cy="395" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="122" y="400" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CB</text>
+      </g>
+      <g data-slot="3" style="cursor:default" onclick="">
+        <circle cx="218" cy="395" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="218" y="400" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CB</text>
+      </g>
+      <g data-slot="4" style="cursor:default" onclick="">
+        <circle cx="278" cy="400" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="278" y="405" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">RB</text>
+      </g>
+      <g data-slot="5" style="cursor:default" onclick="">
+        <circle cx="170" cy="330" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="170" y="335" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CDM</text>
+      </g>
+      <g data-slot="6" style="cursor:default" onclick="">
+        <circle cx="110" cy="272" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="110" y="277" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CM</text>
+      </g>
+      <g data-slot="7" style="cursor:default" onclick="">
+        <circle cx="230" cy="272" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="230" y="277" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CM</text>
+      </g>
+      <g data-slot="8" style="cursor:default" onclick="">
+        <circle cx="170" cy="210" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="170" y="215" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">CAM</text>
+      </g>
+      <g data-slot="9" style="cursor:default" onclick="">
+        <circle cx="72" cy="148" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="72" y="153" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">LW</text>
+      </g>
+      <g data-slot="10" style="cursor:default" onclick="">
+        <circle cx="268" cy="148" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="268" y="153" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">RW</text>
+      </g>
+      <g data-slot="11" style="cursor:default" onclick="">
+        <circle cx="125" cy="88" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="125" y="93" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">ST</text>
+      </g>
+      <g data-slot="12" style="cursor:default" onclick="">
+        <circle cx="215" cy="88" r="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4 3"></circle>
+        <text x="215" y="93" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="rgba(255,255,255,0.5)">ST</text>
+      </g></g>
         <g id="playerLayer"></g>
         <g id="pendingLayer"></g>
         <g id="dragGhost" style="display:none;pointer-events:none">
-          <circle r="24" fill="rgba(232,255,71,.25)" stroke="var(--ac)" stroke-width="2"/>
+          <circle r="24" fill="rgba(232,255,71,.25)" stroke="var(--ac)" stroke-width="2"></circle>
           <text id="ghostName" y="-3" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="11" fill="white"></text>
-          <text id="ghostNum"  y="11" text-anchor="middle" font-family="DM Mono,monospace" font-size="9"  fill="rgba(255,255,255,.85)"></text>
+          <text id="ghostNum" y="11" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="rgba(255,255,255,.85)"></text>
         </g>
       </svg>
     </div>
@@ -279,13 +376,49 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <!-- On field -->
       <div class="pbox">
         <h3>On Field <span id="onCount" style="color:var(--ac)">0</span></h3>
-        <div class="onfield-list" id="onFieldList"></div>
+        <div class="onfield-list" id="onFieldList"><p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Drag bench players onto field positions</p></div>
       </div>
 
       <!-- Bench -->
       <div class="pbox">
-        <h3>Bench <span id="offCount" style="color:var(--gr)">0</span></h3>
-        <div class="bench-chips" id="benchChips"></div>
+        <h3>Bench <span id="offCount" style="color:var(--gr)">9</span></h3>
+        <div class="bench-chips" id="benchChips"><div class="bchip" draggable="true" data-id="1780432442512" onmousedown="startDragMouse(event,1780432442512)" ontouchstart="startDragTouch(event,1780432442512)">
+        <span class="cn">—</span>
+        <span class="cname">Delaney</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div><div class="bchip" draggable="true" data-id="1780432452513" onmousedown="startDragMouse(event,1780432452513)" ontouchstart="startDragTouch(event,1780432452513)">
+        <span class="cn">—</span>
+        <span class="cname">Josephine</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div><div class="bchip" draggable="true" data-id="1780432507570" onmousedown="startDragMouse(event,1780432507570)" ontouchstart="startDragTouch(event,1780432507570)">
+        <span class="cn">—</span>
+        <span class="cname">Olivia L</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div><div class="bchip" draggable="true" data-id="1780432514398" onmousedown="startDragMouse(event,1780432514398)" ontouchstart="startDragTouch(event,1780432514398)">
+        <span class="cn">—</span>
+        <span class="cname">Peyton</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div><div class="bchip" draggable="true" data-id="1780432516443" onmousedown="startDragMouse(event,1780432516443)" ontouchstart="startDragTouch(event,1780432516443)">
+        <span class="cn">—</span>
+        <span class="cname">Shelby</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div><div class="bchip" draggable="true" data-id="1780432520066" onmousedown="startDragMouse(event,1780432520066)" ontouchstart="startDragTouch(event,1780432520066)">
+        <span class="cn">—</span>
+        <span class="cname">Harper</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div><div class="bchip" draggable="true" data-id="1780432535347" onmousedown="startDragMouse(event,1780432535347)" ontouchstart="startDragTouch(event,1780432535347)">
+        <span class="cn">—</span>
+        <span class="cname">Finley</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div><div class="bchip" draggable="true" data-id="1780432538947" onmousedown="startDragMouse(event,1780432538947)" ontouchstart="startDragTouch(event,1780432538947)">
+        <span class="cn">—</span>
+        <span class="cname">Alivia</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div><div class="bchip" draggable="true" data-id="1780432544627" onmousedown="startDragMouse(event,1780432544627)" ontouchstart="startDragTouch(event,1780432544627)">
+        <span class="cn">—</span>
+        <span class="cname">Evelyn</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div></div>
       </div>
 
     </div>
@@ -295,7 +428,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 <!-- SUMMARY -->
 <div class="view" id="view-summary">
   <div class="sum-hdr">
-    <h2 style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gr)">Game History</h2>
+    <h2 style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-weight:700;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gr)">Game History</h2>
     <div style="display:flex;gap:.4rem">
       <button class="btn btn-ol btn-sm" onclick="exportCSV()">CSV</button>
       <button class="btn btn-rd btn-sm" onclick="clearGames()">Clear</button>
@@ -973,5 +1106,6 @@ function esc(s){
 renderRoster();
 renderGame();
 </script>
-</body>
-</html>
+
+
+</body></html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)file:///C:/Users/josep/Downloads/index_5.html -->
+<!-- saved from url=(0045)file:///C:/Users/josep/Downloads/index_6.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -307,7 +307,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 
 <header>
   <h1>⚽ SubGo</h1>
-  <button class="team-btn" id="teamBtn" onclick="openTeamOverlay()">My Team</button>
+  <button class="team-btn" id="teamBtn" onclick="openTeamOverlay()">Spain</button>
   <div class="hdr-score" id="hdrScore" style="display:none">
     <button class="score-btn us" id="scoreUs" onclick="goalScored(&#39;us&#39;)" title="We scored">0</button>
     <span class="score-sep">—</span>
@@ -326,7 +326,13 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 <div class="team-overlay" id="teamOverlay">
   <div class="team-sheet">
     <h2>⚽ Teams</h2>
-    <div class="team-list" id="teamList"></div>
+    <div class="team-list" id="teamList">
+    <div class="team-item active-team">
+      <div class="tname" onclick="switchTeam(&#39;team_1780514800698&#39;)">Spain</div>
+      <span class="tcount">9 players · 18 games</span>
+      <button class="tdel" onclick="renameTeam(&#39;team_1780514800698&#39;)" title="Rename team" style="color:var(--gr)">✎</button>
+      
+    </div></div>
     <div class="team-add-form">
       <input type="text" id="newTeamName" placeholder="New team name" onkeydown="if(event.key===&#39;Enter&#39;)addTeam()">
       <button class="btn btn-ac" onclick="addTeam()">Add</button>
@@ -348,14 +354,14 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 </div>
 
 <nav>
-  <button class="" onclick="showView(&#39;roster&#39;,this)">Roster</button>
-  <button onclick="showView(&#39;game&#39;,this)" class="active">Game</button>
-  <button onclick="showView(&#39;summary&#39;,this)">Summary</button>
-  <button onclick="showView(&#39;help&#39;,this)">Help</button>
+  <button class="active" onclick="showView(&#39;roster&#39;,this)">Roster</button>
+  <button onclick="showView(&#39;game&#39;,this)" class="">Game</button>
+  <button onclick="showView(&#39;summary&#39;,this)" class="">Summary</button>
+  <button onclick="showView(&#39;help&#39;,this)" class="">Help</button>
 </nav>
 
 <!-- ROSTER -->
-<div class="view" id="view-roster">
+<div class="view active" id="view-roster">
   <div class="sec-hdr">
     <h2>Roster <span id="playerCount" style="color:var(--grd);font-size:.82rem;font-weight:400;text-transform:none;letter-spacing:0">(9)</span></h2>
     <button class="btn btn-ol btn-sm" onclick="clearRoster()">Clear All</button>
@@ -367,7 +373,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     </div>
     <button class="btn btn-ac" onclick="addPlayer()" style="width:100%">Add Player</button>
   </div>
-  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.85rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-bottom:.75rem">Welcome to SubGo v2.7</p>
+  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.85rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-bottom:.75rem">Welcome to SubGo v2.8</p>
   <div class="roster-list" id="rosterList">
     <div class="pcard">
       <div class="pnum">—</div>
@@ -417,13 +423,13 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 </div>
 
 <!-- GAME -->
-<div class="view active" id="view-game">
+<div class="view" id="view-game">
   <div class="game-top">
     <div class="game-setup">
       <input type="text" id="gameOpponent" placeholder="Opponent name">
       <button class="btn btn-ac" onclick="newGame()">New Game</button>
     </div>
-    <div class="game-lbl" id="gameLabel">No active game — create one above</div>
+    <div class="game-lbl" id="gameLabel">No active game — create one above <button id="renameOppBtn" onclick="renameOpponent()" style="display:none;background:none;border:none;color:var(--grd);cursor:pointer;font-size:.8rem;padding:0 .25rem;vertical-align:middle" title="Rename opponent">✎</button></div>
   </div>
 
   <div class="game-wrap" id="gameWrap">
@@ -594,7 +600,800 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <button class="btn btn-rd btn-sm" onclick="clearGames()">Clear</button>
     </div>
   </div>
-  <div class="game-list" id="gameList"></div>
+  <div class="game-list" id="gameList"><div class="gitem" id="gitem-0">
+    <div class="gitem-header" onclick="toggleGameCard(0)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#18</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 3, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Delaney</span>
+      <span class="pspos">RW</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:100%"></div></div></div>
+      <span class="psmins">1'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Shelby</span>
+      <span class="pspos">ST</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:100%"></div></div></div>
+      <span class="psmins">1'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Finley</span>
+      <span class="pspos">CM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:100%"></div></div></div>
+      <span class="psmins">1'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(0)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-1">
+    <div class="gitem-header" onclick="toggleGameCard(1)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#17</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 3, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">#5</span>
+      <span class="psname">Josephine</span>
+      <span class="pspos">CAM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(1)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-2">
+    <div class="gitem-header" onclick="toggleGameCard(2)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#16</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 3, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Peyton</span>
+      <span class="pspos">CM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:100%"></div></div></div>
+      <span class="psmins">15'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Delaney</span>
+      <span class="pspos">ST</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Olivia L</span>
+      <span class="pspos">RW</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Harper</span>
+      <span class="pspos">GK</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Finley</span>
+      <span class="pspos">RB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Shelby</span>
+      <span class="pspos">CB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Player 1780432452513</span>
+      <span class="pspos">CDM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Evelyn</span>
+      <span class="pspos">CAM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Alivia</span>
+      <span class="pspos">CM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(2)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-3">
+    <div class="gitem-header" onclick="toggleGameCard(3)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#15</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 3, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Delaney</span>
+      <span class="pspos">RW</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Shelby</span>
+      <span class="pspos">ST</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Player 1780432452513</span>
+      <span class="pspos">CAM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Finley</span>
+      <span class="pspos">CM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Olivia L</span>
+      <span class="pspos">ST</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Harper</span>
+      <span class="pspos">LW</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Alivia</span>
+      <span class="pspos">CM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Evelyn</span>
+      <span class="pspos">CDM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Peyton</span>
+      <span class="pspos">CB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(3)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-4">
+    <div class="gitem-header" onclick="toggleGameCard(4)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#14</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 3, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Delaney</span>
+      <span class="pspos">CAM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:100%"></div></div></div>
+      <span class="psmins">1'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Finley</span>
+      <span class="pspos">CAM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:100%"></div></div></div>
+      <span class="psmins">1'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Shelby</span>
+      <span class="pspos">RW</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Harper</span>
+      <span class="pspos">LW</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Player 1780432452513</span>
+      <span class="pspos">CDM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Alivia</span>
+      <span class="pspos">CAM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(4)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-5">
+    <div class="gitem-header" onclick="toggleGameCard(5)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#13</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 3, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Harper</span>
+      <span class="pspos">RW</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:100%"></div></div></div>
+      <span class="psmins">1'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Evelyn</span>
+      <span class="pspos">CAM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:100%"></div></div></div>
+      <span class="psmins">1'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Olivia L</span>
+      <span class="pspos">RW</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:100%"></div></div></div>
+      <span class="psmins">1'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Alivia</span>
+      <span class="pspos">CDM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Finley</span>
+      <span class="pspos">CAM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(5)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-6">
+    <div class="gitem-header" onclick="toggleGameCard(6)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#12</span>
+      <span class="gname">vs. Opponent</span>
+      <span style="font-family:&#39;DM Mono&#39;,monospace;font-size:.78rem"><span style="color:var(--ac)">1</span><span style="color:var(--grd)">—</span><span style="color:var(--wh)">0</span></span>
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">1</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div class="gsum-section"><h4>Goals</h4><div class="goal-row us-goal">
+      <span class="gmin">0'</span>
+      <span style="color:var(--ac)">⚽</span>
+      <span class="gscorer">Delaney</span>
+      <button class="gdel" onclick="event.stopPropagation();deleteGoal(6,0)" title="Remove">✕</button>
+    </div></div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Peyton</span>
+      <span class="pspos">ST</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Delaney</span>
+      <span class="pspos">ST</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(6)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-7">
+    <div class="gitem-header" onclick="toggleGameCard(7)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#11</span>
+      <span class="gname">vs. Opponent</span>
+      <span style="font-family:&#39;DM Mono&#39;,monospace;font-size:.78rem"><span style="color:var(--ac)">1</span><span style="color:var(--grd)">—</span><span style="color:var(--wh)">2</span></span>
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">1</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">2</span>
+      </div>
+      <div class="gsum-section"><h4>Goals</h4><div class="goal-row us-goal">
+      <span class="gmin">0'</span>
+      <span style="color:var(--ac)">⚽</span>
+      <span class="gscorer">Delaney</span>
+      <button class="gdel" onclick="event.stopPropagation();deleteGoal(7,0)" title="Remove">✕</button>
+    </div><div class="goal-row them-goal">
+      <span class="gmin">0'</span>
+      <span style="color:var(--rd)">⚽</span>
+      <span class="gscorer">Opponent</span>
+      <button class="gdel" onclick="event.stopPropagation();deleteGoal(7,1)" title="Remove">✕</button>
+    </div><div class="goal-row them-goal">
+      <span class="gmin">0'</span>
+      <span style="color:var(--rd)">⚽</span>
+      <span class="gscorer">Own Goal</span>
+      <button class="gdel" onclick="event.stopPropagation();deleteGoal(7,2)" title="Remove">✕</button>
+    </div></div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Delaney</span>
+      <span class="pspos">ST</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(7)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-8">
+    <div class="gitem-header" onclick="toggleGameCard(8)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#10</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Delaney</span>
+      <span class="pspos">GK</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Player 1780432452513</span>
+      <span class="pspos">LB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Olivia L</span>
+      <span class="pspos">RB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Finley</span>
+      <span class="pspos">CB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Harper</span>
+      <span class="pspos">LW, RB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Alivia</span>
+      <span class="pspos">CDM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Evelyn</span>
+      <span class="pspos">CAM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Shelby</span>
+      <span class="pspos">ST</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Peyton</span>
+      <span class="pspos">RW</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(8)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-9">
+    <div class="gitem-header" onclick="toggleGameCard(9)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#9</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Peyton</span>
+      <span class="pspos">LB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Delaney</span>
+      <span class="pspos">GK</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Olivia L</span>
+      <span class="pspos">RB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Harper</span>
+      <span class="pspos">CM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Shelby</span>
+      <span class="pspos">LM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Finley</span>
+      <span class="pspos">RM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Alivia</span>
+      <span class="pspos">CM</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Player 1780432452513</span>
+      <span class="pspos">ST</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Evelyn</span>
+      <span class="pspos">CB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(9)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-10">
+    <div class="gitem-header" onclick="toggleGameCard(10)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#8</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      <div class="gsum-section"><h4>Players</h4>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Delaney</span>
+      <span class="pspos">GK</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Finley</span>
+      <span class="pspos">LB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Alivia</span>
+      <span class="pspos">LB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Peyton</span>
+      <span class="pspos">LB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div>
+    <div class="player-sum-row">
+      <span class="psnum">—</span>
+      <span class="psname">Olivia L</span>
+      <span class="pspos">LB</span>
+      <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:0%"></div></div></div>
+      <span class="psmins">0'</span>
+    </div></div>
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(10)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-11">
+    <div class="gitem-header" onclick="toggleGameCard(11)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#7</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(11)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-12">
+    <div class="gitem-header" onclick="toggleGameCard(12)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#6</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(12)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-13">
+    <div class="gitem-header" onclick="toggleGameCard(13)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#5</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(13)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-14">
+    <div class="gitem-header" onclick="toggleGameCard(14)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#4</span>
+      <span class="gname">vs. Opponent</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(14)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-15">
+    <div class="gitem-header" onclick="toggleGameCard(15)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#3</span>
+      <span class="gname">vs. test</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(15)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-16">
+    <div class="gitem-header" onclick="toggleGameCard(16)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#2</span>
+      <span class="gname">vs. test</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(16)">Delete Game</button>
+      </div>
+    </div>
+  </div><div class="gitem" id="gitem-17">
+    <div class="gitem-header" onclick="toggleGameCard(17)">
+      <span style="font-size:.7rem;color:var(--ac);font-family:&#39;DM Mono&#39;,monospace">#1</span>
+      <span class="gname">vs. test</span>
+      
+      <span class="gdate">Jun 2, 2026</span>
+      <span class="gitem-expand">▼</span>
+    </div>
+    <div class="gitem-body">
+      <div class="gsum-score">
+        <span style="color:var(--ac)">0</span>
+        <span style="color:var(--grd);margin:0 .4rem">—</span>
+        <span style="color:var(--wh)">0</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>
+      
+      <div class="gitem-actions">
+        <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(17)">Delete Game</button>
+      </div>
+    </div>
+  </div></div>
 </div>
 
 <!-- HELP -->
@@ -800,7 +1599,8 @@ function switchTeam(teamId){
   benchSinceMinute={};
 
   document.getElementById('hdrScore').style.display='none';
-  document.getElementById('gameLabel').textContent='No active game — create one above';
+  document.getElementById('gameLabel').childNodes[0].textContent='No active game — create one above ';
+  document.getElementById('renameOppBtn').style.display='none';
   document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 
   saveData();
@@ -828,8 +1628,21 @@ function renderTeamList(){
     <div class="team-item${t.id===currentTeamId?' active-team':''}">
       <div class="tname" onclick="switchTeam('${t.id}')">${esc(t.name)}</div>
       <span class="tcount">${t.roster.length} players · ${t.games.length} games</span>
+      <button class="tdel" onclick="renameTeam('${t.id}')" title="Rename team" style="color:var(--gr)">✎</button>
       ${teams.length>1?`<button class="tdel" onclick="deleteTeam('${t.id}')" title="Delete team">✕</button>`:''}
     </div>`).join('');
+}
+
+function renameTeam(teamId){
+  const t=teams.find(x=>x.id===teamId);
+  if(!t)return;
+  const newName=prompt('Rename team:',t.name);
+  if(!newName||!newName.trim())return;
+  t.name=newName.trim();
+  if(teamId===currentTeamId)
+    document.getElementById('teamBtn').textContent=t.name;
+  saveData();
+  renderTeamList();
 }
 
 function addTeam(){
@@ -939,6 +1752,13 @@ function showView(name,btn){
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
   if(btn)btn.classList.add('active');
+  // Auto-pause clock when leaving game tab
+  if(name!=='game' && timerRunning){
+    clearInterval(timerInterval);
+    timerRunning=false;
+    document.getElementById('timerBtn').textContent='Resume';
+    document.getElementById('clock').classList.remove('run');
+  }
   if(name==='summary')renderSummary();
   if(name==='game'){
     if(currentGame){document.getElementById('hdrScore').style.display='flex';renderScore();}
@@ -998,7 +1818,8 @@ function newGame(){
   getTeam().games.unshift(currentGame);
   games=getGames();
   saveData();
-  document.getElementById('gameLabel').textContent=`vs. ${opp} — ${dateStr}`;
+  document.getElementById('gameLabel').childNodes[0].textContent=`vs. ${opp} — ${dateStr} `;
+  document.getElementById('renameOppBtn').style.display='inline';
   document.getElementById('hdrScore').style.display='flex';
   renderScore();
   resetTimer();
@@ -1069,7 +1890,19 @@ function renderGame(){
   renderField();
   renderBenchPanel();
   renderPendingBox();
-  if(currentGame)document.getElementById('gameLabel').textContent=`vs. ${currentGame.opponent} — ${currentGame.date}`;
+  if(currentGame){
+    document.getElementById('gameLabel').childNodes[0].textContent=`vs. ${currentGame.opponent} — ${currentGame.date} `;
+    document.getElementById('renameOppBtn').style.display='inline';
+  }
+}
+
+function renameOpponent(){
+  if(!currentGame)return;
+  const newName=prompt('Rename opponent:',currentGame.opponent);
+  if(!newName||!newName.trim())return;
+  currentGame.opponent=newName.trim();
+  saveData();
+  renderGame();
 }
 
 function renderField(){
@@ -1162,20 +1995,21 @@ function renderBenchPanel(){
       </div>`).join('');
   }
 
-  // Bench chips — show total minutes played and alert if bench time exceeded
+  // Bench chips — sorted by least minutes played (least time first)
   const alertMin=parseInt(document.getElementById('benchAlertMin')?.value)||5;
-  const benchPlayers=roster.filter(p=>!onIds.has(p.id)&&!unavailIds.has(p.id));
+  const benchPlayers=roster
+    .filter(p=>!onIds.has(p.id)&&!unavailIds.has(p.id))
+    .map(p=>({p, mins:totalMinsPlayed(p.id)}))
+    .sort((a,b)=>a.mins-b.mins);
   const chips=document.getElementById('benchChips');
   if(!roster.length){
     chips.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Add players in the Roster tab</p>';
   } else if(!benchPlayers.length){
     chips.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">All players on field or unavailable</p>';
   } else {
-    chips.innerHTML=benchPlayers.map(p=>{
+    chips.innerHTML=benchPlayers.map(({p,mins})=>{
       const wasOn=currentGame&&currentGame.playerStats[p.id]?.length;
       const isPendingIn=pendingInIds.has(p.id);
-      const mins=totalMinsPlayed(p.id);
-      // Bench alert: has been off field for >= alertMin minutes
       const benchSince=benchSinceMinute[p.id];
       const benchMins=benchSince!==undefined?getMinute()-benchSince:null;
       const isAlerted=benchMins!==null&&benchMins>=alertMin;
@@ -1614,7 +2448,8 @@ function deleteGame(idx){
     fieldSlots=new Array(SLOTS.length).fill(null);
     pendingSubs=[];
     unavailablePlayers=[];
-    document.getElementById('gameLabel').textContent='No active game — create one above';
+    document.getElementById('gameLabel').childNodes[0].textContent='No active game — create one above ';
+    document.getElementById('renameOppBtn').style.display='none';
     document.getElementById('hdrScore').style.display='none';
   }
   saveData();
@@ -1660,10 +2495,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v2.7</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v2.8</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v2.7 [DEV]';
+  document.getElementById('verTag').textContent='v2.8 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_14.html -->
+<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_18.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -29,6 +29,30 @@ header h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.
 .hdr-timer{display:flex;align-items:center;gap:.4rem;margin-left:auto}
 .clock{font-family:'DM Mono',monospace;font-size:1.2rem;color:var(--wh);background:var(--gm);padding:.2rem .6rem;border-radius:4px;border:1px solid var(--br);min-width:58px;text-align:center}
 .clock.run{color:var(--ac)}
+
+/* SCORE */
+.hdr-score{display:flex;align-items:center;gap:.3rem;margin-left:.4rem}
+.score-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.3rem;background:var(--gm);border:1px solid var(--br);border-radius:5px;color:var(--wh);padding:.15rem .55rem;cursor:pointer;min-width:36px;text-align:center;line-height:1.4;transition:background .12s}
+.score-btn:active{background:#2a6a32}
+.score-btn.us{color:var(--ac)}
+.score-sep{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.1rem;color:var(--grd)}
+.score-undo{background:none;border:none;color:var(--grd);font-size:.85rem;cursor:pointer;padding:.15rem .2rem;line-height:1}
+.score-undo:active{color:var(--rd)}
+
+/* GOAL OVERLAY */
+.goal-overlay{display:none;position:fixed;inset:0;z-index:400;background:rgba(5,15,7,.93);align-items:flex-end;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px)}
+.goal-overlay.active{display:flex}
+.goal-sheet{background:#0d1f10;border:2px solid var(--ac);border-bottom:none;border-radius:14px 14px 0 0;padding:1.25rem;width:100%;max-width:480px;max-height:80vh;display:flex;flex-direction:column;gap:.75rem}
+.goal-sheet h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ac);text-align:center}
+.goal-player-list{display:flex;flex-direction:column;gap:.35rem;overflow-y:auto;flex:1}
+.goal-player-btn{display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;border-radius:7px;background:var(--gm);border:1px solid var(--br);cursor:pointer;min-height:48px;text-align:left;width:100%}
+.goal-player-btn:active{background:#2a6a32;border-color:var(--ac)}
+.goal-player-btn .gpnum{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--ac);min-width:24px}
+.goal-player-btn .gpname{font-size:.95rem;font-weight:500;flex:1}
+.goal-player-btn .gppos{font-size:.7rem;color:var(--gr);font-family:'DM Mono',monospace}
+.goal-sheet-actions{display:flex;gap:.5rem;flex-shrink:0}
+.goal-og-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.6rem .75rem;border-radius:7px;background:#2a0a0a;border:1px solid #5a1a1a;cursor:pointer;min-height:48px;width:100%;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;color:var(--rd)}
+.goal-og-btn:active{background:#3a1010}
 
 /* NAV */
 nav{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--gd);border-bottom:1px solid var(--br)}
@@ -184,12 +208,30 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 
 <header>
   <h1>⚽ Soccer Tracker</h1>
+  <div class="hdr-score" id="hdrScore" style="display:none">
+    <button class="score-btn us" id="scoreUs" onclick="goalScored(&#39;us&#39;)" title="We scored">0</button>
+    <span class="score-sep">—</span>
+    <button class="score-btn" id="scoreThem" onclick="goalScored(&#39;them&#39;)" title="They scored">0</button>
+    <button class="score-undo" onclick="undoGoal()" title="Undo last goal">↩</button>
+  </div>
   <div class="hdr-timer">
     <div class="clock" id="clock">0:00</div>
     <button class="btn btn-ac btn-sm" id="timerBtn" onclick="toggleTimer()">Start</button>
     <button class="btn btn-ol btn-sm" onclick="resetTimer()">↺</button>
   </div>
 </header>
+
+<!-- GOAL SCORER OVERLAY -->
+<div class="goal-overlay" id="goalOverlay">
+  <div class="goal-sheet">
+    <h2 id="goalSheetTitle">⚽ Who Scored?</h2>
+    <div class="goal-player-list" id="goalPlayerList"></div>
+    <button class="goal-og-btn" onclick="recordGoal(null,true)">Own Goal</button>
+    <div class="goal-sheet-actions">
+      <button class="btn btn-ol" style="flex:1" onclick="closeGoalSheet()">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <nav>
   <button class="active" onclick="showView(&#39;roster&#39;,this)">Roster</button>
@@ -436,6 +478,7 @@ let currentGame = null;
 let timerSec = 0, timerRunning = false, timerInterval = null;
 let panelVisible = true;
 let pendingSubs = [];
+let pendingGoalSide = null;
 
 const SLOTS = [
   {pos:'GK',   x:170, y:468},
@@ -493,7 +536,10 @@ function showView(name,btn){
   document.getElementById('view-'+name).classList.add('active');
   if(btn)btn.classList.add('active');
   if(name==='summary')renderSummary();
-  if(name==='game')renderGame();
+  if(name==='game'){
+    if(currentGame){document.getElementById('hdrScore').style.display='flex';renderScore();}
+    renderGame();
+  }
 }
 
 function togglePanel(){
@@ -536,12 +582,14 @@ function renderRoster(){
 function newGame(){
   const opp=document.getElementById('gameOpponent').value.trim()||'Opponent';
   const dateStr=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  currentGame={id:Date.now(),opponent:opp,date:dateStr,events:[],playerStats:{}};
+  currentGame={id:Date.now(),opponent:opp,date:dateStr,events:[],playerStats:{},goals:[]};
   fieldSlots=new Array(SLOTS.length).fill(null);
   pendingSubs=[];
   games.unshift(currentGame);
   saveData();
   document.getElementById('gameLabel').textContent=`vs. ${opp} — ${dateStr}`;
+  document.getElementById('hdrScore').style.display='flex';
+  renderScore();
   resetTimer();
   renderGame();
 }
@@ -771,6 +819,71 @@ function removeFromSlot(slotIdx){
   saveData();renderGame();
 }
 
+// ── SCORE & GOALS ──────────────────────────────────────────
+function renderScore(){
+  if(!currentGame)return;
+  const goals=currentGame.goals||[];
+  document.getElementById('scoreUs').textContent=goals.filter(g=>g.side==='us').length;
+  document.getElementById('scoreThem').textContent=goals.filter(g=>g.side==='them').length;
+}
+
+function goalScored(side){
+  if(!currentGame){alert('Start a new game first.');return;}
+  pendingGoalSide=side;
+  if(side==='us'){
+    document.getElementById('goalSheetTitle').textContent='⚽ Who Scored?';
+    const onPlayers=fieldSlots.map((rid,i)=>{
+      if(!rid)return null;
+      const p=roster.find(pl=>pl.id===rid);
+      if(!p)return null;
+      return{p,pos:slotLabel(SLOTS[i].pos)};
+    }).filter(Boolean);
+    const list=document.getElementById('goalPlayerList');
+    if(!onPlayers.length){
+      list.innerHTML='<p style="color:var(--grd);font-size:.85rem;text-align:center;padding:.5rem">No players on field</p>';
+    } else {
+      list.innerHTML=onPlayers.map(({p,pos})=>`
+        <button class="goal-player-btn" onclick="recordGoal(${p.id},false)">
+          <span class="gpnum">${p.num!=='—'?'#'+p.num:'—'}</span>
+          <span class="gpname">${esc(p.name)}</span>
+          <span class="gppos">${pos}</span>
+        </button>`).join('');
+    }
+    document.getElementById('goalOverlay').classList.add('active');
+  } else {
+    recordGoal(null,false);
+  }
+}
+
+function recordGoal(scorerId,ownGoal){
+  if(!currentGame)return;
+  if(!currentGame.goals)currentGame.goals=[];
+  const side=ownGoal?'them':pendingGoalSide;
+  currentGame.goals.push({side,scorerId:scorerId||null,ownGoal,minute:getMinute()});
+  saveData();renderScore();closeGoalSheet();
+}
+
+function undoGoal(){
+  if(!currentGame||!currentGame.goals||!currentGame.goals.length)return;
+  currentGame.goals.pop();
+  saveData();renderScore();
+}
+
+function deleteGoal(gameIdx,goalIdx){
+  const g=games[gameIdx];
+  if(!g||!g.goals)return;
+  g.goals.splice(goalIdx,1);
+  saveData();
+  if(currentGame&&g.id===currentGame.id)renderScore();
+  showGameSummary(gameIdx);
+}
+
+function closeGoalSheet(){
+  document.getElementById('goalOverlay').classList.remove('active');
+  pendingGoalSide=null;
+}
+
+// ── DRAG AND DROP ──────────────────────────────────────────
 let drag=null;
 
 function getSvgPoint(svgEl,clientX,clientY){
@@ -890,15 +1003,21 @@ function startDragTouch(e,rosterId){
 const POSITIONS=['GK','LB','CB','RB','CDM','CM','CAM','LM','RM','LW','RW','ST','CF'];
 
 function renderSummary(){
-  const gl=document.getElementById('gameList');
+  const gameListEl=document.getElementById('gameList');
   const sc=document.getElementById('summaryContent');
-  if(!games.length){gl.innerHTML='<p class="empty">No games yet.</p>';sc.innerHTML='';return;}
-  gl.innerHTML=games.map((g,i)=>`
-    <div class="gitem${currentGame&&g.id===currentGame.id?' active-g':''}" onclick="showGameSummary(${i})">
+  if(!games.length){gameListEl.innerHTML='<p class="empty">No games yet.</p>';sc.innerHTML='';return;}
+  gameListEl.innerHTML=games.map((g,i)=>{
+    const ggoals=g.goals||[];
+    const us=ggoals.filter(x=>x.side==='us').length;
+    const them=ggoals.filter(x=>x.side==='them').length;
+    const scoreStr=ggoals.length?`<span style="font-family:'DM Mono',monospace;font-size:.75rem;color:var(--ac);margin-left:.3rem">${us}—${them}</span>`:'';
+    return `<div class="gitem${currentGame&&g.id===currentGame.id?' active-g':''}" onclick="showGameSummary(${i})">
       <span style="font-size:.7rem;color:var(--ac);font-family:'DM Mono',monospace">#${games.length-i}</span>
       <span class="gname">vs. ${esc(g.opponent)}</span>
+      ${scoreStr}
       <span class="gdate">${g.date}</span>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   showGameSummary(0);
 }
 
@@ -918,9 +1037,32 @@ function showGameSummary(idx){
   }
   rows.sort((a,b)=>{const pa=POSITIONS.indexOf(a.pos),pb=POSITIONS.indexOf(b.pos);return(pa<0?99:pa)-(pb<0?99:pb)||a.name.localeCompare(b.name);});
   const maxM=Math.max(...rows.filter(r=>typeof r.mins==='number').map(r=>r.mins),1);
+  const goals=g.goals||[];
+  const usScore=goals.filter(x=>x.side==='us').length;
+  const themScore=goals.filter(x=>x.side==='them').length;
+  const goalLog=goals.map((gl,gi)=>{
+    const scorer=gl.scorerId?roster.find(p=>p.id===gl.scorerId):null;
+    const scorerTxt=gl.ownGoal?'Own Goal':scorer?`${scorer.num!=='—'?'#'+scorer.num+' ':''}${scorer.name}`:'Opponent';
+    const side=gl.side==='us'
+      ?`<span style="color:var(--ac)">⚽ ${esc(scorerTxt)}</span>`
+      :`<span style="color:var(--rd)">⚽ ${esc(scorerTxt)}</span>`;
+    return `<tr>
+      <td style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gr);padding:.4rem .55rem">${gl.minute}'</td>
+      <td style="padding:.4rem .55rem">${side}</td>
+      <td style="padding:.4rem .55rem;text-align:right"><button onclick="deleteGoal(${idx},${gi})" style="background:none;border:none;color:var(--grd);cursor:pointer;font-size:.9rem;padding:2px 4px;border-radius:3px" title="Remove goal">✕</button></td>
+    </tr>`;
+  }).join('');
   document.getElementById('summaryContent').innerHTML=`
     <div class="pbox">
-      <h3 style="margin-bottom:.6rem">vs. ${esc(g.opponent)} — ${g.date}</h3>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem">
+        <h3>vs. ${esc(g.opponent)} — ${g.date}</h3>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.6rem;letter-spacing:.04em">
+          <span style="color:var(--ac)">${usScore}</span>
+          <span style="color:var(--grd);margin:0 .3rem">—</span>
+          <span style="color:var(--wh)">${themScore}</span>
+        </div>
+      </div>
+      ${goals.length?`<table class="stbl" style="margin-bottom:.75rem"><thead><tr><th>Min</th><th>Goal</th></tr></thead><tbody>${goalLog}</tbody></table>`:''}
       <div class="table-scroll">
         <table class="stbl">
           <thead><tr><th>#</th><th>Player</th><th>Pos</th><th>On</th><th>Off</th><th>Min</th><th></th></tr></thead>
@@ -975,7 +1117,7 @@ function esc(s){
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#2a4a2a;z-index:999;pointer-events:none">v1.0</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#2a4a2a;z-index:999;pointer-events:none">v1.2</div>
 <script>
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>{

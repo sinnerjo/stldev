@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_19.html -->
+<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_26.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Soccer Tracker</title>
+<title>SubGo</title>
 <link rel="manifest" href="file:///C:/Users/josep/Downloads/manifest.json">
 <meta name="theme-color" content="#00004a">
 <link rel="apple-touch-icon" href="file:///C:/Users/josep/Downloads/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com/">
-<link href="./Soccer Tracker_files/css2" rel="stylesheet">
+<link href="./SubGo_files/css2" rel="stylesheet">
 <style>
 :root {
   /* Primary: dark navy #00008b, Secondary: silver/white */
-  --gd:#00004a;--gm:#000070;--gf:#000090;
+  --gd:#00004a;--gm:#000070;--gf:#2d7a3a;
   --ac:#e8eeff;--ac2:#c0c8f0;
   --wh:#f0f2ff;--gr:#9090b0;--grd:#505068;
   --rd:#e84a4a;--bg:#00001a;--cb:#00002e;--br:#00006a;
@@ -102,10 +102,41 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .game-lbl{font-size:.78rem;color:var(--gr);text-align:center;padding:.15rem 0 .4rem;font-family:'DM Mono',monospace}
 .game-wrap{display:flex;gap:0;align-items:flex-start;position:relative}
 
+@media(min-width:641px){
+  #view-game{display:flex;flex-direction:column;align-items:center}
+  #view-game .game-top{width:100%;max-width:calc(75vh * 0.654* 2 + 2px)}
+  .game-wrap{width:calc(75vh * 0.654 * 2 + 2px);max-width:842px}
+}
+
 /* FIELD */
 .field-wrap{flex:1;min-width:0;background:var(--gf);overflow:hidden;border-right:1px solid var(--br);position:relative;user-select:none}
 .field-svg{display:block;width:100%;touch-action:pan-y}
 .field-svg.dragging{touch-action:none}
+
+/* DESKTOP: field and bench equal width, centered */
+@media(min-width:641px){
+  .game-wrap{
+    justify-content:center;
+    align-items:flex-start;
+    max-width:none;
+  }
+  .field-wrap{
+    flex:none;
+    width:calc(75vh * 0.654);
+    max-width:420px;
+    min-width:240px;
+  }
+  .field-svg{width:100%;height:auto}
+  .bench-col{
+    flex:none;
+    width:calc(75vh * 0.654);
+    max-width:420px;
+    min-width:240px;
+    max-height:75vh;
+    overflow-y:auto;
+    border-left:1px solid var(--br);
+  }
+}
 
 /* BENCH PANEL */
 .bench-col{width:230px;flex-shrink:0;display:flex;flex-direction:column;gap:.6rem;padding:.6rem .6rem .6rem .5rem;background:var(--bg);border-left:1px solid var(--br);overflow-y:auto}
@@ -160,7 +191,15 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .shoutout-player .sp-pos{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--gr);background:var(--gm);padding:2px 7px;border-radius:3px}
 .shoutout-close{display:flex;gap:.5rem;margin-top:1.25rem}
 
-/* BENCH CHIPS */
+/* UNAVAILABLE SECTION */
+.unavail-box{background:#1a0a0a;border:1px solid #5a1a1a;border-radius:8px;padding:.65rem}
+.unavail-box h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#c05050;margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between}
+.unavail-list{display:flex;flex-direction:column;gap:.3rem;min-height:36px}
+.unavail-chip{display:flex;align-items:center;gap:.45rem;padding:.45rem .6rem;border-radius:6px;border:1px solid #5a1a1a;background:#2a0a0a;min-height:40px;opacity:.7}
+.unavail-chip .cn{font-family:'DM Mono',monospace;font-size:.7rem;color:#c05050;min-width:20px}
+.unavail-chip .cname{font-size:.85rem;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--gr)}
+.unavail-drop-hint{font-size:.72rem;color:var(--grd);padding:.25rem 0;text-align:center;border:1px dashed #3a1a1a;border-radius:5px;padding:.4rem}
+.unavail-drop-hint.drag-over{border-color:#c05050;background:rgba(192,80,80,.08)}
 .bench-chips{display:flex;flex-direction:column;gap:.3rem;max-height:200px;overflow-y:auto}
 .bchip{display:flex;align-items:center;gap:.45rem;padding:.5rem .6rem;border-radius:6px;cursor:grab;border:1px solid var(--br);background:var(--gm);min-height:44px;transition:opacity .15s,border-color .15s;touch-action:pan-y;user-select:none}
 .bchip.dragging{touch-action:none}
@@ -209,7 +248,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 <body>
 
 <header>
-  <h1>⚽ Soccer Tracker</h1>
+  <h1>⚽ SubGo</h1>
   <div class="hdr-score" id="hdrScore" style="display:none">
     <button class="score-btn us" id="scoreUs" onclick="goalScored(&#39;us&#39;)" title="We scored">0</button>
     <span class="score-sep">—</span>
@@ -254,17 +293,12 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     </div>
     <button class="btn btn-ac" onclick="addPlayer()" style="width:100%">Add Player</button>
   </div>
-  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.85rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-bottom:.75rem">Welcome to SubGo v1.4</p>
+  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.85rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-bottom:.75rem">Welcome to SubGo v2.0</p>
   <div class="roster-list" id="rosterList">
     <div class="pcard">
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Delaney</div></div>
       <button class="del" onclick="deletePlayer(1780432442512)">✕</button>
-    </div>
-    <div class="pcard">
-      <div class="pnum">—</div>
-      <div class="pinfo"><div class="pname">Josephine</div></div>
-      <button class="del" onclick="deletePlayer(1780432452513)">✕</button>
     </div>
     <div class="pcard">
       <div class="pnum">—</div>
@@ -300,6 +334,11 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Evelyn</div></div>
       <button class="del" onclick="deletePlayer(1780432544627)">✕</button>
+    </div>
+    <div class="pcard">
+      <div class="pnum">5</div>
+      <div class="pinfo"><div class="pname">Josephine</div></div>
+      <button class="del" onclick="deletePlayer(1780492548190)">✕</button>
     </div></div>
 </div>
 
@@ -316,12 +355,12 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   <div class="game-wrap" id="gameWrap">
     <div class="field-wrap" id="fieldWrap">
       <svg class="field-svg" id="fieldSvg" viewBox="0 0 340 520" xmlns="http://www.w3.org/2000/svg">
-        <rect width="340" height="520" fill="#00008b"></rect>
-        <rect x="0" y="0" width="340" height="52" fill="#0000a0" opacity=".6"></rect>
-        <rect x="0" y="104" width="340" height="52" fill="#0000a0" opacity=".6"></rect>
-        <rect x="0" y="208" width="340" height="52" fill="#0000a0" opacity=".6"></rect>
-        <rect x="0" y="312" width="340" height="52" fill="#0000a0" opacity=".6"></rect>
-        <rect x="0" y="416" width="340" height="52" fill="#0000a0" opacity=".6"></rect>
+        <rect width="340" height="520" fill="#2d7a3a"></rect>
+        <rect x="0" y="0" width="340" height="52" fill="#33883f" opacity=".6"></rect>
+        <rect x="0" y="104" width="340" height="52" fill="#33883f" opacity=".6"></rect>
+        <rect x="0" y="208" width="340" height="52" fill="#33883f" opacity=".6"></rect>
+        <rect x="0" y="312" width="340" height="52" fill="#33883f" opacity=".6"></rect>
+        <rect x="0" y="416" width="340" height="52" fill="#33883f" opacity=".6"></rect>
         <rect x="10" y="10" width="320" height="500" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" rx="2"></rect>
         <line x1="10" y1="260" x2="330" y2="260" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></line>
         <circle cx="170" cy="260" r="50" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"></circle>
@@ -410,40 +449,58 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
         <div class="bench-chips" id="benchChips"><div class="bchip" draggable="true" data-id="1780432442512" onmousedown="startDragMouse(event,1780432442512)" ontouchstart="startDragTouch(event,1780432442512)">
         <span class="cn">—</span>
         <span class="cname">Delaney</span>
-        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
-      </div><div class="bchip" draggable="true" data-id="1780432452513" onmousedown="startDragMouse(event,1780432452513)" ontouchstart="startDragTouch(event,1780432452513)">
-        <span class="cn">—</span>
-        <span class="cname">Josephine</span>
+        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
         <span style="font-size:.7rem;color:var(--ac)">⠿</span>
       </div><div class="bchip" draggable="true" data-id="1780432507570" onmousedown="startDragMouse(event,1780432507570)" ontouchstart="startDragTouch(event,1780432507570)">
         <span class="cn">—</span>
         <span class="cname">Olivia L</span>
+        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
         <span style="font-size:.7rem;color:var(--ac)">⠿</span>
       </div><div class="bchip" draggable="true" data-id="1780432514398" onmousedown="startDragMouse(event,1780432514398)" ontouchstart="startDragTouch(event,1780432514398)">
         <span class="cn">—</span>
         <span class="cname">Peyton</span>
+        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
         <span style="font-size:.7rem;color:var(--ac)">⠿</span>
       </div><div class="bchip" draggable="true" data-id="1780432516443" onmousedown="startDragMouse(event,1780432516443)" ontouchstart="startDragTouch(event,1780432516443)">
         <span class="cn">—</span>
         <span class="cname">Shelby</span>
+        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
         <span style="font-size:.7rem;color:var(--ac)">⠿</span>
       </div><div class="bchip" draggable="true" data-id="1780432520066" onmousedown="startDragMouse(event,1780432520066)" ontouchstart="startDragTouch(event,1780432520066)">
         <span class="cn">—</span>
         <span class="cname">Harper</span>
+        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
         <span style="font-size:.7rem;color:var(--ac)">⠿</span>
       </div><div class="bchip" draggable="true" data-id="1780432535347" onmousedown="startDragMouse(event,1780432535347)" ontouchstart="startDragTouch(event,1780432535347)">
         <span class="cn">—</span>
         <span class="cname">Finley</span>
+        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
         <span style="font-size:.7rem;color:var(--ac)">⠿</span>
       </div><div class="bchip" draggable="true" data-id="1780432538947" onmousedown="startDragMouse(event,1780432538947)" ontouchstart="startDragTouch(event,1780432538947)">
         <span class="cn">—</span>
         <span class="cname">Alivia</span>
+        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
         <span style="font-size:.7rem;color:var(--ac)">⠿</span>
       </div><div class="bchip" draggable="true" data-id="1780432544627" onmousedown="startDragMouse(event,1780432544627)" ontouchstart="startDragTouch(event,1780432544627)">
         <span class="cn">—</span>
         <span class="cname">Evelyn</span>
+        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
+        <span style="font-size:.7rem;color:var(--ac)">⠿</span>
+      </div><div class="bchip" draggable="true" data-id="1780492548190" onmousedown="startDragMouse(event,1780492548190)" ontouchstart="startDragTouch(event,1780492548190)">
+        <span class="cn">#5</span>
+        <span class="cname">Josephine</span>
+        <span style="font-size:.68rem;font-family:&#39;DM Mono&#39;,monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">—</span>
         <span style="font-size:.7rem;color:var(--ac)">⠿</span>
       </div></div>
+      </div>
+      <div class="unavail-box" id="unavailBox">
+        <h3>
+          <span>Unavailable</span>
+          <button class="btn btn-ol btn-sm" onclick="resetUnavailable()" style="font-size:.65rem;min-height:24px;padding:.2rem .5rem">Reset</button>
+        </h3>
+        <div id="unavailList"><div class="unavail-drop-hint" id="unavailHint" ondragover="unavailDragOver(event)" ondragleave="unavailDragLeave(event)" ondrop="unavailDrop(event)">
+    Drop players here
+  </div></div>
       </div>
     </div>
   </div>
@@ -465,7 +522,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 <!-- SUB SHOUTOUT OVERLAY -->
 <div class="shoutout-overlay" id="shoutoutOverlay">
   <div class="shoutout-card">
-    <h2>⚽ Substitutions</h2>
+    <h2>⚽ SubGo — Substitutions</h2>
     <div id="shoutoutContent"></div>
     <div class="shoutout-close">
       <button class="btn btn-ol" style="flex:1" onclick="closeShoutout()">Close</button>
@@ -482,6 +539,7 @@ let timerSec = 0, timerRunning = false, timerInterval = null;
 let panelVisible = true;
 let pendingSubs = [];
 let pendingGoalSide = null;
+let unavailablePlayers = []; // array of rosterIds
 
 const SLOTS = [
   {pos:'GK',   x:170, y:468},
@@ -504,10 +562,10 @@ let fieldSlots = new Array(SLOTS.length).fill(null);
 
 const POS_COLORS = {
   GK:'#c47a10',
-  LB:'#c0c0e0',CB:'#c0c0e0',CB2:'#c0c0e0',RB:'#c0c0e0',
-  CDM:'#a020f0',CM:'#7060d8',CM2:'#7060d8',
-  CAM:'#d040c0',LW:'#e04040',RW:'#e04040',
-  ST:'#e8eeff',ST2:'#e8eeff'
+  LB:'#1a5a9a',CB:'#1a5a9a',CB2:'#1a5a9a',RB:'#1a5a9a',
+  CDM:'#6a35bb',CM:'#5040c0',CM2:'#5040c0',
+  CAM:'#8030a8',LW:'#b02060',RW:'#b02060',
+  ST:'#b01818',ST2:'#b01818'
 };
 
 function saveData(){
@@ -518,7 +576,7 @@ function saveData(){
 function toggleTimer(){
   timerRunning=!timerRunning;
   const btn=document.getElementById('timerBtn'),clk=document.getElementById('clock');
-  if(timerRunning){btn.textContent='Pause';clk.classList.add('run');timerInterval=setInterval(()=>{timerSec++;updateClock();},1000);}
+  if(timerRunning){btn.textContent='Pause';clk.classList.add('run');timerInterval=setInterval(()=>{timerSec++;updateClock();if(document.getElementById('view-game').classList.contains('active'))renderBenchPanel();},1000);}
   else{btn.textContent='Resume';clk.classList.remove('run');clearInterval(timerInterval);}
 }
 function resetTimer(){
@@ -588,6 +646,7 @@ function newGame(){
   currentGame={id:Date.now(),opponent:opp,date:dateStr,events:[],playerStats:{},goals:[]};
   fieldSlots=new Array(SLOTS.length).fill(null);
   pendingSubs=[];
+  unavailablePlayers=[];
   games.unshift(currentGame);
   saveData();
   document.getElementById('gameLabel').textContent=`vs. ${opp} — ${dateStr}`;
@@ -705,13 +764,26 @@ function renderField(){
   }).join('');
 }
 
+function totalMinsPlayed(rosterId){
+  if(!currentGame)return 0;
+  const stats=currentGame.playerStats[rosterId];
+  if(!stats||!stats.length)return 0;
+  return stats.reduce((sum,st)=>{
+    const off=st.offMin!==null?st.offMin:getMinute();
+    return sum+(off-st.onMin);
+  },0);
+}
+
 function renderBenchPanel(){
   const onIds=new Set(fieldSlots.filter(Boolean));
   const pendingInIds=new Set(pendingSubs.map(p=>p.inRosterId));
   const pendingOutIds=new Set(pendingSubs.map(p=>p.outRosterId));
+  const unavailIds=new Set(unavailablePlayers);
   const onCount=fieldSlots.filter(Boolean).length;
   document.getElementById('onCount').textContent=onCount;
-  document.getElementById('offCount').textContent=roster.length-onCount;
+  document.getElementById('offCount').textContent=roster.filter(p=>!onIds.has(p.id)&&!unavailIds.has(p.id)).length;
+
+  // On-field list — show minutes ON field (currentMinute - onMin)
   const onList=document.getElementById('onFieldList');
   const onPlayers=fieldSlots.map((rid,i)=>{
     if(!rid)return null;
@@ -719,43 +791,67 @@ function renderBenchPanel(){
     if(!p)return null;
     const stats=currentGame?.playerStats[rid];
     const last=stats?stats[stats.length-1]:null;
-    const onMin=last?last.onMin:0;
+    const minsOnField=last?getMinute()-last.onMin:0;
     const hasSub=pendingOutIds.has(rid);
     const pendingSub=pendingSubs.find(ps=>ps.outRosterId===rid);
     const inPlayer=pendingSub?roster.find(pl=>pl.id===pendingSub.inRosterId):null;
-    return{p,i,onMin,pos:slotLabel(SLOTS[i].pos),hasSub,inPlayer};
+    return{p,i,minsOnField,pos:slotLabel(SLOTS[i].pos),hasSub,inPlayer};
   }).filter(Boolean);
   if(!onPlayers.length){
     onList.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Drag bench players onto field positions</p>';
   } else {
-    onList.innerHTML=onPlayers.map(({p,i,onMin,pos,hasSub,inPlayer})=>`
+    onList.innerHTML=onPlayers.map(({p,i,minsOnField,pos,hasSub,inPlayer})=>`
       <div class="onfield-item${hasSub?' has-sub-out':''}">
         <span class="ci">${p.num!=='—'?'#'+p.num:'—'}</span>
         <span class="cn2">${esc(p.name)}${hasSub?`<span class="tag-pending">→${esc(inPlayer?inPlayer.name.split(' ')[0]:'?')}</span>`:''}</span>
         <span class="cp">${pos}</span>
-        <span class="ct">${onMin}'</span>
+        <span class="ct">${minsOnField}'</span>
       </div>`).join('');
   }
-  const benchPlayers=roster.filter(p=>!onIds.has(p.id));
+
+  // Bench chips — show total minutes played so far
+  const benchPlayers=roster.filter(p=>!onIds.has(p.id)&&!unavailIds.has(p.id));
   const chips=document.getElementById('benchChips');
   if(!roster.length){
     chips.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Add players in the Roster tab</p>';
   } else if(!benchPlayers.length){
-    chips.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">All players on the field</p>';
+    chips.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">All players on field or unavailable</p>';
   } else {
     chips.innerHTML=benchPlayers.map(p=>{
       const wasOn=currentGame&&currentGame.playerStats[p.id]?.length;
       const isPendingIn=pendingInIds.has(p.id);
+      const mins=totalMinsPlayed(p.id);
       return `<div class="bchip${wasOn?' was-on':''}${isPendingIn?' pending-in':''}"
         draggable="true" data-id="${p.id}"
         onmousedown="startDragMouse(event,${p.id})"
         ontouchstart="startDragTouch(event,${p.id})">
         <span class="cn">${p.num!=='—'?'#'+p.num:'—'}</span>
-        <span class="cname">${esc(p.name)}${wasOn&&!isPendingIn?'<span class="tag-on">was on</span>':''}${isPendingIn?'<span class="tag-pending">pending</span>':''}</span>
+        <span class="cname">${esc(p.name)}${isPendingIn?'<span class="tag-pending">pending</span>':''}</span>
+        <span style="font-size:.68rem;font-family:'DM Mono',monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">${mins?mins+"'":'—'}</span>
         <span style="font-size:.7rem;color:${isPendingIn?'var(--pending)':'var(--ac)'}">⠿</span>
       </div>`;
     }).join('');
   }
+
+  // Unavailable section
+  const unavailList=document.getElementById('unavailList');
+  const unavailPlayers=roster.filter(p=>unavailIds.has(p.id));
+  let html='';
+  if(unavailPlayers.length){
+    html=unavailPlayers.map(p=>`
+      <div class="unavail-chip">
+        <span class="cn">${p.num!=='—'?'#'+p.num:'—'}</span>
+        <span class="cname">${esc(p.name)}</span>
+        <span style="font-size:.65rem;color:#c05050">✗</span>
+      </div>`).join('');
+  }
+  html+=`<div class="unavail-drop-hint" id="unavailHint"
+    ondragover="unavailDragOver(event)"
+    ondragleave="unavailDragLeave(event)"
+    ondrop="unavailDrop(event)">
+    Drop players here
+  </div>`;
+  unavailList.innerHTML=html;
 }
 
 function renderPendingBox(){
@@ -886,6 +982,38 @@ function closeGoalSheet(){
   pendingGoalSide=null;
 }
 
+// ── UNAVAILABLE ────────────────────────────────────────────
+function unavailDragOver(e){
+  e.preventDefault();
+  document.getElementById('unavailHint')?.classList.add('drag-over');
+}
+function unavailDragLeave(e){
+  document.getElementById('unavailHint')?.classList.remove('drag-over');
+}
+function unavailDrop(e){
+  e.preventDefault();
+  document.getElementById('unavailHint')?.classList.remove('drag-over');
+  if(drag&&drag.rosterId){
+    markUnavailable(drag.rosterId);
+    drag=null;
+    document.getElementById('dragGhost').style.display='none';
+  }
+}
+function unavailTouchDrop(rosterId){
+  markUnavailable(rosterId);
+}
+function markUnavailable(rosterId){
+  if(unavailablePlayers.includes(rosterId))return;
+  // Can't mark someone who is on the field
+  if(fieldSlots.includes(rosterId))return;
+  unavailablePlayers.push(rosterId);
+  renderGame();
+}
+function resetUnavailable(){
+  unavailablePlayers=[];
+  renderGame();
+}
+
 // ── DRAG AND DROP ──────────────────────────────────────────
 let drag=null;
 
@@ -933,6 +1061,20 @@ function moveDragGhost(clientX,clientY){
 
 function endDrag(clientX,clientY){
   if(!drag)return;
+  // Check if dropped over unavailable zone
+  const hint=document.getElementById('unavailHint');
+  if(hint){
+    const r=hint.getBoundingClientRect();
+    if(clientX>=r.left&&clientX<=r.right&&clientY>=r.top&&clientY<=r.bottom){
+      markUnavailable(drag.rosterId);
+      document.getElementById('dragGhost').style.display='none';
+      document.querySelectorAll('#slotLayer circle').forEach(c=>{
+        c.setAttribute('stroke','rgba(255,255,255,0.35)');c.setAttribute('stroke-width','1.5');c.setAttribute('fill','rgba(255,255,255,0.08)');
+      });
+      drag=null;
+      return;
+    }
+  }
   const svgEl=document.getElementById('fieldSvg');
   const pt=getSvgPoint(svgEl,clientX,clientY);
   const slot=nearestSlot(pt.x,pt.y);
@@ -1019,6 +1161,7 @@ function renderSummary(){
       <span class="gname">vs. ${esc(g.opponent)}</span>
       ${scoreStr}
       <span class="gdate">${g.date}</span>
+      <button onclick="event.stopPropagation();deleteGame(${i})" style="background:none;border:none;color:var(--grd);cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:4px;line-height:1;margin-left:.25rem" title="Delete game">✕</button>
     </div>`;
   }).join('');
   showGameSummary(0);
@@ -1085,9 +1228,25 @@ function showGameSummary(idx){
     </div>`;
 }
 
+function deleteGame(idx){
+  if(!confirm('Delete this game?'))return;
+  const wasActive=currentGame&&games[idx].id===currentGame.id;
+  games.splice(idx,1);
+  if(wasActive){
+    currentGame=null;
+    fieldSlots=new Array(SLOTS.length).fill(null);
+    pendingSubs=[];
+    unavailablePlayers=[];
+    document.getElementById('gameLabel').textContent='No active game — create one above';
+    document.getElementById('hdrScore').style.display='none';
+  }
+  saveData();
+  renderSummary();
+}
+
 function clearGames(){
   if(!confirm('Clear all game history?'))return;
-  games=[];currentGame=null;fieldSlots=new Array(SLOTS.length).fill(null);pendingSubs=[];
+  games=[];currentGame=null;fieldSlots=new Array(SLOTS.length).fill(null);pendingSubs=[];unavailablePlayers=[];
   saveData();renderSummary();
   document.getElementById('gameLabel').textContent='No active game';
 }
@@ -1120,7 +1279,7 @@ function esc(s){
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none">v1.4</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none">v2.0</div>
 <script>
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>{

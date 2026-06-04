@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_17.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>STL Soccer Dev Lab</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com/">
-  <link href="./index_files/css2" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,7 +30,6 @@
       overflow-x: hidden;
     }
 
-    /* ── PITCH GRID BACKGROUND ── */
     body::before {
       content: '';
       position: fixed;
@@ -43,7 +42,6 @@
       z-index: 0;
     }
 
-    /* ── NAV ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -83,7 +81,6 @@
 
     nav a:hover { color: var(--lime); }
 
-    /* ── HERO ── */
     .hero {
       position: relative;
       z-index: 1;
@@ -181,7 +178,6 @@
       border-color: var(--lime);
     }
 
-    /* big decorative number */
     .hero-deco {
       position: absolute;
       right: -40px;
@@ -195,7 +191,6 @@
       user-select: none;
     }
 
-    /* ── TICKER ── */
     .ticker-wrap {
       position: relative;
       z-index: 1;
@@ -229,7 +224,6 @@
       to { transform: translateX(-50%); }
     }
 
-    /* ── SECTION COMMON ── */
     section {
       position: relative;
       z-index: 1;
@@ -258,7 +252,6 @@
       margin-bottom: 24px;
     }
 
-    /* ── CARDS ── */
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -326,7 +319,6 @@
 
     .card-arrow.dim { color: var(--muted); }
 
-    /* ── ABOUT STRIP ── */
     .about-strip {
       position: relative;
       z-index: 1;
@@ -372,7 +364,6 @@
       margin-top: 6px;
     }
 
-    /* ── FOOTER ── */
     footer {
       position: relative;
       z-index: 1;
@@ -400,13 +391,11 @@
       letter-spacing: 0.1em;
     }
 
-    /* ── ANIMATIONS ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── MOBILE ── */
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
       nav ul { display: none; }
@@ -425,28 +414,28 @@
   <nav>
     <div class="nav-logo">STL<span>Dev</span>Lab</div>
     <ul>
-      <li><a href="file:///C:/Users/josep/Downloads/index_17.html#projects">Projects</a></li>
-      <li><a href="file:///C:/Users/josep/Downloads/subgo/index.html">SubGo</a></li>
-      <li><a href="file:///C:/Users/josep/Downloads/flappyball/">FlappyBall</a></li>
-      <li><a href="file:///C:/Users/josep/Downloads/index_17.html#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="./subgo/">SubGo</a></li>
+      <li><a href="./flappyball/">FlappyBall</a></li>
+      <li><a href="#about">About</a></li>
     </ul>
   </nav>
 
   <!-- HERO -->
   <section class="hero" style="max-width:100%; padding-left:clamp(24px,5vw,80px); padding-right:clamp(24px,5vw,80px);">
-    <div class="hero-eyebrow">STL Soccer Dev Lab — St. Louis, MO</div>
+    <div class="hero-eyebrow">STL Soccer Dev Lab &mdash; St. Louis, MO</div>
     <h1>
-      Soccer<br>
-      <span class="accent">Runs</span> on<br>
+      Soccer<br />
+      <span class="accent">Runs</span> on<br />
       <span class="orange">Code.</span>
     </h1>
     <p class="hero-sub">
       Building software at the intersection of the beautiful game and modern tech.
-      Tools for coaches, managers, and fans—made in STL.
+      Tools for coaches, managers, and fans&mdash;made in STL.
     </p>
     <div class="hero-cta">
-      <a href="file:///C:/Users/josep/Downloads/index_17.html#projects" class="btn btn-primary">See What We're Building</a>
-      <a href="file:///C:/Users/josep/Downloads/subgo/index.html" class="btn btn-outline">Launch SubGo →</a>
+      <a href="#projects" class="btn btn-primary">See What We're Building</a>
+      <a href="./subgo/" class="btn btn-outline">Launch SubGo &rarr;</a>
     </div>
     <div class="hero-deco" aria-hidden="true">10</div>
   </section>
@@ -454,19 +443,18 @@
   <!-- TICKER -->
   <div class="ticker-wrap" aria-hidden="true">
     <div class="ticker">
-      <!-- duplicated for seamless loop -->
-      <div class="ticker-item"><span>•</span> Game Management</div>
-      <div class="ticker-item"><span>•</span> STL Soccer Dev Lab</div>
-      <div class="ticker-item"><span>•</span> SubGo App</div>
-      <div class="ticker-item"><span>•</span> Open Source</div>
-      <div class="ticker-item"><span>•</span> Built in St. Louis</div>
-      <div class="ticker-item"><span>•</span> Soccer Software</div>
-      <div class="ticker-item"><span>•</span> Game Management</div>
-      <div class="ticker-item"><span>•</span> STL Soccer Dev Lab</div>
-      <div class="ticker-item"><span>•</span> SubGo App</div>
-      <div class="ticker-item"><span>•</span> Open Source</div>
-      <div class="ticker-item"><span>•</span> Built in St. Louis</div>
-      <div class="ticker-item"><span>•</span> Soccer Software</div>
+      <div class="ticker-item"><span>&bull;</span> Game Management</div>
+      <div class="ticker-item"><span>&bull;</span> STL Soccer Dev Lab</div>
+      <div class="ticker-item"><span>&bull;</span> SubGo App</div>
+      <div class="ticker-item"><span>&bull;</span> Open Source</div>
+      <div class="ticker-item"><span>&bull;</span> Built in St. Louis</div>
+      <div class="ticker-item"><span>&bull;</span> Soccer Software</div>
+      <div class="ticker-item"><span>&bull;</span> Game Management</div>
+      <div class="ticker-item"><span>&bull;</span> STL Soccer Dev Lab</div>
+      <div class="ticker-item"><span>&bull;</span> SubGo App</div>
+      <div class="ticker-item"><span>&bull;</span> Open Source</div>
+      <div class="ticker-item"><span>&bull;</span> Built in St. Louis</div>
+      <div class="ticker-item"><span>&bull;</span> Soccer Software</div>
     </div>
   </div>
 
@@ -476,24 +464,24 @@
     <h2>What We're Building</h2>
     <div class="cards">
 
-      <a href="file:///C:/Users/josep/Downloads/subgo/index.html" class="card">
+      <a href="./subgo/" class="card">
         <div class="card-tag">Live</div>
         <h3>SubGo</h3>
         <p>
           Substitution and game management software for soccer coaches.
-          Track lineups, rotations, and player time—live on the sideline.
+          Track lineups, rotations, and player time&mdash;live on the sideline.
         </p>
-        <div class="card-arrow">Launch SubGo →</div>
+        <div class="card-arrow">Launch SubGo &rarr;</div>
       </a>
 
-      <a href="file:///C:/Users/josep/Downloads/flappyball/" class="card">
+      <a href="./flappyball/" class="card">
         <div class="card-tag orange">Live</div>
         <h3>FlappyBall</h3>
         <p>
-          A soccer-themed Flappy Bird–style arcade game. Tap to keep the
+          A soccer-themed Flappy Bird&ndash;style arcade game. Tap to keep the
           ball in play, dodge defenders, and climb the leaderboard.
         </p>
-        <div class="card-arrow">Play Now →</div>
+        <div class="card-arrow">Play Now &rarr;</div>
       </a>
 
       <div class="card">
@@ -518,15 +506,15 @@
         <p style="font-size:0.82rem; line-height:1.8; color:var(--muted); margin-top:12px;">
           STL Soccer Dev Lab started on the sideline and moved to the terminal.
           Every tool here is built by someone who has counted minutes on a clipboard
-          and wished the software just worked. Based in St. Louis—home of one
+          and wished the software just worked. Based in St. Louis&mdash;home of one
           of the most passionate soccer cultures in the US.
         </p>
-        <a href="file:///C:/Users/josep/Downloads/subgo/index.html" class="btn btn-primary" style="margin-top:32px;">Try SubGo Free</a>
+        <a href="./subgo/" class="btn btn-primary" style="margin-top:32px;">Try SubGo Free</a>
       </div>
       <div class="stat-grid">
         <div class="stat-box">
-          <div class="stat-num">01</div>
-          <div class="stat-label">Live App</div>
+          <div class="stat-num">02</div>
+          <div class="stat-label">Live Apps</div>
         </div>
         <div class="stat-box">
           <div class="stat-num">STL</div>
@@ -537,7 +525,7 @@
           <div class="stat-label">Cost to Use</div>
         </div>
         <div class="stat-box">
-          <div class="stat-num">∞</div>
+          <div class="stat-num">&infin;</div>
           <div class="stat-label">More to Come</div>
         </div>
       </div>
@@ -547,10 +535,9 @@
   <!-- FOOTER -->
   <footer>
     <div class="footer-logo">STL<span>Dev</span>Lab</div>
-    <p>stldev.com — St. Louis Soccer Software</p>
-    <p style="color:rgba(184,242,10,0.3); font-size:0.6rem;">© 2025 STL Soccer Dev Lab</p>
+    <p>stldev.com &mdash; St. Louis Soccer Software</p>
+    <p style="color:rgba(184,242,10,0.3); font-size:0.6rem;">&copy; 2025 STL Soccer Dev Lab</p>
   </footer>
 
-
-
-</body></html>
+</body>
+</html>

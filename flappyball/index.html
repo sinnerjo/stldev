@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Dribble Dash</title>
+<title>FlappyBall</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #1a1a2e; display: flex; flex-direction: column; align-items: center; padding: 20px; font-family: system-ui, sans-serif; }
@@ -132,7 +132,7 @@ function drawOverlay(){
   ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,0,W,H);
   ctx.textAlign='center';
   if(state==='idle'){
-    ctx.fillStyle='#fff';ctx.font='bold 36px system-ui';ctx.fillText('Dribble Dash',W/2,H/2-90);
+    ctx.fillStyle='#fff';ctx.font='bold 36px system-ui';ctx.fillText('FlappyBall',W/2,H/2-90);
     ctx.font='14px system-ui';ctx.fillStyle='#ccc';
     ctx.fillText('Dribble through the defenders without getting tackled',W/2,H/2-58);
     ctx.font='12px system-ui';ctx.fillStyle='#999';ctx.fillText('difficulty',W/2,H/2-24);

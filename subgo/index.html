@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_14.html -->
+<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_19.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#00004a">
 <link rel="apple-touch-icon" href="file:///C:/Users/josep/Downloads/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com/">
-<link href="./SubGo_files/css2" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 :root {
   /* Primary: dark navy #00008b, Secondary: silver/white */
@@ -413,7 +413,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <div class="pinfo"><div class="pname">Josephine</div></div>
       <button class="del" onclick="deletePlayer(1780492548190)">✕</button>
     </div></div>
-  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v3.0</p>
+  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v3.1</p>
 </div>
 
 <!-- GAME -->
@@ -1091,6 +1091,9 @@ function recordOn(rosterId,slotIdx){
   const minute=getMinute();
   if(!currentGame.playerStats[rosterId])currentGame.playerStats[rosterId]=[];
   currentGame.playerStats[rosterId].push({pos,onMin:minute,offMin:null});
+  // Snapshot name+num so summary survives roster deletions
+  if(!currentGame.playerSnapshots) currentGame.playerSnapshots={};
+  currentGame.playerSnapshots[rosterId]={name:player.name, num:player.num};
   currentGame.events.push({type:'on',playerId:rosterId,minute,position:pos});
   // Clear bench timer — they're on the field now
   delete benchSinceMinute[rosterId];
@@ -1407,11 +1410,16 @@ function goalScored(side){
 function recordGoal(scorerId,ownGoal){
   if(!currentGame)return;
   if(!currentGame.goals)currentGame.goals=[];
-  // Own goal by your player still counts as a goal FOR you (it's their own goal against themselves)
-  // If pendingGoalSide is 'us': own goal = counts for us
-  // If pendingGoalSide is 'them': own goal by opponent = counts for us
   const side=ownGoal?'us':pendingGoalSide;
-  currentGame.goals.push({side,scorerId:scorerId||null,ownGoal,minute:getMinute()});
+  const scorer=scorerId?roster.find(p=>p.id===scorerId):null;
+  currentGame.goals.push({
+    side,
+    scorerId:scorerId||null,
+    scorerName:scorer?scorer.name:null,
+    scorerNum:scorer?scorer.num:null,
+    ownGoal,
+    minute:getMinute()
+  });
   saveData();renderScore();closeGoalSheet();
 }
 
@@ -1449,26 +1457,7 @@ function editGoalScorer(gameIdx,goalIdx){
   document.getElementById('goalOverlay').classList.add('active');
 }
 
-function applyEditScorer(gameIdx,goalIdx,scorerId,ownGoal){
-  const g=games[gameIdx];
-  if(!g||!g.goals)return;
-  g.goals[goalIdx].scorerId=scorerId||null;
-  g.goals[goalIdx].ownGoal=ownGoal;
-  saveData();
-  if(currentGame&&g.id===currentGame.id)renderScore();
-  closeGoalSheet();
-  // Re-render the card keeping it open
-  const el=document.getElementById('gitem-'+gameIdx);
-  if(el){
-    const wasOpen=el.classList.contains('open');
-    el.outerHTML=buildGameCard(g,gameIdx);
-    const newEl=document.getElementById('gitem-'+gameIdx);
-    if(newEl&&wasOpen)newEl.classList.add('open');
-  }
-  // Restore the Own Goal button to default behavior for future use
-  const ogBtn=document.querySelector('.goal-og-btn');
-  if(ogBtn)ogBtn.onclick=()=>recordGoal(null,true);
-}
+
 
 function deleteGoal(gameIdx,goalIdx){
   const g=games[gameIdx];
@@ -1673,10 +1662,13 @@ function buildGameCard(g,i){
     :'';
   const isActive=currentGame&&g.id===currentGame.id;
 
-  // Build goals section
+  // Build goals section — use stored snapshots so deleted players still show correctly
   const goalRows=ggoals.map((gl,gi)=>{
-    const scorer=gl.scorerId?roster.find(p=>p.id===gl.scorerId):null;
-    const scorerTxt=gl.ownGoal?'Own Goal':scorer?`${scorer.num!=='—'?'#'+scorer.num+' ':''}${scorer.name}`:'Opponent';
+    const snapName = gl.scorerName || (gl.scorerId ? (roster.find(p=>p.id===gl.scorerId)?.name) : null);
+    const snapNum  = gl.scorerNum  || (gl.scorerId ? (roster.find(p=>p.id===gl.scorerId)?.num)  : null);
+    const scorerTxt = gl.ownGoal ? 'Own Goal'
+      : snapName ? `${snapNum && snapNum!=='—' ? '#'+snapNum+' ' : ''}${snapName}`
+      : 'Opponent';
     const icon=gl.side==='us'?`<span style="color:var(--ac)">⚽</span>`:`<span style="color:var(--rd)">⚽</span>`;
     const editBtn=gl.side==='us'
       ?`<button class="gdel" onclick="event.stopPropagation();editGoalScorer(${i},${gi})" title="Edit scorer" style="color:var(--gr)">✎</button>`
@@ -1690,13 +1682,15 @@ function buildGameCard(g,i){
     </div>`;
   }).join('');
 
-  // Build player totals — aggregate stints per player
+  // Build player totals — use snapshots so deleted players still appear
+  const snapshots = g.playerSnapshots || {};
   const playerTotals={};
   for(const [idStr,stints] of Object.entries(g.playerStats)){
     const id=parseInt(idStr);
+    const snap = snapshots[id];
     const player=roster.find(p=>p.id===id);
-    const name=player?player.name:`Player ${id}`;
-    const num=player?player.num:'—';
+    const name = snap?.name || player?.name || `Player ${id}`;
+    const num  = snap?.num  || player?.num  || '—';
     const totalMins=stints.reduce((sum,st)=>{
       const off=st.offMin!==null?st.offMin:(isActive?getMinute():0);
       return sum+Math.max(0,off-st.onMin);
@@ -1828,7 +1822,10 @@ function editGoalScorer(gameIdx,goalIdx){
 function applyEditScorer(gameIdx,goalIdx,scorerId,ownGoal){
   const g=games[gameIdx];
   if(!g||!g.goals)return;
+  const scorer=scorerId?roster.find(p=>p.id===scorerId):null;
   g.goals[goalIdx].scorerId=scorerId||null;
+  g.goals[goalIdx].scorerName=scorer?scorer.name:null;
+  g.goals[goalIdx].scorerNum=scorer?scorer.num:null;
   g.goals[goalIdx].ownGoal=ownGoal;
   saveData();
   if(currentGame&&g.id===currentGame.id)renderScore();
@@ -1851,10 +1848,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v3.0</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v3.1</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v3.0 [DEV]';
+  document.getElementById('verTag').textContent='v3.1 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

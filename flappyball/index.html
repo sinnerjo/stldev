@@ -39,7 +39,9 @@ function spawnPipe(){
 }
 
 function drawBg(){
-  for(let i=0;i<10;i++){const x=(i*64+frame*0.8)%W;ctx.fillStyle=i%2?'#338840':'#2d7a3a';ctx.fillRect(x,0,64,H-GH);}
+  ctx.fillStyle='#2d7a3a';ctx.fillRect(0,0,W,H-GH);
+  const offset=(frame*0.8)%64;
+  for(let i=0;i<11;i++){const x=i*64-offset;ctx.fillStyle=i%2?'#338840':'#2d7a3a';ctx.fillRect(x,0,64,H-GH);}
   ctx.fillStyle='#1a6b28';ctx.fillRect(0,H-GH,W,GH);
   ctx.fillStyle='#ffffff22';ctx.fillRect(0,H-GH,W,2);
   ctx.strokeStyle='#ffffffaa';ctx.lineWidth=1;ctx.setLineDash([8,6]);

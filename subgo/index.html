@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_19.html -->
+<!-- saved from url=(0046)file:///C:/Users/josep/Downloads/index_20.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -368,52 +368,115 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <button class="btn btn-ac" onclick="addPlayer()" style="width:100%">Add Player</button>
   </div>
   <div class="roster-list" id="rosterList">
-    <div class="pcard">
+    <div class="pcard" id="pcard-1780432442512">
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Delaney</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(1780432442512)" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(1780432442512)">✕</button>
     </div>
-    <div class="pcard">
+    <div class="pedit" id="pedit-1780432442512" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-1780432442512" value="" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:&#39;DM Mono&#39;,monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-1780432442512" value="Delaney" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:&#39;Barlow&#39;,sans-serif;font-size:.95rem" onkeydown="if(event.key===&#39;Enter&#39;)savePlayer(1780432442512)">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(1780432442512)">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(1780432442512)">Cancel</button>
+    </div>
+    <div class="pcard" id="pcard-1780432507570">
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Olivia L</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(1780432507570)" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(1780432507570)">✕</button>
     </div>
-    <div class="pcard">
+    <div class="pedit" id="pedit-1780432507570" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-1780432507570" value="" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:&#39;DM Mono&#39;,monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-1780432507570" value="Olivia L" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:&#39;Barlow&#39;,sans-serif;font-size:.95rem" onkeydown="if(event.key===&#39;Enter&#39;)savePlayer(1780432507570)">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(1780432507570)">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(1780432507570)">Cancel</button>
+    </div>
+    <div class="pcard" id="pcard-1780432514398">
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Peyton</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(1780432514398)" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(1780432514398)">✕</button>
     </div>
-    <div class="pcard">
+    <div class="pedit" id="pedit-1780432514398" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-1780432514398" value="" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:&#39;DM Mono&#39;,monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-1780432514398" value="Peyton" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:&#39;Barlow&#39;,sans-serif;font-size:.95rem" onkeydown="if(event.key===&#39;Enter&#39;)savePlayer(1780432514398)">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(1780432514398)">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(1780432514398)">Cancel</button>
+    </div>
+    <div class="pcard" id="pcard-1780432516443">
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Shelby</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(1780432516443)" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(1780432516443)">✕</button>
     </div>
-    <div class="pcard">
+    <div class="pedit" id="pedit-1780432516443" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-1780432516443" value="" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:&#39;DM Mono&#39;,monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-1780432516443" value="Shelby" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:&#39;Barlow&#39;,sans-serif;font-size:.95rem" onkeydown="if(event.key===&#39;Enter&#39;)savePlayer(1780432516443)">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(1780432516443)">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(1780432516443)">Cancel</button>
+    </div>
+    <div class="pcard" id="pcard-1780432520066">
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Harper</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(1780432520066)" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(1780432520066)">✕</button>
     </div>
-    <div class="pcard">
+    <div class="pedit" id="pedit-1780432520066" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-1780432520066" value="" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:&#39;DM Mono&#39;,monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-1780432520066" value="Harper" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:&#39;Barlow&#39;,sans-serif;font-size:.95rem" onkeydown="if(event.key===&#39;Enter&#39;)savePlayer(1780432520066)">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(1780432520066)">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(1780432520066)">Cancel</button>
+    </div>
+    <div class="pcard" id="pcard-1780432535347">
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Finley</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(1780432535347)" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(1780432535347)">✕</button>
     </div>
-    <div class="pcard">
+    <div class="pedit" id="pedit-1780432535347" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-1780432535347" value="" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:&#39;DM Mono&#39;,monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-1780432535347" value="Finley" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:&#39;Barlow&#39;,sans-serif;font-size:.95rem" onkeydown="if(event.key===&#39;Enter&#39;)savePlayer(1780432535347)">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(1780432535347)">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(1780432535347)">Cancel</button>
+    </div>
+    <div class="pcard" id="pcard-1780432538947">
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Alivia</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(1780432538947)" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(1780432538947)">✕</button>
     </div>
-    <div class="pcard">
+    <div class="pedit" id="pedit-1780432538947" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-1780432538947" value="" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:&#39;DM Mono&#39;,monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-1780432538947" value="Alivia" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:&#39;Barlow&#39;,sans-serif;font-size:.95rem" onkeydown="if(event.key===&#39;Enter&#39;)savePlayer(1780432538947)">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(1780432538947)">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(1780432538947)">Cancel</button>
+    </div>
+    <div class="pcard" id="pcard-1780432544627">
       <div class="pnum">—</div>
       <div class="pinfo"><div class="pname">Evelyn</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(1780432544627)" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(1780432544627)">✕</button>
     </div>
-    <div class="pcard">
+    <div class="pedit" id="pedit-1780432544627" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-1780432544627" value="" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:&#39;DM Mono&#39;,monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-1780432544627" value="Evelyn" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:&#39;Barlow&#39;,sans-serif;font-size:.95rem" onkeydown="if(event.key===&#39;Enter&#39;)savePlayer(1780432544627)">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(1780432544627)">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(1780432544627)">Cancel</button>
+    </div>
+    <div class="pcard" id="pcard-1780492548190">
       <div class="pnum">5</div>
       <div class="pinfo"><div class="pname">Josephine</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(1780492548190)" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(1780492548190)">✕</button>
+    </div>
+    <div class="pedit" id="pedit-1780492548190" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-1780492548190" value="5" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:&#39;DM Mono&#39;,monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-1780492548190" value="Josephine" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:&#39;Barlow&#39;,sans-serif;font-size:.95rem" onkeydown="if(event.key===&#39;Enter&#39;)savePlayer(1780492548190)">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(1780492548190)">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(1780492548190)">Cancel</button>
     </div></div>
-  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v3.1</p>
+  <p style="font-family:&#39;Barlow Condensed&#39;,sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v3.2</p>
 </div>
 
 <!-- GAME -->
@@ -1050,11 +1113,49 @@ function renderRoster(){
   document.getElementById('playerCount').textContent=roster.length?`(${roster.length})`:'';
   if(!roster.length){list.innerHTML='<p class="empty">No players yet.</p>';return;}
   list.innerHTML=roster.map(p=>`
-    <div class="pcard">
+    <div class="pcard" id="pcard-${p.id}">
       <div class="pnum">${esc(p.num)}</div>
       <div class="pinfo"><div class="pname">${esc(p.name)}</div></div>
+      <button class="del" style="font-size:1rem;color:var(--gr)" onclick="editPlayer(${p.id})" title="Edit">✎</button>
       <button class="del" onclick="deletePlayer(${p.id})">✕</button>
+    </div>
+    <div class="pedit" id="pedit-${p.id}" style="display:none;background:#00002e;border:1px solid var(--br);border-top:none;border-radius:0 0 8px 8px;padding:.6rem .9rem;display:none;gap:.5rem;flex-wrap:wrap">
+      <input type="number" id="pedit-num-${p.id}" value="${p.num==='—'?'':p.num}" placeholder="#" min="1" max="99" inputmode="numeric" style="width:58px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .5rem;border-radius:5px;font-family:'DM Mono',monospace;font-size:.88rem">
+      <input type="text" id="pedit-name-${p.id}" value="${esc(p.name)}" style="flex:1;min-width:120px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.45rem .6rem;border-radius:5px;font-family:'Barlow',sans-serif;font-size:.95rem" onkeydown="if(event.key==='Enter')savePlayer(${p.id})">
+      <button class="btn btn-ac btn-sm" onclick="savePlayer(${p.id})">Save</button>
+      <button class="btn btn-ol btn-sm" onclick="cancelEdit(${p.id})">Cancel</button>
     </div>`).join('');
+}
+
+function editPlayer(id){
+  // Close any other open edits first
+  document.querySelectorAll('.pedit').forEach(el=>el.style.display='none');
+  const editRow=document.getElementById('pedit-'+id);
+  if(editRow){
+    editRow.style.display='flex';
+    document.getElementById('pedit-name-'+id)?.focus();
+  }
+}
+
+function cancelEdit(id){
+  const editRow=document.getElementById('pedit-'+id);
+  if(editRow) editRow.style.display='none';
+}
+
+function savePlayer(id){
+  const numEl=document.getElementById('pedit-num-'+id);
+  const nameEl=document.getElementById('pedit-name-'+id);
+  if(!numEl||!nameEl)return;
+  const newName=nameEl.value.trim();
+  if(!newName){alert('Name cannot be empty.');return;}
+  const newNum=numEl.value.trim()||'—';
+  const player=getTeam().roster.find(p=>p.id===id);
+  if(!player)return;
+  player.name=newName;
+  player.num=newNum;
+  roster=getRoster();
+  saveData();
+  renderRoster();
 }
 
 function newGame(){
@@ -1091,9 +1192,9 @@ function recordOn(rosterId,slotIdx){
   const minute=getMinute();
   if(!currentGame.playerStats[rosterId])currentGame.playerStats[rosterId]=[];
   currentGame.playerStats[rosterId].push({pos,onMin:minute,offMin:null});
-  // Snapshot name+num so summary survives roster deletions
+  // Snapshot name+num so summary survives roster deletions (use string key for JSON safety)
   if(!currentGame.playerSnapshots) currentGame.playerSnapshots={};
-  currentGame.playerSnapshots[rosterId]={name:player.name, num:player.num};
+  currentGame.playerSnapshots[String(rosterId)]={name:player.name, num:player.num};
   currentGame.events.push({type:'on',playerId:rosterId,minute,position:pos});
   // Clear bench timer — they're on the field now
   delete benchSinceMinute[rosterId];
@@ -1687,17 +1788,18 @@ function buildGameCard(g,i){
   const playerTotals={};
   for(const [idStr,stints] of Object.entries(g.playerStats)){
     const id=parseInt(idStr);
-    const snap = snapshots[id];
+    const snap = snapshots[idStr] || snapshots[id]; // handle both string and numeric keys
     const player=roster.find(p=>p.id===id);
-    const name = snap?.name || player?.name || `Player ${id}`;
+    const name = snap?.name || player?.name || `Unknown`;
     const num  = snap?.num  || player?.num  || '—';
+    const inactive = !player; // player was deleted from roster
     const totalMins=stints.reduce((sum,st)=>{
       const off=st.offMin!==null?st.offMin:(isActive?getMinute():0);
       return sum+Math.max(0,off-st.onMin);
     },0);
     const positions=[...new Set(stints.map(st=>st.pos))].join(', ');
-    if(!playerTotals[id])playerTotals[id]={name,num,totalMins,positions};
-    else playerTotals[id].totalMins+=totalMins;
+    if(!playerTotals[idStr])playerTotals[idStr]={name,num,totalMins,positions,inactive};
+    else playerTotals[idStr].totalMins+=totalMins;
   }
   const playerRows=Object.values(playerTotals)
     .sort((a,b)=>b.totalMins-a.totalMins);
@@ -1705,7 +1807,7 @@ function buildGameCard(g,i){
   const playerHtml=playerRows.map(p=>`
     <div class="player-sum-row">
       <span class="psnum">${p.num!=='—'?'#'+p.num:'—'}</span>
-      <span class="psname">${esc(p.name)}</span>
+      <span class="psname">${esc(p.name)}${p.inactive?'<span style="font-size:.65rem;color:var(--grd);margin-left:4px">(inactive)</span>':''}</span>
       <span class="pspos">${p.positions}</span>
       <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:${Math.round(p.totalMins/maxMins*100)}%"></div></div></div>
       <span class="psmins">${p.totalMins}'</span>
@@ -1848,10 +1950,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v3.1</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:&#39;DM Mono&#39;,monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v3.2</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v3.1 [DEV]';
+  document.getElementById('verTag').textContent='v3.2 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

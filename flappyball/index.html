@@ -2,44 +2,112 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <title>FlappyBall</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #1a1a2e; display: flex; flex-direction: column; align-items: center; padding: 20px; font-family: system-ui, sans-serif; }
-#hud { display: flex; justify-content: space-between; width: 640px; margin-bottom: 8px; font-size: 14px; color: #aaa; }
+
+html, body {
+  background: #1a1a2e;
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: system-ui, sans-serif;
+}
+
+/* Normal layout wrapper */
+#wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 12px;
+}
+
+#hud {
+  display: flex;
+  justify-content: space-between;
+  width: 640px;
+  max-width: 100%;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #aaa;
+}
 #score-display { font-weight: 600; color: #fff; }
 #controls { display: flex; gap: 8px; align-items: center; }
 #tap-hint { font-size: 13px; color: #666; margin-top: 10px; }
+
 #fs-btn {
   background: #ffffff18; border: 1px solid #444; color: #ccc;
   font-size: 13px; padding: 4px 10px; border-radius: 6px; cursor: pointer;
   font-family: system-ui, sans-serif;
 }
 #fs-btn:hover { background: #ffffff30; color: #fff; }
-canvas { border-radius: 12px; border: 1px solid #333; display: block; cursor: pointer; }
 
-/* Fullscreen styles */
-:fullscreen body, :-webkit-full-screen body { padding: 0; justify-content: center; align-items: center; height: 100vh; background: #1a1a2e; }
-:fullscreen #hud, :-webkit-full-screen #hud { width: 100%; max-width: 100vw; padding: 8px 16px; margin-bottom: 0; position: absolute; top: 0; left: 0; z-index: 10; pointer-events: none; }
-:fullscreen canvas, :-webkit-full-screen canvas { border-radius: 0; border: none; width: 100vw !important; height: 100vh !important; }
+canvas {
+  border-radius: 12px;
+  border: 1px solid #333;
+  display: block;
+  cursor: pointer;
+  max-width: 100%;
+}
+
+/* Portrait mode: rotate the entire game wrapper 90deg so it fills the screen sideways */
+@media (orientation: portrait) {
+  #portrait-msg { display: none; } /* we handle it via rotation instead */
+
+  #wrap {
+    /* rotate the whole wrap so landscape game fills portrait screen */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vh;   /* swap axes */
+    height: 100vw;
+    transform-origin: top left;
+    transform: rotate(90deg) translateY(-100%);
+    padding: 8px;
+  }
+
+  #hud {
+    width: 100%;
+  }
+
+  canvas {
+    border-radius: 0;
+    border: none;
+  }
+
+  #tap-hint { display: none; }
+}
+
+/* Fullscreen */
+:fullscreen #wrap, :-webkit-full-screen #wrap {
+  padding: 4px 12px;
+  height: 100vh;
+}
+:fullscreen canvas, :-webkit-full-screen canvas {
+  border-radius: 0; border: none;
+}
 :fullscreen #tap-hint, :-webkit-full-screen #tap-hint { display: none; }
 :fullscreen #fs-btn, :-webkit-full-screen #fs-btn { display: none; }
 </style>
 </head>
 <body>
-<div id="hud">
-  <span id="score-display">Score: 0</span>
-  <div id="controls">
-    <button id="fs-btn" onclick="toggleFS()">⛶ Fullscreen</button>
-    <span id="best-display">Best: 0</span>
+<div id="wrap">
+  <div id="hud">
+    <span id="score-display">Score: 0</span>
+    <div id="controls">
+      <button id="fs-btn" onclick="toggleFS()">⛶ Fullscreen</button>
+      <span id="best-display">Best: 0</span>
+    </div>
   </div>
+  <canvas id="canvas" width="640" height="380"></canvas>
+  <div id="tap-hint">tap / click / spacebar to dribble</div>
 </div>
-<canvas id="canvas" width="640" height="380"></canvas>
-<div id="tap-hint">tap / click / spacebar to dribble</div>
+
 <script>
 const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
 let W=640,H=380;
+
 const SPEED=3.2,GAP=145,INTERVAL=110,PX=110,GH=40;
 const DIFFS={
   easy:   {gravity:0.22,jump:-5.0},
@@ -48,7 +116,50 @@ const DIFFS={
 };
 let diff='normal',state,player,pipes,score,bests={easy:0,normal:0,hard:0},frame,parts;
 
-// Fullscreen
+// Fit canvas to available space
+function resize(){
+  const isFS=!!(document.fullscreenElement||document.webkitFullscreenElement);
+  const portrait=window.innerHeight>window.innerWidth;
+
+  if(isFS){
+    // fullscreen: use screen dimensions
+    W=window.screen.width; H=window.screen.height;
+    if(W<H){const t=W;W=H;H=t;} // ensure landscape
+  } else if(portrait){
+    // portrait: our CSS rotates the wrap so available space = innerHeight wide, innerWidth tall
+    // but canvas internal resolution stays 640x380-ish, scaled by CSS
+    W=640; H=380;
+  } else {
+    // landscape browser: fit to viewport
+    const maxW=Math.min(window.innerWidth-24, 900);
+    const maxH=Math.min(window.innerHeight-80, 500);
+    const scale=Math.min(maxW/640, maxH/380);
+    W=Math.round(640*scale); H=Math.round(380*scale);
+  }
+
+  canvas.width=W; canvas.height=H;
+
+  // In portrait mode scale canvas CSS to fill rotated space
+  if(portrait && !isFS){
+    const sw=window.innerHeight-16;
+    const sh=window.innerWidth-60;
+    const s=Math.min(sw/640, sh/380);
+    canvas.style.width=Math.round(640*s)+'px';
+    canvas.style.height=Math.round(380*s)+'px';
+    W=640; H=380; // keep logical size constant
+  } else {
+    canvas.style.width='';
+    canvas.style.height='';
+  }
+
+  if(player) player.y=Math.max(10,Math.min(player.y,H-GH-60));
+}
+
+window.addEventListener('resize',resize);
+window.addEventListener('orientationchange',()=>setTimeout(resize,200));
+document.addEventListener('fullscreenchange',resize);
+document.addEventListener('webkitfullscreenchange',resize);
+
 function toggleFS(){
   if(!document.fullscreenElement&&!document.webkitFullscreenElement){
     const el=document.documentElement;
@@ -60,19 +171,6 @@ function toggleFS(){
     else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
   }
 }
-function onFSChange(){
-  const isFS=!!(document.fullscreenElement||document.webkitFullscreenElement);
-  if(isFS){
-    W=window.screen.width; H=window.screen.height;
-  } else {
-    W=640; H=380;
-  }
-  canvas.width=W; canvas.height=H;
-  // re-clamp player
-  if(player) player.y=Math.min(player.y, H-GH-60);
-}
-document.addEventListener('fullscreenchange',onFSChange);
-document.addEventListener('webkitfullscreenchange',onFSChange);
 
 function init(){
   state='idle';player={y:H/2-20,vy:0,angle:0};
@@ -103,31 +201,14 @@ function drawBg(){
 const JERSEY=['#e63946','#4361ee','#f4a261','#9b2226'];
 const HAIR=['#2c1810','#1a1a2e','#c9a66b','#ff6b35'];
 
-// flip=true means top group (heads pointing DOWN toward gap = south)
-// We want top defenders heads pointing UP (north), so no flip needed for top
-// Bottom defenders: heads pointing UP naturally, which is correct
-// The base drawDef draws head at top (-10 to -19), body below
-// So for TOP defenders: we want head at BOTTOM (toward gap) = flip
-// For BOTTOM defenders: we want head at TOP (toward gap) = flip
-// Wait - we want top ones heads-north (away from gap, toward top of screen)
-// Base figure: head at y=-10 (top), feet at y=30 (bottom)
-// Top group: placed above gap, we want heads pointing UP = no flip
-// Bottom group: placed below gap, we want heads pointing UP = flip (mirror vertically)
-
 function drawDef(cx,cy,flipped,ci){
   ctx.save();ctx.translate(cx,cy);
   if(flipped)ctx.scale(1,-1);
-  // head
   ctx.fillStyle='#f5cba7';ctx.beginPath();ctx.arc(0,-10,9,0,Math.PI*2);ctx.fill();
-  // hair
   ctx.fillStyle=HAIR[ci];ctx.beginPath();ctx.arc(0,-14,9,Math.PI,0);ctx.fill();
-  // jersey
   ctx.fillStyle=JERSEY[ci];ctx.fillRect(-11,-2,22,18);
-  // shorts
   ctx.fillStyle='#333';ctx.fillRect(-8,16,6,14);ctx.fillRect(2,16,6,14);
-  // socks
   ctx.fillStyle='#fff';ctx.fillRect(-8,16,6,4);ctx.fillRect(2,16,6,4);
-  // arms
   ctx.fillStyle='#f5cba7';ctx.fillRect(-16,0,5,12);ctx.fillRect(11,0,5,12);
   ctx.restore();
 }
@@ -139,24 +220,10 @@ function drawPipes(){
     ctx.fillStyle='#0003';ctx.fillRect(p.x+1,0,pW,y1);ctx.fillRect(p.x+1,y2,pW,H-GH-y2);
     ctx.strokeStyle='#ffffff55';ctx.lineWidth=1.5;
     ctx.strokeRect(p.x,0,pW,y1);ctx.strokeRect(p.x,y2,pW,H-GH-y2);
-
-    // TOP group: heads pointing north (up), feet toward gap
-    // drawDef base has head at top, feet at bottom
-    // Place from bottom of top zone upward, no flip: head above, feet below (toward gap) - perfect
     const nT=Math.max(1,Math.floor(y1/55));
-    for(let i=0;i<nT;i++){
-      const dy=y1-30-i*52; // feet near gap edge, head above
-      if(dy>-10)drawDef(p.x+pW/2,dy,false,p.ci);
-    }
-
-    // BOTTOM group: heads pointing north (up), feet toward bottom
-    // drawDef base: head at top, feet at bottom = head toward gap, feet down
-    // That's already correct for bottom group (head up = toward gap for bottom zone)
+    for(let i=0;i<nT;i++){const dy=y1-30-i*52;if(dy>-10)drawDef(p.x+pW/2,dy,false,p.ci);}
     const nB=Math.max(1,Math.floor((H-GH-y2)/55));
-    for(let i=0;i<nB;i++){
-      const dy=y2+14+i*52;
-      if(dy<H-GH-10)drawDef(p.x+pW/2,dy,false,p.ci);
-    }
+    for(let i=0;i<nB;i++){const dy=y2+14+i*52;if(dy<H-GH-10)drawDef(p.x+pW/2,dy,false,p.ci);}
   });
 }
 
@@ -211,8 +278,7 @@ const BTNS=[
 ];
 const BW=90,BH=34;
 let hoveredBtn=null;
-
-function getBtnX(i){ return W/2-135+i*150; }
+function getBtnX(i){return W/2-135+i*150;}
 
 function drawOverlay(){
   ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,0,W,H);
@@ -268,24 +334,22 @@ function handleInput(mx,my,isClick){
   }
 }
 
-function getCanvasXY(e){
+function getCanvasXY(clientX,clientY){
   const r=canvas.getBoundingClientRect();
-  const scaleX=W/r.width, scaleY=H/r.height;
-  return [(e.clientX-r.left)*scaleX,(e.clientY-r.top)*scaleY];
+  return [(clientX-r.left)*(W/r.width),(clientY-r.top)*(H/r.height)];
 }
 
-canvas.addEventListener('click',e=>{const[mx,my]=getCanvasXY(e);handleInput(mx,my,true);});
+canvas.addEventListener('click',e=>{const[mx,my]=getCanvasXY(e.clientX,e.clientY);handleInput(mx,my,true);});
 canvas.addEventListener('mousemove',e=>{
   if(state!=='idle'){hoveredBtn=null;return;}
-  const[mx,my]=getCanvasXY(e);
+  const[mx,my]=getCanvasXY(e.clientX,e.clientY);
   const by=H/2-12;hoveredBtn=null;
   for(let i=0;i<BTNS.length;i++){const bx=getBtnX(i);if(mx>=bx&&mx<=bx+BW&&my>=by&&my<=by+BH){hoveredBtn=BTNS[i].key;break;}}
 });
 canvas.addEventListener('touchstart',e=>{
   e.preventDefault();
-  const t=e.touches[0],r=canvas.getBoundingClientRect();
-  const scaleX=W/r.width,scaleY=H/r.height;
-  const mx=(t.clientX-r.left)*scaleX,my=(t.clientY-r.top)*scaleY;
+  const t=e.touches[0];
+  const[mx,my]=getCanvasXY(t.clientX,t.clientY);
   handleInput(mx,my,true);
 },{passive:false});
 document.addEventListener('keydown',e=>{
@@ -325,7 +389,9 @@ function draw(){
 }
 
 function loop(){update();draw();requestAnimationFrame(loop);}
-init();loop();
+resize();
+init();
+loop();
 </script>
 </body>
 </html>

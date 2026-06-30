@@ -37,9 +37,8 @@ html,body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--wh);m
 header{background:var(--gd);border-bottom:2px solid var(--ac);padding:.6rem 1rem;padding-top:calc(.6rem + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:.6rem;position:sticky;top:0;z-index:200}
 header h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.3rem;color:var(--ac);text-transform:uppercase;white-space:nowrap}
 .hdr-timer{display:flex;align-items:center;gap:.4rem;margin-left:auto}
-.clock{font-family:'DM Mono',monospace;font-size:1.2rem;color:var(--wh);background:var(--gm);padding:.2rem .6rem;border-radius:4px;border:1px solid var(--br);min-width:58px;text-align:center;cursor:default}
+.clock{font-family:'DM Mono',monospace;font-size:1.2rem;color:var(--wh);background:var(--gm);padding:.2rem .6rem;border-radius:4px;border:1px solid var(--br);min-width:58px;text-align:center}
 .clock.run{color:var(--ac)}
-.clock[contenteditable="true"]{outline:1px solid var(--pending);cursor:text}
 
 /* SCORE */
 .hdr-score{display:flex;align-items:center;gap:.3rem;margin-left:.4rem}
@@ -326,11 +325,10 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <button class="score-undo" onclick="undoGoal()" title="Undo last goal">↩</button>
   </div>
   <div class="hdr-timer">
-    <div class="clock" id="clock" contenteditable="false" onblur="commitClockEdit()" onkeydown="clockEditKeydown(event)">0:00</div>
+    <div class="clock" id="clock">0:00</div>
     <button class="btn btn-ac btn-sm" id="timerBtn" onclick="toggleTimer()">Start</button>
     <button class="btn btn-ol btn-sm" onclick="halftime()" id="halfBtn" title="Halftime — resets clock, keeps player minutes">HT</button>
     <button class="btn btn-ol btn-sm" onclick="resetTimer()">↺</button>
-    <input type="number" id="halfLengthMin" value="25" min="1" max="90" inputmode="numeric" title="Half length (minutes) — used for on-field time warning" style="width:42px;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.2rem .3rem;border-radius:4px;font-family:'DM Mono',monospace;font-size:.75rem;text-align:center">
   </div>
 </header>
 
@@ -445,11 +443,18 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       </div>
       <div class="pbox">
         <h3>On Field <span id="onCount" style="color:var(--ac)">0</span></h3>
+        <div class="bench-alert-bar">
+          <input type="checkbox" id="onfieldAlertEnabled" checked style="flex-shrink:0;width:14px;height:14px">
+          <label>⏱ Alert after</label>
+          <input type="number" id="onfieldAlertMin" value="20" min="1" max="90" inputmode="numeric">
+          <label>min</label>
+        </div>
         <div class="onfield-list" id="onFieldList"><p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Drag bench players onto field positions</p></div>
       </div>
       <div class="pbox">
         <h3>Bench <span id="offCount" style="color:var(--gr)">9</span></h3>
         <div class="bench-alert-bar">
+          <input type="checkbox" id="benchAlertEnabled" checked style="flex-shrink:0;width:14px;height:14px">
           <label>⏱ Alert after</label>
           <input type="number" id="benchAlertMin" value="5" min="1" max="90" inputmode="numeric">
           <label>min</label>
@@ -464,13 +469,6 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
         <div id="unavailList"><div class="unavail-drop-hint" id="unavailHint" ondragover="unavailDragOver(event)" ondragleave="unavailDragLeave(event)" ondrop="unavailDrop(event)">
     Drop players here
   </div></div>
-      </div>
-      <div class="pbox">
-        <h3>
-          <span>Total Time</span>
-          <button class="btn btn-ol btn-sm" id="totalTimeSortBtn" onclick="toggleTotalTimeSort()" style="font-size:.65rem;min-height:24px;padding:.2rem .5rem;float:right">Desc ▼</button>
-        </h3>
-        <div class="onfield-list" id="totalTimeList"></div>
       </div>
     </div>
   </div>
@@ -535,19 +533,11 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     </div>
     <div class="help-item">
       <span class="hkey">Game Clock</span>
-      <span class="hval">Tap <span class="help-badge">Start</span> to run the clock. Tap <span class="help-badge">HT</span> at halftime — the clock resets to 0:00 but all player minutes carry forward into the second half. Tap <span class="help-badge">↺</span> to fully reset the clock. Before the clock starts, tap the time itself to type in a custom starting time.</span>
-    </div>
-    <div class="help-item">
-      <span class="hkey">Half Length</span>
-      <span class="hval">The small minutes field next to the clock buttons sets your half length. It's used to flag any on-field player who has played more than half of that time without a break.</span>
+      <span class="hval">Tap <span class="help-badge">Start</span> to run the clock. Tap <span class="help-badge">HT</span> at halftime — the clock resets to 0:00 but all player minutes carry forward into the second half. Tap <span class="help-badge">↺</span> to fully reset the clock.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Unavailable</span>
       <span class="hval">Drag a bench player into the Unavailable zone to mark them absent for this game. Tap Reset to return them to the bench, or start a new game to clear automatically.</span>
-    </div>
-    <div class="help-item">
-      <span class="hkey">Total Time</span>
-      <span class="hval">Below Unavailable, the Total Time panel lists every roster player by total minutes played this game. Tap the sort button to flip between most and least time played.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Remove from Field</span>
@@ -572,18 +562,18 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
 
   <div class="help-section">
-    <h2><span class="hico">⏱</span> Bench Alert</h2>
+    <h2><span class="hico">⏱</span> Alerts</h2>
     <div class="help-item">
-      <span class="hkey">Set Threshold</span>
-      <span class="hval">In the Bench panel, set the number of minutes in the Alert field (default 5). Any player who has been sitting on the bench for that many consecutive minutes will be highlighted in orange with their bench time shown.</span>
+      <span class="hkey">Bench Alert</span>
+      <span class="hval">In the Bench panel, set the number of minutes in the Alert field (default 5). Any player who has been sitting on the bench for that many consecutive minutes will be highlighted in orange with their bench time shown. Uncheck the box to disable it.</span>
+    </div>
+    <div class="help-item">
+      <span class="hkey">On Field Alert</span>
+      <span class="hval">In the On Field panel, set the number of minutes in the Alert field (default 20). Any player who has been on the field that long without a sub will be highlighted in orange — handy for spotting players who are overdue for a rest. Uncheck the box to disable it.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Alert Resets</span>
-      <span class="hval">The alert clears when the player comes back on the field. Halftime resets all bench timers so second-half bench time starts fresh.</span>
-    </div>
-    <div class="help-item">
-      <span class="hkey">On-Field Alert</span>
-      <span class="hval">Any player who has been on the field for more than half of your set half length, without coming off, is highlighted in orange in the On Field list — useful for spotting players overdue for a rest.</span>
+      <span class="hval">Both alerts clear the moment a player is substituted. Halftime resets all bench and on-field timers so second-half tracking starts fresh.</span>
     </div>
   </div>
 
@@ -679,8 +669,6 @@ let pendingGoalSide = null;
 let unavailablePlayers = [];
 let benchSinceMinute = {};
 let isSecondHalf = false;
-let clockHasRun = false;
-let totalTimeSortDesc = true;
 
 function saveData(){
   localStorage.setItem('sc_teams', JSON.stringify(teams));
@@ -692,7 +680,6 @@ function switchTeam(teamId){
   clearInterval(timerInterval);
   timerRunning=false;
   timerSec=0;
-  clockHasRun=false;
   document.getElementById('timerBtn').textContent='Start';
   document.getElementById('clock').classList.remove('run');
   updateClock();
@@ -808,11 +795,11 @@ function toggleTimer(){
   const btn=document.getElementById('timerBtn'),clk=document.getElementById('clock');
   const devMode=new URLSearchParams(window.location.search).get('devmode')==='true';
   const tick=devMode?30:1;
-  if(timerRunning){btn.textContent='Pause';clk.classList.add('run');clockHasRun=true;timerInterval=setInterval(()=>{timerSec+=tick;updateClock();if(document.getElementById('view-game').classList.contains('active'))renderBenchPanel();},1000);}
+  if(timerRunning){btn.textContent='Pause';clk.classList.add('run');timerInterval=setInterval(()=>{timerSec+=tick;updateClock();if(document.getElementById('view-game').classList.contains('active'))renderBenchPanel();},1000);}
   else{btn.textContent='Resume';clk.classList.remove('run');clearInterval(timerInterval);}
 }
 function resetTimer(){
-  clearInterval(timerInterval);timerRunning=false;timerSec=0;clockHasRun=false;
+  clearInterval(timerInterval);timerRunning=false;timerSec=0;
   document.getElementById('timerBtn').textContent='Start';
   document.getElementById('clock').classList.remove('run');
   updateClock();
@@ -852,7 +839,6 @@ function halftime(){
 
   // Reset clock and bench timers for 2nd half
   timerSec=0;
-  clockHasRun=false;
   benchSinceMinute={};
   // Re-initialize bench timers for bench players at minute 0
   const onIds=new Set(fieldSlots.filter(Boolean));
@@ -903,37 +889,6 @@ function updateClock(){
   document.getElementById('clock').textContent=`${m}:${s.toString().padStart(2,'0')}`;
 }
 function getMinute(){return Math.floor(timerSec/60);}
-
-function clockEditable(){
-  // Only allow manual edits before the clock has ever been started for this game
-  return !timerRunning && timerSec===0 && !clockHasRun;
-}
-
-function clockEditKeydown(e){
-  if(e.key==='Enter'){e.preventDefault();e.target.blur();}
-}
-
-document.getElementById('clock').addEventListener('click',()=>{
-  if(!clockEditable())return;
-  const clk=document.getElementById('clock');
-  clk.contentEditable='true';
-  clk.focus();
-  document.execCommand('selectAll',false,null);
-});
-
-function commitClockEdit(){
-  const clk=document.getElementById('clock');
-  clk.contentEditable='false';
-  if(!clockEditable()){updateClock();return;}
-  const txt=clk.textContent.trim();
-  const m=txt.match(/^(\d{1,3}):?(\d{0,2})$/);
-  if(m){
-    const mins=parseInt(m[1])||0;
-    const secs=parseInt(m[2])||0;
-    timerSec=mins*60+Math.min(secs,59);
-  }
-  updateClock();
-}
 
 function showView(name,btn){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -1196,31 +1151,6 @@ function totalMinsPlayed(rosterId){
   },0);
 }
 
-function toggleTotalTimeSort(){
-  totalTimeSortDesc=!totalTimeSortDesc;
-  const btn=document.getElementById('totalTimeSortBtn');
-  if(btn)btn.textContent=totalTimeSortDesc?'Desc ▼':'Asc ▲';
-  renderTotalTimePanel();
-}
-
-function renderTotalTimePanel(){
-  const list=document.getElementById('totalTimeList');
-  if(!list)return;
-  if(!roster.length){
-    list.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Add players in the Roster tab</p>';
-    return;
-  }
-  const rows=roster
-    .map(p=>({p,mins:totalMinsPlayed(p.id)}))
-    .sort((a,b)=>totalTimeSortDesc?b.mins-a.mins:a.mins-b.mins);
-  list.innerHTML=rows.map(({p,mins})=>`
-    <div class="onfield-item">
-      <span class="ci">${p.num!=='—'?'#'+p.num:'—'}</span>
-      <span class="cn2">${esc(p.name)}</span>
-      <span class="ct">${mins?mins+"'":'—'}</span>
-    </div>`).join('');
-}
-
 function renderBenchPanel(){
   const onIds=new Set(fieldSlots.filter(Boolean));
   const pendingInIds=new Set(pendingSubs.map(p=>p.inRosterId));
@@ -1230,9 +1160,9 @@ function renderBenchPanel(){
   document.getElementById('onCount').textContent=onCount;
   document.getElementById('offCount').textContent=roster.filter(p=>!onIds.has(p.id)&&!unavailIds.has(p.id)).length;
 
-  // On-field list — show minutes ON field (currentMinute - onMin), with over-half-time warning
-  const halfLen=parseInt(document.getElementById('halfLengthMin')?.value)||25;
-  const onfieldWarnMin=halfLen/2;
+  // On-field list — show minutes ON field (currentMinute - onMin), with optional alert when over threshold
+  const onfieldAlertOn=document.getElementById('onfieldAlertEnabled')?.checked;
+  const onfieldAlertMin=parseInt(document.getElementById('onfieldAlertMin')?.value)||20;
   const onList=document.getElementById('onFieldList');
   const onPlayers=fieldSlots.map((rid,i)=>{
     if(!rid)return null;
@@ -1244,7 +1174,7 @@ function renderBenchPanel(){
     const hasSub=pendingOutIds.has(rid);
     const pendingSub=pendingSubs.find(ps=>ps.outRosterId===rid);
     const inPlayer=pendingSub?roster.find(pl=>pl.id===pendingSub.inRosterId):null;
-    const isOverTime=minsOnField>=onfieldWarnMin;
+    const isOverTime=onfieldAlertOn&&minsOnField>=onfieldAlertMin;
     return{p,i,minsOnField,pos:slotLabel(SLOTS[i].pos),hasSub,inPlayer,isOverTime};
   }).filter(Boolean);
   if(!onPlayers.length){
@@ -1255,11 +1185,12 @@ function renderBenchPanel(){
         <span class="ci">${p.num!=='—'?'#'+p.num:'—'}</span>
         <span class="cn2">${esc(p.name)}${hasSub?`<span class="tag-pending">→${esc(inPlayer?inPlayer.name.split(' ')[0]:'?')}</span>`:''}</span>
         <span class="cp">${pos}</span>
-        <span class="ct">${isOverTime?`<span class="alert-badge" title="${minsOnField} min on field this half">⚑ ${minsOnField}'</span>`:minsOnField+"'"}</span>
+        <span class="ct">${isOverTime?`<span class="alert-badge" title="${minsOnField} min on field">⚑ ${minsOnField}'</span>`:minsOnField+"'"}</span>
       </div>`).join('');
   }
 
   // Bench chips — sorted by longest current consecutive bench time first (descending)
+  const benchAlertOn=document.getElementById('benchAlertEnabled')?.checked;
   const alertMin=parseInt(document.getElementById('benchAlertMin')?.value)||5;
   const benchPlayers=roster
     .filter(p=>!onIds.has(p.id)&&!unavailIds.has(p.id))
@@ -1278,7 +1209,7 @@ function renderBenchPanel(){
     chips.innerHTML=benchPlayers.map(({p,mins,benchMins})=>{
       const wasOn=currentGame&&currentGame.playerStats[p.id]?.length;
       const isPendingIn=pendingInIds.has(p.id);
-      const isAlerted=benchMins>=0&&benchMins>=alertMin;
+      const isAlerted=benchAlertOn&&benchMins>=0&&benchMins>=alertMin;
       const alertEl=isAlerted?`<span class="alert-badge" title="${benchMins} min on bench">⚑ ${benchMins}'</span>`:'';
       return `<div class="bchip${wasOn?' was-on':''}${isPendingIn?' pending-in':''}${isAlerted?' bchip-alert':''}"
         draggable="true" data-id="${p.id}"
@@ -1311,8 +1242,6 @@ function renderBenchPanel(){
     Drop players here
   </div>`;
   unavailList.innerHTML=html;
-
-  renderTotalTimePanel();
 }
 
 function renderPendingBox(){

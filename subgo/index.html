@@ -1176,7 +1176,7 @@ function renderBenchPanel(){
     const inPlayer=pendingSub?roster.find(pl=>pl.id===pendingSub.inRosterId):null;
     const isOverTime=onfieldAlertOn&&minsOnField>=onfieldAlertMin;
     return{p,i,minsOnField,pos:slotLabel(SLOTS[i].pos),hasSub,inPlayer,isOverTime};
-  }).filter(Boolean);
+  }).filter(Boolean).sort((a,b)=>b.minsOnField-a.minsOnField);
   if(!onPlayers.length){
     onList.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Drag bench players onto field positions</p>';
   } else {

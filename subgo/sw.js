@@ -1,16 +1,29 @@
-const CACHE = 'subgo-v5';
-const ASSETS = [
+const CACHE = 'subgo-v6';
+const LOCAL_ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png',
+  './icon-512.png'
+];
+const REMOTE_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&family=DM+Mono&display=swap'
 ];
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE).then(async c => {
+      // Local assets must all succeed
+      await c.addAll(LOCAL_ASSETS);
+      // Remote assets are best-effort — a failure here won't block install
+      await Promise.allSettled(
+        REMOTE_ASSETS.map(url =>
+          fetch(url, { mode: 'no-cors' })
+            .then(res => c.put(url, res))
+            .catch(() => {})
+        )
+      );
+    }).then(() => self.skipWaiting())
   );
 });
 

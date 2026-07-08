@@ -1545,10 +1545,11 @@ function startDragTouch(e,rosterId){
   let scrollInterval=null;
 
   function beginDrag(clientX,clientY){
+    if(dragStarted)return;
     dragStarted=true;
     startDrag(rosterId,clientX,clientY);
     document.getElementById('fieldSvg').classList.add('dragging');
-    if(chip)chip.classList.add('dragging');
+    if(chip){chip.classList.add('dragging');chip.style.touchAction='none';}
   }
 
   function cleanup(){
@@ -1556,7 +1557,7 @@ function startDragTouch(e,rosterId){
     clearInterval(scrollInterval);
     scrollInterval=null;
     document.getElementById('fieldSvg').classList.remove('dragging');
-    if(chip)chip.classList.remove('dragging');
+    if(chip){chip.classList.remove('dragging');chip.style.touchAction='';}
   }
 
   function handleEdgeScroll(clientY){
@@ -1567,23 +1568,32 @@ function startDragTouch(e,rosterId){
     } else if(clientY>window.innerHeight-ZONE){
       const dist=clientY-(window.innerHeight-ZONE);
       scrollInterval=setInterval(()=>window.scrollBy(0,(SPEED*(dist/ZONE))|0),16);
+    } else {
+      clearInterval(scrollInterval);
+      scrollInterval=null;
     }
   }
 
-  holdTimer=setTimeout(()=>{ beginDrag(startX,startY); },300);
+  // Disable touch-action immediately so the browser doesn't steal the gesture
+  if(chip) chip.style.touchAction='none';
+
+  holdTimer=setTimeout(()=>{ beginDrag(startX,startY); },200);
 
   const onMove=ev=>{
     const tc=ev.touches[0];
     const dx=Math.abs(tc.clientX-startX);
     const dy=Math.abs(tc.clientY-startY);
     if(!dragStarted){
-      if(dy>dx&&dy>8){
-        clearTimeout(holdTimer);cleanup();
+      // Vertical scroll intent — cancel drag and restore touch-action
+      if(dy>dx&&dy>10){
+        clearTimeout(holdTimer);
+        if(chip) chip.style.touchAction='';
+        cleanup();
         document.removeEventListener('touchmove',onMove);
         document.removeEventListener('touchend',onEnd);
         return;
       }
-      if(dx>8||dy>8){clearTimeout(holdTimer);beginDrag(startX,startY);}
+      if(dx>10||dy>10){clearTimeout(holdTimer);beginDrag(startX,startY);}
     }
     if(dragStarted){
       ev.preventDefault();

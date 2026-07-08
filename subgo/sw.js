@@ -1,10 +1,11 @@
-const CACHE = 'subgo-v4';
+const CACHE = 'subgo-v5';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  'https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&family=DM+Mono&display=swap'
 ];
 
 self.addEventListener('install', e => {

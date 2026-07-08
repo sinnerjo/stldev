@@ -1,24 +1,37 @@
 {
-  "name": "Soccer Tracker",
+  "name": "SubGo",
   "short_name": "SubGo",
   "description": "Track player positions, substitutions, and minutes during soccer games.",
-  "start_url": "./index.html",
+  "start_url": "https://stldev.com/subgo/",
+  "scope": "https://stldev.com/subgo/",
   "display": "standalone",
-  "background_color": "#0d1f10",
-  "theme_color": "#0a2a0f",
+  "background_color": "#00001a",
+  "theme_color": "#00004a",
   "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

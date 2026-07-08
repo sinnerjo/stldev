@@ -190,6 +190,9 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   .bench-col > .pending-box{flex:0 0 100%}
   .panel-toggle{display:none}
   .bench-col.hidden-panel{display:flex}
+  #view-game.active{display:flex;flex-direction:column;align-items:center}
+  #view-game .game-top{width:100%}
+  .game-wrap{width:100%}
 }
 
 .pbox{background:var(--cb);border:1px solid var(--br);border-radius:8px;padding:.65rem}
@@ -1539,6 +1542,7 @@ function startDragTouch(e,rosterId){
   const chip=e.currentTarget;
   let dragStarted=false;
   let holdTimer=null;
+  let scrollInterval=null;
 
   function beginDrag(clientX,clientY){
     dragStarted=true;
@@ -1549,8 +1553,21 @@ function startDragTouch(e,rosterId){
 
   function cleanup(){
     clearTimeout(holdTimer);
+    clearInterval(scrollInterval);
+    scrollInterval=null;
     document.getElementById('fieldSvg').classList.remove('dragging');
     if(chip)chip.classList.remove('dragging');
+  }
+
+  function handleEdgeScroll(clientY){
+    clearInterval(scrollInterval);
+    const ZONE=80, SPEED=6;
+    if(clientY<ZONE){
+      scrollInterval=setInterval(()=>window.scrollBy(0,-(SPEED*(1-(clientY/ZONE)))|0),16);
+    } else if(clientY>window.innerHeight-ZONE){
+      const dist=clientY-(window.innerHeight-ZONE);
+      scrollInterval=setInterval(()=>window.scrollBy(0,(SPEED*(dist/ZONE))|0),16);
+    }
   }
 
   holdTimer=setTimeout(()=>{ beginDrag(startX,startY); },300);
@@ -1568,7 +1585,11 @@ function startDragTouch(e,rosterId){
       }
       if(dx>8||dy>8){clearTimeout(holdTimer);beginDrag(startX,startY);}
     }
-    if(dragStarted){ev.preventDefault();moveDragGhost(tc.clientX,tc.clientY);}
+    if(dragStarted){
+      ev.preventDefault();
+      moveDragGhost(tc.clientX,tc.clientY);
+      handleEdgeScroll(tc.clientY);
+    }
   };
 
   const onEnd=ev=>{

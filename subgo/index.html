@@ -206,9 +206,9 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 @media(max-width:640px){
   .game-wrap{flex-direction:column}
   .field-wrap{width:100%;border-right:none;border-bottom:1px solid var(--br)}
-  .bench-col{width:100%;border-left:none;padding:.65rem .75rem;flex-direction:row;flex-wrap:wrap;gap:.6rem}
-  .bench-col > .pbox{flex:1;min-width:140px}
-  .bench-col > .pending-box{flex:0 0 100%}
+  .bench-col{width:100%;border-left:none;padding:.65rem .75rem;flex-direction:column;gap:.6rem}
+  .bench-col > .pbox{flex:none;width:100%}
+  .bench-col > .pending-box{flex:none;width:100%}
   .panel-toggle{display:none}
   .bench-col.hidden-panel{display:flex}
   #view-game.active{display:flex;flex-direction:column;align-items:center}
@@ -414,7 +414,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.2</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.3</p>
 </div>
 
 <!-- GAME -->
@@ -1949,10 +1949,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.2</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.3</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.2 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.3 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

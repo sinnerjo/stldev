@@ -54,6 +54,12 @@ header h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.
   header h1{font-size:1.3rem}
   .clock{font-size:1.2rem;min-width:58px}
 }
+@media(min-width:1024px){
+  header{padding:.7rem 2rem;padding-top:calc(.7rem + env(safe-area-inset-top,0px))}
+  header h1{font-size:1.5rem}
+  .team-btn{font-size:1rem;min-height:36px}
+  .clock{font-size:1.3rem}
+}
 
 /* SCORE */
 .hdr-score{display:flex;align-items:center;gap:.3rem}
@@ -119,10 +125,17 @@ header h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.
 nav{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;background:var(--gd);border-bottom:1px solid var(--br)}
 nav button{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;background:none;border:none;color:var(--gr);padding:.7rem .5rem;cursor:pointer;border-bottom:3px solid transparent;transition:color .15s,border-color .15s}
 nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
+@media(min-width:1024px){
+  nav{padding:0 2rem}
+  nav button{font-size:1.05rem;padding:.8rem 1.5rem;letter-spacing:.08em}
+}
 
 /* VIEWS */
 .view{display:none;padding:.85rem;max-width:960px;margin:0 auto;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom,0px))}
 .view.active{display:block}
+@media(min-width:1024px){
+  .view{max-width:1100px;padding:1.25rem 2rem}
+}
 #view-game{padding:0;max-width:none}
 #view-game .game-top{padding:.7rem .75rem .3rem}
 
@@ -159,11 +172,12 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 #view-game .game-setup{display:flex;gap:.5rem;align-items:center}
 #view-game .game-setup input{flex:1;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.6rem .75rem;border-radius:6px;font-family:'Barlow',sans-serif;font-size:1rem;min-height:44px}
 .game-lbl{font-size:.78rem;color:var(--gr);text-align:center;padding:.15rem 0 .4rem;font-family:'DM Mono',monospace}
+.game-wrap-outer{display:flex;justify-content:center}
 .game-wrap{display:flex;gap:0;align-items:flex-start;position:relative}
 
 @media(min-width:641px){
   #view-game.active{display:flex;flex-direction:column;align-items:center}
-  #view-game .game-top{width:100%;max-width:calc(75vh * 0.654* 2 + 2px)}
+  #view-game .game-top{width:100%;max-width:calc(75vh * 0.654 * 2 + 2px)}
   .game-wrap{width:calc(75vh * 0.654 * 2 + 2px);max-width:842px}
 }
 
@@ -172,7 +186,6 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .field-svg{display:block;width:100%;touch-action:pan-y}
 .field-svg.dragging{touch-action:none}
 
-/* DESKTOP: field and bench equal width, centered */
 @media(min-width:641px){
   .game-wrap{
     justify-content:center;
@@ -194,6 +207,18 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     max-height:75vh;
     overflow-y:auto;
     border-left:1px solid var(--br);
+  }
+}
+
+/* Large tablet and desktop — more breathing room, wider bench */
+@media(min-width:1024px){
+  #view-game .game-top{padding:.85rem 1.25rem .4rem;max-width:940px;margin:0 auto;width:100%}
+  .game-wrap-outer{padding:1rem 1.25rem 2rem}
+  .game-wrap{
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid var(--br);
+    box-shadow:0 2px 24px rgba(0,0,40,.4);
   }
 }
 
@@ -414,7 +439,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.3</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.4</p>
 </div>
 
 <!-- GAME -->
@@ -427,6 +452,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <div class="game-lbl" id="gameLabel">No active game — create one above <button id="renameOppBtn" onclick="renameOpponent()" style="display:none;background:none;border:none;color:var(--grd);cursor:pointer;font-size:.8rem;padding:0 .25rem;vertical-align:middle" title="Rename opponent">✎</button></div>
   </div>
 
+  <div class="game-wrap-outer">
   <div class="game-wrap" id="gameWrap">
     <div class="field-wrap" id="fieldWrap">
       <svg class="field-svg" id="fieldSvg" viewBox="0 0 340 520" xmlns="http://www.w3.org/2000/svg">
@@ -506,6 +532,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div></div>
       </div>
     </div>
+  </div>
   </div>
 </div>
 
@@ -1949,10 +1976,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.3</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.4</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.3 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.4 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

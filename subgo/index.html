@@ -37,16 +37,20 @@ html,body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--wh);m
 
 /* HEADER — mobile first: two rows */
 header{background:var(--gd);border-bottom:2px solid var(--ac);padding:0;padding-top:env(safe-area-inset-top,0px);position:sticky;top:0;z-index:200;display:flex;flex-direction:column}
-.hdr-row1{display:flex;align-items:center;gap:.5rem;padding:.55rem .75rem}
-.hdr-row2{display:flex;align-items:center;gap:.4rem;padding:.35rem .75rem .45rem;border-top:1px solid rgba(255,255,255,.07)}
+.hdr-row1{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:.55rem .75rem;gap:.5rem}
+.hdr-row1-left{display:flex;align-items:center}
+.hdr-row1-center{display:flex;justify-content:center}
+.hdr-row1-right{display:flex;justify-content:flex-end;align-items:center}
+.hdr-row2{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.35rem .75rem .45rem;border-top:1px solid rgba(255,255,255,.07)}
 header h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.2rem;color:var(--ac);text-transform:uppercase;white-space:nowrap}
-.hdr-timer{display:flex;align-items:center;gap:.35rem;flex:1}
+.hdr-timer{display:flex;align-items:center;gap:.35rem}
 .clock{font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--wh);background:var(--gm);padding:.18rem .5rem;border-radius:4px;border:1px solid var(--br);min-width:52px;text-align:center}
 .clock.run{color:var(--ac)}
 @media(min-width:600px){
   header{flex-direction:row;align-items:center;padding:.6rem 1rem;padding-top:calc(.6rem + env(safe-area-inset-top,0px));gap:.6rem}
-  .hdr-row1{padding:0;flex:0 0 auto;border:none}
-  .hdr-row2{padding:0;border:none;margin-left:auto}
+  .hdr-row1{display:contents}
+  .hdr-row1-left,.hdr-row1-center,.hdr-row1-right{display:contents}
+  .hdr-row2{border:none;padding:0;margin-left:auto}
   header h1{font-size:1.3rem}
   .clock{font-size:1.2rem;min-width:58px}
 }
@@ -87,7 +91,7 @@ header h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.
 .help-hero{text-align:center;padding:.5rem 0 1rem}
 .help-hero .app-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ac)}
 .help-hero .app-sub{font-size:.85rem;color:var(--gr);margin-top:.25rem;line-height:1.5}
-.team-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.04em;background:var(--gm);border:1px solid var(--br);color:var(--ac);border-radius:5px;padding:.2rem .6rem;cursor:pointer;white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;min-height:32px}
+.team-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.04em;background:var(--gm);border:1px solid var(--br);color:var(--ac);border-radius:5px;padding:.2rem .6rem;cursor:pointer;white-space:nowrap;width:100%;overflow:hidden;text-overflow:ellipsis;min-height:32px;text-align:center}
 .team-btn:active{background:#0000a0}
 .team-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,20,.92);align-items:flex-end;justify-content:center}
 .team-overlay.active{display:flex}
@@ -343,9 +347,9 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 
 <header>
   <div class="hdr-row1">
-    <h1>⚽ SubGo</h1>
-    <button class="team-btn" id="teamBtn" onclick="openTeamOverlay()">Spain</button>
-    <button class="btn btn-ac btn-sm" id="timerBtn" onclick="toggleTimer()">Start</button>
+    <div class="hdr-row1-left"><h1>⚽ SubGo</h1></div>
+    <div class="hdr-row1-center"><button class="team-btn" id="teamBtn" onclick="openTeamOverlay()">Spain</button></div>
+    <div class="hdr-row1-right"><button class="btn btn-ac btn-sm" id="timerBtn" onclick="toggleTimer()">Start</button></div>
   </div>
   <div class="hdr-row2">
     <div class="hdr-score" id="hdrScore" style="display:none">
@@ -357,7 +361,6 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <div class="hdr-timer">
       <div class="clock" id="clock">0:00</div>
       <button class="btn btn-ol btn-sm" onclick="halftime()" id="halfBtn" title="Halftime — resets clock, keeps player minutes">HT</button>
-      <button class="btn btn-ol btn-sm" onclick="resetTimer()">↺</button>
     </div>
   </div>
 </header>
@@ -411,7 +414,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.1</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.2</p>
 </div>
 
 <!-- GAME -->
@@ -1946,10 +1949,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.1</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.2</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.1 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.2 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

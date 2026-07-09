@@ -18,7 +18,7 @@
 </script>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#00004a">
-<link rel="apple-touch-icon" href="file:///C:/Users/josep/Downloads/icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&family=DM+Mono&display=swap" rel="stylesheet">
@@ -35,16 +35,25 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--wh);min-height:100%;font-size:15px;overscroll-behavior:none}
 
-/* HEADER */
-header{background:var(--gd);border-bottom:2px solid var(--ac);padding:.6rem 1rem;padding-top:calc(.6rem + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:.6rem;position:sticky;top:0;z-index:200}
-header h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.3rem;color:var(--ac);text-transform:uppercase;white-space:nowrap}
-.hdr-timer{display:flex;align-items:center;gap:.4rem;margin-left:auto}
-.clock{font-family:'DM Mono',monospace;font-size:1.2rem;color:var(--wh);background:var(--gm);padding:.2rem .6rem;border-radius:4px;border:1px solid var(--br);min-width:58px;text-align:center}
+/* HEADER — mobile first: two rows */
+header{background:var(--gd);border-bottom:2px solid var(--ac);padding:0;padding-top:env(safe-area-inset-top,0px);position:sticky;top:0;z-index:200;display:flex;flex-direction:column}
+.hdr-row1{display:flex;align-items:center;gap:.5rem;padding:.55rem .75rem}
+.hdr-row2{display:flex;align-items:center;gap:.4rem;padding:.35rem .75rem .45rem;border-top:1px solid rgba(255,255,255,.07)}
+header h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.2rem;color:var(--ac);text-transform:uppercase;white-space:nowrap}
+.hdr-timer{display:flex;align-items:center;gap:.35rem;flex:1}
+.clock{font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--wh);background:var(--gm);padding:.18rem .5rem;border-radius:4px;border:1px solid var(--br);min-width:52px;text-align:center}
 .clock.run{color:var(--ac)}
+@media(min-width:600px){
+  header{flex-direction:row;align-items:center;padding:.6rem 1rem;padding-top:calc(.6rem + env(safe-area-inset-top,0px));gap:.6rem}
+  .hdr-row1{padding:0;flex:0 0 auto;border:none}
+  .hdr-row2{padding:0;border:none;margin-left:auto}
+  header h1{font-size:1.3rem}
+  .clock{font-size:1.2rem;min-width:58px}
+}
 
 /* SCORE */
-.hdr-score{display:flex;align-items:center;gap:.3rem;margin-left:.4rem}
-.score-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.3rem;background:var(--gm);border:1px solid var(--br);border-radius:5px;color:var(--wh);padding:.15rem .55rem;cursor:pointer;min-width:36px;text-align:center;line-height:1.4;transition:background .12s}
+.hdr-score{display:flex;align-items:center;gap:.3rem}
+.score-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.2rem;background:var(--gm);border:1px solid var(--br);border-radius:5px;color:var(--wh);padding:.15rem .5rem;cursor:pointer;min-width:34px;text-align:center;line-height:1.4;transition:background .12s}
 .score-btn:active{background:#2a6a32}
 .score-btn.us{color:var(--ac)}
 .score-sep{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.1rem;color:var(--grd)}
@@ -80,21 +89,29 @@ header h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.
 .help-hero .app-sub{font-size:.85rem;color:var(--gr);margin-top:.25rem;line-height:1.5}
 .team-btn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.04em;background:var(--gm);border:1px solid var(--br);color:var(--ac);border-radius:5px;padding:.2rem .6rem;cursor:pointer;white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;min-height:32px}
 .team-btn:active{background:#0000a0}
-.team-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,20,.92);align-items:flex-start;justify-content:center;padding-top:60px}
+.team-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,20,.92);align-items:flex-end;justify-content:center}
 .team-overlay.active{display:flex}
-.team-sheet{background:#00002e;border:2px solid var(--ac);border-radius:12px;padding:1.25rem;width:100%;max-width:400px;display:flex;flex-direction:column;gap:.75rem;max-height:85vh;overflow-y:auto}
+.team-sheet{background:#00002e;border:2px solid var(--ac);border-bottom:none;border-radius:14px 14px 0 0;padding:1.25rem;padding-bottom:calc(1.25rem + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;display:flex;flex-direction:column;gap:.75rem;max-height:85vh;overflow-y:auto}
 .team-sheet h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ac);text-align:center}
+@media(min-width:600px){
+  .team-overlay{align-items:center}
+  .team-sheet{border-radius:12px;border-bottom:2px solid var(--ac);padding-bottom:1.25rem;max-width:400px}
+}
 .team-list{display:flex;flex-direction:column;gap:.4rem}
-.team-item{display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;border-radius:7px;border:1px solid var(--br);background:var(--gm);min-height:48px}
+.team-item{display:flex;align-items:center;gap:.6rem;padding:.75rem;border-radius:7px;border:1px solid var(--br);background:var(--gm);min-height:52px}
 .team-item.active-team{border-color:var(--ac);background:#00003a}
-.team-item .tname{font-size:.95rem;font-weight:500;flex:1;cursor:pointer}
+.team-item .tname{font-size:1rem;font-weight:500;flex:1;cursor:pointer}
 .team-item .tcount{font-size:.72rem;color:var(--gr);font-family:'DM Mono',monospace}
-.team-item .tdel{background:none;border:none;color:var(--grd);cursor:pointer;font-size:1rem;padding:4px 6px;border-radius:4px;min-width:30px;min-height:30px}
+.team-item .tdel{background:none;border:none;color:var(--grd);cursor:pointer;font-size:1.1rem;padding:6px 8px;border-radius:4px;min-width:36px;min-height:36px}
 .team-item .tdel:active{color:var(--rd)}
-.team-add-form{display:flex;gap:.5rem}
-.team-add-form input{flex:1;background:var(--bg);border:1px solid var(--br);color:var(--wh);padding:.55rem .75rem;border-radius:6px;font-family:'Barlow',sans-serif;font-size:1rem;min-height:44px}
+.team-add-form{display:flex;flex-direction:column;gap:.5rem}
+.team-add-form input{background:var(--bg);border:1px solid var(--br);color:var(--wh);padding:.65rem .75rem;border-radius:6px;font-family:'Barlow',sans-serif;font-size:1rem;min-height:48px;width:100%}
 .team-add-form input::placeholder{color:var(--grd)}
 .team-add-form input:focus{outline:1px solid var(--ac)}
+@media(min-width:600px){
+  .team-add-form{flex-direction:row}
+  .team-add-form input{min-height:44px}
+}
 nav{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;background:var(--gd);border-bottom:1px solid var(--br)}
 nav button{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;background:none;border:none;color:var(--gr);padding:.7rem .5rem;cursor:pointer;border-bottom:3px solid transparent;transition:color .15s,border-color .15s}
 nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
@@ -214,9 +231,13 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .pending-actions{display:flex;gap:.4rem}
 
 /* SUB SHOUTOUT OVERLAY */
-.shoutout-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(5,15,7,.92);align-items:center;justify-content:center;padding:1.5rem}
+.shoutout-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(5,15,7,.92);align-items:flex-end;justify-content:center}
 .shoutout-overlay.active{display:flex}
-.shoutout-card{background:#00001a;border:2px solid var(--ac);border-radius:14px;padding:1.5rem;max-width:480px;width:100%;max-height:90vh;overflow-y:auto}
+.shoutout-card{background:#00001a;border:2px solid var(--ac);border-bottom:none;border-radius:14px 14px 0 0;padding:1.5rem;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+@media(min-width:600px){
+  .shoutout-overlay{align-items:center}
+  .shoutout-card{border-radius:14px;border-bottom:2px solid var(--ac);padding-bottom:1.5rem}
+}
 .shoutout-card h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.4rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ac);text-align:center;margin-bottom:1.25rem}
 .shoutout-section{margin-bottom:1.1rem}
 .shoutout-section h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid var(--br)}
@@ -321,19 +342,23 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 <body>
 
 <header>
-  <h1>⚽ SubGo</h1>
-  <button class="team-btn" id="teamBtn" onclick="openTeamOverlay()">Spain</button>
-  <div class="hdr-score" id="hdrScore" style="display:none">
-    <button class="score-btn us" id="scoreUs" onclick="goalScored('us')" title="We scored">0</button>
-    <span class="score-sep">—</span>
-    <button class="score-btn" id="scoreThem" onclick="goalScored('them')" title="They scored">0</button>
-    <button class="score-undo" onclick="undoGoal()" title="Undo last goal">↩</button>
-  </div>
-  <div class="hdr-timer">
-    <div class="clock" id="clock">0:00</div>
+  <div class="hdr-row1">
+    <h1>⚽ SubGo</h1>
+    <button class="team-btn" id="teamBtn" onclick="openTeamOverlay()">Spain</button>
     <button class="btn btn-ac btn-sm" id="timerBtn" onclick="toggleTimer()">Start</button>
-    <button class="btn btn-ol btn-sm" onclick="halftime()" id="halfBtn" title="Halftime — resets clock, keeps player minutes">HT</button>
-    <button class="btn btn-ol btn-sm" onclick="resetTimer()">↺</button>
+  </div>
+  <div class="hdr-row2">
+    <div class="hdr-score" id="hdrScore" style="display:none">
+      <button class="score-btn us" id="scoreUs" onclick="goalScored('us')" title="We scored">0</button>
+      <span class="score-sep">—</span>
+      <button class="score-btn" id="scoreThem" onclick="goalScored('them')" title="They scored">0</button>
+      <button class="score-undo" onclick="undoGoal()" title="Undo last goal">↩</button>
+    </div>
+    <div class="hdr-timer">
+      <div class="clock" id="clock">0:00</div>
+      <button class="btn btn-ol btn-sm" onclick="halftime()" id="halfBtn" title="Halftime — resets clock, keeps player minutes">HT</button>
+      <button class="btn btn-ol btn-sm" onclick="resetTimer()">↺</button>
+    </div>
   </div>
 </header>
 
@@ -386,7 +411,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v3.4</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.1</p>
 </div>
 
 <!-- GAME -->
@@ -1131,7 +1156,10 @@ function renderField(){
     const firstName=player.name.split(' ')[0];
     const dname=firstName.length>8?firstName.substring(0,7)+'.':firstName;
     const opacity=pendingOutSlots.has(i)?'0.6':'1';
-    return `<g style="cursor:pointer;opacity:${opacity}" onclick="removeFromSlot(${i})">
+    return `<g style="cursor:grab;opacity:${opacity}"
+      onmousedown="startFieldDragMouse(event,${i})"
+      ontouchstart="startFieldDragTouch(event,${i})"
+      onclick="handleFieldDotClick(event,${i})">
       <circle cx="${s.x}" cy="${s.y}" r="24" fill="${col}" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
       <text x="${s.x}" y="${s.y-3}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="11" fill="white">${esc(dname)}</text>
       <text x="${s.x}" y="${s.y+10}" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="rgba(255,255,255,0.85)">${player.num!=='—'?'#'+player.num:''}</text>
@@ -1487,35 +1515,37 @@ function moveDragGhost(clientX,clientY){
 
 function endDrag(clientX,clientY){
   if(!drag)return;
-  // Check if dropped over unavailable zone
-  const hint=document.getElementById('unavailHint');
-  if(hint){
-    const r=hint.getBoundingClientRect();
-    if(clientX>=r.left&&clientX<=r.right&&clientY>=r.top&&clientY<=r.bottom){
-      markUnavailable(drag.rosterId);
-      document.getElementById('dragGhost').style.display='none';
-      document.querySelectorAll('#slotLayer circle').forEach(c=>{
-        c.setAttribute('stroke','rgba(255,255,255,0.35)');c.setAttribute('stroke-width','1.5');c.setAttribute('fill','rgba(255,255,255,0.08)');
-      });
-      drag=null;
-      return;
+  const isFieldDrag=drag.fromSlot!==undefined;
+
+  // Check if dropped over unavailable zone (bench drags only)
+  if(!isFieldDrag){
+    const hint=document.getElementById('unavailHint');
+    if(hint){
+      const r=hint.getBoundingClientRect();
+      if(clientX>=r.left&&clientX<=r.right&&clientY>=r.top&&clientY<=r.bottom){
+        markUnavailable(drag.rosterId);
+        document.getElementById('dragGhost').style.display='none';
+        drag=null;
+        return;
+      }
+    }
+    // Check if dropped on an On Field panel row
+    const onfieldRows=document.querySelectorAll('.onfield-item[data-slot]');
+    for(const row of onfieldRows){
+      const r=row.getBoundingClientRect();
+      if(clientX>=r.left&&clientX<=r.right&&clientY>=r.top&&clientY<=r.bottom){
+        const slotIdx=parseInt(row.getAttribute('data-slot'));
+        document.getElementById('dragGhost').style.display='none';
+        document.querySelectorAll('#slotLayer circle').forEach(c=>{
+          c.setAttribute('stroke','rgba(255,255,255,0.35)');c.setAttribute('stroke-width','1.5');c.setAttribute('fill','rgba(255,255,255,0.08)');
+        });
+        assignSlot(drag.rosterId,slotIdx);
+        drag=null;
+        return;
+      }
     }
   }
-  // Check if dropped over an On Field panel row — treat as dropping on that slot
-  const onfieldRows=document.querySelectorAll('.onfield-item[data-slot]');
-  for(const row of onfieldRows){
-    const r=row.getBoundingClientRect();
-    if(clientX>=r.left&&clientX<=r.right&&clientY>=r.top&&clientY<=r.bottom){
-      const slotIdx=parseInt(row.getAttribute('data-slot'));
-      document.getElementById('dragGhost').style.display='none';
-      document.querySelectorAll('#slotLayer circle').forEach(c=>{
-        c.setAttribute('stroke','rgba(255,255,255,0.35)');c.setAttribute('stroke-width','1.5');c.setAttribute('fill','rgba(255,255,255,0.08)');
-      });
-      assignSlot(drag.rosterId,slotIdx);
-      drag=null;
-      return;
-    }
-  }
+
   const svgEl=document.getElementById('fieldSvg');
   const pt=getSvgPoint(svgEl,clientX,clientY);
   const slot=nearestSlot(pt.x,pt.y);
@@ -1523,8 +1553,106 @@ function endDrag(clientX,clientY){
   document.querySelectorAll('#slotLayer circle').forEach(c=>{
     c.setAttribute('stroke','rgba(255,255,255,0.35)');c.setAttribute('stroke-width','1.5');c.setAttribute('fill','rgba(255,255,255,0.08)');
   });
-  if(slot!==null)assignSlot(drag.rosterId,slot);
+  document.querySelectorAll('.onfield-item[data-slot]').forEach(r=>r.classList.remove('drop-target-hover'));
+
+  if(slot!==null){
+    if(isFieldDrag){
+      const fromSlot=drag.fromSlot;
+      if(slot!==fromSlot){
+        // Field-to-field: swap or move
+        const movingId=fieldSlots[fromSlot];
+        const targetId=fieldSlots[slot];
+        // Move moving player to target slot
+        recordOff(fromSlot);
+        if(targetId!==null) recordOff(slot);
+        fieldSlots[fromSlot]=targetId||null;
+        fieldSlots[slot]=movingId;
+        recordOn(movingId,slot);
+        if(targetId!==null) recordOn(targetId,fromSlot);
+        saveData();renderGame();
+      }
+    } else {
+      assignSlot(drag.rosterId,slot);
+    }
+  }
   drag=null;
+}
+
+function handleFieldDotClick(e,slotIdx){
+  // Only fire click if no drag movement occurred
+  if(drag&&drag.moved)return;
+  removeFromSlot(slotIdx);
+}
+
+function startFieldDrag(fromSlot,clientX,clientY){
+  const rosterId=fieldSlots[fromSlot];
+  if(!rosterId)return;
+  const player=roster.find(p=>p.id===rosterId);
+  if(!player)return;
+  drag={rosterId,fromSlot,moved:false};
+  const ghost=document.getElementById('dragGhost');
+  ghost.style.display='';
+  document.getElementById('ghostName').textContent=player.name.split(' ')[0].substring(0,8);
+  document.getElementById('ghostNum').textContent=player.num!=='—'?'#'+player.num:'';
+  moveDragGhost(clientX,clientY);
+}
+
+function startFieldDragMouse(e,fromSlot){
+  e.preventDefault();
+  e.stopPropagation();
+  startFieldDrag(fromSlot,e.clientX,e.clientY);
+  if(!drag)return;
+  const onMove=ev=>{drag.moved=true;moveDragGhost(ev.clientX,ev.clientY);};
+  const onUp=ev=>{endDrag(ev.clientX,ev.clientY);document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);};
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+}
+
+function startFieldDragTouch(e,fromSlot){
+  e.stopPropagation();
+  const t=e.touches[0];
+  const startX=t.clientX,startY=t.clientY;
+  let dragStarted=false;
+  let holdTimer=null;
+  let scrollInterval=null;
+
+  function beginDrag(clientX,clientY){
+    if(dragStarted)return;
+    dragStarted=true;
+    startFieldDrag(fromSlot,clientX,clientY);
+    document.getElementById('fieldSvg').classList.add('dragging');
+  }
+
+  function cleanup(){
+    clearTimeout(holdTimer);
+    clearInterval(scrollInterval);
+    scrollInterval=null;
+    document.getElementById('fieldSvg').classList.remove('dragging');
+  }
+
+  holdTimer=setTimeout(()=>beginDrag(startX,startY),200);
+
+  const onMove=ev=>{
+    const tc=ev.touches[0];
+    const dx=Math.abs(tc.clientX-startX);
+    const dy=Math.abs(tc.clientY-startY);
+    if(!dragStarted){
+      if(dy>dx&&dy>10){clearTimeout(holdTimer);cleanup();document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);return;}
+      if(dx>10||dy>10){clearTimeout(holdTimer);beginDrag(startX,startY);}
+    }
+    if(dragStarted&&drag){drag.moved=true;ev.preventDefault();moveDragGhost(tc.clientX,tc.clientY);}
+  };
+
+  const onEnd=ev=>{
+    clearTimeout(holdTimer);
+    if(dragStarted){const tc=ev.changedTouches[0];endDrag(tc.clientX,tc.clientY);}
+    cleanup();
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('touchend',onEnd);
+  };
+
+  document.addEventListener('touchmove',onMove,{passive:false});
+  document.addEventListener('touchend',onEnd);
 }
 
 function startDragMouse(e,rosterId){
@@ -1818,10 +1946,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v3.4</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.1</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v3.4 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.1 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

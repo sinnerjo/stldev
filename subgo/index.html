@@ -183,7 +183,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 
 /* FIELD */
 .field-wrap{flex:1;min-width:0;background:var(--gf);overflow:hidden;border-right:1px solid var(--br);position:relative;user-select:none}
-.field-svg{display:block;width:100%;touch-action:pan-y}
+.field-svg{display:block;width:100%;touch-action:none}
 .field-svg.dragging{touch-action:none}
 
 @media(min-width:641px){
@@ -441,7 +441,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.6</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.7</p>
 </div>
 
 <!-- GAME -->
@@ -1195,8 +1195,7 @@ function renderField(){
     const dname=firstName.length>8?firstName.substring(0,7)+'.':firstName;
     const opacity=pendingOutSlots.has(i)?'0.6':'1';
     return `<g style="cursor:grab;opacity:${opacity}"
-      onmousedown="startFieldDragMouse(event,${i})"
-      ontouchstart="startFieldDragTouch(event,${i})"
+      onpointerdown="startFieldDragMouse(event,${i})"
       onclick="handleFieldDotClick(event,${i})">
       <circle cx="${s.x}" cy="${s.y}" r="24" fill="${col}" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
       <text x="${s.x}" y="${s.y-3}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="11" fill="white">${esc(dname)}</text>
@@ -1326,8 +1325,7 @@ function renderBenchPanel(){
       return `<div class="bchip${wasOn?' was-on':''}${isPendingIn?' pending-in':''}${isAlerted?' bchip-alert':''}${isSelected?' bchip-selected':''}"
         draggable="true" data-id="${p.id}"
         onclick="selectBenchPlayer(${p.id})"
-        onmousedown="startDragMouse(event,${p.id})"
-        ontouchstart="startDragTouch(event,${p.id})">
+        onpointerdown="startDragMouse(event,${p.id})">
         <span class="cn">${p.num!=='—'?'#'+p.num:'—'}</span>
         <span class="cname">${esc(p.name)}${alertEl}${isPendingIn?'<span class="tag-pending">pending</span>':''}</span>
         <span style="font-size:.68rem;font-family:'DM Mono',monospace;color:var(--grd);margin-left:auto;margin-right:.25rem">${mins?mins+"'":'—'}</span>
@@ -1675,113 +1673,48 @@ function startFieldDrag(fromSlot,clientX,clientY){
 }
 
 function startFieldDragMouse(e,fromSlot){
-  e.preventDefault();
-  e.stopPropagation();
-  startFieldDrag(fromSlot,e.clientX,e.clientY);
-  if(!drag)return;
-  const onMove=ev=>{drag.moved=true;moveDragGhost(ev.clientX,ev.clientY);};
-  const onUp=ev=>{endDrag(ev.clientX,ev.clientY);document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);};
-  document.addEventListener('mousemove',onMove);
-  document.addEventListener('mouseup',onUp);
+  e.preventDefault();e.stopPropagation();
+  startPointerDrag(e,null,fromSlot);
 }
-
 function startFieldDragTouch(e,fromSlot){
-  e.preventDefault();
-  e.stopPropagation();
-  const t=e.touches[0];
-  const startX=t.clientX,startY=t.clientY;
-  let dragStarted=false;
-  let cancelled=false;
-  let holdTimer=null;
-  let scrollInterval=null;
-
-  function beginDrag(clientX,clientY){
-    if(dragStarted||cancelled)return;
-    dragStarted=true;
-    startFieldDrag(fromSlot,clientX,clientY);
-    document.getElementById('fieldSvg').classList.add('dragging');
-  }
-
-  function cancel(){
-    cancelled=true;
-    clearTimeout(holdTimer);
-    clearInterval(scrollInterval);
-    document.getElementById('fieldSvg').classList.remove('dragging');
-    document.getElementById('dragGhost').style.display='none';
-    document.removeEventListener('touchmove',onMove);
-    document.removeEventListener('touchend',onEnd);
-  }
-
-  function cleanup(){
-    clearTimeout(holdTimer);
-    clearInterval(scrollInterval);
-    scrollInterval=null;
-    document.getElementById('fieldSvg').classList.remove('dragging');
-  }
-
-  holdTimer=setTimeout(()=>beginDrag(startX,startY),200);
-
-  const onMove=ev=>{
-    if(cancelled)return;
-    const tc=ev.touches[0];
-    const dx=Math.abs(tc.clientX-startX);
-    const dy=Math.abs(tc.clientY-startY);
-    if(!dragStarted){
-      if(dy>dx&&dy>12){cancel();window.scrollBy(0,startY-tc.clientY);return;}
-      if(dx>12||dy>12){clearTimeout(holdTimer);beginDrag(startX,startY);}
-    }
-    if(dragStarted&&drag){drag.moved=true;ev.preventDefault();moveDragGhost(tc.clientX,tc.clientY);}
-  };
-
-  const onEnd=ev=>{
-    if(cancelled)return;
-    clearTimeout(holdTimer);
-    if(dragStarted){const tc=ev.changedTouches[0];endDrag(tc.clientX,tc.clientY);}
-    cleanup();
-    document.removeEventListener('touchmove',onMove);
-    document.removeEventListener('touchend',onEnd);
-  };
-
-  document.addEventListener('touchmove',onMove,{passive:false});
-  document.addEventListener('touchend',onEnd);
+  e.preventDefault();e.stopPropagation();
+  startPointerDrag(e,null,fromSlot);
 }
-
 function startDragMouse(e,rosterId){
   e.preventDefault();
-  startDrag(rosterId,e.clientX,e.clientY);
-  const onMove=ev=>moveDragGhost(ev.clientX,ev.clientY);
-  const onUp=ev=>{endDrag(ev.clientX,ev.clientY);document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);};
-  document.addEventListener('mousemove',onMove);
-  document.addEventListener('mouseup',onUp);
+  startPointerDrag(e,rosterId,null);
+}
+function startDragTouch(e,rosterId){
+  e.preventDefault();
+  startPointerDrag(e,rosterId,null);
 }
 
-function startDragTouch(e,rosterId){
-  e.preventDefault(); // claim gesture immediately before WebView can steal it
-  const t=e.touches[0];
-  const startX=t.clientX,startY=t.clientY;
-  const chip=e.currentTarget;
+// ── UNIFIED POINTER DRAG ───────────────────────────────────
+// Works for mouse, touch, and stylus via Pointer Events API.
+// rosterId=null means dragging from a field slot (fromSlot set).
+// fromSlot=null means dragging from bench (rosterId set).
+function startPointerDrag(e,rosterId,fromSlot){
+  const el=e.currentTarget;
+  const startX=e.clientX,startY=e.clientY;
   let dragStarted=false;
-  let cancelled=false;
   let holdTimer=null;
   let scrollInterval=null;
+  const pointerId=e.pointerId??null;
 
-  function beginDrag(clientX,clientY){
-    if(dragStarted||cancelled)return;
+  // Capture pointer so we get events even if finger leaves element
+  try{if(el&&el.setPointerCapture&&pointerId!==null)el.setPointerCapture(pointerId);}catch(err){}
+
+  function beginDrag(cx,cy){
+    if(dragStarted)return;
     dragStarted=true;
-    startDrag(rosterId,clientX,clientY);
+    selectedBenchId=null;
+    if(fromSlot!==null){
+      startFieldDrag(fromSlot,cx,cy);
+    } else {
+      startDrag(rosterId,cx,cy);
+      if(el)el.classList.add('dragging');
+    }
     document.getElementById('fieldSvg').classList.add('dragging');
-    if(chip)chip.classList.add('dragging');
-  }
-
-  function cancel(){
-    cancelled=true;
-    clearTimeout(holdTimer);
-    clearInterval(scrollInterval);
-    document.getElementById('fieldSvg').classList.remove('dragging');
-    if(chip)chip.classList.remove('dragging');
-    document.getElementById('dragGhost').style.display='none';
-    document.removeEventListener('touchmove',onMove);
-    document.removeEventListener('touchend',onEnd);
   }
 
   function cleanup(){
@@ -1789,58 +1722,66 @@ function startDragTouch(e,rosterId){
     clearInterval(scrollInterval);
     scrollInterval=null;
     document.getElementById('fieldSvg').classList.remove('dragging');
-    if(chip)chip.classList.remove('dragging');
+    if(el)el.classList.remove('dragging');
   }
 
-  function handleEdgeScroll(clientY){
+  function handleEdgeScroll(cy){
     clearInterval(scrollInterval);
-    const ZONE=80,SPEED=6;
-    if(clientY<ZONE){
-      scrollInterval=setInterval(()=>window.scrollBy(0,-(SPEED*(1-(clientY/ZONE)))|0),16);
-    } else if(clientY>window.innerHeight-ZONE){
-      const dist=clientY-(window.innerHeight-ZONE);
-      scrollInterval=setInterval(()=>window.scrollBy(0,(SPEED*(dist/ZONE))|0),16);
+    const ZONE=80,SPEED=8;
+    if(cy<ZONE){
+      scrollInterval=setInterval(()=>window.scrollBy(0,-Math.round(SPEED*(1-cy/ZONE))),16);
+    } else if(cy>window.innerHeight-ZONE){
+      const d=cy-(window.innerHeight-ZONE);
+      scrollInterval=setInterval(()=>window.scrollBy(0,Math.round(SPEED*(d/ZONE))),16);
     } else {
-      clearInterval(scrollInterval);
-      scrollInterval=null;
+      clearInterval(scrollInterval);scrollInterval=null;
     }
   }
 
+  // Long-press to start drag (200ms) — finger can rest without accidentally dragging
   holdTimer=setTimeout(()=>beginDrag(startX,startY),200);
 
-  const onMove=ev=>{
-    if(cancelled)return;
-    const tc=ev.touches[0];
-    const dx=Math.abs(tc.clientX-startX);
-    const dy=Math.abs(tc.clientY-startY);
+  function onMove(ev){
+    const dx=Math.abs(ev.clientX-startX);
+    const dy=Math.abs(ev.clientY-startY);
     if(!dragStarted){
-      // Clear vertical scroll intent — cancel drag so page can scroll
-      if(dy>dx&&dy>12){
-        cancel();
-        // Manually scroll since we called preventDefault on touchstart
-        window.scrollBy(0,startY-tc.clientY);
-        return;
+      // Vertical intent before hold timer — cancel drag, let page scroll
+      if(dy>dx&&dy>10){
+        clearTimeout(holdTimer);cleanup();
+        unbind();return;
       }
-      if(dx>12||dy>12){clearTimeout(holdTimer);beginDrag(startX,startY);}
+      // Horizontal or diagonal movement — start drag immediately
+      if(dx>10||dy>10){clearTimeout(holdTimer);beginDrag(startX,startY);}
     }
     if(dragStarted){
       ev.preventDefault();
-      moveDragGhost(tc.clientX,tc.clientY);
-      handleEdgeScroll(tc.clientY);
+      if(drag)drag.moved=true;
+      moveDragGhost(ev.clientX,ev.clientY);
+      handleEdgeScroll(ev.clientY);
     }
-  };
+  }
 
-  const onEnd=ev=>{
-    if(cancelled)return;
+  function onUp(ev){
     clearTimeout(holdTimer);
-    if(dragStarted){const tc=ev.changedTouches[0];endDrag(tc.clientX,tc.clientY);}
-    cleanup();
-    document.removeEventListener('touchmove',onMove);
-    document.removeEventListener('touchend',onEnd);
-  };
+    if(dragStarted)endDrag(ev.clientX,ev.clientY);
+    cleanup();unbind();
+  }
 
-  document.addEventListener('touchmove',onMove,{passive:false});
-  document.addEventListener('touchend',onEnd);
+  function onCancel(){
+    clearTimeout(holdTimer);
+    if(drag){document.getElementById('dragGhost').style.display='none';drag=null;}
+    cleanup();unbind();
+  }
+
+  function unbind(){
+    document.removeEventListener('pointermove',onMove);
+    document.removeEventListener('pointerup',onUp);
+    document.removeEventListener('pointercancel',onCancel);
+  }
+
+  document.addEventListener('pointermove',onMove,{passive:false});
+  document.addEventListener('pointerup',onUp);
+  document.addEventListener('pointercancel',onCancel);
 }
 
 const POSITIONS=['GK','LB','CB','RB','CDM','CM','CAM','LM','RM','LW','RW','ST','CF'];
@@ -2047,10 +1988,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.6</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.7</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.6 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.7 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

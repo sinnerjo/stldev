@@ -280,6 +280,22 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .shoutout-player.on-row .sp-num{color:#6eee80}
 .shoutout-player .sp-name{font-weight:600;font-size:1.05rem;flex:1}
 .shoutout-player .sp-pos{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--gr);background:var(--gm);padding:2px 7px;border-radius:3px}
+/* SHOUTOUT — paired sub rows */
+.sub-row{display:flex;align-items:center;gap:.5rem;padding:.75rem .85rem;border-radius:10px;background:var(--cb);border:1px solid var(--br);margin-bottom:.6rem}
+.sub-row .sr-in{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0}
+.sub-row .sr-out{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0}
+.sub-row .sr-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:2rem;line-height:1}
+.sub-row .sr-in .sr-num{color:#6eee80}
+.sub-row .sr-out .sr-num{color:var(--rd)}
+.sub-row .sr-name{font-size:.85rem;font-weight:600;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
+.sub-row .sr-in .sr-name{color:#fff}
+.sub-row .sr-out .sr-name{color:var(--gr)}
+.sub-row .sr-label{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.sub-row .sr-in .sr-label{color:#4aaa5a}
+.sub-row .sr-out .sr-label{color:#a04040}
+.sub-row .sr-mid{display:flex;flex-direction:column;align-items:center;gap:.3rem;flex-shrink:0;padding:0 .25rem}
+.sub-row .sr-pos{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.06em;color:var(--ac);background:var(--gm);border:1px solid var(--br);border-radius:5px;padding:3px 8px;white-space:nowrap}
+.sub-row .sr-arrow{font-size:1.1rem;color:var(--grd)}
 .shoutout-close{display:flex;gap:.5rem;margin-top:1.25rem}
 
 /* BENCH ALERT */
@@ -441,7 +457,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.7</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.9</p>
 </div>
 
 <!-- GAME -->
@@ -1231,7 +1247,7 @@ function cancelSelection(){
 }
 
 function selectBenchPlayer(rosterId){
-  if(!currentGame){alert('Start a new game first.');return;}
+  if(!currentGame) return;
   if(selectedBenchId===rosterId){
     // Tap same player again — deselect
     selectedBenchId=null;
@@ -1380,29 +1396,32 @@ function renderPendingBox(){
 
 function showShoutout(){
   if(!pendingSubs.length)return;
-  const offRows=pendingSubs.map(ps=>{
-    const p=roster.find(pl=>pl.id===ps.outRosterId);
+  const rows=pendingSubs.map(ps=>{
+    const inP=roster.find(pl=>pl.id===ps.inRosterId);
+    const outP=roster.find(pl=>pl.id===ps.outRosterId);
     const pos=slotLabel(SLOTS[ps.slotIdx].pos);
-    if(!p)return'';
-    return `<div class="shoutout-player off-row">
-      <span class="sp-num">${p.num!=='—'?p.num:'—'}</span>
-      <span class="sp-name">${esc(p.name)}</span>
-      <span class="sp-pos">${pos}</span>
+    const inNum=inP&&inP.num!=='—'?inP.num:'—';
+    const outNum=outP&&outP.num!=='—'?outP.num:'—';
+    const inName=inP?inP.name:'?';
+    const outName=outP?outP.name:'?';
+    return `<div class="sub-row">
+      <div class="sr-in">
+        <span class="sr-num">${esc(inNum)}</span>
+        <span class="sr-name">${esc(inName)}</span>
+        <span class="sr-label">Coming On</span>
+      </div>
+      <div class="sr-mid">
+        <span class="sr-pos">${pos}</span>
+        <span class="sr-arrow">⇄</span>
+      </div>
+      <div class="sr-out">
+        <span class="sr-num">${esc(outNum)}</span>
+        <span class="sr-name">${esc(outName)}</span>
+        <span class="sr-label">Coming Off</span>
+      </div>
     </div>`;
   }).join('');
-  const onRows=pendingSubs.map(ps=>{
-    const p=roster.find(pl=>pl.id===ps.inRosterId);
-    const pos=slotLabel(SLOTS[ps.slotIdx].pos);
-    if(!p)return'';
-    return `<div class="shoutout-player on-row">
-      <span class="sp-num">${p.num!=='—'?p.num:'—'}</span>
-      <span class="sp-name">${esc(p.name)}</span>
-      <span class="sp-pos">${pos}</span>
-    </div>`;
-  }).join('');
-  document.getElementById('shoutoutContent').innerHTML=`
-    <div class="shoutout-section off"><h3>Coming Off</h3>${offRows}</div>
-    <div class="shoutout-section on"><h3>Coming On</h3>${onRows}</div>`;
+  document.getElementById('shoutoutContent').innerHTML=rows;
   document.getElementById('shoutoutOverlay').classList.add('active');
 }
 
@@ -1706,6 +1725,7 @@ function startPointerDrag(e,rosterId,fromSlot){
 
   function beginDrag(cx,cy){
     if(dragStarted)return;
+    if(!currentGame)return;
     dragStarted=true;
     selectedBenchId=null;
     if(fromSlot!==null){
@@ -1988,10 +2008,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.7</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.9</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.7 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.9 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

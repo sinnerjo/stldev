@@ -460,7 +460,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.12</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.19</p>
 </div>
 
 <!-- GAME -->
@@ -574,6 +574,54 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   <div class="help-hero">
     <div class="app-name">⚽ SubGo</div>
     <div class="app-sub">Sideline substitution and game tracker for soccer coaches.<br>Everything runs in your browser — no account, no server, no internet needed after first load.</div>
+  </div>
+
+  <div class="help-section">
+    <h2><span class="hico">⚙️</span> Settings</h2>
+    <div class="help-item">
+      <span class="hkey">Position Numbers</span>
+      <span class="hval" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" id="settingPositionNumbers" onchange="togglePositionNumbers(this.checked)" style="width:18px;height:18px;flex-shrink:0">
+          <span>Use position numbers instead of abbreviations (e.g. <span class="help-badge">9</span> instead of <span class="help-badge">ST</span>)</span>
+        </label>
+      </span>
+    </div>
+    <div class="help-item">
+      <span class="hkey">Buzz Alerts</span>
+      <span class="hval" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" id="settingBuzzAlerts" onchange="toggleBuzzAlerts(this.checked)" style="width:18px;height:18px;flex-shrink:0">
+          <span>Vibrate the phone when a bench or on-field alert triggers</span>
+        </label>
+      </span>
+    </div>
+    <div class="help-item" style="flex-direction:column;align-items:flex-start;gap:.6rem">
+      <span class="hkey" style="margin-bottom:.1rem">Field Positions</span>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.35rem">
+        <button class="btn btn-ol btn-sm" onclick="applyPreset('11v11')" style="font-size:.72rem;min-height:30px;padding:.2rem .65rem">11v11</button>
+        <button class="btn btn-ol btn-sm" onclick="applyPreset('9v9')"   style="font-size:.72rem;min-height:30px;padding:.2rem .65rem">9v9</button>
+        <button class="btn btn-ol btn-sm" onclick="applyPreset('7v7')"   style="font-size:.72rem;min-height:30px;padding:.2rem .65rem">7v7</button>
+        <button class="btn btn-ol btn-sm" onclick="applyPreset('5v5')"   style="font-size:.72rem;min-height:30px;padding:.2rem .65rem">5v5</button>
+        <button class="btn btn-ol btn-sm" onclick="applyPreset('3v3')"   style="font-size:.72rem;min-height:30px;padding:.2rem .65rem">3v3</button>
+        <button class="btn btn-ol btn-sm" onclick="applyPreset('all')"   style="font-size:.72rem;min-height:30px;padding:.2rem .65rem">Show All</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.3rem .75rem;width:100%">
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_GK"  onchange="toggleSlotVisible('GK', this.checked)"  style="width:16px;height:16px">GK</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_LB"  onchange="toggleSlotVisible('LB', this.checked)"  style="width:16px;height:16px">LB</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_CB"  onchange="toggleSlotVisible('CB', this.checked)"  style="width:16px;height:16px">CB</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_CB2" onchange="toggleSlotVisible('CB2',this.checked)"  style="width:16px;height:16px">CB (2)</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_RB"  onchange="toggleSlotVisible('RB', this.checked)"  style="width:16px;height:16px">RB</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_CDM" onchange="toggleSlotVisible('CDM',this.checked)"  style="width:16px;height:16px">CDM</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_CM"  onchange="toggleSlotVisible('CM', this.checked)"  style="width:16px;height:16px">CM</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_CM2" onchange="toggleSlotVisible('CM2',this.checked)"  style="width:16px;height:16px">CM (2)</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_CAM" onchange="toggleSlotVisible('CAM',this.checked)"  style="width:16px;height:16px">CAM</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_LW"  onchange="toggleSlotVisible('LW', this.checked)"  style="width:16px;height:16px">LW</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_RW"  onchange="toggleSlotVisible('RW', this.checked)"  style="width:16px;height:16px">RW</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_ST"  onchange="toggleSlotVisible('ST', this.checked)"  style="width:16px;height:16px">ST</label>
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.82rem;color:var(--gr)"><input type="checkbox" id="settingSlot_ST2" onchange="toggleSlotVisible('ST2',this.checked)"  style="width:16px;height:16px">ST (2)</label>
+      </div>
+    </div>
   </div>
 
   <div class="help-section">
@@ -871,22 +919,86 @@ function deleteTeam(teamId){
 }
 
 const SLOTS = [
-  {pos:'GK',   x:170, y:468},
-  {pos:'LB',   x:62,  y:400},
-  {pos:'CB',   x:122, y:395},
-  {pos:'CB2',  x:218, y:395},
-  {pos:'RB',   x:278, y:400},
-  {pos:'CDM',  x:170, y:330},
-  {pos:'CM',   x:110, y:272},
-  {pos:'CM2',  x:230, y:272},
-  {pos:'CAM',  x:170, y:210},
-  {pos:'LW',   x:72,  y:148},
-  {pos:'RW',   x:268, y:148},
-  {pos:'ST',   x:125, y:88},
-  {pos:'ST2',  x:215, y:88},
+  {pos:'GK',   x:170, y:468, num:'1'},
+  {pos:'LB',   x:62,  y:400, num:'3'},
+  {pos:'CB',   x:122, y:395, num:'4'},
+  {pos:'CB2',  x:218, y:395, num:'5'},
+  {pos:'RB',   x:278, y:400, num:'2'},
+  {pos:'CDM',  x:170, y:330, num:'6'},
+  {pos:'CM',   x:110, y:272, num:'8'},
+  {pos:'CM2',  x:230, y:272, num:'8'},
+  {pos:'CAM',  x:170, y:210, num:'10'},
+  {pos:'LW',   x:72,  y:148, num:'11'},
+  {pos:'RW',   x:268, y:148, num:'7'},
+  {pos:'ST',   x:125, y:88,  num:'9'},
+  {pos:'ST2',  x:215, y:88,  num:'9'},
 ];
 
-function slotLabel(pos){ return pos.replace(/\d+$/,''); }
+let usePositionNumbers = localStorage.getItem('sc_usePositionNumbers')==='true';
+let useBuzzAlerts = localStorage.getItem('sc_useBuzzAlerts')==='true';
+// Slot visibility — keyed by pos, all default on
+const SLOT_KEYS=['GK','LB','CB','CB2','RB','CDM','CM','CM2','CAM','LW','RW','ST','ST2'];
+function loadSlotVisible(){
+  const v={};
+  SLOT_KEYS.forEach(k=>{ v[k]=localStorage.getItem('sc_slot_'+k)!=='false'; });
+  return v;
+}
+let slotVisible=loadSlotVisible();
+
+// Legacy migration — respect old sc_showSecond* keys on first load
+if(localStorage.getItem('sc_showSecondST')==='false') slotVisible.ST2=false;
+if(localStorage.getItem('sc_showSecondCM')==='false') slotVisible.CM2=false;
+if(localStorage.getItem('sc_showSecondCB')==='false') slotVisible.CB2=false;
+
+// Presets: map of pos keys to show
+const PRESETS={
+  'all':  ['GK','LB','CB','CB2','RB','CDM','CM','CM2','CAM','LW','RW','ST','ST2'],
+  '11v11':['GK','LB','CB','CB2','RB','CDM','CM','CAM','LW','RW','ST'],
+  '9v9':  ['GK','LB','CB','RB','CM','CM2','LW','RW','ST'],
+  '7v7':  ['GK','CB','CB2','CM','LW','RW','ST'],
+  '5v5':  ['GK','LB','RB','CM','ST'],
+  '3v3':  ['GK','CB','CM'],
+};
+
+function slotLabel(pos){
+  const base=pos.replace(/\d+$/,'');
+  if(!usePositionNumbers) return base;
+  const slot=SLOTS.find(s=>s.pos===pos);
+  if(!slot) return base;
+  return slot.num;
+}
+
+function slotDisplayLabel(pos){
+  // Like slotLabel but for SVG slot circles — shows number on field dot
+  return slotLabel(pos);
+}
+
+// Slot indices of the "second" duplicates
+const SLOT_IDX_CB2=3, SLOT_IDX_CM2=7, SLOT_IDX_ST2=12;
+
+function isSlotVisible(slotIdx){
+  return slotVisible[SLOTS[slotIdx].pos]!==false;
+}
+
+function getSlotX(slotIdx){
+  const s=SLOTS[slotIdx];
+  const base=s.pos.replace(/\d+$/,'');
+  // Center primary slot when its pair is hidden
+  if(base==='ST'&&!slotVisible.ST2) return 170;
+  if(base==='CM'&&!slotVisible.CM2) return 170;
+  if(base==='CB'&&!slotVisible.CB2) return 170;
+  return s.x;
+}
+
+function applySlotVisibility(){
+  // Move players in hidden slots back to bench
+  SLOTS.forEach((s,i)=>{
+    if(!isSlotVisible(i)&&fieldSlots[i]){
+      recordOff(i);
+      fieldSlots[i]=null;
+    }
+  });
+}
 let fieldSlots = new Array(SLOTS.length).fill(null);
 
 const POS_COLORS = {
@@ -1219,6 +1331,8 @@ function renderField(){
   const pendingOutSlots=new Set(pendingSubs.map(p=>p.slotIdx));
   const hasSelection=selectedBenchId!==null;
   slotLayer.innerHTML=SLOTS.map((s,i)=>{
+    if(!isSlotVisible(i))return'';
+    const cx=getSlotX(i);
     const occupied=fieldSlots[i]!==null;
     const label=slotLabel(s.pos);
     const fill=occupied?'none':hasSelection?'rgba(232,238,255,0.12)':'rgba(255,255,255,0.08)';
@@ -1227,11 +1341,13 @@ function renderField(){
     const anim=!occupied&&hasSelection?'style="animation:slot-ready 1s ease-in-out infinite"':'';
     const clickFn=occupied?`tapFieldSlot(${i})`:hasSelection?`tapFieldSlot(${i})`:'';
     return `<g data-slot="${i}" style="cursor:${occupied||hasSelection?'pointer':'default'}" onclick="${clickFn}">
-      <circle cx="${s.x}" cy="${s.y}" r="24" fill="${fill}" stroke="${stroke}" stroke-width="${hasSelection&&!occupied?'2':'1.5'}" ${dash} ${anim}/>
-      ${!occupied?`<text x="${s.x}" y="${s.y+5}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="${hasSelection?'rgba(232,238,255,0.8)':'rgba(255,255,255,0.5)'}">${label}</text>`:''}
+      <circle cx="${cx}" cy="${s.y}" r="24" fill="${fill}" stroke="${stroke}" stroke-width="${hasSelection&&!occupied?'2':'1.5'}" ${dash} ${anim}/>
+      ${!occupied?`<text x="${cx}" y="${s.y+5}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" fill="${hasSelection?'rgba(232,238,255,0.8)':'rgba(255,255,255,0.5)'}">${label}</text>`:''}
     </g>`;
   }).join('');
   playerLayer.innerHTML=SLOTS.map((s,i)=>{
+    if(!isSlotVisible(i))return'';
+    const cx=getSlotX(i);
     const rid=fieldSlots[i];
     if(!rid)return'';
     const player=roster.find(p=>p.id===rid);
@@ -1243,20 +1359,22 @@ function renderField(){
     return `<g style="cursor:grab;opacity:${opacity}"
       onpointerdown="startFieldDragMouse(event,${i})"
       onclick="handleFieldDotClick(event,${i})">
-      <circle cx="${s.x}" cy="${s.y}" r="24" fill="${col}" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
-      <text x="${s.x}" y="${s.y-3}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="11" fill="white">${esc(dname)}</text>
-      <text x="${s.x}" y="${s.y+10}" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="rgba(255,255,255,0.85)">${player.num!=='—'?'#'+player.num:''}</text>
-      <text x="${s.x}" y="${s.y+21}" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="rgba(255,255,255,0.65)">${slotLabel(s.pos)}</text>
+      <circle cx="${cx}" cy="${s.y}" r="24" fill="${col}" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+      <text x="${cx}" y="${s.y-3}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="11" fill="white">${esc(dname)}</text>
+      <text x="${cx}" y="${s.y+10}" text-anchor="middle" font-family="DM Mono,monospace" font-size="9" fill="rgba(255,255,255,0.85)">${player.num!=='—'?'#'+player.num:''}</text>
+      <text x="${cx}" y="${s.y+21}" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="rgba(255,255,255,0.65)">${slotLabel(s.pos)}</text>
     </g>`;
   }).join('');
   pendingLayer.innerHTML=pendingSubs.map(ps=>{
+    if(!isSlotVisible(ps.slotIdx))return'';
     const s=SLOTS[ps.slotIdx];
+    const cx=getSlotX(ps.slotIdx);
     const inPlayer=roster.find(p=>p.id===ps.inRosterId);
     const inName=inPlayer?inPlayer.name.split(' ')[0].substring(0,8):'?';
     const inNum=inPlayer&&inPlayer.num!=='—'?'#'+inPlayer.num:'';
     return `<g>
-      <circle cx="${s.x}" cy="${s.y}" r="30" fill="none" stroke="#f0a030" stroke-width="2.5" stroke-dasharray="6 3" class="pending-ring"/>
-      <text x="${s.x}" y="${s.y-33}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="10" fill="#f0a030">${esc(inName)} ${inNum}</text>
+      <circle cx="${cx}" cy="${s.y}" r="30" fill="none" stroke="#f0a030" stroke-width="2.5" stroke-dasharray="6 3" class="pending-ring"/>
+      <text x="${cx}" y="${s.y-33}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="10" fill="#f0a030">${esc(inName)} ${inNum}</text>
     </g>`;
   }).join('');
 }
@@ -1300,9 +1418,37 @@ function tapFieldSlot(slotIdx){
 }
 
 function buzzAlert(){
+  if(!useBuzzAlerts) return;
   if(navigator.vibrate){
     navigator.vibrate([200,100,200]);
   }
+}
+
+function toggleSlotVisible(pos, on){
+  slotVisible[pos]=on;
+  localStorage.setItem('sc_slot_'+pos, on?'true':'false');
+  if(!on) applySlotVisibility();
+  renderGame();
+}
+
+function applyPreset(name){
+  const show=new Set(PRESETS[name]||SLOT_KEYS);
+  SLOT_KEYS.forEach(k=>{
+    slotVisible[k]=show.has(k);
+    localStorage.setItem('sc_slot_'+k, slotVisible[k]?'true':'false');
+  });
+  applySlotVisibility();
+  renderGame();
+  // Update all checkboxes
+  SLOT_KEYS.forEach(k=>{
+    const el=document.getElementById('settingSlot_'+k);
+    if(el) el.checked=slotVisible[k];
+  });
+}
+
+function toggleBuzzAlerts(on){
+  useBuzzAlerts=on;
+  localStorage.setItem('sc_useBuzzAlerts', on?'true':'false');
 }
 
 function renderBenchPanel(){
@@ -1332,7 +1478,7 @@ function renderBenchPanel(){
     const hasSub=pendingOutIds.has(rid);
     const pendingSub=pendingSubs.find(ps=>ps.outRosterId===rid);
     const inPlayer=pendingSub?roster.find(pl=>pl.id===pendingSub.inRosterId):null;
-    const isGK=slotLabel(SLOTS[i].pos)==='GK';
+    const isGK=SLOTS[i].pos==='GK';
     const isOverTime=onfieldAlertOn&&!isGK&&minsOnField>=onfieldAlertMin;
     // Buzz once when player first crosses threshold
     if(isOverTime&&!alertedFieldIds.has(rid)){
@@ -1615,7 +1761,9 @@ function getSvgPoint(svgEl,clientX,clientY){
 function nearestSlot(svgX,svgY){
   let best=null,bestDist=Infinity;
   SLOTS.forEach((s,i)=>{
-    const d=Math.hypot(s.x-svgX,s.y-svgY);
+    if(!isSlotVisible(i))return;
+    const cx=getSlotX(i);
+    const d=Math.hypot(cx-svgX,s.y-svgY);
     if(d<bestDist){bestDist=d;best=i;}
   });
   return bestDist<40?best:null;
@@ -2071,15 +2219,27 @@ function applyEditScorer(gameIdx,goalIdx,scorerId,ownGoal){
   }
 }
 
+function togglePositionNumbers(on){
+  usePositionNumbers=on;
+  localStorage.setItem('sc_usePositionNumbers', on?'true':'false');
+  renderGame();
+}
+
 // Init
 document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
+document.getElementById('settingPositionNumbers').checked=usePositionNumbers;
+document.getElementById('settingBuzzAlerts').checked=useBuzzAlerts;
+SLOT_KEYS.forEach(k=>{
+  const el=document.getElementById('settingSlot_'+k);
+  if(el) el.checked=slotVisible[k];
+});
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.12</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.19</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.12 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.19 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

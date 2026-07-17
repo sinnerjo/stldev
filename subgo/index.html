@@ -477,7 +477,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.21</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.22</p>
 </div>
 
 <!-- GAME -->
@@ -2360,6 +2360,28 @@ function assert(condition, passMsg, failMsg){
   else tfail(failMsg||passMsg);
 }
 
+const TEST_IDS=[888881,888882,888883,888884,888885];
+
+function cleanupTestData(){
+  // Remove any test players from roster
+  getTeam().roster=getTeam().roster.filter(p=>!TEST_IDS.includes(p.id));
+  roster=getRoster();
+  // Remove test players from field slots
+  fieldSlots=fieldSlots.map(id=>TEST_IDS.includes(id)?null:id);
+  // Remove test players from pending subs
+  pendingSubs=pendingSubs.filter(ps=>!TEST_IDS.includes(ps.inRosterId)&&!TEST_IDS.includes(ps.outRosterId));
+  // Remove test player stats from current game
+  if(currentGame){
+    TEST_IDS.forEach(id=>{
+      delete currentGame.playerStats[id];
+      if(currentGame.playerSnapshots) delete currentGame.playerSnapshots[String(id)];
+    });
+  }
+  saveData();
+  renderGame();
+  renderRoster();
+}
+
 function testBuzz(){
   tinfo('Triggering vibration...');
   if(!navigator.vibrate){tfail('navigator.vibrate not supported on this device');return;}
@@ -2371,6 +2393,7 @@ function testBuzz(){
 
 function testRoster(){
   thead('ROSTER TESTS');
+  cleanupTestData();
   const team=getTeam();
   assert(team!==null,'getTeam() returns a team object');
   assert(Array.isArray(getRoster()),'getRoster() returns an array');
@@ -2393,6 +2416,7 @@ function testRoster(){
   roster=getRoster();
   assert(!getRoster().find(p=>p.id===999999),'Player removed from roster');
   assert(getRoster().length===beforeCount,'Roster count restored after remove');
+  cleanupTestData();
   renderRoster();
 }
 
@@ -2426,6 +2450,7 @@ function testGame(){
 
 function testSubs(){
   thead('SUBSTITUTION TESTS');
+  cleanupTestData(); // ensure clean slate
 
   if(!currentGame){
     tinfo('No active game — starting one for sub tests');
@@ -2472,11 +2497,8 @@ function testSubs(){
   getTeam().roster=getTeam().roster.filter(p=>p.id!==888883);
   roster=getRoster();
 
-  // Cleanup
-  fieldSlots[11]=null;fieldSlots[10]=null;
-  getTeam().roster=getTeam().roster.filter(p=>p.id!==888881&&p.id!==888882);
-  roster=getRoster();
-  renderGame();
+  // Final cleanup
+  cleanupTestData();
   tpass('Sub test cleanup complete');
 }
 
@@ -2556,22 +2578,27 @@ function runTestSuite(name){
   const fn=SUITES[name];
   if(!fn){tlog('Unknown suite: '+name,'fail');return;}
   try{fn();}catch(e){tfail('Suite threw error: '+e.message);}
+  finally{cleanupTestData();}
 }
 
 function runAllTests(){
   clearTestLog();
   tlog('Running all test suites...','info');
-  for(const [name,fn] of Object.entries(SUITES)){
-    try{fn();}catch(e){tfail('['+name+'] Suite threw: '+e.message);}
+  try{
+    for(const [name,fn] of Object.entries(SUITES)){
+      try{fn();}catch(e){tfail('['+name+'] Suite threw: '+e.message);}
+    }
+  } finally {
+    cleanupTestData();
   }
   tlog('','info');
   tlog('Done. See summary below.','info');
 }
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.21</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.22</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.21 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.22 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

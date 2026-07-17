@@ -301,7 +301,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 /* BENCH ALERT */
 .bench-alert-bar{display:flex;align-items:center;gap:.35rem;padding:.3rem .5rem;background:#1a0a00;border:1px solid var(--pending-dim);border-radius:6px;margin-bottom:.4rem;flex-wrap:nowrap;overflow:hidden}
 .bench-alert-bar label{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:.03em;text-transform:uppercase;color:var(--gr);white-space:nowrap}
-.bench-alert-bar input{width:38px;min-width:0;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.2rem .3rem;border-radius:4px;font-family:'DM Mono',monospace;font-size:.8rem;text-align:center;flex-shrink:0}
+.bench-alert-bar input{width:52px;min-width:0;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.2rem .4rem;border-radius:4px;font-family:'DM Mono',monospace;font-size:.8rem;text-align:center;flex-shrink:0}
 .bench-alert-bar input:focus{outline:1px solid var(--pending)}
 .alert-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--pending);color:#1a0a00;border-radius:10px;font-family:'DM Mono',monospace;font-size:.6rem;font-weight:700;padding:1px 5px;margin-left:3px;vertical-align:middle;animation:pulse-ring 1s ease-in-out infinite}
 @keyframes alert-pulse{0%,100%{box-shadow:0 0 0 0 rgba(240,160,48,.6)}50%{box-shadow:0 0 0 4px rgba(240,160,48,0)}}
@@ -380,7 +380,26 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .mbar-f{height:100%;background:var(--ac);border-radius:3px}
 .empty{color:var(--grd);font-size:.9rem;text-align:center;padding:2rem 1rem}
 
-/* TEST PANEL */
+/* ONBOARDING */
+.onboard-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,20,.96);align-items:flex-end;justify-content:center}
+.onboard-overlay.active{display:flex}
+.onboard-sheet{background:#00002e;border:2px solid var(--ac);border-bottom:none;border-radius:14px 14px 0 0;padding:1.5rem 1.5rem calc(1.5rem + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;display:flex;flex-direction:column;gap:1rem}
+.onboard-step{display:none;flex-direction:column;gap:.85rem}
+.onboard-step.active{display:flex}
+.onboard-icon{font-size:2.5rem;text-align:center}
+.onboard-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.4rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ac);text-align:center}
+.onboard-body{font-size:.9rem;color:var(--gr);text-align:center;line-height:1.6}
+.onboard-input{background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.7rem .85rem;border-radius:7px;font-family:'Barlow',sans-serif;font-size:1rem;min-height:48px;width:100%}
+.onboard-input:focus{outline:1px solid var(--ac)}
+.onboard-input::placeholder{color:var(--grd)}
+.onboard-dots{display:flex;justify-content:center;gap:.4rem}
+.onboard-dot{width:7px;height:7px;border-radius:50%;background:var(--br);transition:background .2s}
+.onboard-dot.active{background:var(--ac)}
+.onboard-player-list{display:flex;flex-direction:column;gap:.3rem;max-height:160px;overflow-y:auto}
+.onboard-player-chip{display:flex;align-items:center;gap:.5rem;padding:.4rem .6rem;border-radius:5px;background:var(--gm);border:1px solid var(--br);font-size:.85rem}
+.onboard-player-chip .opnum{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--ac);min-width:22px}
+.onboard-skip{background:none;border:none;color:var(--grd);font-size:.78rem;cursor:pointer;text-align:center;padding:.25rem;font-family:'Barlow',sans-serif}
+.onboard-skip:hover{color:var(--gr)}
 #testPanel{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,10,.96);flex-direction:column;font-family:'DM Mono',monospace}
 #testPanel.active{display:flex}
 #testPanelHeader{background:#00002e;border-bottom:2px solid var(--ac);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem}
@@ -477,7 +496,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.22</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.27 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button></p>
 </div>
 
 <!-- GAME -->
@@ -487,10 +506,16 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <input type="text" id="gameOpponent" placeholder="Opponent name">
       <button class="btn btn-ac" onclick="newGame()">New Game</button>
     </div>
-    <div class="game-lbl" id="gameLabel">No active game — create one above <button id="renameOppBtn" onclick="renameOpponent()" style="display:none;background:none;border:none;color:var(--grd);cursor:pointer;font-size:.8rem;padding:0 .25rem;vertical-align:middle" title="Rename opponent">✎</button></div>
+    <div class="game-lbl" id="gameLabel" style="display:none"> <button id="renameOppBtn" onclick="renameOpponent()" style="display:none;background:none;border:none;color:var(--grd);cursor:pointer;font-size:.8rem;padding:0 .25rem;vertical-align:middle" title="Rename opponent">✎</button></div>
   </div>
 
-  <div class="game-wrap-outer">
+  <div id="noGamePlaceholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.5rem;gap:1rem;text-align:center">
+    <div style="font-size:3rem;opacity:.3">⚽</div>
+    <p style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gr)">No Active Game</p>
+    <p style="font-size:.85rem;color:var(--grd);max-width:260px;line-height:1.6">Enter an opponent name above and tap <strong style="color:var(--ac)">New Game</strong> to get started</p>
+  </div>
+
+  <div class="game-wrap-outer" style="display:none">
   <div class="game-wrap" id="gameWrap">
     <div class="field-wrap" id="fieldWrap">
       <svg class="field-svg" id="fieldSvg" viewBox="0 0 340 520" xmlns="http://www.w3.org/2000/svg">
@@ -544,7 +569,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
         <h3>On Field <span id="onCount" style="color:var(--ac)">0</span></h3>
         <div class="bench-alert-bar">
           <input type="checkbox" id="onfieldAlertEnabled" checked style="flex-shrink:0;width:14px;height:14px">
-          <label>⏱ Alert after</label>
+          <label>⏱ Alert</label>
           <input type="number" id="onfieldAlertMin" value="20" min="1" max="90" inputmode="numeric">
           <label>min</label>
         </div>
@@ -554,7 +579,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
         <h3>Bench <span id="offCount" style="color:var(--gr)">9</span><span id="selectionHint" style="display:none;font-size:.65rem;font-weight:400;color:var(--ac);margin-left:.5rem;letter-spacing:0;text-transform:none"> — tap a position</span><button id="selectionCancel" onclick="cancelSelection()" style="display:none;float:right;background:none;border:1px solid var(--grd);color:var(--grd);border-radius:4px;font-size:.65rem;padding:2px 6px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;letter-spacing:.04em;text-transform:uppercase">✕ Cancel</button></h3>
         <div class="bench-alert-bar">
           <input type="checkbox" id="benchAlertEnabled" checked style="flex-shrink:0;width:14px;height:14px">
-          <label>⏱ Alert after</label>
+          <label>⏱ Alert</label>
           <input type="number" id="benchAlertMin" value="5" min="1" max="90" inputmode="numeric">
           <label>min</label>
         </div>
@@ -600,7 +625,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <span class="hval" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
         <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
           <input type="checkbox" id="settingPositionNumbers" onchange="togglePositionNumbers(this.checked)" style="width:18px;height:18px;flex-shrink:0">
-          <span>Use position numbers instead of abbreviations (e.g. <span class="help-badge">9</span> instead of <span class="help-badge">ST</span>)</span>
+          <span>Use position numbers instead of abbreviations (e.g. <span class="help-badge">9</span> instead of <span class="help-badge">ST</span>) — applies to the field, On Field list, bench panel, call out screen, and game summary</span>
         </label>
       </span>
     </div>
@@ -624,6 +649,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     </div>
     <div class="help-item" style="flex-direction:column;align-items:flex-start;gap:.6rem">
       <span class="hkey" style="margin-bottom:.1rem">Field Positions</span>
+      <span class="hval" style="font-size:.82rem;color:var(--gr);margin-bottom:.1rem">Use the preset buttons to configure the field for your game format, then fine-tune with individual checkboxes. Any player assigned to a hidden slot is moved back to the bench automatically. When a paired slot (e.g. ST 2) is hidden, the remaining slot centers on the field.</span>
       <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.35rem">
         <button class="btn btn-ol btn-sm" onclick="applyPreset('11v11')" style="font-size:.72rem;min-height:30px;padding:.2rem .65rem">11v11</button>
         <button class="btn btn-ol btn-sm" onclick="applyPreset('9v9')"   style="font-size:.72rem;min-height:30px;padding:.2rem .65rem">9v9</button>
@@ -738,7 +764,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     </div>
     <div class="help-item">
       <span class="hkey">On Field Alert</span>
-      <span class="hval">In the On Field panel, set the minutes threshold (default 20 min). Any outfield player on the field longer than that is highlighted in orange. The phone buzzes once when they first hit the threshold. The GK is never flagged. Uncheck the box to disable.</span>
+      <span class="hval">In the On Field panel, set the minutes threshold (default 20 min). Any outfield player on the field longer than that is highlighted in orange. The phone buzzes once when they first hit the threshold. The GK is never flagged and is always pinned to the bottom of the On Field list — outfield players sort by longest time on field first. Uncheck the box to disable.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Alert Resets</span>
@@ -795,6 +821,52 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
 </div>
 
+</div>
+
+<!-- ONBOARDING -->
+<div class="onboard-overlay" id="onboardOverlay">
+  <div class="onboard-sheet">
+
+    <!-- Step 1: Welcome -->
+    <div class="onboard-step active" id="onboardStep1">
+      <div class="onboard-icon">⚽</div>
+      <div class="onboard-title">Welcome to SubGo</div>
+      <div class="onboard-body">Your sideline substitution and game tracker for soccer coaches.<br><br>Let's get you set up in about 60 seconds.</div>
+      <button class="btn btn-ac" onclick="onboardNext(2)">Get Started →</button>
+      <button class="onboard-skip" onclick="skipOnboard()">I'll figure it out myself</button>
+    </div>
+
+    <!-- Step 2: Team name -->
+    <div class="onboard-step" id="onboardStep2">
+      <div class="onboard-icon">👕</div>
+      <div class="onboard-title">Name Your Team</div>
+      <div class="onboard-body">What's your team called? You can manage multiple teams later.</div>
+      <input type="text" class="onboard-input" id="onboardTeamName" placeholder="e.g. Spain, U12 Girls..." maxlength="40" onkeydown="if(event.key==='Enter')onboardCreateTeam()">
+      <button class="btn btn-ac" onclick="onboardCreateTeam()">Create Team →</button>
+      <button class="onboard-skip" onclick="skipOnboard()">Skip setup</button>
+    </div>
+
+    <!-- Step 3: Add players -->
+    <div class="onboard-step" id="onboardStep3">
+      <div class="onboard-icon">👥</div>
+      <div class="onboard-title">Add Your Players</div>
+      <div class="onboard-body">Add a few players to get started. Jersey number is optional. You can add more anytime in the Roster tab.</div>
+      <div style="display:flex;gap:.5rem">
+        <input type="number" class="onboard-input" id="onboardNum" placeholder="#" min="1" max="99" inputmode="numeric" style="width:70px;flex-shrink:0">
+        <input type="text" class="onboard-input" id="onboardName" placeholder="Player name" style="flex:1" onkeydown="if(event.key==='Enter')onboardAddPlayer()">
+      </div>
+      <button class="btn btn-ol" onclick="onboardAddPlayer()">+ Add Player</button>
+      <div class="onboard-player-list" id="onboardPlayerList"></div>
+      <button class="btn btn-ac" id="onboardDoneBtn" onclick="finishOnboard()" style="display:none">Go to Game Tab →</button>
+      <button class="onboard-skip" onclick="finishOnboard()">Skip — add players later</button>
+    </div>
+
+    <div class="onboard-dots">
+      <div class="onboard-dot active" id="odot1"></div>
+      <div class="onboard-dot" id="odot2"></div>
+      <div class="onboard-dot" id="odot3"></div>
+    </div>
+  </div>
 </div>
 
 <!-- TEST PANEL (showpanel=true) -->
@@ -1359,7 +1431,17 @@ function confirmAllSubs(){
   saveData();renderGame();
 }
 
+function setGameActive(active){
+  const wrap=document.querySelector('.game-wrap-outer');
+  const placeholder=document.getElementById('noGamePlaceholder');
+  const label=document.getElementById('gameLabel');
+  if(wrap) wrap.style.display=active?'flex':'none';
+  if(placeholder) placeholder.style.display=active?'none':'flex';
+  if(label) label.style.display=active?'block':'none';
+}
+
 function renderGame(){
+  setGameActive(!!currentGame);
   renderField();
   renderBenchPanel();
   renderPendingBox();
@@ -1570,8 +1652,13 @@ function renderBenchPanel(){
     } else if(!isOverTime){
       alertedFieldIds.delete(rid);
     }
-    return{p,i,minsOnField,pos:slotLabel(SLOTS[i].pos),hasSub,inPlayer,isOverTime};
-  }).filter(Boolean).sort((a,b)=>b.minsOnField-a.minsOnField);
+    return{p,i,minsOnField,pos:slotLabel(SLOTS[i].pos),hasSub,inPlayer,isOverTime,isGK};
+  }).filter(Boolean).sort((a,b)=>{
+    // GK always pinned to bottom of list
+    if(a.isGK&&!b.isGK) return 1;
+    if(!a.isGK&&b.isGK) return -1;
+    return b.minsOnField-a.minsOnField;
+  });
   if(!onPlayers.length){
     onList.innerHTML='<p style="font-size:.75rem;color:var(--grd);padding:.15rem 0">Drag bench players onto field positions</p>';
   } else {
@@ -2230,7 +2317,7 @@ function clearGames(){
   const htBtn=document.getElementById('halfBtn');
   if(htBtn){htBtn.textContent='HT';htBtn.classList.remove('btn-rd');htBtn.classList.add('btn-ol');}
   saveData();renderSummary();
-  document.getElementById('gameLabel').textContent='No active game';
+  renderGame();
 }
 
 function exportCSV(){
@@ -2308,6 +2395,92 @@ function togglePositionNumbers(on){
   renderGame();
 }
 
+// ── ONBOARDING ─────────────────────────────────────────────
+function startOnboard(){
+  // Reset to step 1
+  onboardGoTo(1);
+  document.getElementById('onboardTeamName').value='';
+  document.getElementById('onboardNum').value='';
+  document.getElementById('onboardName').value='';
+  document.getElementById('onboardPlayerList').innerHTML='';
+  document.getElementById('onboardDoneBtn').style.display='none';
+  document.getElementById('onboardOverlay').classList.add('active');
+}
+
+function onboardGoTo(step){
+  [1,2,3].forEach(n=>{
+    document.getElementById('onboardStep'+n).classList.toggle('active',n===step);
+    document.getElementById('odot'+n).classList.toggle('active',n===step);
+  });
+  if(step===2) setTimeout(()=>document.getElementById('onboardTeamName').focus(),100);
+  if(step===3) setTimeout(()=>document.getElementById('onboardName').focus(),100);
+}
+
+function onboardNext(step){ onboardGoTo(step); }
+
+function onboardCreateTeam(){
+  const name=document.getElementById('onboardTeamName').value.trim();
+  if(!name){document.getElementById('onboardTeamName').focus();return;}
+  // Rename current team or create new one
+  const t=getTeam();
+  if(t){
+    t.name=name;
+    document.getElementById('teamBtn').textContent=name;
+  } else {
+    const newTeam={id:'team_'+Date.now(),name,roster:[],games:[]};
+    teams.push(newTeam);
+    currentTeamId=newTeam.id;
+    roster=getRoster();
+    games=getGames();
+  }
+  saveData();
+  onboardGoTo(3);
+}
+
+function onboardAddPlayer(){
+  const num=document.getElementById('onboardNum').value.trim();
+  const name=document.getElementById('onboardName').value.trim();
+  if(!name) return;
+  getTeam().roster.push({id:Date.now(),num:num||'—',name});
+  roster=getRoster();
+  saveData();
+  // Update mini player list
+  const list=document.getElementById('onboardPlayerList');
+  const chip=document.createElement('div');
+  chip.className='onboard-player-chip';
+  chip.innerHTML=`<span class="opnum">${num?'#'+num:'—'}</span><span>${esc(name)}</span>`;
+  list.appendChild(chip);
+  list.scrollTop=list.scrollHeight;
+  document.getElementById('onboardNum').value='';
+  document.getElementById('onboardName').value='';
+  document.getElementById('onboardName').focus();
+  document.getElementById('onboardDoneBtn').style.display='block';
+  renderRoster();
+}
+
+function skipOnboard(){
+  localStorage.setItem('sc_onboarded','true');
+  document.getElementById('onboardOverlay').classList.remove('active');
+}
+
+function finishOnboard(){
+  localStorage.setItem('sc_onboarded','true');
+  document.getElementById('onboardOverlay').classList.remove('active');
+  // Navigate to game tab
+  const gameBtn=document.querySelector('nav button:nth-child(2)');
+  if(gameBtn) showView('game',gameBtn);
+}
+
+function checkOnboard(){
+  const onboarded=localStorage.getItem('sc_onboarded')==='true';
+  const hasPlayers=getRoster().length>0;
+  const hasGames=getGames().length>0;
+  // Show onboarding if never completed and no real data exists
+  if(!onboarded&&!hasPlayers&&!hasGames){
+    startOnboard();
+  }
+}
+
 // Init
 document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 document.getElementById('settingPositionNumbers').checked=usePositionNumbers;
@@ -2317,6 +2490,7 @@ SLOT_KEYS.forEach(k=>{
   const el=document.getElementById('settingSlot_'+k);
   if(el) el.checked=slotVisible[k];
 });
+checkOnboard();
 renderRoster();
 renderGame();
 </script>
@@ -2595,10 +2769,10 @@ function runAllTests(){
   tlog('Done. See summary below.','info');
 }
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.22</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.27</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.22 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.27 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

@@ -2320,7 +2320,6 @@ SLOT_KEYS.forEach(k=>{
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.21</div>
 <script>
 // ── TEST PANEL ─────────────────────────────────────────────
 (function(){
@@ -2569,6 +2568,9 @@ function runAllTests(){
   tlog('Done. See summary below.','info');
 }
 </script>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.21</div>
+<script>
+if(new URLSearchParams(window.location.search).get('devmode')==='true'){
   document.getElementById('verTag').textContent='v1.0.21 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }

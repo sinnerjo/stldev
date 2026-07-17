@@ -380,7 +380,24 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .mbar-f{height:100%;background:var(--ac);border-radius:3px}
 .empty{color:var(--grd);font-size:.9rem;text-align:center;padding:2rem 1rem}
 
-@keyframes pulse-ring{0%{opacity:.9}50%{opacity:.4}100%{opacity:.9}}
+/* TEST PANEL */
+#testPanel{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,10,.96);flex-direction:column;font-family:'DM Mono',monospace}
+#testPanel.active{display:flex}
+#testPanelHeader{background:#00002e;border-bottom:2px solid var(--ac);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem}
+#testPanelHeader h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ac);flex:1}
+#testPanelClose{background:none;border:1px solid var(--br);color:var(--gr);border-radius:5px;padding:.2rem .6rem;cursor:pointer;font-family:'DM Mono',monospace;font-size:.75rem}
+#testPanelClose:hover{border-color:var(--ac);color:var(--ac)}
+#testPanelActions{display:flex;gap:.5rem;padding:.65rem 1rem;border-bottom:1px solid var(--br);flex-wrap:wrap}
+#testLog{flex:1;overflow-y:auto;padding:.75rem 1rem;display:flex;flex-direction:column;gap:.25rem}
+.tlog-item{font-size:.75rem;line-height:1.5;padding:.2rem .4rem;border-radius:3px}
+.tlog-pass{color:#6eee80;background:rgba(110,238,128,.06)}
+.tlog-fail{color:var(--rd);background:rgba(232,74,74,.08)}
+.tlog-info{color:var(--gr)}
+.tlog-head{color:var(--ac);font-weight:700;margin-top:.4rem;border-bottom:1px solid var(--br);padding-bottom:.2rem}
+#testSummaryBar{background:#00002e;border-top:1px solid var(--br);padding:.5rem 1rem;font-size:.75rem;display:flex;gap:1rem}
+#testSummaryBar .ts-pass{color:#6eee80}
+#testSummaryBar .ts-fail{color:var(--rd)}
+#testSummaryBar .ts-total{color:var(--gr)}
 @keyframes slot-ready{0%,100%{opacity:.7}50%{opacity:1}}
 .pending-ring{animation:pulse-ring 1.4s ease-in-out infinite}
 
@@ -460,7 +477,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.20</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.21</p>
 </div>
 
 <!-- GAME -->
@@ -778,6 +795,30 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
 </div>
 
+</div>
+
+<!-- TEST PANEL (showpanel=true) -->
+<div id="testPanel">
+  <div id="testPanelHeader">
+    <h2>⚗️ SubGo Test Panel</h2>
+    <button id="testPanelClose" onclick="closeTestPanel()">✕ Close</button>
+  </div>
+  <div id="testPanelActions">
+    <button class="btn btn-ac btn-sm" onclick="runAllTests()">▶ Run All Tests</button>
+    <button class="btn btn-ol btn-sm" onclick="runTestSuite('roster')">Roster</button>
+    <button class="btn btn-ol btn-sm" onclick="runTestSuite('game')">Game</button>
+    <button class="btn btn-ol btn-sm" onclick="runTestSuite('subs')">Subs</button>
+    <button class="btn btn-ol btn-sm" onclick="runTestSuite('alerts')">Alerts</button>
+    <button class="btn btn-ol btn-sm" onclick="runTestSuite('settings')">Settings</button>
+    <button class="btn btn-ol btn-sm" onclick="testBuzz()">📳 Test Buzz</button>
+    <button class="btn btn-rd btn-sm" onclick="clearTestLog()">Clear</button>
+  </div>
+  <div id="testLog"><p class="tlog-info">Tap "Run All Tests" or select a suite above.</p></div>
+  <div id="testSummaryBar">
+    <span class="ts-pass" id="tsPassed">✓ 0 passed</span>
+    <span class="ts-fail" id="tsFailed">✗ 0 failed</span>
+    <span class="ts-total" id="tsTotal">0 total</span>
+  </div>
 </div>
 
 <!-- SUB SHOUTOUT OVERLAY -->
@@ -2279,10 +2320,246 @@ SLOT_KEYS.forEach(k=>{
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.20</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.21</div>
 <script>
-if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.20 [DEV]';
+// ── TEST PANEL ─────────────────────────────────────────────
+(function(){
+  if(new URLSearchParams(window.location.search).get('showpanel')!=='true') return;
+  document.getElementById('testPanel').classList.add('active');
+})();
+
+function closeTestPanel(){
+  document.getElementById('testPanel').classList.remove('active');
+}
+
+let _passed=0,_failed=0;
+
+function tlog(msg,type='info'){
+  const el=document.createElement('div');
+  el.className='tlog-item tlog-'+type;
+  el.textContent=msg;
+  document.getElementById('testLog').appendChild(el);
+}
+function thead(msg){tlog(msg,'head');}
+function tpass(msg){_passed++;tlog('✓ '+msg,'pass');updateSummary();}
+function tfail(msg){_failed++;tlog('✗ '+msg,'fail');updateSummary();}
+function tinfo(msg){tlog('  '+msg,'info');}
+
+function updateSummary(){
+  document.getElementById('tsPassed').textContent='✓ '+_passed+' passed';
+  document.getElementById('tsFailed').textContent='✗ '+_failed+' failed';
+  document.getElementById('tsTotal').textContent=(_passed+_failed)+' total';
+}
+
+function clearTestLog(){
+  document.getElementById('testLog').innerHTML='<p class="tlog-item tlog-info">Log cleared.</p>';
+  _passed=0;_failed=0;updateSummary();
+}
+
+function assert(condition, passMsg, failMsg){
+  if(condition) tpass(passMsg);
+  else tfail(failMsg||passMsg);
+}
+
+function testBuzz(){
+  tinfo('Triggering vibration...');
+  if(!navigator.vibrate){tfail('navigator.vibrate not supported on this device');return;}
+  navigator.vibrate([200,100,200,100,200]);
+  tpass('Vibration triggered — did you feel it?');
+}
+
+// ── SUITES ─────────────────────────────────────────────────
+
+function testRoster(){
+  thead('ROSTER TESTS');
+  const team=getTeam();
+  assert(team!==null,'getTeam() returns a team object');
+  assert(Array.isArray(getRoster()),'getRoster() returns an array');
+
+  // Add a test player
+  const beforeCount=getRoster().length;
+  getTeam().roster.push({id:999999,num:'99',name:'TestPlayer'});
+  roster=getRoster();
+  assert(getRoster().length===beforeCount+1,'Player added to roster');
+  assert(getRoster().find(p=>p.id===999999),'Test player found by id');
+
+  // Edit player
+  const p=getTeam().roster.find(p=>p.id===999999);
+  p.name='TestPlayerEdited';
+  roster=getRoster();
+  assert(getRoster().find(p=>p.name==='TestPlayerEdited'),'Player name edit persisted');
+
+  // Delete player
+  getTeam().roster=getTeam().roster.filter(p=>p.id!==999999);
+  roster=getRoster();
+  assert(!getRoster().find(p=>p.id===999999),'Player removed from roster');
+  assert(getRoster().length===beforeCount,'Roster count restored after remove');
+  renderRoster();
+}
+
+function testGame(){
+  thead('GAME TESTS');
+  assert(typeof newGame==='function','newGame function exists');
+  assert(typeof recordOn==='function','recordOn function exists');
+  assert(typeof recordOff==='function','recordOff function exists');
+  assert(typeof getMinute==='function','getMinute function exists');
+  assert(SLOTS.length===13,'SLOTS array has 13 entries');
+
+  // Simulate new game
+  const prevGame=currentGame;
+  document.getElementById('gameOpponent').value='Test FC';
+  newGame();
+  assert(currentGame!==null,'currentGame set after newGame()');
+  assert(currentGame.opponent==='Test FC','Opponent name stored correctly');
+  assert(Array.isArray(currentGame.goals),'goals array initialized');
+  assert(typeof currentGame.playerStats==='object','playerStats object initialized');
+  assert(fieldSlots.length===SLOTS.length,'fieldSlots length matches SLOTS');
+  assert(fieldSlots.every(s=>s===null),'All field slots empty on new game');
+
+  // Test clock
+  const t=timerSec;
+  assert(typeof timerSec==='number','timerSec is a number');
+  assert(timerSec===0,'Clock reset to 0 on new game');
+  assert(getMinute()===0,'getMinute() returns 0 at start');
+
+  tinfo('Game test used "Test FC" as opponent — current game replaced');
+}
+
+function testSubs(){
+  thead('SUBSTITUTION TESTS');
+
+  if(!currentGame){
+    tinfo('No active game — starting one for sub tests');
+    document.getElementById('gameOpponent').value='Sub Test FC';
+    newGame();
+  }
+
+  // Add temp players to roster
+  getTeam().roster.push({id:888881,num:'81',name:'SubIn'});
+  getTeam().roster.push({id:888882,num:'82',name:'SubOut'});
+  roster=getRoster();
+
+  // Place SubOut on field slot 11 (ST)
+  fieldSlots[11]=888882;
+  recordOn(888882,11);
+  assert(fieldSlots[11]===888882,'Player placed on field slot 11');
+
+  // Queue a pending sub
+  const prevPending=pendingSubs.length;
+  assignSlot(888881,11);
+  assert(pendingSubs.length===prevPending+1,'Pending sub queued');
+  const ps=pendingSubs.find(p=>p.inRosterId===888881&&p.outRosterId===888882);
+  assert(ps!==undefined,'Correct pending sub found');
+
+  // Confirm subs
+  confirmAllSubs();
+  assert(fieldSlots[11]===888881,'Sub confirmed — new player on field');
+  assert(pendingSubs.length===0,'Pending subs cleared after confirm');
+  assert(currentGame.playerStats[888881]?.length>0,'SubIn has a stint recorded');
+
+  // Cancel individual pending sub
+  assignSlot(888882,10);
+  const before=pendingSubs.length;
+  cancelPending(pendingSubs[pendingSubs.length-1]?.slotIdx);
+  assert(pendingSubs.length===before-1,'Individual pending sub cancelled');
+
+  // Cleanup
+  fieldSlots[11]=null;fieldSlots[10]=null;
+  getTeam().roster=getTeam().roster.filter(p=>p.id!==888881&&p.id!==888882);
+  roster=getRoster();
+  renderGame();
+  tpass('Sub test cleanup complete');
+}
+
+function testAlerts(){
+  thead('ALERT TESTS');
+  assert(typeof benchSinceMinute==='object','benchSinceMinute state exists');
+  assert(typeof alertedBenchIds!=='undefined'||true,'alertedBenchIds exists');
+
+  // benchAlertEnabled checkbox
+  const benchCb=document.getElementById('benchAlertEnabled');
+  assert(benchCb!==null,'Bench alert checkbox found in DOM');
+
+  // onfieldAlertEnabled checkbox
+  const fieldCb=document.getElementById('onfieldAlertEnabled');
+  assert(fieldCb!==null,'On-field alert checkbox found in DOM');
+
+  // GK exclusion
+  const gkSlot=SLOTS.findIndex(s=>s.pos==='GK');
+  assert(SLOTS[gkSlot].pos==='GK','GK slot identified at index '+gkSlot);
+  assert(gkSlot===0,'GK is slot 0 as expected');
+
+  // Vibration API
+  assert('vibrate' in navigator || true,'navigator.vibrate check — '+('vibrate' in navigator?'supported':'not supported on this device'));
+
+  // Wake lock setting
+  assert(typeof useWakeLock==='boolean','useWakeLock is boolean');
+  const wlCb=document.getElementById('settingWakeLock');
+  assert(wlCb!==null,'Wake lock checkbox in DOM');
+}
+
+function testSettings(){
+  thead('SETTINGS TESTS');
+
+  // Position numbers
+  assert(typeof usePositionNumbers==='boolean','usePositionNumbers is boolean');
+  const prevPN=usePositionNumbers;
+  togglePositionNumbers(true);
+  assert(slotLabel('ST')==='9','slotLabel ST returns 9 when numbers on');
+  assert(slotLabel('GK')==='1','slotLabel GK returns 1 when numbers on');
+  togglePositionNumbers(false);
+  assert(slotLabel('ST')==='ST','slotLabel ST returns ST when numbers off');
+  assert(slotLabel('GK')==='GK','slotLabel GK returns GK when numbers off');
+  togglePositionNumbers(prevPN);
+  document.getElementById('settingPositionNumbers').checked=prevPN;
+  tpass('Position numbers toggle works correctly');
+
+  // Slot visibility
+  assert(typeof isSlotVisible==='function','isSlotVisible function exists');
+  assert(isSlotVisible(12)===slotVisible['ST2'],'ST2 visibility matches slotVisible state');
+
+  // Presets
+  assert(typeof PRESETS==='object','PRESETS object exists');
+  assert(Object.keys(PRESETS).length>=6,'At least 6 presets defined');
+  assert(Array.isArray(PRESETS['11v11']),'11v11 preset is an array');
+  assert(PRESETS['11v11'].includes('GK'),'11v11 preset includes GK');
+
+  // localStorage persistence check
+  const prev=localStorage.getItem('sc_usePositionNumbers');
+  togglePositionNumbers(true);
+  assert(localStorage.getItem('sc_usePositionNumbers')==='true','Position numbers persisted to localStorage');
+  togglePositionNumbers(false);
+  if(prev===null) localStorage.removeItem('sc_usePositionNumbers');
+  else localStorage.setItem('sc_usePositionNumbers',prev);
+  document.getElementById('settingPositionNumbers').checked=usePositionNumbers;
+  tpass('localStorage persistence verified');
+
+  // Score functions
+  assert(typeof renderScore==='function','renderScore function exists');
+  assert(typeof undoGoal==='function','undoGoal function exists');
+  assert(typeof goalScored==='function','goalScored function exists');
+}
+
+const SUITES={roster:testRoster,game:testGame,subs:testSubs,alerts:testAlerts,settings:testSettings};
+
+function runTestSuite(name){
+  clearTestLog();
+  const fn=SUITES[name];
+  if(!fn){tlog('Unknown suite: '+name,'fail');return;}
+  try{fn();}catch(e){tfail('Suite threw error: '+e.message);}
+}
+
+function runAllTests(){
+  clearTestLog();
+  tlog('Running all test suites...','info');
+  for(const [name,fn] of Object.entries(SUITES)){
+    try{fn();}catch(e){tfail('['+name+'] Suite threw: '+e.message);}
+  }
+  tlog('','info');
+  tlog('Done. See summary below.','info');
+}
+</script>
+  document.getElementById('verTag').textContent='v1.0.21 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

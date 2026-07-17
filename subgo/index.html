@@ -2457,11 +2457,21 @@ function testSubs(){
   assert(pendingSubs.length===0,'Pending subs cleared after confirm');
   assert(currentGame.playerStats[888881]?.length>0,'SubIn has a stint recorded');
 
-  // Cancel individual pending sub
+  // Cancel individual pending sub — need an occupied slot to queue against
+  getTeam().roster.push({id:888883,num:'83',name:'SlotHolder'});
+  roster=getRoster();
+  fieldSlots[10]=888883;
+  recordOn(888883,10);
   assignSlot(888882,10);
   const before=pendingSubs.length;
-  cancelPending(pendingSubs[pendingSubs.length-1]?.slotIdx);
+  assert(before>0,'Pending sub queued for cancel test');
+  const cancelSlot=pendingSubs[pendingSubs.length-1]?.slotIdx;
+  cancelPending(cancelSlot);
   assert(pendingSubs.length===before-1,'Individual pending sub cancelled');
+  // Cleanup slot holder
+  fieldSlots[10]=null;
+  getTeam().roster=getTeam().roster.filter(p=>p.id!==888883);
+  roster=getRoster();
 
   // Cleanup
   fieldSlots[11]=null;fieldSlots[10]=null;

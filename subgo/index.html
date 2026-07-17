@@ -359,13 +359,16 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .goal-row .gscorer{font-size:.88rem;font-weight:500;flex:1}
 .goal-row .gdel{background:none;border:none;color:var(--grd);cursor:pointer;font-size:.85rem;padding:2px 4px;border-radius:3px;min-width:24px;min-height:24px}
 .goal-row .gdel:active{color:var(--rd)}
-.player-sum-row{display:flex;align-items:center;gap:.5rem;padding:.35rem 0;border-bottom:1px solid #00002a}
+.player-sum-row{display:flex;align-items:center;gap:.5rem;padding:.4rem 0;border-bottom:1px solid #00002a}
 .player-sum-row:last-child{border-bottom:none}
-.player-sum-row .psnum{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--ac);min-width:28px}
-.player-sum-row .psname{font-size:.88rem;font-weight:500;flex:1}
-.player-sum-row .pspos{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--gr);min-width:30px}
-.player-sum-row .psmins{font-family:'DM Mono',monospace;font-size:.82rem;color:var(--ac);font-weight:500;min-width:32px;text-align:right}
-.player-sum-row .psbar{flex:1;max-width:70px}
+.player-sum-row .psnum{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--ac);min-width:28px;flex-shrink:0}
+.player-sum-row .psinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:.25rem}
+.player-sum-row .psname{font-size:.88rem;font-weight:500}
+.pos-stints{display:flex;flex-wrap:wrap;gap:.25rem}
+.pos-stint-tag{font-family:'DM Mono',monospace;font-size:.62rem;padding:2px 6px;border-radius:3px;background:var(--gm);border:1px solid var(--br);color:var(--gr);white-space:nowrap}
+.pos-stint-mins{color:var(--ac);font-weight:500}
+.player-sum-row .psmins{font-family:'DM Mono',monospace;font-size:.82rem;color:var(--ac);font-weight:500;min-width:32px;text-align:right;flex-shrink:0}
+.player-sum-row .psbar{min-width:40px;max-width:60px;flex:1}
 .gitem-actions{display:flex;gap:.4rem;padding-top:.65rem;border-top:1px solid var(--br)}
 .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .stbl{width:100%;border-collapse:collapse;font-size:.83rem;min-width:360px}
@@ -457,7 +460,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.9</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.12</p>
 </div>
 
 <!-- GAME -->
@@ -577,7 +580,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <h2><span class="hico">👥</span> Teams</h2>
     <div class="help-item">
       <span class="hkey">Switch Teams</span>
-      <span class="hval">Tap the team name button in the top-left of the header to open the team manager. All rosters and game history are stored separately per team.</span>
+      <span class="hval">Tap the team name button in the center of the header to open the team manager. All rosters and game history are stored separately per team.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Add a Team</span>
@@ -596,6 +599,10 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <span class="hval">Enter a jersey number and name, then tap Add Player. Jersey number is optional. Players are stored per team.</span>
     </div>
     <div class="help-item">
+      <span class="hkey">Edit Players</span>
+      <span class="hval">Tap ✎ on any player card to edit their name or jersey number.</span>
+    </div>
+    <div class="help-item">
       <span class="hkey">Remove Players</span>
       <span class="hval">Tap ✕ on any player card to remove them from the roster.</span>
     </div>
@@ -608,12 +615,20 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <span class="hval">Go to the Game tab, type the opponent name, and tap New Game. The field appears with labeled position slots.</span>
     </div>
     <div class="help-item">
-      <span class="hkey">Place Players</span>
-      <span class="hval">Drag a player chip from the Bench panel and drop it onto any position slot on the field, or directly onto a row in the On Field list to substitute that player. On mobile, press and hold briefly to start a drag.</span>
+      <span class="hkey">Place Players — Drag</span>
+      <span class="hval">Press and hold a player chip in the Bench panel, then drag onto any position slot on the field or onto a row in the On Field list. You can also drag a player already on the field to a different position.</span>
+    </div>
+    <div class="help-item">
+      <span class="hkey">Place Players — Tap</span>
+      <span class="hval">Tap a bench player to select them — they highlight in blue and the bench header shows "tap a position." Then tap any field slot or On Field row to place them. Tap the same player again or tap Cancel to deselect.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Game Clock</span>
-      <span class="hval">Tap <span class="help-badge">Start</span> to run the clock. Tap <span class="help-badge">HT</span> at halftime — the clock resets to 0:00 but all player minutes carry forward into the second half. Tap <span class="help-badge">↺</span> to fully reset the clock.</span>
+      <span class="hval">Tap <span class="help-badge">Start</span> in the top right to run the clock. Tap <span class="help-badge">HT</span> at halftime — the clock resets to 0:00 but all player minutes carry forward into the second half.</span>
+    </div>
+    <div class="help-item">
+      <span class="hkey">Halftime / End Game</span>
+      <span class="hval">Tap <span class="help-badge">HT</span> to start halftime. The button changes to <span class="help-badge">End</span> for the second half — tap it to close all player stints and stop the clock.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Unavailable</span>
@@ -629,15 +644,15 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <h2><span class="hico">🔄</span> Substitutions</h2>
     <div class="help-item">
       <span class="hkey">Queue a Sub</span>
-      <span class="hval">Drag a bench player onto an occupied field slot. Instead of swapping immediately, a pending sub is queued — the outgoing player dims and shows a pulsing orange ring with the incoming player's name.</span>
+      <span class="hval">Drag or tap-select a bench player onto an occupied field slot. A pending sub is queued — the outgoing player dims and shows a pulsing orange ring. Multiple subs can be queued at once.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Call Out</span>
-      <span class="hval">Tap <span class="help-badge">📋 Call Out</span> to open a full-screen display showing Coming Off and Coming On with jersey numbers — easy to read aloud on the sideline.</span>
+      <span class="hval">Tap <span class="help-badge">📋 Call Out</span> to open a full-screen display. Each substitution is shown as a paired card — incoming player on the left, position in the center, outgoing player on the right. Easy to read aloud on the sideline.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Confirm Subs</span>
-      <span class="hval">Tap <span class="help-badge">✓ Confirm</span> when play stops to execute all queued subs simultaneously at the current game minute. Tap ✕ on any pending row to cancel that individual sub.</span>
+      <span class="hval">Tap <span class="help-badge">✓ Confirm</span> when play stops to execute all queued subs at the current game minute. Tap ✕ on any pending row to cancel that individual sub.</span>
     </div>
   </div>
 
@@ -645,15 +660,15 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <h2><span class="hico">⏱</span> Alerts</h2>
     <div class="help-item">
       <span class="hkey">Bench Alert</span>
-      <span class="hval">In the Bench panel, set the number of minutes in the Alert field (default 5). Any player who has been sitting on the bench for that many consecutive minutes will be highlighted in orange with their bench time shown. Uncheck the box to disable it.</span>
+      <span class="hval">In the Bench panel, set the minutes threshold (default 5 min). Any player on the bench longer than that is highlighted in orange with their bench time shown. The phone will also buzz once when they first hit the threshold. Uncheck the box to disable.</span>
     </div>
     <div class="help-item">
       <span class="hkey">On Field Alert</span>
-      <span class="hval">In the On Field panel, set the number of minutes in the Alert field (default 20). Any player who has been on the field that long without a sub will be highlighted in orange — handy for spotting players who are overdue for a rest. Uncheck the box to disable it.</span>
+      <span class="hval">In the On Field panel, set the minutes threshold (default 20 min). Any outfield player on the field longer than that is highlighted in orange. The phone buzzes once when they first hit the threshold. The GK is never flagged. Uncheck the box to disable.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Alert Resets</span>
-      <span class="hval">Both alerts clear the moment a player is substituted. Halftime resets all bench and on-field timers so second-half tracking starts fresh.</span>
+      <span class="hval">Both alerts clear the moment a player is substituted. Halftime resets all timers so second-half alerts start fresh.</span>
     </div>
   </div>
 
@@ -661,11 +676,11 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <h2><span class="hico">⚽</span> Score Tracking</h2>
     <div class="help-item">
       <span class="hkey">Log a Goal</span>
-      <span class="hval">Tap your score (yellow) in the header to open the scorer picker — choose who scored from the on-field players, or tap Own Goal. Tap the opponent score (white) to log their goal instantly.</span>
+      <span class="hval">Tap your score (blue) in the header to open the scorer picker — choose who scored from the on-field players, or tap Own Goal. Tap the opponent score (white) to log their goal instantly.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Undo / Edit</span>
-      <span class="hval">Tap <span class="help-badge">↩</span> in the header to remove the last goal. In the Summary tab, expand a game and tap ✕ next to any goal to remove it individually.</span>
+      <span class="hval">Tap <span class="help-badge">↩</span> in the header to remove the last goal. In the Summary tab, expand a game and tap ✎ to edit a scorer or ✕ to remove a goal individually.</span>
     </div>
   </div>
 
@@ -673,7 +688,11 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <h2><span class="hico">📊</span> Summary</h2>
     <div class="help-item">
       <span class="hkey">Expand a Game</span>
-      <span class="hval">Tap any game row to expand it and see the final score, goal log with scorers and minutes, and a player minutes summary sorted by time played.</span>
+      <span class="hval">Tap any game row to expand it and see the final score, goal log with scorers and minutes, and a full player breakdown sorted by total time played.</span>
+    </div>
+    <div class="help-item">
+      <span class="hkey">Position Breakdown</span>
+      <span class="hval">Under each player's name, small tags show every position they played and how many minutes at each — for example CB 15' CM 8'. Sorted by most minutes first.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Export CSV</span>
@@ -685,11 +704,11 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <h2><span class="hico">💾</span> Data &amp; Storage</h2>
     <div class="help-item">
       <span class="hkey">Storage</span>
-      <span class="hval">All data is stored in your browser's local storage on this device only. No data is sent to any server. Clearing your browser data will erase all teams, rosters, and games.</span>
+      <span class="hval">All data is stored locally on this device only. No data is sent to any server. Clearing your browser data will erase all teams, rosters, and games.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Offline Use</span>
-      <span class="hval">After the first load, SubGo works without an internet connection. Add it to your home screen for a full-screen app experience.</span>
+      <span class="hval">After the first load, SubGo works without an internet connection. Install it to your home screen for a full-screen app experience.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Install on Phone</span>
@@ -752,6 +771,8 @@ let pendingGoalSide = null;
 let unavailablePlayers = [];
 let benchSinceMinute = {};
 let isSecondHalf = false;
+let alertedBenchIds = new Set();
+let alertedFieldIds = new Set();
 
 function saveData(){
   localStorage.setItem('sc_teams', JSON.stringify(teams));
@@ -777,6 +798,8 @@ function switchTeam(teamId){
   benchSinceMinute={};
   selectedBenchId=null;
   isSecondHalf=false;
+  alertedBenchIds=new Set();
+  alertedFieldIds=new Set();
   const htBtn=document.getElementById('halfBtn');
   if(htBtn){htBtn.textContent='HT';htBtn.classList.remove('btn-rd');htBtn.classList.add('btn-ol');}
 
@@ -924,6 +947,8 @@ function halftime(){
   // Reset clock and bench timers for 2nd half
   timerSec=0;
   benchSinceMinute={};
+  alertedBenchIds=new Set();
+  alertedFieldIds=new Set();
   // Re-initialize bench timers for bench players at minute 0
   const onIds=new Set(fieldSlots.filter(Boolean));
   roster.forEach(p=>{ if(!onIds.has(p.id)) benchSinceMinute[p.id]=0; });
@@ -1082,6 +1107,8 @@ function newGame(){
   benchSinceMinute={};
   selectedBenchId=null;
   isSecondHalf=false;
+  alertedBenchIds=new Set();
+  alertedFieldIds=new Set();
   // All players start on bench at minute 0 — initialize bench timers now
   roster.forEach(p=>{ benchSinceMinute[p.id]=0; });
   document.getElementById('halfBtn').textContent='HT';
@@ -1111,8 +1138,9 @@ function recordOn(rosterId,slotIdx){
   if(!currentGame.playerSnapshots) currentGame.playerSnapshots={};
   currentGame.playerSnapshots[String(rosterId)]={name:player.name, num:player.num};
   currentGame.events.push({type:'on',playerId:rosterId,minute,position:pos});
-  // Clear bench timer — they're on the field now
+  // Clear bench timer and bench alert tracking
   delete benchSinceMinute[rosterId];
+  alertedBenchIds.delete(rosterId);
 }
 
 function recordOff(slotIdx){
@@ -1125,6 +1153,8 @@ function recordOff(slotIdx){
   currentGame.events.push({type:'off',playerId:rosterId,minute});
   // Start bench timer — record what minute they came off
   benchSinceMinute[rosterId]=minute;
+  // Clear field alert tracking so it can re-trigger if they come back on
+  alertedFieldIds.delete(rosterId);
 }
 
 function assignSlot(rosterId,slotIdx){
@@ -1269,6 +1299,12 @@ function tapFieldSlot(slotIdx){
   renderGame();
 }
 
+function buzzAlert(){
+  if(navigator.vibrate){
+    navigator.vibrate([200,100,200]);
+  }
+}
+
 function renderBenchPanel(){
   const onIds=new Set(fieldSlots.filter(Boolean));
   const pendingInIds=new Set(pendingSubs.map(p=>p.inRosterId));
@@ -1298,6 +1334,13 @@ function renderBenchPanel(){
     const inPlayer=pendingSub?roster.find(pl=>pl.id===pendingSub.inRosterId):null;
     const isGK=slotLabel(SLOTS[i].pos)==='GK';
     const isOverTime=onfieldAlertOn&&!isGK&&minsOnField>=onfieldAlertMin;
+    // Buzz once when player first crosses threshold
+    if(isOverTime&&!alertedFieldIds.has(rid)){
+      alertedFieldIds.add(rid);
+      buzzAlert();
+    } else if(!isOverTime){
+      alertedFieldIds.delete(rid);
+    }
     return{p,i,minsOnField,pos:slotLabel(SLOTS[i].pos),hasSub,inPlayer,isOverTime};
   }).filter(Boolean).sort((a,b)=>b.minsOnField-a.minsOnField);
   if(!onPlayers.length){
@@ -1336,6 +1379,13 @@ function renderBenchPanel(){
       const wasOn=currentGame&&currentGame.playerStats[p.id]?.length;
       const isPendingIn=pendingInIds.has(p.id);
       const isAlerted=benchAlertOn&&benchMins>=0&&benchMins>=alertMin;
+      // Buzz once when player first crosses bench threshold
+      if(isAlerted&&!alertedBenchIds.has(p.id)){
+        alertedBenchIds.add(p.id);
+        buzzAlert();
+      } else if(!isAlerted){
+        alertedBenchIds.delete(p.id);
+      }
       const alertEl=isAlerted?`<span class="alert-badge" title="${benchMins} min on bench">⚑ ${benchMins}'</span>`:'';
       const isSelected=selectedBenchId===p.id;
       return `<div class="bchip${wasOn?' was-on':''}${isPendingIn?' pending-in':''}${isAlerted?' bchip-alert':''}${isSelected?' bchip-selected':''}"
@@ -1846,30 +1896,48 @@ function buildGameCard(g,i){
   const playerTotals={};
   for(const [idStr,stints] of Object.entries(g.playerStats)){
     const id=parseInt(idStr);
-    const snap = snapshots[idStr] || snapshots[id]; // handle both string and numeric keys
+    const snap = snapshots[idStr] || snapshots[id];
     const player=roster.find(p=>p.id===id);
     const name = snap?.name || player?.name || `Unknown`;
     const num  = snap?.num  || player?.num  || '—';
-    const inactive = !player; // player was deleted from roster
+    const inactive = !player;
     const totalMins=stints.reduce((sum,st)=>{
       const off=st.offMin!==null?st.offMin:(isActive?getMinute():0);
       return sum+Math.max(0,off-st.onMin);
     },0);
-    const positions=[...new Set(stints.map(st=>st.pos))].join(', ');
-    if(!playerTotals[idStr])playerTotals[idStr]={name,num,totalMins,positions,inactive};
-    else playerTotals[idStr].totalMins+=totalMins;
+    // Build per-position minutes map
+    const posMins={};
+    stints.forEach(st=>{
+      const off=st.offMin!==null?st.offMin:(isActive?getMinute():0);
+      const mins=Math.max(0,off-st.onMin);
+      if(mins>0) posMins[st.pos]=(posMins[st.pos]||0)+mins;
+    });
+    if(!playerTotals[idStr]) playerTotals[idStr]={name,num,totalMins,posMins,inactive};
+    else{
+      playerTotals[idStr].totalMins+=totalMins;
+      Object.entries(posMins).forEach(([pos,mins])=>{
+        playerTotals[idStr].posMins[pos]=(playerTotals[idStr].posMins[pos]||0)+mins;
+      });
+    }
   }
   const playerRows=Object.values(playerTotals)
     .sort((a,b)=>b.totalMins-a.totalMins);
   const maxMins=Math.max(...playerRows.map(p=>p.totalMins),1);
-  const playerHtml=playerRows.map(p=>`
-    <div class="player-sum-row">
+  const playerHtml=playerRows.map(p=>{
+    const posTags=Object.entries(p.posMins)
+      .sort((a,b)=>b[1]-a[1])
+      .map(([pos,mins])=>`<span class="pos-stint-tag">${pos} <span class="pos-stint-mins">${mins}'</span></span>`)
+      .join('');
+    return `<div class="player-sum-row">
       <span class="psnum">${p.num!=='—'?'#'+p.num:'—'}</span>
-      <span class="psname">${esc(p.name)}${p.inactive?'<span style="font-size:.65rem;color:var(--grd);margin-left:4px">(inactive)</span>':''}</span>
-      <span class="pspos">${p.positions}</span>
+      <div class="psinfo">
+        <span class="psname">${esc(p.name)}${p.inactive?'<span style="font-size:.65rem;color:var(--grd);margin-left:4px">(inactive)</span>':''}</span>
+        <div class="pos-stints">${posTags}</div>
+      </div>
       <div class="psbar"><div class="mbar"><div class="mbar-f" style="width:${Math.round(p.totalMins/maxMins*100)}%"></div></div></div>
       <span class="psmins">${p.totalMins}'</span>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   return `<div class="gitem${isActive?' active-g':''}" id="gitem-${i}">
     <div class="gitem-header" onclick="toggleGameCard(${i})">
@@ -2008,10 +2076,10 @@ document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.9</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.12</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.9 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.12 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

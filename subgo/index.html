@@ -460,7 +460,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.19</p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.20</p>
 </div>
 
 <!-- GAME -->
@@ -584,6 +584,15 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
         <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
           <input type="checkbox" id="settingPositionNumbers" onchange="togglePositionNumbers(this.checked)" style="width:18px;height:18px;flex-shrink:0">
           <span>Use position numbers instead of abbreviations (e.g. <span class="help-badge">9</span> instead of <span class="help-badge">ST</span>)</span>
+        </label>
+      </span>
+    </div>
+    <div class="help-item">
+      <span class="hkey">Keep Screen On</span>
+      <span class="hval" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" id="settingWakeLock" onchange="toggleWakeLock(this.checked)" style="width:18px;height:18px;flex-shrink:0">
+          <span>Prevent the screen from sleeping while a game is active</span>
         </label>
       </span>
     </div>
@@ -861,6 +870,7 @@ function switchTeam(teamId){
   renderGame();
   if(document.getElementById('view-summary').classList.contains('active'))renderSummary();
   closeTeamOverlay();
+  releaseWakeLock();
 }
 
 // ── TEAM MANAGEMENT ────────────────────────────────────────
@@ -936,6 +946,8 @@ const SLOTS = [
 
 let usePositionNumbers = localStorage.getItem('sc_usePositionNumbers')==='true';
 let useBuzzAlerts = localStorage.getItem('sc_useBuzzAlerts')==='true';
+let useWakeLock = localStorage.getItem('sc_useWakeLock')!=='false';
+let wakeLock = null;
 // Slot visibility — keyed by pos, all default on
 const SLOT_KEYS=['GK','LB','CB','CB2','RB','CDM','CM','CM2','CAM','LW','RW','ST','ST2'];
 function loadSlotVisible(){
@@ -1104,6 +1116,7 @@ function endGame(){
 
   saveData();
   renderGame();
+  releaseWakeLock();
 }
 function updateClock(){
   const m=Math.floor(timerSec/60),s=timerSec%60;
@@ -1236,6 +1249,7 @@ function newGame(){
   renderScore();
   resetTimer();
   renderGame();
+  acquireWakeLock();
 }
 
 function recordOn(rosterId,slotIdx){
@@ -1416,6 +1430,34 @@ function tapFieldSlot(slotIdx){
   selectedBenchId=null;
   renderGame();
 }
+
+async function acquireWakeLock(){
+  if(!useWakeLock) return;
+  if(!('wakeLock' in navigator)) return;
+  try{
+    if(wakeLock) return; // already held
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release',()=>{ wakeLock=null; });
+  } catch(e){}
+}
+
+function releaseWakeLock(){
+  if(wakeLock){wakeLock.release();wakeLock=null;}
+}
+
+function toggleWakeLock(on){
+  useWakeLock=on;
+  localStorage.setItem('sc_useWakeLock', on?'true':'false');
+  if(on && currentGame) acquireWakeLock();
+  else releaseWakeLock();
+}
+
+// Reacquire wake lock when page becomes visible again (e.g. after a phone call)
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible' && useWakeLock && currentGame && !wakeLock){
+    acquireWakeLock();
+  }
+});
 
 function buzzAlert(){
   if(!useBuzzAlerts) return;
@@ -2229,6 +2271,7 @@ function togglePositionNumbers(on){
 document.getElementById('teamBtn').textContent=getTeam()?.name||'Team';
 document.getElementById('settingPositionNumbers').checked=usePositionNumbers;
 document.getElementById('settingBuzzAlerts').checked=useBuzzAlerts;
+document.getElementById('settingWakeLock').checked=useWakeLock;
 SLOT_KEYS.forEach(k=>{
   const el=document.getElementById('settingSlot_'+k);
   if(el) el.checked=slotVisible[k];
@@ -2236,10 +2279,10 @@ SLOT_KEYS.forEach(k=>{
 renderRoster();
 renderGame();
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.19</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.20</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.19 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.20 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

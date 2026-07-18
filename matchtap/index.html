@@ -844,6 +844,31 @@ function renderTrackScreen() {
 }
 
 let clockInterval = null;
+let wakeLock = null;
+
+async function requestWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release', () => { wakeLock = null; });
+  } catch (e) {
+    wakeLock = null;
+  }
+}
+
+async function releaseWakeLock() {
+  if (wakeLock) {
+    try { await wakeLock.release(); } catch (e) {}
+    wakeLock = null;
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' &&
+      document.getElementById('screen-track').classList.contains('active')) {
+    requestWakeLock();
+  }
+});
 
 function elapsedClockMs() {
   const raw = state.clockAccumulatedMs + (state.clockRunningSince ? Date.now() - state.clockRunningSince : 0);
@@ -954,8 +979,8 @@ function showScreen(name) {
   document.getElementById('screen-' + name).classList.add('active');
   document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('nav-' + name).classList.add('active');
-  if (name !== 'track') stopClock();
-  if (name === 'track') renderTrackScreen();
+  if (name !== 'track') { stopClock(); releaseWakeLock(); }
+  if (name === 'track') { renderTrackScreen(); requestWakeLock(); }
   if (name === 'log') renderLogScreen();
   if (name === 'past') renderPastScreen();
   if (name === 'setup') {

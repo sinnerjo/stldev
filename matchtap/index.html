@@ -1160,6 +1160,14 @@ function elapsedClockMs() {
   return DEV_MODE ? raw * DEV_CLOCK_MULTIPLIER : raw;
 }
 
+function formatElapsed(ms) {
+  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  const pad = n => String(n).padStart(2, '0');
+  return mins >= 100 ? `${pad(Math.floor(mins/60))}:${pad(mins%60)}:${pad(secs)}` : `${pad(mins)}:${pad(secs)}`;
+}
+
 function updateClockDisplay() {
   const timeEl = document.getElementById('clock-time');
   const hintEl = document.getElementById('clock-hint');
@@ -1173,11 +1181,7 @@ function updateClockDisplay() {
   }
   const running = !!state.clockRunningSince;
   if (state.showClock) {
-    const totalSeconds = Math.max(0, Math.floor(elapsedClockMs() / 1000));
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    const pad = n => String(n).padStart(2, '0');
-    timeEl.textContent = mins >= 100 ? `${pad(Math.floor(mins/60))}:${pad(mins%60)}:${pad(secs)}` : `${pad(mins)}:${pad(secs)}`;
+    timeEl.textContent = formatElapsed(elapsedClockMs());
   } else {
     timeEl.textContent = running ? 'Game running' : 'Game paused';
   }
@@ -1237,6 +1241,10 @@ function generateEventId() {
   return 'e_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
+function currentClockSnapshot() {
+  return state.gameDate ? elapsedClockMs() : null;
+}
+
 function logEvent(eventId) {
   if (state.mode === 'team_individual' && !state.currentPlayer) {
     alert('Select a player first.');
@@ -1250,7 +1258,8 @@ function logEvent(eventId) {
     eventId: eventId,
     player: player,
     half: state.currentHalf,
-    ts: Date.now()
+    ts: Date.now(),
+    clockMs: currentClockSnapshot()
   };
   state.events.push(entry);
   save();
@@ -1289,7 +1298,8 @@ function saveNote() {
     text: text,
     player: currentTrackingPlayerLabel(),
     half: state.currentHalf,
-    ts: Date.now()
+    ts: Date.now(),
+    clockMs: currentClockSnapshot()
   };
   state.events.push(entry);
   save();
@@ -1324,6 +1334,11 @@ function showScreen(name) {
     renderEventConfig();
     setMode(state.mode);
   }
+}
+
+function eventTimeLabel(e) {
+  if (e.clockMs !== null && e.clockMs !== undefined) return formatElapsed(e.clockMs);
+  return new Date(e.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 function renderLogScreen() {
@@ -1369,7 +1384,7 @@ function renderLogScreen() {
   }
   const sorted = [...state.events].reverse();
   list.innerHTML = sorted.map(e => {
-    const time = new Date(e.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const time = eventTimeLabel(e);
     if (e.eventId === 'note') {
       return `<div class="log-entry is-note">
         <span class="note-text">"${escapeHtml(e.text)}"${e.player ? ' - ' + escapeHtml(e.player) : ''}</span>
@@ -1406,14 +1421,15 @@ function downloadEventsCSV(events, opponent, dateStr) {
     alert('No events to export.');
     return;
   }
-  let csv = 'timestamp,half,player,event,note\n';
+  let csv = 'timestamp,game_clock,half,player,event,note\n';
   events.forEach(e => {
+    const clockLabel = (e.clockMs !== null && e.clockMs !== undefined) ? formatElapsed(e.clockMs) : '';
     let row;
     if (e.eventId === 'note') {
-      row = [new Date(e.ts).toISOString(), e.half, e.player || '', 'Note', e.text || ''];
+      row = [new Date(e.ts).toISOString(), clockLabel, e.half, e.player || '', 'Note', e.text || ''];
     } else {
       const ev = MASTER_EVENTS.find(m => m.id === e.eventId);
-      row = [new Date(e.ts).toISOString(), e.half, e.player || '', ev ? ev.label : e.eventId, ''];
+      row = [new Date(e.ts).toISOString(), clockLabel, e.half, e.player || '', ev ? ev.label : e.eventId, ''];
     }
     csv += row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',') + '\n';
   });
@@ -1512,7 +1528,7 @@ function renderPastGameEvents(g) {
   if (g.events.length === 0) return '<div class="empty-state">No events in this game.</div>';
   const sorted = [...g.events].reverse();
   return sorted.map(e => {
-    const time = new Date(e.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const time = eventTimeLabel(e);
     if (e.eventId === 'note') {
       return `<div class="log-entry is-note">
         <span class="note-text">"${escapeHtml(e.text)}"${e.player ? ' - ' + escapeHtml(e.player) : ''}</span>

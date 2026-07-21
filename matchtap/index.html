@@ -127,8 +127,16 @@
     padding: 0;
     line-height: 1;
   }
-  .add-row { display: flex; gap: 8px; }
+  .add-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .add-row input { margin-bottom: 0; }
+  .add-row select {
+    padding: 10px 8px;
+    background: var(--pitch-dark);
+    border: 1px solid var(--pitch-line);
+    border-radius: 8px;
+    color: var(--chalk);
+    font-size: 13px;
+  }
   .add-row button {
     background: var(--lime-dim);
     border: none;
@@ -364,6 +372,33 @@
   }
   .log-summary .stat .n { font-size: 20px; font-weight: 700; color: var(--lime); }
   .log-summary .stat .l { font-size: 11px; color: var(--chalk-dim); margin-top: 2px; }
+  .log-percentages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .pct-stat {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 120px;
+    background: var(--card);
+    border: 1px solid var(--pitch-line);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+  .pct-n { font-size: 20px; font-weight: 700; color: var(--amber); }
+  .pct-l { font-size: 11px; color: var(--chalk); margin-top: 2px; font-weight: 600; }
+  .pct-f { font-size: 10px; color: var(--chalk-dim); margin-top: 1px; }
+  .log-entry-right { display: flex; align-items: center; gap: 10px; }
+  .log-remove-btn {
+    background: none;
+    border: none;
+    color: var(--red);
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 4px;
+  }
   .log-entry {
     display: flex;
     justify-content: space-between;
@@ -398,6 +433,17 @@
     font-weight: 700;
     margin: 0 0 14px;
   }
+  .share-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--pitch-dark);
+    border: 1px solid var(--chalk-dim);
+    color: var(--chalk);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
   .past-card {
     background: var(--card);
     border: 1px solid var(--pitch-line);
@@ -416,9 +462,10 @@
   .past-card-count { font-size: 13px; color: var(--lime); font-weight: 600; }
   .past-card-detail { display: none; margin-top: 12px; border-top: 1px solid var(--pitch-line); padding-top: 10px; }
   .past-card-detail.open { display: block; }
-  .past-card-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .past-card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
   .past-card-actions button {
-    flex: 1;
+    flex: 1 1 calc(33% - 6px);
+    min-width: 80px;
     padding: 8px;
     background: var(--pitch-dark);
     border: 1px solid var(--pitch-line);
@@ -465,6 +512,152 @@
   .test-row { padding: 3px 0; }
   .test-row.pass { color: #7ed957; }
   .test-row.fail { color: #ff6b6b; }
+
+  .replay-tutorial-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 10px;
+    background: var(--pitch-dark);
+    border: 1px solid var(--lime-dim);
+    color: var(--lime);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .tutorial-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(4, 12, 8, 0.88);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .tutorial-card {
+    background: var(--card);
+    border: 1px solid var(--lime-dim);
+    border-radius: 14px;
+    padding: 22px 20px;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+  .tutorial-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .tutorial-dots span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--pitch-line);
+  }
+  .tutorial-dots span.active { background: var(--lime); }
+  .tutorial-card h3 {
+    color: var(--lime);
+    font-size: 17px;
+    margin: 0 0 10px;
+    text-align: center;
+  }
+  .tutorial-card p {
+    color: var(--chalk);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 20px;
+    text-align: center;
+  }
+  .tutorial-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tutorial-skip {
+    background: none;
+    border: none;
+    color: var(--chalk-dim);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 4px;
+  }
+  .tutorial-nav { display: flex; gap: 8px; }
+  .tutorial-nav button {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .tutorial-back {
+    background: var(--pitch-dark);
+    border: 1px solid var(--pitch-line);
+    color: var(--chalk-dim);
+  }
+  .tutorial-back:disabled { opacity: 0.35; }
+  .tutorial-next {
+    background: var(--lime);
+    border: none;
+    color: var(--pitch-dark);
+  }
+
+  .note-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--pitch-dark);
+    border: 1px dashed var(--amber);
+    color: var(--amber);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .note-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(4, 12, 8, 0.88);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .note-card {
+    background: var(--card);
+    border: 1px solid var(--amber);
+    border-radius: 14px;
+    padding: 20px;
+    max-width: 380px;
+    width: 100%;
+  }
+  .note-card h3 { color: var(--amber); font-size: 16px; margin: 0 0 4px; }
+  .note-meta { color: var(--chalk-dim); font-size: 12px; margin-bottom: 12px; }
+  .note-card textarea {
+    width: 100%;
+    background: var(--pitch-dark);
+    border: 1px solid var(--pitch-line);
+    border-radius: 8px;
+    color: var(--chalk);
+    font-size: 14px;
+    padding: 10px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 14px;
+  }
+  .note-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  .note-actions button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .note-cancel { background: var(--pitch-dark); border: 1px solid var(--pitch-line); color: var(--chalk-dim); }
+  .note-save { background: var(--amber); border: none; color: var(--pitch-dark); }
+
+  .log-entry.is-note { display: block; }
+  .log-entry.is-note .note-text { color: var(--chalk); font-style: italic; display: block; margin-bottom: 4px; }
+  .log-entry.is-note .log-entry-right { justify-content: space-between; width: 100%; }
 </style>
 </head>
 
@@ -496,15 +689,38 @@
       <div style="margin-top:8px; color:var(--chalk-dim); font-size:12px;" id="mode-hint"></div>
     </div>
 
+    <div class="setup-block" id="team-name-block" style="display:none;">
+      <h2>Team name</h2>
+      <input type="text" id="team-name-input" placeholder="e.g. StlDev FC">
+    </div>
+
     <div class="setup-block" id="player-name-block" style="display:none;">
       <h2>Player name</h2>
       <input type="text" id="player-name-input" placeholder="e.g. Emma">
+      <div class="add-row">
+        <input type="text" id="player-number-input" placeholder="Number (optional)" inputmode="numeric" maxlength="2" style="flex:1;">
+        <select id="player-position-input" style="flex:1;">
+          <option value="">Position (optional)</option>
+          <option value="GK">GK</option>
+          <option value="DEF">DEF</option>
+          <option value="MID">MID</option>
+          <option value="FWD">FWD</option>
+        </select>
+      </div>
     </div>
 
     <div class="setup-block" id="roster-block" style="display:none;">
       <h2>Roster</h2>
       <div class="add-row">
-        <input type="text" id="roster-input" placeholder="Add player name">
+        <input type="text" id="roster-input" placeholder="Player name">
+        <input type="text" id="roster-number-input" placeholder="#" inputmode="numeric" maxlength="2" style="flex:0 0 60px;">
+        <select id="roster-position-input" style="flex:0 0 90px;">
+          <option value="">Pos</option>
+          <option value="GK">GK</option>
+          <option value="DEF">DEF</option>
+          <option value="MID">MID</option>
+          <option value="FWD">FWD</option>
+        </select>
         <button onclick="addRosterPlayer()">+</button>
       </div>
       <div class="roster-list" id="roster-list"></div>
@@ -559,6 +775,8 @@
 
         <p class="help-heading">Reset current game</p>
         <p>Wipes the game in progress, events, score, and clock, without saving anything. Use this for a mis-start, not for ending a real game, that's what Save game to history is for.</p>
+
+        <button class="replay-tutorial-btn" onclick="startTutorial()">Replay the walkthrough</button>
       </details>
     </div>
 
@@ -587,12 +805,28 @@
       <div class="tracking-label">Tracking: <b id="current-player-label">-</b></div>
     </div>
 
+    <button class="note-btn" onclick="openNoteModal()">+ Add note</button>
+
     <div class="btn-grid" id="event-grid"></div>
+  </div>
+
+  <div class="note-overlay" id="note-overlay" style="display:none;">
+    <div class="note-card">
+      <h3>Add a note</h3>
+      <div class="note-meta" id="note-meta"></div>
+      <textarea id="note-text-input" rows="4" placeholder="What did you see? e.g. Great first touch under pressure, hesitant to shoot with left foot..."></textarea>
+      <div class="note-actions">
+        <button class="note-cancel" onclick="closeNoteModal()">Cancel</button>
+        <button class="note-save" onclick="saveNote()">Save note</button>
+      </div>
+    </div>
   </div>
 
   <div class="screen" id="screen-log">
     <div class="log-summary" id="log-summary"></div>
+    <div class="log-percentages" id="log-percentages"></div>
     <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+    <button class="share-btn" onclick="shareCurrentGameSummary()">Share summary</button>
     <button class="finish-btn" onclick="finishGame()">Save game to history</button>
     <div id="log-list"></div>
   </div>
@@ -612,6 +846,7 @@
 
 <script>
 const STORAGE_KEY = 'matchtap_state_v1';
+const TUTORIAL_SEEN_KEY = 'matchtap_tutorial_seen_v1';
 const APP_VERSION = 'v1.0.0';
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
@@ -646,10 +881,13 @@ const MASTER_EVENTS = [
   { id: 'header_lost', label: 'Header lost', type: 'negative', category: 'Defending' },
   { id: 'dribble_completed', label: 'Dribble completed', type: 'positive', category: 'Defending' },
   { id: 'possession_lost', label: 'Possession lost', type: 'negative', category: 'Defending' },
+  { id: 'dribble_attempted', label: 'Dribbles attempted', type: 'neutral', category: 'Defending' },
+  { id: 'dribble_successful', label: 'Successful dribbles', type: 'positive', category: 'Defending' },
 
   // Goalkeeping
   { id: 'save', label: 'Save', type: 'positive', category: 'Goalkeeping' },
   { id: 'gk_catch', label: 'Catch', type: 'positive', category: 'Goalkeeping' },
+  { id: 'gk_punch', label: 'Punch', type: 'positive', category: 'Goalkeeping' },
   { id: 'goal_conceded', label: 'Goal conceded', type: 'negative', category: 'Goalkeeping' },
 
   // Discipline
@@ -663,17 +901,35 @@ const MASTER_EVENTS = [
   { id: 'corner', label: 'Corner won', type: 'positive', category: 'Set pieces' },
   { id: 'corner_conceded', label: 'Corner conceded', type: 'negative', category: 'Set pieces' },
   { id: 'throw_in_won', label: 'Throw-in won', type: 'positive', category: 'Set pieces' },
-  { id: 'free_kick_won', label: 'Free kick won', type: 'positive', category: 'Set pieces' }
+  { id: 'free_kick_won', label: 'Free kick won', type: 'positive', category: 'Set pieces' },
+
+  // General
+  { id: 'good_decision', label: 'Good decision', type: 'positive', category: 'General' },
+  { id: 'poor_decision', label: 'Poor decision', type: 'negative', category: 'General' },
+  { id: 'turnover', label: 'Turnover', type: 'negative', category: 'General' }
 ];
 
-const EVENT_CATEGORIES = ['Passing', 'Shooting', 'Defending', 'Goalkeeping', 'Discipline', 'Set pieces'];
+const EVENT_CATEGORIES = ['Passing', 'Shooting', 'Defending', 'Goalkeeping', 'Discipline', 'Set pieces', 'General'];
+
+const STAT_PAIRS = [
+  { a: 'pass_c', b: 'pass_m', label: 'Pass success', mode: 'ratio' },
+  { a: 'cross_c', b: 'cross_m', label: 'Cross success', mode: 'ratio' },
+  { a: 'shot_og', b: 'shot_miss', label: 'Shot accuracy', mode: 'ratio' },
+  { a: 'tackle_won', b: 'tackle_lost', label: 'Tackle success', mode: 'ratio' },
+  { a: 'header_won', b: 'header_lost', label: 'Header success', mode: 'ratio' },
+  { a: 'pen_scored', b: 'pen_missed', label: 'Penalty conversion', mode: 'ratio' },
+  { a: 'dribble_successful', b: 'dribble_attempted', label: 'Dribble success', mode: 'subset' }
+];
 
 const DEFAULT_ACTIVE = ['pass_c','pass_m','shot_og','shot_miss','goal','assist','tackle_won','tackle_lost','interception','save','foul_c','foul_d','yellow_card','red_card'];
 
 let state = {
   mode: 'player',
   opponent: '',
+  teamName: '',
   playerName: '',
+  playerNumber: '',
+  playerPosition: '',
   roster: [],
   activeEvents: [...DEFAULT_ACTIVE],
   currentPlayer: null,
@@ -691,6 +947,12 @@ function load() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) state = Object.assign(state, JSON.parse(raw));
   } catch (e) {}
+  if (Array.isArray(state.events)) {
+    state.events.forEach(e => { if (!e.id) e.id = generateEventId(); });
+  }
+  if (Array.isArray(state.roster)) {
+    state.roster = state.roster.map(r => typeof r === 'string' ? { name: r, number: '', position: '' } : r);
+  }
 }
 function save() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
@@ -707,6 +969,7 @@ function setMode(m) {
   ['player', 'team_whole', 'team_individual'].forEach(mode => {
     document.getElementById('mode-' + mode).classList.toggle('selected', m === mode);
   });
+  document.getElementById('team-name-block').style.display = (m === 'team_whole' || m === 'team_individual') ? 'block' : 'none';
   document.getElementById('player-name-block').style.display = m === 'player' ? 'block' : 'none';
   document.getElementById('roster-block').style.display = m === 'team_individual' ? 'block' : 'none';
   document.getElementById('mode-hint').textContent = MODE_HINTS[m] || '';
@@ -715,10 +978,18 @@ function setMode(m) {
 
 function addRosterPlayer() {
   const input = document.getElementById('roster-input');
+  const numberInput = document.getElementById('roster-number-input');
+  const positionInput = document.getElementById('roster-position-input');
   const name = input.value.trim();
   if (!name) return;
-  state.roster.push(name);
+  state.roster.push({
+    name: name,
+    number: numberInput.value.trim(),
+    position: positionInput.value
+  });
   input.value = '';
+  numberInput.value = '';
+  positionInput.value = '';
   renderRoster();
   save();
 }
@@ -731,9 +1002,13 @@ function removeRosterPlayer(idx) {
 
 function renderRoster() {
   const list = document.getElementById('roster-list');
-  list.innerHTML = state.roster.map((name, i) =>
-    `<div class="roster-chip">${escapeHtml(name)}<button onclick="removeRosterPlayer(${i})">&times;</button></div>`
-  ).join('');
+  list.innerHTML = state.roster.map((p, i) => {
+    const bits = [];
+    if (p.number) bits.push('#' + escapeHtml(p.number));
+    bits.push(escapeHtml(p.name));
+    if (p.position) bits.push('(' + escapeHtml(p.position) + ')');
+    return `<div class="roster-chip">${bits.join(' ')}<button onclick="removeRosterPlayer(${i})">&times;</button></div>`;
+  }).join('');
 }
 
 function renderEventConfig() {
@@ -770,16 +1045,20 @@ function beginGame() {
   state.opponent = document.getElementById('opponent-input').value.trim();
   if (state.mode === 'player') {
     state.playerName = document.getElementById('player-name-input').value.trim() || 'Player';
+    state.playerNumber = document.getElementById('player-number-input').value.trim();
+    state.playerPosition = document.getElementById('player-position-input').value;
     state.currentPlayer = state.playerName;
   } else if (state.mode === 'team_individual') {
+    state.teamName = document.getElementById('team-name-input').value.trim();
     if (state.roster.length === 0) {
       alert('Add at least one player to the roster in Setup first.');
       return;
     }
-    if (!state.currentPlayer || !state.roster.includes(state.currentPlayer)) {
-      state.currentPlayer = state.roster[0];
+    if (!state.currentPlayer || !state.roster.some(p => p.name === state.currentPlayer)) {
+      state.currentPlayer = state.roster[0].name;
     }
   } else {
+    state.teamName = document.getElementById('team-name-input').value.trim();
     state.currentPlayer = null;
   }
   state.gameDate = new Date().toISOString();
@@ -797,9 +1076,14 @@ const MODE_LABELS = {
 
 function renderTrackScreen() {
   const base = (MODE_LABELS[state.mode] || (() => ''))();
-  document.getElementById('header-sub').textContent = state.opponent
-    ? base + ' - vs ' + state.opponent
-    : base;
+  const isTeamMode = state.mode === 'team_whole' || state.mode === 'team_individual';
+  let headerText;
+  if (isTeamMode && state.teamName) {
+    headerText = state.opponent ? `${state.teamName} vs ${state.opponent}` : state.teamName;
+  } else {
+    headerText = state.opponent ? base + ' - vs ' + state.opponent : base;
+  }
+  document.getElementById('header-sub').textContent = headerText;
 
   const scoreboard = document.getElementById('scoreboard');
   const hasScoring = state.activeEvents.includes('goal') && state.activeEvents.includes('goal_conceded');
@@ -821,9 +1105,10 @@ function renderTrackScreen() {
   if (state.mode === 'team_individual') {
     wrap.style.display = 'block';
     const strip = document.getElementById('player-strip');
-    strip.innerHTML = state.roster.map(name =>
-      `<button class="${name === state.currentPlayer ? 'selected' : ''}" onclick="selectPlayer('${escapeAttr(name)}')">${escapeHtml(name)}</button>`
-    ).join('');
+    strip.innerHTML = state.roster.map(p => {
+      const displayName = (p.number ? '#' + escapeHtml(p.number) + ' ' : '') + escapeHtml(p.name);
+      return `<button class="${p.name === state.currentPlayer ? 'selected' : ''}" onclick="selectPlayer('${escapeAttr(p.name)}')">${displayName}</button>`;
+    }).join('');
     document.getElementById('current-player-label').textContent = state.currentPlayer || '-';
   } else {
     wrap.style.display = 'none';
@@ -948,6 +1233,10 @@ function countFor(eventId) {
     (state.mode !== 'team_individual' || e.player === state.currentPlayer)).length;
 }
 
+function generateEventId() {
+  return 'e_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
 function logEvent(eventId) {
   if (state.mode === 'team_individual' && !state.currentPlayer) {
     alert('Select a player first.');
@@ -957,6 +1246,7 @@ function logEvent(eventId) {
   if (state.mode === 'player') player = state.playerName || 'Player';
   if (state.mode === 'team_individual') player = state.currentPlayer;
   const entry = {
+    id: generateEventId(),
     eventId: eventId,
     player: player,
     half: state.currentHalf,
@@ -965,6 +1255,46 @@ function logEvent(eventId) {
   state.events.push(entry);
   save();
   renderTrackScreen();
+}
+
+function currentTrackingPlayerLabel() {
+  if (state.mode === 'player') return state.playerName || 'Player';
+  if (state.mode === 'team_individual') return state.currentPlayer || null;
+  return null;
+}
+
+function openNoteModal() {
+  const player = currentTrackingPlayerLabel();
+  document.getElementById('note-meta').textContent = player
+    ? `Tagged to ${player}, half ${state.currentHalf}`
+    : `General note, half ${state.currentHalf}`;
+  document.getElementById('note-text-input').value = '';
+  document.getElementById('note-overlay').style.display = 'flex';
+  document.getElementById('note-text-input').focus();
+}
+
+function closeNoteModal() {
+  document.getElementById('note-overlay').style.display = 'none';
+}
+
+function saveNote() {
+  const text = document.getElementById('note-text-input').value.trim();
+  if (!text) {
+    alert('Write something before saving, or tap Cancel.');
+    return;
+  }
+  const entry = {
+    id: generateEventId(),
+    eventId: 'note',
+    text: text,
+    player: currentTrackingPlayerLabel(),
+    half: state.currentHalf,
+    ts: Date.now()
+  };
+  state.events.push(entry);
+  save();
+  closeNoteModal();
+  if (document.getElementById('screen-log').classList.contains('active')) renderLogScreen();
 }
 
 function undoLast() {
@@ -985,7 +1315,10 @@ function showScreen(name) {
   if (name === 'past') renderPastScreen();
   if (name === 'setup') {
     document.getElementById('opponent-input').value = state.opponent || '';
+    document.getElementById('team-name-input').value = state.teamName || '';
     document.getElementById('player-name-input').value = state.playerName || '';
+    document.getElementById('player-number-input').value = state.playerNumber || '';
+    document.getElementById('player-position-input').value = state.playerPosition || '';
     document.getElementById('show-clock-toggle').checked = !!state.showClock;
     renderRoster();
     renderEventConfig();
@@ -995,7 +1328,7 @@ function showScreen(name) {
 
 function renderLogScreen() {
   const summary = document.getElementById('log-summary');
-  const total = state.events.length;
+  const total = state.events.filter(e => e.eventId !== 'note').length;
   const goals = state.events.filter(e => e.eventId === 'goal').length;
   const passC = state.events.filter(e => e.eventId === 'pass_c').length;
   summary.innerHTML = `
@@ -1004,6 +1337,31 @@ function renderLogScreen() {
     <div class="stat"><div class="n">${passC}</div><div class="l">Passes completed</div></div>
   `;
 
+  const pctWrap = document.getElementById('log-percentages');
+  const applicablePairs = STAT_PAIRS.filter(p => state.activeEvents.includes(p.a) && state.activeEvents.includes(p.b));
+  if (applicablePairs.length === 0) {
+    pctWrap.innerHTML = '';
+  } else {
+    pctWrap.innerHTML = applicablePairs.map(p => {
+      const countA = state.events.filter(e => e.eventId === p.a).length;
+      const countB = state.events.filter(e => e.eventId === p.b).length;
+      let pct, fraction;
+      if (p.mode === 'ratio') {
+        const denom = countA + countB;
+        pct = denom > 0 ? Math.round((countA / denom) * 100) : null;
+        fraction = `${countA}/${denom}`;
+      } else {
+        pct = countB > 0 ? Math.round((countA / countB) * 100) : null;
+        fraction = `${countA}/${countB}`;
+      }
+      return `<div class="pct-stat">
+        <div class="pct-n">${pct === null ? '-' : pct + '%'}</div>
+        <div class="pct-l">${escapeHtml(p.label)}</div>
+        <div class="pct-f">${fraction}</div>
+      </div>`;
+    }).join('');
+  }
+
   const list = document.getElementById('log-list');
   if (state.events.length === 0) {
     list.innerHTML = '<div class="empty-state">No events logged yet. Head to Track to get started.</div>';
@@ -1011,13 +1369,32 @@ function renderLogScreen() {
   }
   const sorted = [...state.events].reverse();
   list.innerHTML = sorted.map(e => {
-    const ev = MASTER_EVENTS.find(m => m.id === e.eventId);
     const time = new Date(e.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (e.eventId === 'note') {
+      return `<div class="log-entry is-note">
+        <span class="note-text">"${escapeHtml(e.text)}"${e.player ? ' - ' + escapeHtml(e.player) : ''}</span>
+        <span class="log-entry-right">
+          <span class="meta">H${e.half} - ${time}</span>
+          <button class="log-remove-btn" onclick="removeLogEvent('${e.id}')" aria-label="Remove note">&times;</button>
+        </span>
+      </div>`;
+    }
+    const ev = MASTER_EVENTS.find(m => m.id === e.eventId);
     return `<div class="log-entry">
       <span>${ev ? ev.label : e.eventId}${state.mode === 'team_individual' && e.player ? ' - ' + escapeHtml(e.player) : ''}</span>
-      <span class="meta">H${e.half} - ${time}</span>
+      <span class="log-entry-right">
+        <span class="meta">H${e.half} - ${time}</span>
+        <button class="log-remove-btn" onclick="removeLogEvent('${e.id}')" aria-label="Remove event">&times;</button>
+      </span>
     </div>`;
   }).join('');
+}
+
+function removeLogEvent(id) {
+  if (!confirm('Remove this event? This cannot be undone.')) return;
+  state.events = state.events.filter(e => e.id !== id);
+  save();
+  renderLogScreen();
 }
 
 function exportCSV() {
@@ -1029,10 +1406,15 @@ function downloadEventsCSV(events, opponent, dateStr) {
     alert('No events to export.');
     return;
   }
-  let csv = 'timestamp,half,player,event\n';
+  let csv = 'timestamp,half,player,event,note\n';
   events.forEach(e => {
-    const ev = MASTER_EVENTS.find(m => m.id === e.eventId);
-    const row = [new Date(e.ts).toISOString(), e.half, e.player || '', ev ? ev.label : e.eventId];
+    let row;
+    if (e.eventId === 'note') {
+      row = [new Date(e.ts).toISOString(), e.half, e.player || '', 'Note', e.text || ''];
+    } else {
+      const ev = MASTER_EVENTS.find(m => m.id === e.eventId);
+      row = [new Date(e.ts).toISOString(), e.half, e.player || '', ev ? ev.label : e.eventId, ''];
+    }
     csv += row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',') + '\n';
   });
   const blob = new Blob([csv], { type: 'text/csv' });
@@ -1056,9 +1438,12 @@ function finishGame() {
     id: 'g_' + Date.now(),
     date: state.gameDate || new Date().toISOString(),
     opponent: state.opponent || '',
+    teamName: state.teamName || '',
     mode: state.mode,
     playerName: state.playerName,
-    roster: [...state.roster],
+    playerNumber: state.playerNumber || '',
+    playerPosition: state.playerPosition || '',
+    roster: state.roster.map(p => ({ ...p })),
     events: state.events.map(e => ({ ...e }))
   };
   state.pastGames.push(record);
@@ -1098,10 +1483,15 @@ function renderPastScreen() {
   wrap.innerHTML = sorted.map(g => {
     const dateLabel = new Date(g.date).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
     const modeLabel = g.mode === 'player' ? 'Player' : (g.mode === 'team_whole' ? 'Team whole' : 'Team individual');
+    let title;
+    if (g.teamName && g.opponent) title = `${escapeHtml(g.teamName)} vs ${escapeHtml(g.opponent)}`;
+    else if (g.teamName) title = escapeHtml(g.teamName);
+    else if (g.opponent) title = 'vs ' + escapeHtml(g.opponent);
+    else title = 'Untitled game';
     return `<div class="past-card">
       <div class="past-card-top" onclick="togglePastCard('${g.id}')">
         <div>
-          <div class="past-card-title">${g.opponent ? 'vs ' + escapeHtml(g.opponent) : 'Untitled game'}</div>
+          <div class="past-card-title">${title}</div>
           <div class="past-card-sub">${dateLabel} - ${modeLabel}</div>
         </div>
         <div class="past-card-count">${g.events.length} events</div>
@@ -1110,6 +1500,7 @@ function renderPastScreen() {
         ${renderPastGameEvents(g)}
         <div class="past-card-actions">
           <button onclick="exportPastGame('${g.id}')">Export CSV</button>
+          <button onclick="sharePastGameSummary('${g.id}')">Share</button>
           <button class="danger" onclick="deletePastGame('${g.id}')">Delete</button>
         </div>
       </div>
@@ -1121,8 +1512,14 @@ function renderPastGameEvents(g) {
   if (g.events.length === 0) return '<div class="empty-state">No events in this game.</div>';
   const sorted = [...g.events].reverse();
   return sorted.map(e => {
-    const ev = MASTER_EVENTS.find(m => m.id === e.eventId);
     const time = new Date(e.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (e.eventId === 'note') {
+      return `<div class="log-entry is-note">
+        <span class="note-text">"${escapeHtml(e.text)}"${e.player ? ' - ' + escapeHtml(e.player) : ''}</span>
+        <span class="meta">H${e.half} - ${time}</span>
+      </div>`;
+    }
+    const ev = MASTER_EVENTS.find(m => m.id === e.eventId);
     return `<div class="log-entry">
       <span>${ev ? ev.label : e.eventId}${g.mode === 'team_individual' && e.player ? ' - ' + escapeHtml(e.player) : ''}</span>
       <span class="meta">H${e.half} - ${time}</span>
@@ -1146,6 +1543,119 @@ function deletePastGame(id) {
   state.pastGames = state.pastGames.filter(x => x.id !== id);
   save();
   renderPastScreen();
+}
+
+function buildGameSummaryText(events, meta) {
+  const lines = [];
+  const dateLabel = new Date(meta.date || Date.now()).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+  const isTeamMode = meta.mode === 'team_whole' || meta.mode === 'team_individual';
+
+  let title;
+  if (isTeamMode && meta.teamName && meta.opponent) title = `${meta.teamName} vs ${meta.opponent}`;
+  else if (isTeamMode && meta.teamName) title = meta.teamName;
+  else if (meta.mode === 'player' && meta.opponent) title = `${meta.playerName || 'Player'} vs ${meta.opponent}`;
+  else if (meta.mode === 'player') title = meta.playerName || 'Player';
+  else if (meta.opponent) title = 'vs ' + meta.opponent;
+  else title = 'Match summary';
+
+  lines.push(title);
+  lines.push(dateLabel);
+
+  const goalsFor = events.filter(e => e.eventId === 'goal').length;
+  const goalsAgainst = events.filter(e => e.eventId === 'goal_conceded').length;
+  if (goalsFor + goalsAgainst > 0) {
+    lines.push('');
+    lines.push(`Score: ${goalsFor} to ${goalsAgainst}`);
+  }
+
+  const countsById = {};
+  events.forEach(e => { if (e.eventId !== 'note') countsById[e.eventId] = (countsById[e.eventId] || 0) + 1; });
+  const statLines = [];
+  EVENT_CATEGORIES.forEach(cat => {
+    MASTER_EVENTS.filter(m => m.category === cat && countsById[m.id]).forEach(m => {
+      statLines.push(`${m.label}: ${countsById[m.id]}`);
+    });
+  });
+  if (statLines.length) {
+    lines.push('');
+    lines.push('Stats');
+    lines.push(...statLines);
+  }
+
+  const pctLines = [];
+  STAT_PAIRS.forEach(p => {
+    const countA = countsById[p.a] || 0;
+    const countB = countsById[p.b] || 0;
+    if (p.mode === 'ratio') {
+      const denom = countA + countB;
+      if (denom === 0) return;
+      pctLines.push(`${p.label}: ${Math.round((countA / denom) * 100)}% (${countA}/${denom})`);
+    } else {
+      if (countB === 0) return;
+      pctLines.push(`${p.label}: ${Math.round((countA / countB) * 100)}% (${countA}/${countB})`);
+    }
+  });
+  if (pctLines.length) {
+    lines.push('');
+    lines.push('Percentages');
+    lines.push(...pctLines);
+  }
+
+  const notes = events.filter(e => e.eventId === 'note');
+  if (notes.length) {
+    lines.push('');
+    lines.push('Notes');
+    notes.forEach(n => lines.push(`${n.player ? n.player + ': ' : ''}${n.text}`));
+  }
+
+  lines.push('');
+  lines.push('Sent from MatchTap');
+  return lines.join('\n');
+}
+
+async function shareSummaryText(text) {
+  if (navigator.share) {
+    try {
+      await navigator.share({ text: text });
+      return;
+    } catch (e) {
+      if (e && e.name === 'AbortError') return;
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+    alert('Summary copied to clipboard. Paste it wherever you want to send it.');
+  } catch (e) {
+    window.prompt('Copy this summary:', text);
+  }
+}
+
+function shareCurrentGameSummary() {
+  if (state.events.length === 0) {
+    alert('No events logged yet, nothing to share.');
+    return;
+  }
+  const text = buildGameSummaryText(state.events, {
+    mode: state.mode,
+    teamName: state.teamName,
+    opponent: state.opponent,
+    playerName: state.playerName,
+    date: state.gameDate
+  });
+  shareSummaryText(text);
+}
+
+function sharePastGameSummary(id) {
+  const g = state.pastGames.find(x => x.id === id);
+  if (!g) return;
+  const text = buildGameSummaryText(g.events, {
+    mode: g.mode,
+    teamName: g.teamName,
+    opponent: g.opponent,
+    playerName: g.playerName,
+    date: g.date
+  });
+  shareSummaryText(text);
 }
 
 function escapeHtml(s) {
@@ -1201,19 +1711,107 @@ function renderTestPanel() {
   document.body.appendChild(panel);
 }
 
+const TUTORIAL_STEPS = [
+  {
+    title: 'Welcome to MatchTap',
+    body: 'Tap events live during a game and MatchTap builds the stat sheet for you. Quick walkthrough, six steps.'
+  },
+  {
+    title: 'Pick a mode',
+    body: 'Player tracks one kid. Team whole counts your team as a group, fastest option. Team individual has you tap a player, then the event, for full detail.'
+  },
+  {
+    title: 'Opponent and team name',
+    body: 'Fill these in on Setup so your games are labeled clearly, both while tracking and later in Past games.'
+  },
+  {
+    title: 'Choose your events',
+    body: 'Check off whatever you want live on the Track screen, grouped by category. Leave the rest off to keep the buttons simple.'
+  },
+  {
+    title: 'Start the clock',
+    body: 'On the Track screen, tap the clock bar to start the game. Tap it again any time to pause, tap again to resume.'
+  },
+  {
+    title: 'Log, save, and review',
+    body: 'The Log tab totals everything and shows percentages once you track both sides of a stat. Save game to history archives it, Past games is where every saved match lives.'
+  }
+];
+
+let tutorialStep = 0;
+
+function startTutorial() {
+  tutorialStep = 0;
+  renderTutorialStep();
+  document.getElementById('tutorial-overlay').style.display = 'flex';
+}
+
+function renderTutorialStep() {
+  const step = TUTORIAL_STEPS[tutorialStep];
+  document.getElementById('tutorial-title').textContent = step.title;
+  document.getElementById('tutorial-body').textContent = step.body;
+  document.getElementById('tutorial-dots').innerHTML = TUTORIAL_STEPS.map((_, i) =>
+    `<span class="${i === tutorialStep ? 'active' : ''}"></span>`).join('');
+  document.getElementById('tutorial-back-btn').disabled = tutorialStep === 0;
+  document.getElementById('tutorial-next-btn').textContent = tutorialStep === TUTORIAL_STEPS.length - 1 ? 'Done' : 'Next';
+}
+
+function nextTutorialStep() {
+  if (tutorialStep >= TUTORIAL_STEPS.length - 1) {
+    closeTutorial();
+    return;
+  }
+  tutorialStep++;
+  renderTutorialStep();
+}
+
+function prevTutorialStep() {
+  if (tutorialStep === 0) return;
+  tutorialStep--;
+  renderTutorialStep();
+}
+
+function closeTutorial() {
+  document.getElementById('tutorial-overlay').style.display = 'none';
+  try { localStorage.setItem(TUTORIAL_SEEN_KEY, 'true'); } catch (e) {}
+}
+
 document.getElementById('settings-btn').addEventListener('click', () => showScreen('setup'));
 
 load();
 setMode(state.mode);
 document.getElementById('opponent-input').value = state.opponent || '';
+document.getElementById('team-name-input').value = state.teamName || '';
 document.getElementById('player-name-input').value = state.playerName || '';
+document.getElementById('player-number-input').value = state.playerNumber || '';
+document.getElementById('player-position-input').value = state.playerPosition || '';
 document.getElementById('show-clock-toggle').checked = !!state.showClock;
 document.getElementById('version-footer').textContent = APP_VERSION;
 renderRoster();
 renderEventConfig();
 showScreen(state.events.length > 0 || state.playerName || state.roster.length > 0 ? 'track' : 'setup');
 if (SHOW_PANEL) renderTestPanel();
+
+let tutorialAlreadySeen = false;
+try { tutorialAlreadySeen = localStorage.getItem(TUTORIAL_SEEN_KEY) === 'true'; } catch (e) {}
+if (!tutorialAlreadySeen) startTutorial();
 </script>
+
+
+<div class="tutorial-overlay" id="tutorial-overlay" style="display:none;">
+  <div class="tutorial-card">
+    <div class="tutorial-dots" id="tutorial-dots"></div>
+    <h3 id="tutorial-title"></h3>
+    <p id="tutorial-body"></p>
+    <div class="tutorial-actions">
+      <button class="tutorial-skip" onclick="closeTutorial()">Skip</button>
+      <div class="tutorial-nav">
+        <button class="tutorial-back" id="tutorial-back-btn" onclick="prevTutorialStep()">Back</button>
+        <button class="tutorial-next" id="tutorial-next-btn" onclick="nextTutorialStep()">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

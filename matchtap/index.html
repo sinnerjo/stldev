@@ -55,14 +55,6 @@
     font-size: 11px;
     color: var(--chalk-dim);
   }
-  .icon-btn {
-    background: transparent;
-    border: 1px solid var(--pitch-line);
-    color: var(--chalk-dim);
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 13px;
-  }
   main { padding: 12px 12px 0; }
   .screen { display: none; }
   .screen.active { display: block; }
@@ -761,7 +753,6 @@
     <h1>MatchTap</h1>
     <div class="sub" id="header-sub">Set up your game</div>
   </div>
-  <button class="icon-btn" id="settings-btn">Settings</button>
 </header>
 
 <main>
@@ -2309,8 +2300,6 @@ function closeTutorial() {
   document.getElementById('tutorial-overlay').style.display = 'none';
   try { localStorage.setItem(TUTORIAL_SEEN_KEY, 'true'); } catch (e) {}
 }
-
-document.getElementById('settings-btn').addEventListener('click', () => showScreen('setup'));
 
 load();
 setMode(state.mode);

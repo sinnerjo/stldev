@@ -171,6 +171,17 @@
     text-align: center;
     color: var(--chalk-dim);
     font-size: 11px;
+    padding-bottom: 4px;
+  }
+  .version-footer a.feedback-link {
+    color: var(--lime);
+    text-decoration: underline;
+  }
+  .copyright-footer {
+    text-align: center;
+    color: var(--chalk-dim);
+    opacity: 0.5;
+    font-size: 10px;
     padding-bottom: 8px;
   }
   .reset-btn {
@@ -868,7 +879,11 @@
       </details>
     </div>
 
-    <div class="version-footer" id="version-footer"></div>
+    <div class="version-footer">
+      <span id="version-footer-text"></span> &middot;
+      <a class="feedback-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" rel="noopener">Feedback</a>
+    </div>
+    <div class="copyright-footer">&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</div>
   </div>
 
   <div class="screen" id="screen-track">
@@ -2305,7 +2320,7 @@ document.getElementById('player-name-input').value = state.playerName || '';
 document.getElementById('player-number-input').value = state.playerNumber || '';
 document.getElementById('player-position-input').value = state.playerPosition || '';
 document.getElementById('show-clock-toggle').checked = !!state.showClock;
-document.getElementById('version-footer').textContent = APP_VERSION;
+document.getElementById('version-footer-text').textContent = APP_VERSION;
 renderRoster();
 renderEventConfig();
 showScreen(state.events.length > 0 || state.playerName || state.roster.length > 0 ? 'track' : 'setup');

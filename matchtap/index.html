@@ -1269,6 +1269,18 @@ function beginGame() {
   state.clockAccumulatedMs = 0;
   state.clockRunningSince = Date.now();
   state.clockIntervals = [{ start: state.clockRunningSince, end: null }];
+
+  if (state.trackPossession && (state.mode === 'team_whole' || state.mode === 'team_individual') && getCurrentPossessionState() === null) {
+    state.events.push({
+      id: generateEventId(),
+      eventId: 'poss_in',
+      player: null,
+      half: state.currentHalf,
+      ts: state.clockRunningSince,
+      clockMs: 0
+    });
+  }
+
   save();
   renderTrackScreen();
 }

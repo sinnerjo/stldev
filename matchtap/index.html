@@ -340,6 +340,23 @@
     color: var(--chalk-dim);
     font-weight: 400;
   }
+  .poss-btn {
+    border: 1px dashed var(--pitch-line);
+  }
+  .poss-btn .poss-time {
+    display: block;
+    font-size: 11px;
+    color: var(--chalk-dim);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .poss-btn.poss-active {
+    background: var(--lime);
+    color: var(--pitch-dark);
+    border: 1px solid var(--lime);
+    border-style: solid;
+  }
+  .poss-btn.poss-active .poss-time { color: var(--pitch-dark); opacity: 0.75; }
   .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -815,6 +832,15 @@
       <div class="roster-list" id="roster-list"></div>
     </div>
 
+    <div class="setup-block" id="possession-block" style="display:none;">
+      <h2>Possession tracking</h2>
+      <label style="display:flex; align-items:center; gap:10px; padding:8px 10px; background:var(--pitch-dark); border-radius:8px; font-size:14px;">
+        <input type="checkbox" id="track-possession-toggle" style="width:18px; height:18px; accent-color: var(--lime);" onchange="toggleTrackPossession()">
+        Track possession (in / out)
+      </label>
+      <div style="margin-top:8px; color:var(--chalk-dim); font-size:12px;">Adds two linked buttons to the top of Track. Tapping one turns off the other automatically. Time in each state is calculated from the game clock, so it pauses whenever the clock does.</div>
+    </div>
+
     <div class="setup-block">
       <h2>Events to track</h2>
       <div class="event-config" id="event-config"></div>
@@ -847,8 +873,11 @@
         <p class="help-heading">Modes</p>
         <p>Player tracks one kid, no player selection needed, just tap events. Team whole tracks the team as a group with one tap per event, no roster required. Team individual has you tap a player chip first, then the event, giving per player detail at the cost of an extra tap.</p>
 
-        <p class="help-heading">Opponent</p>
-        <p>Type the other team's name in Setup. It shows in the header while tracking and labels the game once it's saved to Past games.</p>
+        <p class="help-heading">Opponent and team name</p>
+        <p>Type these in Setup so games are labeled clearly. Team name only shows for Team whole and Team individual, since Player mode has no team to name. Both appear in the header while tracking, in Past games, and in shared summaries.</p>
+
+        <p class="help-heading">Player and roster details</p>
+        <p>Number and position are optional for both a single tracked player and each roster entry in Team individual mode. Leave them blank if you don't need that level of detail, they're just there to help tell players apart on the Track screen.</p>
 
         <p class="help-heading">Events to track</p>
         <p>Check the boxes for whatever you want live on the Track screen. Everything unchecked stays out of the way, you can turn events on or off any time from Setup.</p>
@@ -856,17 +885,26 @@
         <p class="help-heading">Score</p>
         <p>A scoreboard appears automatically at the top of Track, but only once both Goal and Goal conceded are checked. It counts those two buttons directly, nothing else.</p>
 
+        <p class="help-heading">Possession</p>
+        <p>Available in Team whole and Team individual modes. Turn it on in Setup and two linked buttons appear at the top of Track. Tapping one turns off the other automatically. Time in each state is calculated from the game clock, so it pauses whenever the clock pauses, and totals show up in Log, Past games, and shared summaries as time and percentage.</p>
+
         <p class="help-heading">Game clock</p>
-        <p>The clock bar on Track is also the start button. Tap it once to begin the game. Tap it again any time to pause, tap again to resume, it remembers exactly where it left off. The Show game clock setting only controls whether the running time is visible, the bar still starts and pauses the game either way.</p>
+        <p>The clock bar on Track is also the start button. Tap it once to begin the game. Tap it again any time to pause, tap again to resume, it remembers exactly where it left off. The Show game clock setting only controls whether the running time is visible, the bar still starts and pauses the game either way. While Track is open, the screen is also kept from locking automatically, so it won't dim mid game just from sitting idle.</p>
 
         <p class="help-heading">Tracking events</p>
         <p>In Team individual mode, tap a player chip to select who you're tracking, then tap an event button. Undo last removes the most recent tap if you hit the wrong one. The 1st half and 2nd half buttons just tag new events, they don't affect the clock.</p>
 
+        <p class="help-heading">Notes</p>
+        <p>The Add note button on Track lets you write a short observation tied to the current player and half, useful for anything a tap button can't capture. Notes show up in Log and Past games in quotes, and never count toward event totals or percentages.</p>
+
         <p class="help-heading">Log tab</p>
-        <p>Shows totals and the full event history for the current game, with a CSV export. Save game to history archives everything here into Past games and clears the board so you're ready for the next match.</p>
+        <p>Shows totals and the full event history for the current game. Percentages appear automatically for stats with both a positive and negative side tracked, like pass completed and pass not completed. Tap the &times; next to any entry to remove it. Export CSV, Share summary, and Share via QR all send this game's data out in different formats. Save game to history archives everything here into Past games and clears the board so you're ready for the next match.</p>
+
+        <p class="help-heading">Combining data from another device</p>
+        <p>If two people split tracking duties on the same game, Share via QR on Log or on a Past games card displays a code, or a cycling sequence of codes for larger games, that another device can scan. On the receiving side, Import game data on Setup opens the camera to scan it in. If no game is in progress, the scanned data becomes a new game outright. If a game is already in progress, the modes have to match exactly, and anything that overlaps, like both devices tracking the same event for the same player, prompts you to pick which version to keep rather than combining them.</p>
 
         <p class="help-heading">Past games tab</p>
-        <p>Every saved game lives here. Tap a card to see its full event list, export that single game to CSV, or delete it.</p>
+        <p>Every saved game lives here. Tap a card to see its full event list, export it to CSV, share a text summary, share it as a QR code for another device to import, or delete it.</p>
 
         <p class="help-heading">Reset current game</p>
         <p>Wipes the game in progress, events, score, and clock, without saving anything. Use this for a mis-start, not for ending a real game, that's what Save game to history is for.</p>
@@ -924,6 +962,7 @@
   <div class="screen" id="screen-log">
     <div class="log-summary" id="log-summary"></div>
     <div class="log-percentages" id="log-percentages"></div>
+    <div class="log-percentages" id="log-possession"></div>
     <button class="export-btn" onclick="exportCSV()">Export CSV</button>
     <button class="share-btn" onclick="shareCurrentGameSummary()">Share summary</button>
     <button class="qr-btn" onclick="openExportQr('current')">Share via QR</button>
@@ -995,7 +1034,7 @@
 <script>
 const STORAGE_KEY = 'matchtap_state_v1';
 const TUTORIAL_SEEN_KEY = 'matchtap_tutorial_seen_v1';
-const APP_VERSION = 'v1.0.0';
+const APP_VERSION = 'v1.1.0';
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
 const DEV_MODE = URL_PARAMS.get('devmode') === 'true';
@@ -1054,7 +1093,11 @@ const MASTER_EVENTS = [
   // General
   { id: 'good_decision', label: 'Good decision', type: 'positive', category: 'General' },
   { id: 'poor_decision', label: 'Poor decision', type: 'negative', category: 'General' },
-  { id: 'turnover', label: 'Turnover', type: 'negative', category: 'General' }
+  { id: 'turnover', label: 'Turnover', type: 'negative', category: 'General' },
+
+  // Possession (linked pair, controlled by its own setup toggle, not the general checklist)
+  { id: 'poss_in', label: 'In possession', type: 'positive', category: 'Possession' },
+  { id: 'poss_out', label: 'Out of possession', type: 'negative', category: 'Possession' }
 ];
 
 const EVENT_CATEGORIES = ['Passing', 'Shooting', 'Defending', 'Goalkeeping', 'Discipline', 'Set pieces', 'General'];
@@ -1080,6 +1123,7 @@ let state = {
   playerPosition: '',
   roster: [],
   activeEvents: [...DEFAULT_ACTIVE],
+  trackPossession: false,
   currentPlayer: null,
   currentHalf: 1,
   events: [],
@@ -1124,6 +1168,7 @@ function setMode(m) {
     document.getElementById('mode-' + mode).classList.toggle('selected', m === mode);
   });
   document.getElementById('team-name-block').style.display = (m === 'team_whole' || m === 'team_individual') ? 'block' : 'none';
+  document.getElementById('possession-block').style.display = (m === 'team_whole' || m === 'team_individual') ? 'block' : 'none';
   document.getElementById('player-name-block').style.display = m === 'player' ? 'block' : 'none';
   document.getElementById('roster-block').style.display = m === 'team_individual' ? 'block' : 'none';
   document.getElementById('mode-hint').textContent = MODE_HINTS[m] || '';
@@ -1192,6 +1237,11 @@ function toggleEvent(id) {
 
 function toggleShowClock() {
   state.showClock = document.getElementById('show-clock-toggle').checked;
+  save();
+}
+
+function toggleTrackPossession() {
+  state.trackPossession = document.getElementById('track-possession-toggle').checked;
   save();
 }
 
@@ -1270,8 +1320,11 @@ function renderTrackScreen() {
   }
 
   const grid = document.getElementById('event-grid');
+  const showPossession = state.trackPossession && (state.mode === 'team_whole' || state.mode === 'team_individual');
+  const possState = showPossession ? getCurrentPossessionState() : null;
+  const possHtml = showPossession ? renderPossessionButtonsHtml(possState) : '';
   const active = MASTER_EVENTS.filter(ev => state.activeEvents.includes(ev.id));
-  grid.innerHTML = active.map(ev => {
+  grid.innerHTML = possHtml + active.map(ev => {
     const count = countFor(ev.id);
     return `<button class="event-btn ${ev.type}" onclick="logEvent('${ev.id}')">
       <span class="count">${count}</span>
@@ -1281,6 +1334,22 @@ function renderTrackScreen() {
 
   document.getElementById('half-1').classList.toggle('selected', state.currentHalf === 1);
   document.getElementById('half-2').classList.toggle('selected', state.currentHalf === 2);
+}
+
+function renderPossessionButtonsHtml(possState) {
+  const totals = computePossessionTotals(state.events, state.clockIntervals, Date.now());
+  const totalMs = totals.inMs + totals.outMs;
+  const inPct = totalMs > 0 ? Math.round((totals.inMs / totalMs) * 100) : 0;
+  const outPct = totalMs > 0 ? 100 - inPct : 0;
+  return `
+    <button class="event-btn poss-btn ${possState === 'in' ? 'poss-active' : ''}" onclick="togglePossession('in')">
+      <span class="poss-time" id="poss-in-time">${formatElapsed(totals.inMs)} (${inPct}%)</span>
+      In possession
+    </button>
+    <button class="event-btn poss-btn ${possState === 'out' ? 'poss-active' : ''}" onclick="togglePossession('out')">
+      <span class="poss-time" id="poss-out-time">${formatElapsed(totals.outMs)} (${outPct}%)</span>
+      Out of possession
+    </button>`;
 }
 
 let clockInterval = null;
@@ -1338,25 +1407,40 @@ function updateClockDisplay() {
   const timeEl = document.getElementById('clock-time');
   const hintEl = document.getElementById('clock-hint');
   const wrapEl = document.getElementById('game-clock');
-  if (!timeEl) return;
-  if (!state.gameDate) {
-    timeEl.textContent = 'Start game';
-    if (hintEl) hintEl.textContent = 'tap to begin';
-    if (wrapEl) wrapEl.classList.add('paused');
-    return;
+  if (timeEl) {
+    if (!state.gameDate) {
+      timeEl.textContent = 'Start game';
+      if (hintEl) hintEl.textContent = 'tap to begin';
+      if (wrapEl) wrapEl.classList.add('paused');
+    } else {
+      const running = !!state.clockRunningSince;
+      if (state.showClock) {
+        timeEl.textContent = formatElapsed(elapsedClockMs());
+      } else {
+        timeEl.textContent = running ? 'Game running' : 'Game paused';
+      }
+      if (hintEl) hintEl.textContent = running ? 'tap to pause' : 'paused, tap to resume';
+      if (wrapEl) wrapEl.classList.toggle('paused', !running);
+    }
   }
-  const running = !!state.clockRunningSince;
-  if (state.showClock) {
-    timeEl.textContent = formatElapsed(elapsedClockMs());
-  } else {
-    timeEl.textContent = running ? 'Game running' : 'Game paused';
-  }
-  if (hintEl) hintEl.textContent = running ? 'tap to pause' : 'paused, tap to resume';
-  if (wrapEl) wrapEl.classList.toggle('paused', !running);
+  updatePossessionTimeLabels();
+}
+
+function updatePossessionTimeLabels() {
+  const inEl = document.getElementById('poss-in-time');
+  const outEl = document.getElementById('poss-out-time');
+  if (!inEl || !outEl) return;
+  const totals = computePossessionTotals(state.events, state.clockIntervals, Date.now());
+  const totalMs = totals.inMs + totals.outMs;
+  const inPct = totalMs > 0 ? Math.round((totals.inMs / totalMs) * 100) : 0;
+  const outPct = totalMs > 0 ? 100 - inPct : 0;
+  inEl.textContent = `${formatElapsed(totals.inMs)} (${inPct}%)`;
+  outEl.textContent = `${formatElapsed(totals.outMs)} (${outPct}%)`;
 }
 
 function ensureClockInterval() {
-  if (state.showClock && state.clockRunningSince) {
+  const possessionLive = state.trackPossession && (state.mode === 'team_whole' || state.mode === 'team_individual') && state.clockRunningSince;
+  if ((state.showClock || possessionLive) && state.clockRunningSince) {
     if (!clockInterval) clockInterval = setInterval(updateClockDisplay, 1000);
   } else {
     stopClock();
@@ -1416,6 +1500,54 @@ function generateEventId() {
 
 function currentClockSnapshot() {
   return state.gameDate ? elapsedClockMs() : null;
+}
+
+function getCurrentPossessionState() {
+  for (let i = state.events.length - 1; i >= 0; i--) {
+    const e = state.events[i];
+    if (e.eventId === 'poss_in') return 'in';
+    if (e.eventId === 'poss_out') return 'out';
+  }
+  return null;
+}
+
+function togglePossession(newState) {
+  if (state.mode !== 'team_whole' && state.mode !== 'team_individual') return;
+  if (getCurrentPossessionState() === newState) return;
+  const entry = {
+    id: generateEventId(),
+    eventId: newState === 'in' ? 'poss_in' : 'poss_out',
+    player: null,
+    half: state.currentHalf,
+    ts: Date.now(),
+    clockMs: currentClockSnapshot()
+  };
+  state.events.push(entry);
+  save();
+  renderTrackScreen();
+}
+
+function sumOverlapWithIntervals(segStart, segEnd, intervals) {
+  let total = 0;
+  (intervals || []).forEach(iv => {
+    const ivEnd = iv.end !== null && iv.end !== undefined ? iv.end : segEnd;
+    const start = Math.max(iv.start, segStart);
+    const end = Math.min(ivEnd, segEnd);
+    if (end > start) total += (end - start);
+  });
+  return total;
+}
+
+function computePossessionTotals(events, clockIntervals, endTs) {
+  const possEvents = events.filter(e => e.eventId === 'poss_in' || e.eventId === 'poss_out').slice().sort((a, b) => a.ts - b.ts);
+  let inMs = 0, outMs = 0;
+  for (let i = 0; i < possEvents.length; i++) {
+    const segStart = possEvents[i].ts;
+    const segEnd = (i + 1 < possEvents.length) ? possEvents[i + 1].ts : endTs;
+    const overlap = sumOverlapWithIntervals(segStart, segEnd, clockIntervals);
+    if (possEvents[i].eventId === 'poss_in') inMs += overlap; else outMs += overlap;
+  }
+  return { inMs: inMs, outMs: outMs };
 }
 
 function logEvent(eventId) {
@@ -1503,6 +1635,7 @@ function showScreen(name) {
     document.getElementById('player-number-input').value = state.playerNumber || '';
     document.getElementById('player-position-input').value = state.playerPosition || '';
     document.getElementById('show-clock-toggle').checked = !!state.showClock;
+    document.getElementById('track-possession-toggle').checked = !!state.trackPossession;
     renderRoster();
     renderEventConfig();
     setMode(state.mode);
@@ -1548,6 +1681,28 @@ function renderLogScreen() {
         <div class="pct-f">${fraction}</div>
       </div>`;
     }).join('');
+  }
+
+  const possWrap = document.getElementById('log-possession');
+  const hasPossData = state.events.some(e => e.eventId === 'poss_in' || e.eventId === 'poss_out');
+  if (state.trackPossession && hasPossData) {
+    const totals = computePossessionTotals(state.events, state.clockIntervals, Date.now());
+    const totalMs = totals.inMs + totals.outMs;
+    const inPct = totalMs > 0 ? Math.round((totals.inMs / totalMs) * 100) : 0;
+    const outPct = totalMs > 0 ? 100 - inPct : 0;
+    possWrap.innerHTML = `
+      <div class="pct-stat">
+        <div class="pct-n">${inPct}%</div>
+        <div class="pct-l">In possession</div>
+        <div class="pct-f">${formatElapsed(totals.inMs)}</div>
+      </div>
+      <div class="pct-stat">
+        <div class="pct-n">${outPct}%</div>
+        <div class="pct-l">Out of possession</div>
+        <div class="pct-f">${formatElapsed(totals.outMs)}</div>
+      </div>`;
+  } else {
+    possWrap.innerHTML = '';
   }
 
   const list = document.getElementById('log-list');
@@ -1689,6 +1844,7 @@ function renderPastScreen() {
         <div class="past-card-count">${g.events.length} events</div>
       </div>
       <div class="past-card-detail" id="past-detail-${g.id}">
+        ${renderPastGamePossession(g)}
         ${renderPastGameEvents(g)}
         <div class="past-card-actions">
           <button onclick="exportPastGame('${g.id}')">Export CSV</button>
@@ -1699,6 +1855,28 @@ function renderPastScreen() {
       </div>
     </div>`;
   }).join('');
+}
+
+function renderPastGamePossession(g) {
+  const hasPossData = g.events.some(e => e.eventId === 'poss_in' || e.eventId === 'poss_out');
+  if (!hasPossData) return '';
+  const endTs = g.events.length ? g.events[g.events.length - 1].ts : Date.now();
+  const totals = computePossessionTotals(g.events, g.clockIntervals || [], endTs);
+  const totalMs = totals.inMs + totals.outMs;
+  const inPct = totalMs > 0 ? Math.round((totals.inMs / totalMs) * 100) : 0;
+  const outPct = totalMs > 0 ? 100 - inPct : 0;
+  return `<div class="log-percentages" style="margin-bottom:10px;">
+    <div class="pct-stat">
+      <div class="pct-n">${inPct}%</div>
+      <div class="pct-l">In possession</div>
+      <div class="pct-f">${formatElapsed(totals.inMs)}</div>
+    </div>
+    <div class="pct-stat">
+      <div class="pct-n">${outPct}%</div>
+      <div class="pct-l">Out of possession</div>
+      <div class="pct-f">${formatElapsed(totals.outMs)}</div>
+    </div>
+  </div>`;
 }
 
 function renderPastGameEvents(g) {
@@ -1759,6 +1937,17 @@ function buildGameSummaryText(events, meta) {
   if (goalsFor + goalsAgainst > 0) {
     lines.push('');
     lines.push(`Score: ${goalsFor} to ${goalsAgainst}`);
+  }
+
+  const hasPossData = events.some(e => e.eventId === 'poss_in' || e.eventId === 'poss_out');
+  if (hasPossData) {
+    const endTs = meta.endTs || Date.now();
+    const possTotals = computePossessionTotals(events, meta.clockIntervals || [], endTs);
+    const possTotalMs = possTotals.inMs + possTotals.outMs;
+    const inPct = possTotalMs > 0 ? Math.round((possTotals.inMs / possTotalMs) * 100) : 0;
+    const outPct = possTotalMs > 0 ? 100 - inPct : 0;
+    lines.push('');
+    lines.push(`Possession: ${inPct}% (${formatElapsed(possTotals.inMs)}) to ${outPct}% (${formatElapsed(possTotals.outMs)})`);
   }
 
   const countsById = {};
@@ -1833,7 +2022,9 @@ function shareCurrentGameSummary() {
     teamName: state.teamName,
     opponent: state.opponent,
     playerName: state.playerName,
-    date: state.gameDate
+    date: state.gameDate,
+    clockIntervals: state.clockIntervals,
+    endTs: Date.now()
   });
   shareSummaryText(text);
 }
@@ -1841,12 +2032,15 @@ function shareCurrentGameSummary() {
 function sharePastGameSummary(id) {
   const g = state.pastGames.find(x => x.id === id);
   if (!g) return;
+  const endTs = g.events.length ? g.events[g.events.length - 1].ts : (g.date ? new Date(g.date).getTime() : Date.now());
   const text = buildGameSummaryText(g.events, {
     mode: g.mode,
     teamName: g.teamName,
     opponent: g.opponent,
     playerName: g.playerName,
-    date: g.date
+    date: g.date,
+    clockIntervals: g.clockIntervals || [],
+    endTs: endTs
   });
   shareSummaryText(text);
 }
@@ -2314,6 +2508,7 @@ document.getElementById('player-name-input').value = state.playerName || '';
 document.getElementById('player-number-input').value = state.playerNumber || '';
 document.getElementById('player-position-input').value = state.playerPosition || '';
 document.getElementById('show-clock-toggle').checked = !!state.showClock;
+document.getElementById('track-possession-toggle').checked = !!state.trackPossession;
 document.getElementById('version-footer-text').textContent = APP_VERSION;
 renderRoster();
 renderEventConfig();

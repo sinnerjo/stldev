@@ -352,6 +352,15 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .gsum-score{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:.06em;text-align:center;padding:.65rem 0 .5rem}
 .gsum-section{margin-bottom:.75rem}
 .gsum-section h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gr);margin-bottom:.4rem;padding-bottom:.3rem;border-bottom:1px solid var(--br)}
+.starter-section{margin-bottom:.75rem}
+.starter-header{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gr);padding:.4rem 0 .3rem;border-bottom:1px solid var(--br);cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none}
+.starter-header:hover{color:var(--ac)}
+.starter-header .sh-arrow{font-size:.65rem;transition:transform .2s}
+.starter-header.open .sh-arrow{transform:rotate(180deg)}
+.starter-body{display:none;padding-top:.35rem}
+.starter-body.open{display:block}
+.starter-chip{display:inline-flex;align-items:center;gap:.35rem;padding:.25rem .5rem;border-radius:4px;background:var(--gm);border:1px solid var(--br);margin:.2rem .2rem .2rem 0;font-size:.8rem}
+.starter-chip .sc-num{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--ac)}
 .goal-row{display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:5px;margin-bottom:.25rem}
 .goal-row.us-goal{background:rgba(232,238,255,.06);border:1px solid rgba(232,238,255,.12)}
 .goal-row.them-goal{background:rgba(232,74,74,.06);border:1px solid rgba(232,74,74,.12)}
@@ -496,7 +505,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.30 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.29 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
   <p style="font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:.03em;color:var(--grd);text-align:center;margin-top:.4rem">© 2026 Joseph Warren · STLDev · stldev.com</p>
 </div>
 
@@ -700,14 +709,6 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <span class="hval">Enter a jersey number and name, then tap Add Player. Jersey number is optional. Players are stored per team.</span>
     </div>
     <div class="help-item">
-      <span class="hkey">Setup Guide</span>
-      <span class="hval">First-time users are walked through naming their team and adding players automatically. You can re-run the guide anytime via the Setup guide link at the bottom of the Roster tab.</span>
-    </div>
-    <div class="help-item">
-      <span class="hkey">Feedback</span>
-      <span class="hval">A Feedback link at the bottom of the Roster tab opens a short form to send suggestions or report issues. No account needed.</span>
-    </div>
-    <div class="help-item">
       <span class="hkey">Edit Players</span>
       <span class="hval">Tap ✎ on any player card to edit their name or jersey number.</span>
     </div>
@@ -725,7 +726,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     </div>
     <div class="help-item">
       <span class="hkey">Place Players — Drag</span>
-      <span class="hval">Press and hold a player chip in the Bench panel, then drag onto any position slot on the field or onto a row in the On Field list. You can also drag a player already on the field to a different position — drag them to any empty slot to move, or onto an occupied slot to queue a pending sub.</span>
+      <span class="hval">Press and hold a player chip in the Bench panel, then drag onto any position slot on the field or onto a row in the On Field list. You can also drag a player already on the field to a different position.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Place Players — Tap</span>
@@ -1381,7 +1382,7 @@ function recordOn(rosterId,slotIdx){
   const pos=slotLabel(SLOTS[slotIdx].pos);
   const minute=getMinute();
   if(!currentGame.playerStats[rosterId])currentGame.playerStats[rosterId]=[];
-  currentGame.playerStats[rosterId].push({pos,onMin:minute,offMin:null});
+  currentGame.playerStats[rosterId].push({pos,onMin:minute,offMin:null,half:isSecondHalf?2:1});
   // Snapshot name+num so summary survives roster deletions (use string key for JSON safety)
   if(!currentGame.playerSnapshots) currentGame.playerSnapshots={};
   currentGame.playerSnapshots[String(rosterId)]={name:player.name, num:player.num};
@@ -2219,7 +2220,38 @@ function buildGameCard(g,i){
   }).join('');
 
   // Build player totals — use snapshots so deleted players still appear
+  // Build starters — players with a stint starting at onMin===0, grouped by half
   const snapshots = g.playerSnapshots || {};
+  const h1starters=[], h2starters=[];
+  for(const [idStr,stints] of Object.entries(g.playerStats)){
+    const id=parseInt(idStr);
+    const snap=snapshots[idStr]||snapshots[id];
+    const player=roster.find(p=>p.id===id);
+    const name=snap?.name||player?.name||'Unknown';
+    const num=snap?.num||player?.num||'—';
+    stints.forEach(st=>{
+      if(st.onMin===0){
+        const entry={name,num};
+        if((st.half||1)===1) h1starters.push(entry);
+        else h2starters.push(entry);
+      }
+    });
+  }
+  function starterChips(arr){
+    if(!arr.length) return '<span style="font-size:.78rem;color:var(--grd)">None recorded</span>';
+    return arr.map(p=>`<span class="starter-chip"><span class="sc-num">${p.num!=='—'?'#'+p.num:'—'}</span>${esc(p.name)}</span>`).join('');
+  }
+  const starterHtml=`
+    <div class="starter-section">
+      <div class="starter-header" onclick="toggleStarters(this)">1st Half Starters <span class="sh-arrow">▼</span></div>
+      <div class="starter-body">${starterChips(h1starters)}</div>
+    </div>
+    ${h2starters.length?`
+    <div class="starter-section">
+      <div class="starter-header" onclick="toggleStarters(this)">2nd Half Starters <span class="sh-arrow">▼</span></div>
+      <div class="starter-body">${starterChips(h2starters)}</div>
+    </div>`:''}`;
+
   const playerTotals={};
   for(const [idStr,stints] of Object.entries(g.playerStats)){
     const id=parseInt(idStr);
@@ -2281,12 +2313,18 @@ function buildGameCard(g,i){
         <span style="color:var(--wh)">${them}</span>
       </div>
       ${ggoals.length?`<div class="gsum-section"><h4>Goals</h4>${goalRows}</div>`:'<div style="font-size:.8rem;color:var(--grd);text-align:center;padding:.25rem 0 .75rem">No goals recorded</div>'}
+      ${starterHtml}
       ${playerRows.length?`<div class="gsum-section"><h4>Players</h4>${playerHtml}</div>`:''}
       <div class="gitem-actions">
         <button class="btn btn-ol btn-sm" style="flex:1" onclick="event.stopPropagation();deleteGame(${i})">Delete Game</button>
       </div>
     </div>
   </div>`;
+}
+
+function toggleStarters(header){
+  header.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
 }
 
 function toggleGameCard(i){
@@ -2778,10 +2816,10 @@ function runAllTests(){
   tlog('Done. See summary below.','info');
 }
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.30</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.29</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.30 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.29 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

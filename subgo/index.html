@@ -2220,22 +2220,25 @@ function buildGameCard(g,i){
   }).join('');
 
   // Build player totals — use snapshots so deleted players still appear
-  // Build starters — players with a stint starting at onMin===0, grouped by half
+  // Build starters — first stint per player per half where onMin===0, deduped
   const snapshots = g.playerSnapshots || {};
+  const h1seen=new Set(), h2seen=new Set();
   const h1starters=[], h2starters=[];
+  // Sort all stints across all players to process in order
+  const allStints=[];
   for(const [idStr,stints] of Object.entries(g.playerStats)){
-    const id=parseInt(idStr);
-    const snap=snapshots[idStr]||snapshots[id];
-    const player=roster.find(p=>p.id===id);
+    stints.forEach(st=>allStints.push({idStr,st}));
+  }
+  allStints.sort((a,b)=>(a.st.onMin||0)-(b.st.onMin||0));
+  for(const {idStr,st} of allStints){
+    if(st.onMin!==0) continue;
+    const snap=snapshots[idStr]||snapshots[parseInt(idStr)];
+    const player=roster.find(p=>p.id===parseInt(idStr));
     const name=snap?.name||player?.name||'Unknown';
     const num=snap?.num||player?.num||'—';
-    stints.forEach(st=>{
-      if(st.onMin===0){
-        const entry={name,num};
-        if((st.half||1)===1) h1starters.push(entry);
-        else h2starters.push(entry);
-      }
-    });
+    const half=st.half||1;
+    if(half===1&&!h1seen.has(idStr)){h1seen.add(idStr);h1starters.push({name,num});}
+    if(half===2&&!h2seen.has(idStr)){h2seen.add(idStr);h2starters.push({name,num});}
   }
   function starterChips(arr){
     if(!arr.length) return '<span style="font-size:.78rem;color:var(--grd)">None recorded</span>';

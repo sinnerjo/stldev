@@ -1144,12 +1144,32 @@ const POS_COLORS = {
   ST:'#b01818',ST2:'#b01818'
 };
 
+function snapshotField(){
+  return fieldSlots.map((rid,i)=>{
+    if(!rid) return null;
+    const snap=currentGame?.playerSnapshots?.[String(rid)];
+    const player=roster.find(p=>p.id===rid);
+    const name=snap?.name||player?.name||'Unknown';
+    const num=snap?.num||player?.num||'—';
+    const pos=slotLabel(SLOTS[i].pos);
+    return {id:rid,name,num,pos};
+  }).filter(Boolean);
+}
+
 function toggleTimer(){
   timerRunning=!timerRunning;
   const btn=document.getElementById('timerBtn'),clk=document.getElementById('clock');
   const devMode=new URLSearchParams(window.location.search).get('devmode')==='true';
   const tick=devMode?30:1;
-  if(timerRunning){btn.textContent='Pause';clk.classList.add('run');timerInterval=setInterval(()=>{timerSec+=tick;updateClock();if(document.getElementById('view-game').classList.contains('active'))renderBenchPanel();},1000);}
+  if(timerRunning){
+    btn.textContent='Pause';clk.classList.add('run');
+    // Capture 1st half starters the very first time the clock starts
+    if(currentGame&&!currentGame.h1starters){
+      currentGame.h1starters=snapshotField();
+      saveData();
+    }
+    timerInterval=setInterval(()=>{timerSec+=tick;updateClock();if(document.getElementById('view-game').classList.contains('active'))renderBenchPanel();},1000);
+  }
   else{btn.textContent='Resume';clk.classList.remove('run');clearInterval(timerInterval);}
 }
 function resetTimer(){
@@ -1190,6 +1210,9 @@ function halftime(){
       stats.push({pos:last.pos, onMin:0, offMin:null});
     }
   });
+
+  // Capture 2nd half starters — whoever is on the field at halftime
+  currentGame.h2starters=snapshotField();
 
   // Reset clock and bench timers for 2nd half
   timerSec=0;
@@ -1382,7 +1405,7 @@ function recordOn(rosterId,slotIdx){
   const pos=slotLabel(SLOTS[slotIdx].pos);
   const minute=getMinute();
   if(!currentGame.playerStats[rosterId])currentGame.playerStats[rosterId]=[];
-  currentGame.playerStats[rosterId].push({pos,onMin:minute,offMin:null,half:isSecondHalf?2:1});
+  currentGame.playerStats[rosterId].push({pos,onMin:minute,offMin:null});
   // Snapshot name+num so summary survives roster deletions (use string key for JSON safety)
   if(!currentGame.playerSnapshots) currentGame.playerSnapshots={};
   currentGame.playerSnapshots[String(rosterId)]={name:player.name, num:player.num};
@@ -2219,25 +2242,10 @@ function buildGameCard(g,i){
     </div>`;
   }).join('');
 
-  // Build starters — first stint per player per half where onMin===0, deduped
+  // Starters — read directly from stored snapshots
   const snapshots = g.playerSnapshots || {};
-  const h1seen=new Set(), h2seen=new Set();
-  const h1starters=[], h2starters=[];
-  const allStints=[];
-  for(const [idStr,stints] of Object.entries(g.playerStats)){
-    stints.forEach(st=>allStints.push({idStr,st}));
-  }
-  allStints.sort((a,b)=>(a.st.onMin||0)-(b.st.onMin||0));
-  for(const {idStr,st} of allStints){
-    if(st.onMin!==0) continue;
-    const snap=snapshots[idStr]||snapshots[parseInt(idStr)];
-    const player=roster.find(p=>p.id===parseInt(idStr));
-    const name=snap?.name||player?.name||'Unknown';
-    const num=snap?.num||player?.num||'—';
-    const half=st.half||1;
-    if(half===1&&!h1seen.has(idStr)){h1seen.add(idStr);h1starters.push({name,num});}
-    if(half===2&&!h2seen.has(idStr)){h2seen.add(idStr);h2starters.push({name,num});}
-  }
+  const h1starters=g.h1starters||[];
+  const h2starters=g.h2starters||[];
   function starterChips(arr){
     if(!arr.length) return '<span style="font-size:.78rem;color:var(--grd)">None recorded</span>';
     return arr.map(p=>`<span class="starter-chip"><span class="sc-num">${p.num!=='—'?'#'+p.num:'—'}</span>${esc(p.name)}</span>`).join('');

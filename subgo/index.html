@@ -239,6 +239,8 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   .bench-col > .pending-box{flex:none;width:100%}
   .panel-toggle{display:none}
   .bench-col.hidden-panel{display:flex}
+  .bench-chips{max-height:none}
+  .onfield-list{max-height:none}
   #view-game.active{display:flex;flex-direction:column;align-items:center}
   #view-game .game-top{width:100%}
   .game-wrap{width:100%}
@@ -316,8 +318,8 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .unavail-chip .cname{font-size:.85rem;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--gr)}
 .unavail-drop-hint{font-size:.72rem;color:var(--grd);padding:.25rem 0;text-align:center;border:1px dashed #3a1a1a;border-radius:5px;padding:.4rem}
 .unavail-drop-hint.drag-over{border-color:#c05050;background:rgba(192,80,80,.08)}
-.bench-chips{display:flex;flex-direction:column;gap:.3rem;max-height:200px;overflow-y:auto}
-.bchip{display:flex;align-items:center;gap:.45rem;padding:.5rem .6rem;border-radius:6px;cursor:grab;border:1px solid var(--br);background:var(--gm);min-height:44px;transition:opacity .15s,border-color .15s;touch-action:none;user-select:none}
+.bench-chips{display:flex;flex-direction:column;gap:.3rem;max-height:240px;overflow-y:auto}
+.bchip{display:flex;align-items:center;gap:.45rem;padding:.5rem .6rem;border-radius:6px;cursor:grab;border:1px solid var(--br);background:var(--gm);min-height:44px;transition:opacity .15s,border-color .15s;touch-action:pan-y;user-select:none}
 .bchip.dragging{touch-action:none}
 .bchip:active{cursor:grabbing}
 .bchip.bchip-selected{border-color:var(--ac);background:#00003a;box-shadow:0 0 0 2px var(--ac);animation:none}
@@ -329,7 +331,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .tag-pending{font-family:'DM Mono',monospace;font-size:.62rem;padding:1px 4px;border-radius:3px;background:#0d0d30;color:var(--pending);margin-left:3px;vertical-align:middle}
 
 /* ON-FIELD LIST */
-.onfield-list{display:flex;flex-direction:column;gap:.3rem;max-height:200px;overflow-y:auto}
+.onfield-list{display:flex;flex-direction:column;gap:.3rem;max-height:240px;overflow-y:auto}
 .onfield-item{display:flex;align-items:center;gap:.45rem;padding:.4rem .6rem;border-radius:5px;border:1px solid transparent;min-height:38px}
 .onfield-item.has-sub-out{border-color:var(--pending-dim);background:#0a0a2a}
 .onfield-item.onfield-alert{border-color:var(--pending);background:#1a0e00;animation:alert-pulse 1s ease-in-out infinite}
@@ -510,7 +512,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.37 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.38 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
   <p style="font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:.03em;color:var(--grd);text-align:center;margin-top:.4rem">© 2026 Joseph Warren · STLDev · stldev.com</p>
 </div>
 
@@ -2979,10 +2981,10 @@ function runAllTests(){
   tlog('Done. See summary below.','info');
 }
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.37</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.38</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.37 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.38 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

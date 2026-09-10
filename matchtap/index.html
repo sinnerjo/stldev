@@ -222,15 +222,28 @@
   .scoreboard {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 14px;
     background: var(--card);
     border: 1px solid var(--pitch-line);
     border-radius: 10px;
     padding: 10px 14px;
     margin-bottom: 10px;
   }
-  .scoreboard .score-opp { font-size: 13px; color: var(--chalk-dim); font-weight: 600; }
-  .scoreboard .score-value { font-size: 20px; font-weight: 700; color: var(--lime); letter-spacing: 1px; }
+  .score-side {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    padding: 6px;
+  }
+  .score-side:active { transform: scale(0.96); }
+  .scoreboard .score-label { font-size: 12px; color: var(--chalk-dim); font-weight: 600; }
+  .scoreboard .score-num { font-size: 24px; font-weight: 700; color: var(--lime); letter-spacing: 1px; }
+  .score-sep { color: var(--chalk-dim); font-size: 18px; font-weight: 700; }
   .game-clock {
     text-align: center;
     font-size: 22px;
@@ -458,6 +471,17 @@
     font-size: 14px;
     font-weight: 700;
     margin: 0 0 14px;
+  }
+  .end-game-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--pitch-dark);
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
   }
   .share-btn {
     width: 100%;
@@ -852,6 +876,10 @@
         <input type="checkbox" id="show-clock-toggle" style="width:18px; height:18px; accent-color: var(--lime);" onchange="toggleShowClock()">
         Show game clock
       </label>
+      <label style="display:flex; align-items:center; gap:10px; padding:8px 10px; background:var(--pitch-dark); border-radius:8px; font-size:14px; margin-top:6px;">
+        <input type="checkbox" id="track-score-toggle" style="width:18px; height:18px; accent-color: var(--lime);" onchange="toggleTrackScore()">
+        Track score
+      </label>
     </div>
 
     <div class="setup-block">
@@ -883,7 +911,7 @@
         <p>Check the boxes for whatever you want live on the Track screen. Everything unchecked stays out of the way, you can turn events on or off any time from Setup.</p>
 
         <p class="help-heading">Score</p>
-        <p>A scoreboard appears automatically at the top of Track, but only once both Goal and Goal conceded are checked. It counts those two buttons directly, nothing else.</p>
+        <p>Track score is on by default and works in every mode, no matter which events you've checked in Setup. Tap either side of the scoreboard on Track to add a goal for you or the opponent. If Goal and Goal conceded also happen to be checked as regular buttons, they add to the exact same score, there's no separate count to keep in sync.</p>
 
         <p class="help-heading">Possession</p>
         <p>Available in Team whole and Team individual modes. Turn it on in Setup and two linked buttons appear at the top of Track. Tapping one turns off the other automatically. Time in each state is calculated from the game clock, so it pauses whenever the clock pauses, and totals show up in Log, Past games, and shared summaries as time and percentage.</p>
@@ -898,7 +926,7 @@
         <p>The Add note button on Track lets you write a short observation tied to the current player and half, useful for anything a tap button can't capture. Notes show up in Log and Past games in quotes, and never count toward event totals or percentages.</p>
 
         <p class="help-heading">Log tab</p>
-        <p>Shows totals and the full event history for the current game. Percentages appear automatically for stats with both a positive and negative side tracked, like pass completed and pass not completed. Tap the &times; next to any entry to remove it. Export CSV, Share summary, and Share via QR all send this game's data out in different formats. Save game to history archives everything here into Past games and clears the board so you're ready for the next match.</p>
+        <p>Shows totals and the full event history for the current game. Percentages appear automatically for stats with both a positive and negative side tracked, like pass completed and pass not completed. Tap the &times; next to any entry to remove it. Export CSV, Share summary, and Share via QR all send this game's data out in different formats. Save game to history archives everything here into Past games and clears the board so you're ready for the next match. An End game button on Track does the same thing, so you don't have to switch tabs to wrap up.</p>
 
         <p class="help-heading">Combining data from another device</p>
         <p>If two people split tracking duties on the same game, Share via QR on Log or on a Past games card displays a code, or a cycling sequence of codes for larger games, that another device can scan. On the receiving side, Import game data on Setup opens the camera to scan it in. If no game is in progress, the scanned data becomes a new game outright. If a game is already in progress, the modes have to match exactly, and anything that overlaps, like both devices tracking the same event for the same player, prompts you to pick which version to keep rather than combining them.</p>
@@ -922,8 +950,15 @@
 
   <div class="screen" id="screen-track">
     <div class="scoreboard" id="scoreboard" style="display:none;">
-      <span class="score-opp" id="score-opp-label">Opponent</span>
-      <span class="score-value"><span id="score-us">0</span> - <span id="score-them">0</span></span>
+      <button class="score-side" onclick="tapScore('us')">
+        <span class="score-label" id="score-us-label">You</span>
+        <span class="score-num" id="score-us">0</span>
+      </button>
+      <span class="score-sep">-</span>
+      <button class="score-side" onclick="tapScore('opp')">
+        <span class="score-num" id="score-them">0</span>
+        <span class="score-label" id="score-opp-label">Opponent</span>
+      </button>
     </div>
     <div class="game-clock" id="game-clock" onclick="toggleClock()">
       <span id="clock-time">Start game</span>
@@ -936,6 +971,8 @@
       </div>
       <button class="undo-btn" onclick="undoLast()">Undo last</button>
     </div>
+
+    <button class="end-game-btn" id="end-game-btn" onclick="finishGame()" style="display:none;">End game</button>
 
     <div id="player-strip-wrap" style="display:none;">
       <div class="player-strip" id="player-strip"></div>
@@ -1130,6 +1167,7 @@ let state = {
   gameDate: null,
   pastGames: [],
   showClock: true,
+  trackScore: true,
   clockAccumulatedMs: 0,
   clockRunningSince: null,
   clockIntervals: []
@@ -1240,6 +1278,12 @@ function toggleShowClock() {
   save();
 }
 
+function toggleTrackScore() {
+  state.trackScore = document.getElementById('track-score-toggle').checked;
+  save();
+  if (document.getElementById('screen-track').classList.contains('active')) renderTrackScreen();
+}
+
 function toggleTrackPossession() {
   state.trackPossession = document.getElementById('track-possession-toggle').checked;
   save();
@@ -1302,14 +1346,17 @@ function renderTrackScreen() {
   }
   document.getElementById('header-sub').textContent = headerText;
 
+  document.getElementById('end-game-btn').style.display = state.gameDate ? 'block' : 'none';
+
   const scoreboard = document.getElementById('scoreboard');
-  const hasScoring = state.activeEvents.includes('goal') && state.activeEvents.includes('goal_conceded');
-  if (hasScoring) {
+  if (state.trackScore) {
     scoreboard.style.display = 'flex';
     const us = state.events.filter(e => e.eventId === 'goal').length;
     const them = state.events.filter(e => e.eventId === 'goal_conceded').length;
     document.getElementById('score-us').textContent = us;
     document.getElementById('score-them').textContent = them;
+    const usLabel = isTeamMode ? (state.teamName || 'You') : (state.playerName || 'You');
+    document.getElementById('score-us-label').textContent = usLabel;
     document.getElementById('score-opp-label').textContent = state.opponent || 'Opponent';
   } else {
     scoreboard.style.display = 'none';
@@ -1583,6 +1630,10 @@ function logEvent(eventId) {
   renderTrackScreen();
 }
 
+function tapScore(side) {
+  logEvent(side === 'us' ? 'goal' : 'goal_conceded');
+}
+
 function currentTrackingPlayerLabel() {
   if (state.mode === 'player') return state.playerName || 'Player';
   if (state.mode === 'team_individual') return state.currentPlayer || null;
@@ -1647,6 +1698,7 @@ function showScreen(name) {
     document.getElementById('player-number-input').value = state.playerNumber || '';
     document.getElementById('player-position-input').value = state.playerPosition || '';
     document.getElementById('show-clock-toggle').checked = !!state.showClock;
+    document.getElementById('track-score-toggle').checked = !!state.trackScore;
     document.getElementById('track-possession-toggle').checked = !!state.trackPossession;
     renderRoster();
     renderEventConfig();
@@ -2520,6 +2572,7 @@ document.getElementById('player-name-input').value = state.playerName || '';
 document.getElementById('player-number-input').value = state.playerNumber || '';
 document.getElementById('player-position-input').value = state.playerPosition || '';
 document.getElementById('show-clock-toggle').checked = !!state.showClock;
+document.getElementById('track-score-toggle').checked = !!state.trackScore;
 document.getElementById('track-possession-toggle').checked = !!state.trackPossession;
 document.getElementById('version-footer-text').textContent = APP_VERSION;
 renderRoster();

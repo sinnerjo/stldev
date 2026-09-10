@@ -311,6 +311,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .alert-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--pending);color:#1a0a00;border-radius:10px;font-family:'DM Mono',monospace;font-size:.6rem;font-weight:700;padding:1px 5px;margin-left:3px;vertical-align:middle;animation:pulse-ring 1s ease-in-out infinite}
 @keyframes alert-pulse{0%,100%{box-shadow:0 0 0 0 rgba(240,160,48,.6)}50%{box-shadow:0 0 0 4px rgba(240,160,48,0)}}
 .unavail-box{background:#1a0a0a;border:1px solid #5a1a1a;border-radius:8px;padding:.65rem}
+.unavail-box.drag-over{border-color:#c05050;background:rgba(192,80,80,.08)}
 .unavail-box h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#c05050;margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between}
 .unavail-list{display:flex;flex-direction:column;gap:.3rem;min-height:36px}
 .unavail-chip{display:flex;align-items:center;gap:.45rem;padding:.45rem .6rem;border-radius:6px;border:1px solid #5a1a1a;background:#2a0a0a;min-height:40px;opacity:.7}
@@ -512,7 +513,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.40 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.41 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
   <p style="font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:.03em;color:var(--grd);text-align:center;margin-top:.4rem">© 2026 Joseph Warren · STLDev · stldev.com</p>
 </div>
 
@@ -2062,12 +2063,19 @@ function moveDragGhost(clientX,clientY){
       c.setAttribute('stroke','rgba(255,255,255,0.35)');c.setAttribute('stroke-width','1.5');c.setAttribute('fill','rgba(255,255,255,0.08)');
     }
   });
-  // Highlight any On Field panel row currently under the pointer
+  // Highlight On Field panel rows under pointer
   document.querySelectorAll('.onfield-item[data-slot]').forEach(row=>{
     const r=row.getBoundingClientRect();
     const over=clientX>=r.left&&clientX<=r.right&&clientY>=r.top&&clientY<=r.bottom;
     row.classList.toggle('drop-target-hover',over);
   });
+  // Highlight unavailBox when dragging over it
+  const unavailBox=document.getElementById('unavailBox');
+  if(unavailBox&&drag&&drag.fromSlot===undefined){
+    const r=unavailBox.getBoundingClientRect();
+    const over=clientX>=r.left&&clientX<=r.right&&clientY>=r.top&&clientY<=r.bottom;
+    unavailBox.classList.toggle('drag-over',over);
+  }
 }
 
 function endDrag(clientX,clientY){
@@ -2076,9 +2084,9 @@ function endDrag(clientX,clientY){
 
   // Check if dropped over unavailable zone (bench drags only)
   if(!isFieldDrag){
-    const hint=document.getElementById('unavailHint');
-    if(hint){
-      const r=hint.getBoundingClientRect();
+    const unavailBox=document.getElementById('unavailBox');
+    if(unavailBox){
+      const r=unavailBox.getBoundingClientRect();
       if(clientX>=r.left&&clientX<=r.right&&clientY>=r.top&&clientY<=r.bottom){
         markUnavailable(drag.rosterId);
         document.getElementById('dragGhost').style.display='none';
@@ -2110,6 +2118,7 @@ function endDrag(clientX,clientY){
   document.querySelectorAll('#slotLayer circle').forEach(c=>{
     c.setAttribute('stroke','rgba(255,255,255,0.35)');c.setAttribute('stroke-width','1.5');c.setAttribute('fill','rgba(255,255,255,0.08)');
   });
+  document.getElementById('unavailBox')?.classList.remove('drag-over');
   document.querySelectorAll('.onfield-item[data-slot]').forEach(r=>r.classList.remove('drop-target-hover'));
 
   if(slot!==null){
@@ -2995,10 +3004,10 @@ function runAllTests(){
   tlog('Done. See summary below.','info');
 }
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.40</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.41</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.40 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.41 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

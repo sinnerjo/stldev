@@ -1,10 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>FlappyBall</title>
-  <!-- Google Analytics -->
+<title>FlappyBall | Free Soccer Arcade Game to Play in Your Browser</title>
+
+<!-- SEO -->
+<meta name="description" content="Free soccer arcade game. Tap to dribble through the defenders without getting tackled, pick Easy, Normal, or Hard, and beat your best score.">
+<link rel="canonical" href="https://stldev.com/flappyball/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Joseph Warren">
+<meta name="theme-color" content="#1a1a2e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232d7a3a'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23ffffff' stroke='%23222222' stroke-width='2'/%3E%3Ccircle cx='27' cy='27' r='5' fill='%23222222'/%3E%3Ccircle cx='38' cy='34' r='4' fill='%23222222'/%3E%3Ccircle cx='30' cy='40' r='3' fill='%23222222'/%3E%3C/svg%3E">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="STL Soccer Dev Lab">
+<meta property="og:title" content="FlappyBall | Free Soccer Arcade Game">
+<meta property="og:description" content="Tap to dribble through the defenders without getting tackled. Pick your difficulty and beat your best score. Free to play in your browser.">
+<meta property="og:url" content="https://stldev.com/flappyball/">
+<meta property="og:locale" content="en_US">
+<!-- When you have a 1200x630 share image, upload it and uncomment these lines:
+<meta property="og:image" content="https://stldev.com/flappyball/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://stldev.com/flappyball/og-image.png">
+-->
+
+<!-- Twitter / X (switch to summary_large_image once an image exists) -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FlappyBall | Free Soccer Arcade Game">
+<meta name="twitter:description" content="Tap to dribble through the defenders without getting tackled. Free to play in your browser.">
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "VideoGame",
+      "@id": "https://stldev.com/flappyball/#game",
+      "name": "FlappyBall",
+      "url": "https://stldev.com/flappyball/",
+      "description": "A soccer themed arcade game. Tap, click, or press space to dribble through the defenders without getting tackled. Choose Easy, Normal, or Hard and beat your best score.",
+      "genre": "Arcade",
+      "gamePlatform": "Web browser",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "Web",
+      "playMode": "SinglePlayer",
+      "inLanguage": "en",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "STL Soccer Dev Lab", "item": "https://stldev.com/" },
+        { "@type": "ListItem", "position": 2, "name": "FlappyBall", "item": "https://stldev.com/flappyball/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -51,6 +114,12 @@ html, body {
   font-family: system-ui, sans-serif;
 }
 #fs-btn:hover { background: #ffffff30; color: #fff; }
+
+/* Text for search engines and screen readers (the game itself is a canvas) */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
 
 canvas {
   border-radius: 12px;
@@ -100,6 +169,8 @@ canvas {
 </style>
 </head>
 <body>
+<h1 class="sr-only">FlappyBall: Free Soccer Arcade Game</h1>
+<p class="sr-only">Tap, click, or press the spacebar to dribble a soccer ball through the defenders without getting tackled. Choose Easy, Normal, or Hard difficulty and try to beat your best score. A free browser game from STL Soccer Dev Lab in St. Louis.</p>
 <div id="wrap">
   <div id="hud">
     <span id="score-display">Score: 0</span>

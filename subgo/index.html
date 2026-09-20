@@ -397,7 +397,26 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
 .mbar-f{height:100%;background:var(--ac);border-radius:3px}
 .empty{color:var(--grd);font-size:.9rem;text-align:center;padding:2rem 1rem}
 
-/* ONBOARDING */
+/* LINEUPS */
+.lineup-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,20,.92);align-items:flex-end;justify-content:center}
+.lineup-overlay.active{display:flex}
+.lineup-sheet{background:#00002e;border:2px solid var(--ac);border-bottom:none;border-radius:14px 14px 0 0;padding:1.25rem;padding-bottom:calc(1.25rem + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;display:flex;flex-direction:column;gap:.75rem;max-height:85vh;overflow-y:auto}
+.lineup-sheet h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ac);text-align:center}
+.lineup-list{display:flex;flex-direction:column;gap:.4rem}
+.lineup-item{background:var(--gm);border:1px solid var(--br);border-radius:8px;padding:.65rem .85rem;display:flex;flex-direction:column;gap:.35rem}
+.lineup-item-header{display:flex;align-items:center;gap:.5rem}
+.lineup-item-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.04em;color:var(--ac);flex:1}
+.lineup-item-actions{display:flex;gap:.35rem}
+.lineup-positions{display:flex;flex-wrap:wrap;gap:.2rem}
+.lineup-pos-chip{font-family:'DM Mono',monospace;font-size:.62rem;padding:2px 6px;border-radius:3px;background:var(--gd);border:1px solid var(--br);color:var(--gr)}
+.lineup-save-form{display:flex;gap:.5rem}
+.lineup-save-form input{flex:1;background:var(--gd);border:1px solid var(--br);color:var(--wh);padding:.6rem .75rem;border-radius:6px;font-family:'Barlow',sans-serif;font-size:1rem;min-height:44px}
+.lineup-save-form input::placeholder{color:var(--grd)}
+.lineup-save-form input:focus{outline:1px solid var(--ac)}
+@media(min-width:600px){
+  .lineup-overlay{align-items:center}
+  .lineup-sheet{border-radius:12px;border-bottom:2px solid var(--ac);padding-bottom:1.25rem}
+}
 .onboard-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,20,.96);align-items:flex-end;justify-content:center}
 .onboard-overlay.active{display:flex}
 .onboard-sheet{background:#00002e;border:2px solid var(--ac);border-bottom:none;border-radius:14px 14px 0 0;padding:1.5rem 1.5rem calc(1.5rem + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;display:flex;flex-direction:column;gap:1rem}
@@ -515,7 +534,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.43 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.44 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
   <p style="font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:.03em;color:var(--grd);text-align:center;margin-top:.4rem">© 2026 Joseph Warren · STLDev · stldev.com</p>
 </div>
 
@@ -525,6 +544,9 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
     <div class="game-setup">
       <input type="text" id="gameOpponent" placeholder="Opponent name">
       <button class="btn btn-ac" onclick="newGame()">New Game</button>
+    </div>
+    <div style="padding:.35rem 0 .1rem">
+      <button class="btn btn-ol" style="width:100%;font-size:.82rem;min-height:38px" onclick="openLineupOverlay()">📋 Saved Lineups</button>
     </div>
     <div class="game-lbl" id="gameLabel" style="display:none"><span id="gameLabelText"></span><button id="renameOppBtn" onclick="renameOpponent()" style="display:none;background:none;border:none;color:var(--grd);cursor:pointer;font-size:.8rem;padding:0 .25rem;vertical-align:middle" title="Rename opponent">✎</button></div>
   </div>
@@ -755,8 +777,12 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <span class="hval">Tap <span class="help-badge">Start</span> in the top right to run the clock. Tap <span class="help-badge">HT</span> at halftime — the clock resets to 0:00 but all player minutes carry forward into the second half. If you forgot to start the clock on time, tap the clock display while paused to reveal <span class="help-badge">−30s</span> and <span class="help-badge">+30s</span> nudge buttons to adjust the time. Tap the clock again to hide them. The clock uses real wall time — if you briefly switch apps or receive a call, it catches up automatically when you return.</span>
     </div>
     <div class="help-item">
+      <span class="hkey">Saved Lineups</span>
+      <span class="hval">Tap <span class="help-badge">📋 Saved Lineups</span> below the New Game button to open the lineup manager. Set up players on the field, then type a name and tap Save Current to store the lineup. Load a saved lineup at any time to restore it — players not on the roster are skipped automatically. Lineups are saved per team.</span>
+    </div>
+    <div class="help-item">
       <span class="hkey">Halftime / End Game</span>
-      <span class="hval">Tap <span class="help-badge">HT</span> to start halftime. The button changes to <span class="help-badge">End</span> for the second half — tap it to close all player stints and stop the clock.</span>
+      <span class="hval">Tap <span class="help-badge">HT</span> to start halftime. The button changes to <span class="help-badge">End</span> for the second half — tap it to close all player stints and stop the clock. After halftime you will be offered the option to restore the 1st half starting lineup for the 2nd half.</span>
     </div>
     <div class="help-item">
       <span class="hkey">Unavailable</span>
@@ -853,6 +879,19 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
 </div>
 
+</div>
+
+<!-- LINEUP OVERLAY -->
+<div class="lineup-overlay" id="lineupOverlay">
+  <div class="lineup-sheet">
+    <h2>📋 Saved Lineups</h2>
+    <div class="lineup-save-form">
+      <input type="text" id="lineupSaveName" placeholder="Lineup name (e.g. Home 4-3-3)" maxlength="40" onkeydown="if(event.key==='Enter')saveCurrentLineup()">
+      <button class="btn btn-ac btn-sm" onclick="saveCurrentLineup()">Save Current</button>
+    </div>
+    <div class="lineup-list" id="lineupList"></div>
+    <button class="btn btn-ol" onclick="closeLineupOverlay()">Close</button>
+  </div>
 </div>
 
 <!-- ONBOARDING -->
@@ -1180,7 +1219,7 @@ function snapshotField(){
     const name=snap?.name||player?.name||'Unknown';
     const num=snap?.num||player?.num||'—';
     const pos=slotLabel(SLOTS[i].pos);
-    return {id:rid,name,num,pos};
+    return {id:rid,name,num,pos,slotIdx:i};
   }).filter(Boolean);
 }
 
@@ -1307,10 +1346,112 @@ function halftime(){
   updateClock();
   saveData();
   renderGame();
+
+  // Offer to restore starting lineup for 2nd half
+  if(currentGame.h1starters&&currentGame.h1starters.length>0){
+    if(confirm('Restore starting lineup for the 2nd half?\n\nThis will put the 1st half starters back in their original positions.')){
+      restoreStartingLineup();
+    }
+  }
+}
+
+// ── LINEUPS ────────────────────────────────────────────────
+function getLineups(){
+  return getTeam().lineups || [];
+}
+
+function saveCurrentLineup(){
+  const name=document.getElementById('lineupSaveName').value.trim();
+  if(!name){document.getElementById('lineupSaveName').focus();return;}
+  const slots=fieldSlots.map((rid,i)=>{
+    if(!rid) return null;
+    const player=roster.find(p=>p.id===rid);
+    return player?{rosterId:rid,slotIdx:i,pos:slotLabel(SLOTS[i].pos),num:player.num,name:player.name}:null;
+  }).filter(Boolean);
+  if(!slots.length){alert('No players on the field to save.');return;}
+  if(!getTeam().lineups) getTeam().lineups=[];
+  getTeam().lineups.push({id:Date.now(),name,slots});
+  saveData();
+  document.getElementById('lineupSaveName').value='';
+  renderLineupList();
+}
+
+function loadLineup(lineupId){
+  const lineup=getLineups().find(l=>l.id===lineupId);
+  if(!lineup) return;
+  if(currentGame){
+    if(!confirm(`Load lineup "${lineup.name}"? This will move current field players back to the bench.`)) return;
+  }
+  fieldSlots.forEach((rid,i)=>{ if(rid&&currentGame) recordOff(i); });
+  fieldSlots=new Array(SLOTS.length).fill(null);
+  lineup.slots.forEach(entry=>{
+    const player=roster.find(p=>p.id===entry.rosterId);
+    if(!player) return;
+    if(!isSlotVisible(entry.slotIdx)) return;
+    fieldSlots[entry.slotIdx]=entry.rosterId;
+    if(currentGame) recordOn(entry.rosterId,entry.slotIdx);
+  });
+  saveData();
+  renderGame();
+  closeLineupOverlay();
+}
+
+function deleteLineup(lineupId){
+  if(!confirm('Delete this lineup?')) return;
+  getTeam().lineups=(getTeam().lineups||[]).filter(l=>l.id!==lineupId);
+  saveData();
+  renderLineupList();
+}
+
+function renderLineupList(){
+  const list=document.getElementById('lineupList');
+  const lineups=getLineups();
+  if(!lineups.length){
+    list.innerHTML='<p style="font-size:.82rem;color:var(--grd);text-align:center;padding:.5rem 0">No saved lineups yet. Set up a lineup on the field and tap Save Current.</p>';
+    return;
+  }
+  list.innerHTML=lineups.map(l=>{
+    const chips=l.slots.map(s=>`<span class="lineup-pos-chip">${esc(s.pos)} ${esc(s.name.split(' ')[0])}</span>`).join('');
+    return `<div class="lineup-item">
+      <div class="lineup-item-header">
+        <span class="lineup-item-name">${esc(l.name)}</span>
+        <div class="lineup-item-actions">
+          <button class="btn btn-ac btn-sm" onclick="loadLineup(${l.id})">Load</button>
+          <button class="btn btn-rd btn-sm" onclick="deleteLineup(${l.id})">✕</button>
+        </div>
+      </div>
+      <div class="lineup-positions">${chips}</div>
+    </div>`;
+  }).join('');
+}
+
+function openLineupOverlay(){
+  renderLineupList();
+  document.getElementById('lineupOverlay').classList.add('active');
+}
+
+function closeLineupOverlay(){
+  document.getElementById('lineupOverlay').classList.remove('active');
+}
+
+function restoreStartingLineup(){
+  if(!currentGame||!currentGame.h1starters||!currentGame.h1starters.length) return;
+  fieldSlots.forEach((rid,i)=>{ if(rid) recordOff(i); });
+  fieldSlots=new Array(SLOTS.length).fill(null);
+  currentGame.h1starters.forEach(starter=>{
+    const player=roster.find(p=>p.id===starter.id);
+    if(!player) return;
+    const slotIdx=starter.slotIdx;
+    if(slotIdx===undefined||!isSlotVisible(slotIdx)) return;
+    if(fieldSlots[slotIdx]!==null) return; // slot already taken
+    fieldSlots[slotIdx]=starter.id;
+    recordOn(starter.id,slotIdx);
+  });
+  saveData();
+  renderGame();
 }
 
 function endGame(){
-  if(!currentGame)return;
   clearInterval(timerInterval);
   timerRunning=false;
   document.getElementById('timerBtn').textContent='Start';
@@ -3028,10 +3169,10 @@ function runAllTests(){
   tlog('Done. See summary below.','info');
 }
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.43</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.44</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.43 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.44 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>

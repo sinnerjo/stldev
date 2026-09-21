@@ -1,0 +1,561 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Youth Soccer Stat Tracking Without Expensive Hardware</title>
+
+<!-- SEO -->
+<meta name="description" content="Track youth soccer stats with just a phone. Why coaches pick MatchTap over pen and paper or costly cameras, and how parents can help with real metrics." />
+<link rel="canonical" href="https://stldev.com/guides/youth-soccer-stat-tracking/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Youth Soccer Stat Tracking Without the Hardware: 7 Reasons to Use MatchTap" />
+<meta property="og:description" content="A free phone app replaces pen and paper and expensive cameras. Give each parent a small set of stats and coach with real metrics instead of feelings." />
+<meta property="og:url" content="https://stldev.com/guides/youth-soccer-stat-tracking/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/matchtap/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="MatchTap app icon" />
+<meta property="article:published_time" content="2026-09-20" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Youth Soccer Stat Tracking Without the Hardware: 7 Reasons to Use MatchTap" />
+<meta name="twitter:description" content="A free phone app replaces pen and paper and expensive cameras. Give each parent a small set of stats and coach with real metrics instead of feelings." />
+<meta name="twitter:image" content="https://stldev.com/matchtap/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/youth-soccer-stat-tracking/#article",
+      "headline": "Youth Soccer Stat Tracking Without the Hardware: 7 Reasons to Use MatchTap",
+      "description": "Why youth soccer coaches use MatchTap for stat tracking instead of pen and paper or expensive hardware, with research on coach memory and parent involvement.",
+      "datePublished": "2026-09-20",
+      "dateModified": "2026-09-20",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/matchtap/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/youth-soccer-stat-tracking/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Soccer statistics",
+        "Player development"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "MatchTap",
+        "url": "https://stldev.com/matchtap/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Youth Soccer Stat Tracking",
+          "item": "https://stldev.com/guides/youth-soccer-stat-tracking/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 600px) { .table-wrap.wide table { min-width: 620px; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / MatchTap</p>
+
+  <article>
+    <h1>Youth Soccer Stat Tracking Without the Hardware: <span class="accent">7 Reasons to Use MatchTap</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of MatchTap &middot; September 20, 2026 &middot; 9 min read</p>
+
+    <p class="lead">You do not need an expensive camera or a bag of GPS vests to coach with real numbers. A phone and a few taps can tell you how many passes your team completed, who is turning the ball over, and how a player is trending across a season. That is what MatchTap is built for, and it is a real upgrade over a clipboard of tally marks.</p>
+
+    <h2 id="reasons"><span class="tag">The short version</span>Seven reasons to use MatchTap</h2>
+
+    <ol class="plain">
+      <li><a href="#memory">Memory misses more than you think.</a></li>
+      <li><a href="#cost">It costs a fraction of cameras and wearables.</a></li>
+      <li><a href="#paper">It is a real upgrade over pen and paper.</a></li>
+      <li><a href="#pick">You track only the stats that matter.</a></li>
+      <li><a href="#parents">Every parent can have a small, useful job.</a></li>
+      <li><a href="#metrics">Real metrics change the development conversation.</a></li>
+      <li><a href="#privacy">Your data stays on your phone.</a></li>
+    </ol>
+
+    <h2 id="memory"><span class="tag">Reason 1</span>Memory misses more than you think</h2>
+
+    <p>Most coaches believe they see the game clearly. The research says otherwise, and it says so even about experienced coaches.</p>
+    <p>In a study of qualified football coaches, they watched 45 minutes of a match, were allowed to take notes, and then answered questions about the critical events. They recalled about 59% of them correctly (59.2%). The novice observers in the original research managed about 42%.</p>
+    <p>A study of elite youth soccer coaches found the same pattern in real matches. Six coaches assessed 10 youth players across 8 matches, and their unaided observations were accurate only about 39% of the time overall (38.8%). Successful shooting was picked up about 79% of the time, but passing was recognized only about 30% of the time (29.9%). The authors warned that talent identification without post performance analysis rests on shaky ground.</p>
+    <p>Those were trained coaches focused on the game. On a real sideline you are also managing subs, talking to parents, and keeping an eye on the kid who wandered off. When you say a player "never wins a header" or "is having a great season," you are often reporting a feeling. A tally taken during the game is a different kind of evidence.</p>
+
+    <h2 id="cost"><span class="tag">Reason 2</span>It costs a fraction of cameras and wearables</h2>
+
+    <p>Hardware based tracking can be excellent, and if your club can afford it, use it. But it is not the only path, and for most volunteer coaches it is out of reach. For scale:</p>
+
+    <ul class="plain">
+      <li>Veo's own comparison page lists the Hudl Focus Flex camera at around $1,999 for hardware, with subscription pricing on top. A reseller listed the Veo camera at $899 in 2022, also with subscription plans.</li>
+      <li>SoccerEDU's roundup of GPS trackers lists units from about $69 to $300 each, such as the Catapult One at $180 and the STATSports APEX at $300. That is per player. Putting a $180 unit on each of 12 players is about $2,160 before any membership fees.</li>
+    </ul>
+
+    <p>Prices change often, so check current listings. MatchTap is free and runs on the phone you already carry. To be fair about it, these tools measure different things. Cameras give you video to review and GPS units measure distance, speed and workload. MatchTap records what happened on the ball and around it: passes, shots, tackles, turnovers, decisions, and possession. It does not replace video, but it covers questions a camera alone will not answer for you and it costs nothing to try.</p>
+
+    <h2 id="paper"><span class="tag">Reason 3</span>It is a real upgrade over pen and paper</h2>
+
+    <p>A clipboard is a fine place to start. Then you lose track of a tally in the middle of a corner, or cannot read your own handwriting, or spend Saturday night adding columns. MatchTap fixes those problems.</p>
+
+    <div class="table-wrap wide">
+      <table>
+        <thead>
+          <tr><th>Approach</th><th>Typical cost</th><th>Strengths</th><th>Limits</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pen and paper</td><td>Free</td><td>Flexible, no battery needed</td><td>Tally mistakes, no undo, math after the game, hard to share or combine</td></tr>
+          <tr><td>MatchTap</td><td>Free</td><td>One tap per event, undo, automatic percentages, possession timer, notes, CSV export</td><td>Needs a phone and someone tapping. No video or GPS data</td></tr>
+          <tr><td>Camera systems</td><td>Roughly $900 to $2,000 for hardware, plus subscriptions</td><td>Full video for review</td><td>Cost, and video takes time to watch and tag</td></tr>
+          <tr><td>GPS wearables</td><td>Roughly $70 to $300 per player, some with memberships</td><td>Distance, speed and workload</td><td>Per player cost. Says little about passes, shots or decisions</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Here is what MatchTap does that a clipboard cannot:</p>
+    <ul class="plain">
+      <li><strong>Undo.</strong> Hit the wrong button and Undo last removes the most recent tap. You can also remove any single entry from the log.</li>
+      <li><strong>Automatic percentages.</strong> Track pass completed and pass not completed, and MatchTap works out the completion rate for you. The same goes for any stat with a positive and a negative side.</li>
+      <li><strong>A possession timer.</strong> Two linked buttons track time in and out of possession, tied to the game clock, so it pauses when the clock does. Totals show as time and percentage.</li>
+      <li><strong>Notes.</strong> Add a short observation tied to the current player and half for anything a button cannot capture. Notes never count toward the totals.</li>
+      <li><strong>Export and share.</strong> Send a game out as a CSV file, a text summary, or a QR code. Every saved game lives in Past games, ready to review later.</li>
+      <li><strong>Courtside friendly.</strong> The screen stays awake while you are tracking, so it will not lock in the middle of a play.</li>
+    </ul>
+
+    <h2 id="pick"><span class="tag">Reason 4</span>You track only the stats that matter</h2>
+
+    <p>The trap with any tracking system is trying to record everything and recording nothing well. MatchTap lets you check the boxes for only the events you want on screen. Everything else stays out of the way, and you can change the list any time.</p>
+    <p>There are three modes, so you choose how much detail you need:</p>
+    <ul class="plain">
+      <li><strong>Player</strong> follows one child. No player selection, just tap events.</li>
+      <li><strong>Team whole</strong> tracks the team as a group with one tap per event and no roster needed.</li>
+      <li><strong>Team individual</strong> has you tap a player first and then the event, which gives per player detail at the cost of one extra tap.</li>
+    </ul>
+    <p>The event list covers passing (completed and not completed, crosses, through balls), shooting (shots on goal, missed, blocked, goals, assists), defending (tackles, interceptions, clearances, headers, dribbles), goalkeeping, set pieces, discipline, and a general group that includes turnovers and good and poor decisions. Pick three to five that match what your team is working on this month and ignore the rest.</p>
+
+    <h2 id="parents"><span class="tag">Reason 5</span>Every parent can have a small, useful job</h2>
+
+    <p>This is the idea we like most. Give a parent one or two stats to watch and you give them something constructive to do with their attention. Instead of tracking every mistake on the field in their head, they are counting completed passes or shots on goal. You get help, and they get a way to contribute that is not shouting instructions.</p>
+
+    <p>Some examples of small assignments:</p>
+    <ul class="plain">
+      <li>Parent A tracks pass completed and pass not completed for the whole team.</li>
+      <li>Parent B tracks shots on goal, shots missed and shots blocked.</li>
+      <li>Parent C tracks turnovers and tackles won.</li>
+      <li>A parent uses Player mode to follow their own child with three events, such as pass completed, pass not completed and good decision.</li>
+    </ul>
+
+    <p>When two people split the tracking on the same game, Share via QR shows a code that the other phone scans with Import game data. Both devices need to use the same mode. If you divide the events so nothing overlaps, the data combines without any fuss. If both phones tracked the same event for the same player, MatchTap asks you to pick which version to keep.</p>
+
+    <h3>Why it may help with sideline behavior</h3>
+    <p>To be clear about what the evidence does and does not show: we did not find research that tests whether giving parents a stat job reduces sideline coaching. That part is our coaching hypothesis. What the research does say about parents points in the same direction. Dr. Nick Holt of the University of Calgary describes children as highly aware of their parents during games, wanting "encouragement, punctuality, and space" rather than being yelled at, and warns that well meaning parents can undermine development by becoming over invested in outcomes or critiquing performance afterward. A summary of the research from BYU's Exercise Sciences department puts it more bluntly: continual instruction from the sideline can damage a child's youth sport experience. A qualitative study of one football club, with 17 young athletes, 19 parents and 2 coaches, found that intrinsic motivation flourished when parents emphasized personal growth over winning.</p>
+    <p>A parent who is busy counting completed passes is not calling out instructions. At the very least, it is worth a try.</p>
+
+    <h2 id="metrics"><span class="tag">Reason 6</span>Real metrics change the development conversation</h2>
+
+    <p>"You need to be more confident on the ball" gives a 10 year old very little to work with. "Your pass completion went from 62% to 74% over the last four games" gives them something to be proud of and a next step.</p>
+    <p>This fits with what the Rutgers Youth Sports Research Council says about goals for young athletes. Their guidance is to set performance goals instead of outcome goals, because "performance is what the athlete controls. Outcomes are frequently controlled by others." A completed pass is something a player controls. A win depends on the opponent, the referee and the bounce of the ball. Stats that track process give players goals they can act on.</p>
+    <p>A few ways to make the numbers useful:</p>
+    <ul class="plain">
+      <li>Pick one or two metrics per player for the month. Look at the CSV after each game and check the trend, not the single game.</li>
+      <li>Use the "good decision" tag to reward thinking as well as skill.</li>
+      <li>Start every conversation with what improved.</li>
+    </ul>
+
+    <div class="callout orange">
+      <span class="label">Keep the numbers healthy</span>
+      <p>Stats from a volunteer with a phone are not perfect, and one game is a small sample. Look for trends over several games. Agree in advance what counts as a "completed pass." Share each family's numbers privately and never post a ranking of kids. The goal is to help a player see their own progress, not to compare children.</p>
+    </div>
+
+    <h2 id="privacy"><span class="tag">Reason 7</span>Your data stays on your phone</h2>
+
+    <p>MatchTap has no accounts and no sign up. Your games are saved on your own device, and nothing is uploaded unless you choose to share a summary, a CSV or a QR code. When the subject is other people's children, that is how it should be. It also means there is nothing to set up before Saturday. Open the page, pick your events, and start the clock.</p>
+
+    <h2 id="ideas"><span class="tag">Bonus</span>More ways to use it</h2>
+
+    <ul class="plain">
+      <li><strong>Track scrimmages at practice.</strong> The same taps work for small sided games in training, where you have more time to look at the results.</li>
+      <li><strong>Pair it with SubGo.</strong> <a href="../../subgo/">SubGo</a> tracks minutes played and MatchTap tracks events. Export both as CSV and you can compare stats per minute, which is fairer when playing time is not identical. Our guide on <a href="../equal-playing-time-youth-soccer/">equal playing time in youth soccer</a> explains why minutes matter.</li>
+      <li><strong>Make tracking a team volunteer role.</strong> Rotate the job each game so it is shared and no single parent carries it all season.</li>
+      <li><strong>Let older players own their numbers.</strong> Teenagers can choose a metric to work on and check their own trend across the season.</li>
+      <li><strong>Use notes for review sessions.</strong> Pair a "poor decision" tap with a short note, and you have a specific moment to talk about later.</li>
+      <li><strong>Send a short summary after each game.</strong> The Share summary button creates a text summary you can send to a family.</li>
+    </ul>
+
+    <h2 id="start"><span class="tag">Getting started</span>Ten minutes to your first tracked game</h2>
+
+    <ol class="plain">
+      <li>Open MatchTap on your phone and choose a mode. If you have volunteers, Team whole is the easiest place to start.</li>
+      <li>Check only the events you want to focus on. Three to five is plenty.</li>
+      <li>Agree with your helpers on what counts for each event, and who tracks what.</li>
+      <li>Tap the clock bar to start the game. Tap events as they happen, and use Undo last for mistakes.</li>
+      <li>At the end, save the game to history and export the CSV or share the summary.</li>
+      <li>Look at the trend after three or four games before you draw any conclusions.</li>
+    </ol>
+
+    <h3>What MatchTap is not</h3>
+    <p>MatchTap does not record video, measure distance or speed, or judge a player for you. It counts what someone taps, so the quality of the data depends on the person tapping. It is a simple, free way to replace guesswork with a record. Use it alongside your eyes, not instead of them.</p>
+
+    <div class="cta">
+      <h2>Try it at your next game</h2>
+      <p>MatchTap is free, needs no account, and works on your phone. Pick three events and see what you learn.</p>
+      <a class="btn" href="../../matchtap/">Launch MatchTap</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these numbers come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://napier-repository.worktribe.com/output/813804/eyewitness-recollection-of-sport-coaches" rel="noopener">Eyewitness recollection of sport coaches</a>, Laird and Waters, International Journal of Performance Analysis in Sport.</li>
+      <li><a href="https://journals.sagepub.com/doi/abs/10.1177/1747954116676109" rel="noopener">The observational analysis of elite coaches within youth soccer: The importance of performance analysis</a>, Nicholls and Worsfold, International Journal of Sports Science and Coaching (2016).</li>
+      <li><a href="https://www.veo.com/en-us/article/sports-video-camera-systems-compared" rel="noopener">Sports video camera systems compared</a>, Veo (hardware price for Hudl Focus Flex).</li>
+      <li><a href="https://soccerstripes.com/veo-camera-price-plan-costs/" rel="noopener">Veo camera price and plan costs</a>, Soccer Stripes (2022 hardware price).</li>
+      <li><a href="https://www.socceredu.com/en-US/blog/gps-trackers-soccer" rel="noopener">The best GPS trackers in soccer</a>, SoccerEDU (per unit prices).</li>
+      <li><a href="https://youthsports.rutgers.edu/wp-content/uploads/Goal-Setting.pdf" rel="noopener">Set performance rather than outcome goals</a>, Rutgers Youth Sports Research Council.</li>
+      <li><a href="https://sirc.ca/articles/on-the-sidelines-but-central-the-powerful-role-parents-play-in-youth-sport/" rel="noopener">On the sidelines but central: The powerful role parents play in youth sport</a>, Sport Information Resource Centre (Dr. Nick Holt).</li>
+      <li><a href="https://exsc.byu.edu/parent-child-communication-in-youth-sports" rel="noopener">Parent child communication in youth sports</a>, Brigham Young University Exercise Sciences.</li>
+      <li><a href="https://www.mdpi.com/2673-995X/5/3/81" rel="noopener">Parental involvement in youth sports: A phenomenological analysis of the coach, athlete and parent relationship</a>, Youth (MDPI).</li>
+    </ul>
+    <p class="note">Prices for cameras and wearables change often and come from the sources above at the time of writing. Check current pricing before you compare.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

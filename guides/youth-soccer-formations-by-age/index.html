@@ -1,0 +1,793 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Youth Soccer Formations by Age: 3v3 to 11v11 Pathways</title>
+
+<!-- SEO -->
+<meta name="description" content="Pick your 11v11 formation first, then build backwards. Suggested formations for 4v4, 7v7, 9v9 and 11v11, with benefits and downsides for each." />
+<link rel="canonical" href="https://stldev.com/guides/youth-soccer-formations-by-age/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Youth Soccer Formations by Age: Start With Your 11v11 Shape, Then Build Backwards" />
+<meta property="og:description" content="Choose the 11v11 shape you want, then work backwards to the 9v9, 7v7 and small sided formations that prepare players for it." />
+<meta property="og:url" content="https://stldev.com/guides/youth-soccer-formations-by-age/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-20" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Youth Soccer Formations by Age: Start With Your 11v11 Shape, Then Build Backwards" />
+<meta name="twitter:description" content="Choose the 11v11 shape you want, then work backwards to the 9v9, 7v7 and small sided formations that prepare players for it." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/youth-soccer-formations-by-age/#article",
+      "headline": "Youth Soccer Formations by Age: Start With Your 11v11 Shape, Then Build Backwards",
+      "description": "Suggested youth soccer formations for 4v4, 7v7, 9v9 and 11v11, with benefits, downsides, and three pathways that build backwards from your preferred 11v11 shape.",
+      "datePublished": "2026-09-20",
+      "dateModified": "2026-09-20",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/youth-soccer-formations-by-age/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Soccer formations",
+        "Player development"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Youth Soccer Formations by Age",
+          "item": "https://stldev.com/guides/youth-soccer-formations-by-age/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+
+  /* formation figures */
+  .shape { display: flex; gap: 24px; align-items: flex-start; margin-top: 24px; padding: 22px; background: var(--terminal); border-left: 3px solid var(--lime); }
+  .shape-figs { flex: 0 0 120px; display: flex; flex-direction: column; gap: 16px; }
+  .shape-fig { flex: 0 0 120px; margin: 0; text-align: center; }
+  .shape-fig svg { width: 120px; height: auto; display: block; }
+  .shape-fig figcaption { margin-top: 6px; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; color: var(--lime); }
+  .shape-body { flex: 1; min-width: 0; }
+  .shape-body h3 { margin-top: 0; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 14px; }
+  .cols h4 { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lime); font-weight: 500; margin-bottom: 6px; }
+  .cols h4.down { color: var(--accent); }
+  @media (max-width: 600px) {
+    .shape { flex-direction: column; padding: 18px; }
+    .shape-figs { flex-direction: row; flex-basis: auto; }
+    .cols { grid-template-columns: 1fr; gap: 6px; }
+    .table-wrap.wide table { min-width: 620px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Formations</p>
+
+  <article>
+    <h1>Youth Soccer Formations by Age: <span class="accent">Start With Your 11v11 Shape, Then Build Backwards</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 20, 2026 &middot; 11 min read</p>
+
+    <p class="lead">Most coaches pick a formation by looking at the players they have this season. We suggest working the other way. Decide which 11v11 shape you want your players to be comfortable in by U13, then build backwards so that 9v9, 7v7 and the small sided games before it each teach the roles that shape needs. When it works, a player who moves up a format is learning something new, not starting over.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Recreational and club coaches who want their formations to serve player development. Every shape below is a starting point for teaching, not a recipe for winning this weekend. Your league's rules and your players' abilities always come first.</p>
+    </div>
+
+    <h2 id="ground-rules"><span class="tag">Before you pick a shape</span>Three ground rules</h2>
+
+    <h3>1. The shape serves the player</h3>
+    <p>US Youth Soccer's Player Development Model is blunt about this. It warns that "too often coaches concentrate on a team formation to the exclusion of essential developmental needs," and says coaches who permanently place a young player in one position are making "an erroneous decision." Its instruction is short: "Do not lock players in a position!"</p>
+
+    <h3>2. Rotate positions well into the teens</h3>
+    <p>The same model says players in the U10, U12 and U14 age groups should not begin to specialize in any position. FC Bayern Academy's youth positions guide lands in a similar place, recommending that coaches wait until at least ages 13 to 14 before specializing. So every formation below describes a starting shape, and the kids should keep moving through its spots. This is the same idea as the minutes in our <a href="../equal-playing-time-youth-soccer/">equal playing time guide</a>: fair playing time should include fair exposure to every part of the field.</p>
+
+    <h3>3. Small sided formats exist for touches and decisions</h3>
+    <p>U.S. Soccer's small sided standards say that with fewer players on the field, players get more meaningful minutes and more chances to read the game and make decisions. They also introduce build out lines, 14 yards from the goal, starting at U9 to encourage playing out from the back. That is worth keeping in mind when you choose a shape. The best formation at each stage is the one that gives every child the most useful touches and the most repeated decisions.</p>
+
+    <h2 id="pathways"><span class="tag">The big idea</span>Pick a destination, then work backwards</h2>
+
+    <p>There are three common 11v11 destinations for youth teams: the 4-3-3, the 4-4-2 and the 4-2-3-1. Each one has a natural path back through 9v9 and 7v7. The 2-3-1 at 7v7 is a shared starting point for the first two, and the paths split at 9v9.</p>
+
+    <div class="table-wrap wide">
+      <table>
+        <thead>
+          <tr><th>11v11 destination</th><th>9v9 bridge</th><th>7v7 start</th><th>4v4 and 3v3</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>4-3-3</td><td>3-2-3</td><td>2-3-1</td><td>Triangles and a diamond</td></tr>
+          <tr><td>4-4-2</td><td>3-3-2</td><td>2-3-1</td><td>Triangles and a diamond</td></tr>
+          <tr><td>4-2-3-1</td><td>3-1-3-1</td><td>2-1-2-1</td><td>Triangles and a diamond</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>What changes at each step is small, which is the point:</p>
+    <ul class="plain">
+      <li><strong>2-3-1 to 3-2-3 to 4-3-3.</strong> The two wide midfielders step up to become wingers, the lone central midfielder gets a partner, and a third defender joins the back line. The striker's job does not change. At 11v11 you add a fourth defender and a midfielder in front of the two central players. Wingers, striker and central midfielders all keep the roles they learned.</li>
+      <li><strong>2-3-1 to 3-3-2 to 4-4-2.</strong> Add a third defender and a second striker. Later, add a fourth defender and a second central midfielder, and the line of three becomes a flat four.</li>
+      <li><strong>2-1-2-1 to 3-1-3-1 to 4-2-3-1.</strong> Add a third defender and a third attacking midfielder. Later, add a fourth defender and a second holding midfielder to form the double pivot.</li>
+    </ul>
+
+    <p class="note">This mapping is our suggestion, built from published formation guides. The sources agree on some pairings and differ on others, and we note where below. 205 Academy pairs the 3-2-3 with the 4-3-3 and the 3-3-2 with the 4-4-2. Rondo Coach describes a slightly different route for 9v9 (a 2-3-2-1) but ends at the same 4-3-3 or 4-2-3-1.</p>
+
+    <h2 id="3v3"><span class="tag">U6 to U8</span>3v3 and 4v4: shapes, not formations</h2>
+
+    <p>At this age you are not teaching a system. You are teaching a few ideas: be on the ball, be a passing option, and spread out. US Youth Soccer's model has no goalkeepers in 3v3 and 4v4 through age 8, so every child is an outfield player.</p>
+
+    <div class="shape">
+      <div class="shape-figs"><figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="3v3 triangle formation diagram, no goalkeeper"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="100.0" r="6" fill="#b8f20a"/><circle cx="40.0" cy="24.0" r="6" fill="#b8f20a"/><circle cx="80.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>3v3 triangle</figcaption></figure><figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="4v4 diamond formation diagram, no goalkeeper"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="100.0" r="6" fill="#b8f20a"/><circle cx="40.0" cy="62.0" r="6" fill="#b8f20a"/><circle cx="80.0" cy="62.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>4v4 diamond</figcaption></figure></div>
+      <div class="shape-body">
+        <h3>The triangle (3v3) and the diamond (4v4)</h3>
+        <p>In 3v3, think triangle: one player back and two forward, then swap. In 4v4, use a diamond with one player at the back, one on each side and one up front. FC Bayern Academy's guide describes the age group the same way, with two defenders and two attackers who rotate.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>Kids learn support angles: someone behind the ball, someone on each side.</li>
+              <li>The diamond becomes the midfield diamond of a 7v7 and, later, the triangles of a 4-3-3.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>Children bunch around the ball, and the shape will not hold.</li>
+              <li>Fixed spots teach little at this age, so keep rotating.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>Coaching cue:</strong> skip the position talk and use one simple reminder such as "find the open space." Shape will come later.</p>
+
+    <h2 id="7v7"><span class="tag">U9 to U10</span>7v7: the first real lines</h2>
+
+    <p>Seven players means a goalkeeper and six outfield players, which is enough to build a back line, a midfield and a front for the first time. This is where roles start to matter, and where the destination you chose begins to shape what you teach.</p>
+
+    <div class="shape">
+      <figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="2-3-1 formation diagram, goalkeeper shown in orange"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="112.0" r="6" fill="#f97316"/><circle cx="40.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="80.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="30.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="60.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="90.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="60.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>2-3-1</figcaption></figure>
+      <div class="shape-body">
+        <h3>2-3-1: the standard</h3>
+        <p>Two defenders, three midfielders and a striker. Centro's 7v7 guide calls it widely considered the most balanced and popular 7v7 shape. It is the shared start for the 4-3-3 and 4-4-2 paths.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>Three midfielders create passing triangles and width on both sides.</li>
+              <li>Roles are clear, so young players know where they belong.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>Midfielders cover a lot of ground and it is easy to be caught on the counter.</li>
+              <li>The lone striker can be isolated without midfield support.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shape">
+      <figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="3-2-1 formation diagram, goalkeeper shown in orange"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="112.0" r="6" fill="#f97316"/><circle cx="30.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="60.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="90.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="40.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="80.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="60.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>3-2-1</figcaption></figure>
+      <div class="shape-body">
+        <h3>3-2-1: the build out shape</h3>
+        <p>Three defenders, two midfielders and a striker. Centro describes it as excellent for teaching players to build out from the back, which pairs well with the build out lines that start at U9.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>Strong coverage across the back and a natural way to practice playing out.</li>
+              <li>A good option if your team struggles defensively.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>The middle can be overrun by a team playing a 2-3-1.</li>
+              <li>The striker is often alone up front.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shape">
+      <figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="2-1-2-1 formation diagram, goalkeeper shown in orange"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="112.0" r="6" fill="#f97316"/><circle cx="40.0" cy="90.0" r="6" fill="#b8f20a"/><circle cx="80.0" cy="90.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="68.0" r="6" fill="#b8f20a"/><circle cx="40.0" cy="46.0" r="6" fill="#b8f20a"/><circle cx="80.0" cy="46.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>2-1-2-1</figcaption></figure>
+      <div class="shape-body">
+        <h3>2-1-2-1: the diamond</h3>
+        <p>Two defenders, one holding midfielder, two attacking midfielders and a striker. It is the natural start for a 4-2-3-1 destination because it introduces the holding midfielder early.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>Clear layers and many passing angles.</li>
+              <li>The holding midfielder covers the defense and frees the attackers to create.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>The narrow shape can be exploited on the flanks.</li>
+              <li>It can split into pieces without a strong link between the layers.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>Our suggestion:</strong> use the 2-3-1 unless you are headed for a 4-2-3-1. Rotate every child through defender, midfielder and striker, and resist the urge to keep your tallest player in goal or your fastest player up front.</p>
+
+    <h2 id="9v9"><span class="tag">U11 to U12</span>9v9: where the paths split</h2>
+
+    <p>Nine players is the bridge to the full game. The back line grows to three, and this is where your chosen destination shows up in what you teach. Keep rotating positions here too, since US Youth Soccer says U12 players should not begin to specialize.</p>
+
+    <div class="shape">
+      <figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="3-2-3 formation diagram, goalkeeper shown in orange"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="112.0" r="6" fill="#f97316"/><circle cx="30.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="60.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="90.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="40.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="80.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="30.0" cy="24.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="24.0" r="6" fill="#b8f20a"/><circle cx="90.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>3-2-3</figcaption></figure>
+      <div class="shape-body">
+        <h3>3-2-3: the bridge to 4-3-3</h3>
+        <p>Three defenders, two central midfielders and three forwards. 205 Academy says US Soccer has promoted it as an ideal system for the transition to 11v11, and it points toward the 4-3-3 and 3-4-3.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>The shape produces natural triangles and gives wide players clear roles.</li>
+              <li>A strong attacking presence with width and the chance to press high, as SoccerCoachLab notes.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>The two midfielders can be outnumbered, so they must be disciplined.</li>
+              <li>The center forward can end up isolated.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shape">
+      <figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="3-3-2 formation diagram, goalkeeper shown in orange"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="112.0" r="6" fill="#f97316"/><circle cx="30.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="60.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="90.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="30.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="60.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="90.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="40.0" cy="24.0" r="6" fill="#b8f20a"/><circle cx="80.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>3-3-2</figcaption></figure>
+      <div class="shape-body">
+        <h3>3-3-2: the bridge to 4-4-2</h3>
+        <p>Three defenders, three midfielders and two strikers. 205 Academy says it is simple to teach and connects to the 4-4-2.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>Roles are easy to explain and the midfield is strong for ball control.</li>
+              <li>Building out from three defenders is straightforward.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>Less flexible, and it can turn narrow without natural wide players.</li>
+              <li>The lone central midfielder can face numerical disadvantages.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shape">
+      <figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="3-1-3-1 formation diagram, goalkeeper shown in orange"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="112.0" r="6" fill="#f97316"/><circle cx="30.0" cy="90.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="90.0" r="6" fill="#b8f20a"/><circle cx="90.0" cy="90.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="68.0" r="6" fill="#b8f20a"/><circle cx="30.0" cy="46.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="46.0" r="6" fill="#b8f20a"/><circle cx="90.0" cy="46.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>3-1-3-1</figcaption></figure>
+      <div class="shape-body">
+        <h3>3-1-3-1: the bridge to 4-2-3-1</h3>
+        <p>Three defenders, one holding midfielder, three attacking midfielders and one striker. SoccerCoachLab says it introduces the holding midfielder, or "6," that players will meet at higher levels. Sources disagree about it, so use it with care.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>A strong central spine and a good balance between defense and attack.</li>
+              <li>Introduces an advanced role that matters later.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>Demands more tactical understanding than most 10 year olds have.</li>
+              <li>Rondo Coach calls it "the most controversial" 9v9 shape and warns it can slide into a kick and run approach.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p><strong>Our suggestion:</strong> if you are unsure, the 3-2-3 gives you the widest set of 11v11 options and is the easiest to explain to players.</p>
+
+    <h2 id="11v11"><span class="tag">U13 and up</span>11v11: your destination</h2>
+
+    <p>You have arrived. Every player who came up through your system already knows the roles, so this stage is mostly about adding the fourth defender and the extra midfielder. Roles can be earned at this stage, but positions should still rotate as much as you can manage, and every player still plays at least half of every game.</p>
+
+    <div class="shape">
+      <figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="4-3-3 formation diagram, goalkeeper shown in orange"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="112.0" r="6" fill="#f97316"/><circle cx="24.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="48.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="72.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="96.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="30.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="60.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="90.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="30.0" cy="24.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="24.0" r="6" fill="#b8f20a"/><circle cx="90.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>4-3-3</figcaption></figure>
+      <div class="shape-body">
+        <h3>4-3-3</h3>
+        <p>Centro's guide calls it the default for U13 teams. Rondo Coach describes it as a platform to develop players through U14, not a way to maximize wins.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>Three midfielders work together to control the game, and wide forwards add flexibility (Be Your Best).</li>
+              <li>Short passing triangles suit players who are learning to keep the ball.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>A lone striker can become isolated without help from wingers and midfielders.</li>
+              <li>Wingers need real fitness to attack and defend their side for the whole game.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shape">
+      <figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="4-4-2 formation diagram, goalkeeper shown in orange"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="112.0" r="6" fill="#f97316"/><circle cx="24.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="48.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="72.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="96.0" cy="82.7" r="6" fill="#b8f20a"/><circle cx="24.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="48.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="72.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="96.0" cy="53.3" r="6" fill="#b8f20a"/><circle cx="40.0" cy="24.0" r="6" fill="#b8f20a"/><circle cx="80.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>4-4-2</figcaption></figure>
+      <div class="shape-body">
+        <h3>4-4-2</h3>
+        <p>Two banks of four and two strikers. It is the simplest of the three to explain, which is why it is often a first system for teams that are new to 11v11.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>A solid defensive shape with numbers in attack (Be Your Best).</li>
+              <li>Simple coverage of the field and clear roles for every player.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>Two flat lines leave space between the lines for opponents to use.</li>
+              <li>The two central midfielders can be overwhelmed by a team with three.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shape">
+      <figure class="shape-fig"><svg viewBox="0 0 120 150" role="img" aria-label="4-2-3-1 formation diagram, goalkeeper shown in orange"><rect x="1" y="1" width="118" height="148" rx="4" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><rect x="30" y="116" width="60" height="33" fill="none" stroke="#b8f20a" stroke-opacity="0.25"/><line x1="1" y1="8" x2="119" y2="8" stroke="#b8f20a" stroke-opacity="0.25"/><circle cx="60.0" cy="112.0" r="6" fill="#f97316"/><circle cx="24.0" cy="90.0" r="6" fill="#b8f20a"/><circle cx="48.0" cy="90.0" r="6" fill="#b8f20a"/><circle cx="72.0" cy="90.0" r="6" fill="#b8f20a"/><circle cx="96.0" cy="90.0" r="6" fill="#b8f20a"/><circle cx="40.0" cy="68.0" r="6" fill="#b8f20a"/><circle cx="80.0" cy="68.0" r="6" fill="#b8f20a"/><circle cx="30.0" cy="46.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="46.0" r="6" fill="#b8f20a"/><circle cx="90.0" cy="46.0" r="6" fill="#b8f20a"/><circle cx="60.0" cy="24.0" r="6" fill="#b8f20a"/></svg><figcaption>4-2-3-1</figcaption></figure>
+      <div class="shape-body">
+        <h3>4-2-3-1</h3>
+        <p>A back four, two holding midfielders, three attacking midfielders and one striker. Centro suggests introducing it partway through a season once players understand basic positional duties.</p>
+        <div class="cols">
+          <div>
+            <h4>Benefits</h4>
+            <ul class="plain">
+              <li>Two defensive midfielders shield the back four and let attackers focus on attacking (Be Your Best).</li>
+              <li>The number 10 role develops creativity and playmaking.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="down">Downsides</h4>
+            <ul class="plain">
+              <li>The team can become disconnected if the attacking midfielders stop defending (Be Your Best).</li>
+              <li>It leans heavily on the two holding midfielders, and it breaks down if they get pulled forward.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>We left out the 3-5-2. Centro notes that it demands wing back conditioning that is rare at U13, and it changes the back line more than the paths above do. If you plan to use it, the 9v9 3-3-2 is the natural bridge.</p>
+
+    <h2 id="choose"><span class="tag">Choosing</span>How to pick your 11v11 destination</h2>
+
+    <p>Choose from your players, not from your favorite professional team. A few questions help:</p>
+    <ul class="plain">
+      <li><strong>Do you have, or can you develop, good wide players?</strong> If so, the 4-3-3 gives them a big role.</li>
+      <li><strong>Do you want the simplest possible roles?</strong> The 4-4-2 is the easiest to teach, and the path back to 9v9 (3-3-2) is easy to explain.</li>
+      <li><strong>Do you have a disciplined pair of holding midfielders and a creative number 10?</strong> The 4-2-3-1 is the most demanding of the three, and its 9v9 bridge is the one the sources disagree about most.</li>
+      <li><strong>Are you playing for development or for this Saturday?</strong> Formations chosen to win now often lock players in place. The ones above are chosen to teach.</li>
+    </ul>
+
+    <h3>Common mistakes</h3>
+    <ul class="plain">
+      <li><strong>Locking players into one spot.</strong> It works this season and costs you later.</li>
+      <li><strong>Copying a professional team without its roles.</strong> The shape only works if players understand the jobs inside it.</li>
+      <li><strong>Changing formations every week.</strong> Players need repetitions to learn a role. Keep the shape for several games before you judge it.</li>
+      <li><strong>Focusing on the numbers and not the principles.</strong> Support, spacing, pressing and moving the ball matter more than the digits.</li>
+    </ul>
+
+    <h2 id="subgo"><span class="tag">Experiment</span>Testing formations in SubGo</h2>
+
+    <p>A good formation plan needs a way to try things without a whiteboard and a headache. SubGo lets you set up and switch shapes quickly, and it keeps track of who is playing where.</p>
+
+    <ul class="plain">
+      <li><strong>Presets for each format.</strong> In Settings under Field Positions, tap 11v11, 9v9, 7v7, 5v5 or 3v3. The 9v9 preset is a 3-2-3 layout, with a back three, two central midfielders and a front three. The 11v11 preset gives you a back four, three central midfielders and a front three, which is a 4-3-3 with a staggered midfield. The 7v7 preset gives you two center backs, one central midfielder and a front line you can treat as wide midfielders plus a striker, for a 2-3-1. For 4v4, use the 5v5 preset and hide the goalkeeper slot.</li>
+      <li><strong>Show or hide any of 13 positions.</strong> For a 4-4-2, show LB, CB, CB (2), RB, LW, CM, CM (2), RW, ST and ST (2), and hide CDM and CAM. For a 9v9 3-3-2, show LB, CB, RB, LW, CM, RW, ST and ST (2). For a 4-2-3-1, show LB, CB, CB (2), RB, CDM, CM, LW, CAM, RW and ST.</li>
+      <li><strong>Saved lineups.</strong> Save each shape as a named lineup for your team, such as "4-3-3 Home," and load it when you want to try it again.</li>
+      <li><strong>Position minutes in the summary.</strong> After a game, SubGo shows every position each player played and for how many minutes. Use it to check that nobody is stuck in one spot, which is exactly what US Youth Soccer warns against.</li>
+    </ul>
+
+    <p>To be clear about the limits: SubGo does not have named formations and you cannot drag slots around the field. You choose a shape by turning positions on and off. If a slot is hidden, any player in it goes back to the bench, so set your shape before kickoff or at halftime.</p>
+
+    <h3>A simple way to experiment</h3>
+    <ol class="plain">
+      <li>Pick one change, such as trying a 3-3-2 instead of a 3-2-3.</li>
+      <li>Keep it for several games so players have time to learn the roles.</li>
+      <li>Use SubGo's position minutes to make sure everyone is rotating through the shape.</li>
+      <li>Track what happens with <a href="../youth-soccer-stat-tracking/">MatchTap</a>, such as possession and shots, so you judge the shape on numbers instead of a feeling. Remember that a handful of games is a small sample.</li>
+      <li>Ask the players what felt easier or harder. They will tell you.</li>
+    </ol>
+
+    <div class="cta">
+      <h2>Set your shape in seconds</h2>
+      <p>SubGo has presets for every format, 13 positions you can turn on and off, and saved lineups for each shape you want to try. Free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://addisonunitedvt.com/wp-content/uploads/2012/03/US_Youth_Soccer_Player_Development_Model.pdf" rel="noopener">A Player Centered Curriculum for US Youth Soccer Clubs (Player Development Model)</a>, US Youth Soccer (systems of play, position rotation, goalkeepers).</li>
+      <li><a href="https://www.ussoccer.com/stories/2017/08/five-things-to-know-how-smallsided-standards-will-change-youth-soccer" rel="noopener">Five Things to Know: How Small-Sided Standards Will Change Youth Soccer</a>, U.S. Soccer.</li>
+      <li><a href="https://www.epysa.org/u-s-soccer-player-development-initiatives/" rel="noopener">U.S. Soccer Player Development Initiatives</a>, Eastern Pennsylvania Youth Soccer (format age bands).</li>
+      <li><a href="https://www.fcbayernyouth.com/youth-soccer-positions-guide-age-field-size/" rel="noopener">Youth Soccer Positions: guide by age and field size</a>, FC Bayern Academy.</li>
+      <li><a href="https://withcentro.com/blog/7v7-soccer-formations" rel="noopener">7v7 Soccer Formations Explained</a>, Centro.</li>
+      <li><a href="https://withcentro.com/blog/11v11-soccer-formations-youth" rel="noopener">11v11 Youth Soccer Formations</a>, Centro.</li>
+      <li><a href="https://www.soccercoachlab.com/blog/9v9-soccer-formations" rel="noopener">Best 9v9 Soccer Formations Explained</a>, SoccerCoachLab.</li>
+      <li><a href="https://205sports.org/2021/01/an-overview-of-9v9-systems-of-play/" rel="noopener">An overview of 9v9 systems of play</a>, 205 Academy.</li>
+      <li><a href="https://rondocoach.com/youth-soccer-formation/" rel="noopener">How to choose a youth soccer formation</a>, Rondo Coach.</li>
+      <li><a href="https://www.beyourbest.com/en-us/insight/soccer-formations-exploring-the-4-4-2-4-3-3-and-more" rel="noopener">Soccer Formations: Exploring the 4-4-2, 4-3-3 and more</a>, Be Your Best.</li>
+    </ul>
+    <p class="note">Formation guides from coaching sites are opinions, and they do not always agree. We used them to build a suggested path, not to state a rule. Your league, club and players come first.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

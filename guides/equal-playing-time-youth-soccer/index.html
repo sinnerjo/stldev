@@ -1,0 +1,546 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Equal Playing Time in Youth Soccer: 3v3 to 11v11 Guide</title>
+
+<!-- SEO -->
+<meta name="description" content="How much should every youth soccer player play? A format by format guide to fair playing time for 3v3, 7v7, 9v9 and 11v11, plus a free sub tracker." />
+<link rel="canonical" href="https://stldev.com/guides/equal-playing-time-youth-soccer/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Equal Playing Time in Youth Soccer: 3v3, 7v7, 9v9 and 11v11 Guide" />
+<meta property="og:description" content="Through 9v9, aim for equal minutes. At every age, no available player should get less than 50% of a game. Here is how to make it work, format by format." />
+<meta property="og:url" content="https://stldev.com/guides/equal-playing-time-youth-soccer/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-20" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Equal Playing Time in Youth Soccer: 3v3, 7v7, 9v9 and 11v11 Guide" />
+<meta name="twitter:description" content="Through 9v9, aim for equal minutes. At every age, no available player should get less than 50% of a game." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/equal-playing-time-youth-soccer/#article",
+      "headline": "Equal Playing Time in Youth Soccer: A Guide for 3v3, 7v7, 9v9 and 11v11",
+      "description": "A format by format guide to fair playing time in youth soccer, with the math for every roster size and a free tool for tracking minutes on the sideline.",
+      "datePublished": "2026-09-20",
+      "dateModified": "2026-09-20",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/equal-playing-time-youth-soccer/",
+      "author": { "@type": "Person", "name": "Joseph Warren", "url": "https://stldev.com/" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": ["Youth soccer", "Playing time", "Player development"]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "STL Soccer Dev Lab", "item": "https://stldev.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://stldev.com/guides/" },
+        { "@type": "ListItem", "position": 3, "name": "Equal Playing Time in Youth Soccer", "item": "https://stldev.com/guides/equal-playing-time-youth-soccer/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Playing Time</p>
+
+  <article>
+    <h1>Equal Playing Time in Youth Soccer: <span class="accent">A Guide for 3v3, 7v7, 9v9 and 11v11</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 20, 2026 &middot; 10 min read</p>
+
+    <p class="lead">Every season, a youth coach faces the same quiet decision: who plays, and for how long? Our answer is simple. Through 9v9, playing time should be as close to equal as you can make it. At every age, including 11v11, no healthy and available player should get less than half of a game.</p>
+
+    <h2 id="short-version"><span class="tag">The short version</span>Our playing time standard, by format</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Format</th><th>Typical ages</th><th>Playing time standard</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>3v3 and 4v4</td><td>U6 to U8</td><td>Equal minutes. Rotate on a timer. No exceptions beyond injury or absence.</td></tr>
+          <tr><td>7v7</td><td>U9 to U10</td><td>Equal minutes across the season. At least 50% of every game.</td></tr>
+          <tr><td>9v9</td><td>U11 to U12</td><td>Same as 7v7, and rotate positions too. Level of play does not decide minutes.</td></tr>
+          <tr><td>11v11</td><td>U13 and up</td><td>Roles and starting spots can be earned. The 50% floor still applies to every player in every game.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Two clarifications so we are being fair to real coaching. First, equal is a season long goal, not a stopwatch contest inside every game. Some games will not split evenly, and that is fine. Second, the 50% floor is per game. It is what makes the season goal reachable, because it stops any one player from quietly falling behind. The floor only bends for real reasons: injury, illness, arriving late, or a discipline issue you have talked through with the player.</p>
+
+    <p>Formats and age bands come from U.S. Soccer's Player Development Initiatives, which set 4v4 for U8 and younger, 7v7 for U9 and U10, and 9v9 for U11 and U12, with 11v11 after that. Many clubs and leagues use 3v3 for the youngest players. Your league's rules always come first, but as far as we could find, they usually spell out formats and substitution procedures without setting a minimum for minutes. In the playing rules St. Louis Youth Soccer publishes, for example, we found no minimum playing time requirement. That leaves the decision to the coach.</p>
+
+    <h2 id="why"><span class="tag">Why it matters</span>Game time and repetitions beat winning now</h2>
+
+    <p>A youth soccer season is short, and a player's career is long. The question worth asking is not "how do we win Saturday?" but "who will this player be in three years?" Four ideas point the same direction.</p>
+
+    <h3>1. Development happens on the ball</h3>
+    <p>You cannot improve at something you rarely do. A small study of 34 boys with an average age of 11.9 counted touches in 4v4, 7v7 and 11v11 games. Total touches per game were highest in 4v4 (about 311), then 7v7 (about 214), then 11v11 (about 170). The authors concluded that the ball is in play far more in small sided games, which means more repeated decision making, and called 4v4 and 7v7 more developmentally appropriate for players under 12. It was a small study with short games, so treat the exact numbers as a sketch. The direction is what matters.</p>
+    <p>US Youth Soccer's Player Development Model makes the same case, describing small sided games as the place where players gain quality ball skills through "increased time with the ball." A player sitting on the bench is getting none of it.</p>
+
+    <h3>2. Kids develop on different clocks</h3>
+    <p>Two players in the same age group can be years apart physically. As the Player Development Project puts it, "The player at 4th or 5th in your group at age 12 might be your best player by 15." Cut that player's minutes now and you may never find out.</p>
+    <p>Research on an elite academy in Madrid, covering 136 players aged 12 to 15, found that late maturing players received significantly less competitive playing time. The authors concluded that selection tends to favor physical development and can limit opportunities for late maturing and relatively younger players. If minutes follow the calendar and growth spurts instead of long term potential, equal playing time is the fix.</p>
+
+    <h3>3. Kids say they want to play</h3>
+    <p>The Aspen Institute's Project Play recommends equal playing time "through age 12, at least," and notes that the Norwegian, Swedish and Danish federations recommend it for children 12 and under. Its 2025 national survey of 3,827 young people ages 10 to 17 found that 57% believe all or equal playing time is fairest, and only 11% supported restricted minutes for non elite players. Among former players, "I'm not good enough" (29%) and "bad coaching" (21%) were the top reasons for quitting. A bench does nothing for confidence.</p>
+
+    <h3>4. Other countries already do this</h3>
+    <p>Belgium removed league standings for young players, moved to four quarters with mandatory substitutions, and requires a minimum of 50% playing time, according to John O'Sullivan of the Changing the Game Project describing their model. Kris Van Der Haegen of the Belgian federation adds that some clubs go further and give every player at least 75%. His reasoning is plain: "you can't develop if you don't touch the ball."</p>
+
+    <div class="callout">
+      <span class="label">The roster test</span>
+      <p>If a player was good enough to make your roster, that player is good enough to play for you. Roster spots are decisions. Minutes should follow them.</p>
+    </div>
+
+    <h2 id="math"><span class="tag">The math</span>What equal actually looks like</h2>
+
+    <p>Equal playing time is simple arithmetic. Divide the players on the field by the players on your roster. That share of the game is what every player gets when time is split evenly.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Format</th><th>On field</th><th>Example roster</th><th>Equal share of the game</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>3v3</td><td>3</td><td>5 players</td><td>60%</td></tr>
+          <tr><td>4v4</td><td>4</td><td>6 players</td><td>67%</td></tr>
+          <tr><td>7v7</td><td>7</td><td>12 players</td><td>58%</td></tr>
+          <tr><td>9v9</td><td>9</td><td>14 players</td><td>64%</td></tr>
+          <tr><td>11v11</td><td>11</td><td>18 players</td><td>61%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>In a 48 minute 7v7 game with 12 players, equal time is 28 minutes each. The 50% floor also tells you how large a roster can be before fairness becomes impossible: twice the number of players on the field. That is 6 for 3v3, 8 for 4v4, 14 for 7v7, 18 for 9v9 and 22 for 11v11. Carry more than that and someone will fall under half no matter how careful you are. Goalkeepers add a wrinkle, since they count toward the players on the field. Rotate the position rather than locking one player in it.</p>
+
+    <h2 id="3v3"><span class="tag">U6 to U8</span>3v3 and 4v4: equal minutes, every game</h2>
+
+    <p>At this age there is no real "level of play" to sort by. The gap between players is mostly birthdays and how many times each child has kicked a ball. Sorting them now just teaches the kids who need reps the most that they are not wanted.</p>
+    <p><strong>The standard:</strong> equal minutes, with injury and absence as the only exceptions.</p>
+    <p><strong>Why it is hard:</strong> the games are short, kids do not want to come off, and you are managing a handful of small humans, a parent or two, and a clock all at once.</p>
+    <p><strong>What works:</strong></p>
+    <ul class="plain">
+      <li>Rotate on a fixed timer, such as every four or five minutes, rather than "when it feels right." A timer takes the coach out of it, and kids understand a rule better than a mood.</li>
+      <li>Make coming off routine and never a punishment. Do not pull a child for a mistake.</li>
+      <li>With 5 players in 3v3 or 6 in 4v4, everyone plays 60% to 67% of the game. That is plenty of room for equal minutes.</li>
+      <li>Let every child try every spot. Nobody at this age is a defender or a striker yet.</li>
+    </ul>
+
+    <h2 id="7v7"><span class="tag">U9 to U10</span>7v7: equal across the season, 50% in every game</h2>
+
+    <p>This is the first time a scoreboard starts to matter to the adults on the sideline. It is also the age where the gap between the biggest kid and the youngest kid can be very visible, and where coaches feel the first pull to play "the best seven."</p>
+    <p><strong>The standard:</strong> equal minutes across the season, and at least half of every game for every available player. An occasional game may skew, but the floor does not move.</p>
+    <p><strong>Why it is hard:</strong> rotations are more complex. There are seven spots, including a goalkeeper, and the more players you carry the more the bench grows.</p>
+    <p><strong>What works:</strong></p>
+    <ul class="plain">
+      <li>Keep the roster near 10 to 12. At 12 players, everyone plays about 58%, which leaves a small cushion for injuries and absences.</li>
+      <li>Rotate positions along with minutes. Do not lock your tallest player in goal or your fastest player at forward. Nobody knows yet what these kids will become.</li>
+      <li>Share goalkeeper time. Give each willing player a turn, and let kids who do not want it skip it.</li>
+      <li>Plan substitutions in groups at natural stoppages, so the game keeps its flow and you are not making decisions every minute.</li>
+    </ul>
+
+    <h2 id="9v9"><span class="tag">U11 to U12</span>9v9: the last stage where results should not decide minutes</h2>
+
+    <p>Offside arrives, tactics get real, and players start to separate physically. This is the age where a coach is most tempted to shorten the bench and where the cost of doing it is highest. Project Play's recommendation of equal playing time "through age 12, at least" applies squarely here.</p>
+    <p><strong>The standard:</strong> the same as 7v7, with equal minutes as the goal and at least 50% in every game. Level of play does not decide minutes. Some games, such as a tournament final, will tempt you to lean on your strongest group. If you do, hold the 50% line for everyone else.</p>
+    <p><strong>Why it is hard:</strong> the differences between players are bigger, parents are more invested, and you are also trying to teach positions and shape. It is easy to let "who plays where" become "who plays."</p>
+    <p><strong>What works:</strong></p>
+    <ul class="plain">
+      <li>Keep the roster at 14 or fewer where you can. At 9v9 the absolute ceiling for the 50% floor is 18, but 14 leaves a healthy 64% share.</li>
+      <li>Rotate positions. The center back who has only ever defended has a limited view of the game and a limited future.</li>
+      <li>Check totals at halftime. Anyone well behind on minutes should get on the field early in the second half.</li>
+      <li>Remember that the player who is fourth or fifth best today may be your best in three years.</li>
+    </ul>
+
+    <h2 id="11v11"><span class="tag">U13 and up</span>11v11: earn your role, keep your floor</h2>
+
+    <p>This is where the idea of earning playing time, and earning a specific position, begins to make sense. Players are older, the game is bigger, and commitment and performance can reasonably shape who starts and who finishes. We are not arguing against that.</p>
+    <p><strong>The standard:</strong> roles and starting spots can be earned, and even so, every available player gets at least 50% of every game. In a 70 minute game, that is 35 minutes. Again, if a player was good enough to be put on your roster, that player is good enough to play for you.</p>
+    <p><strong>Why it is hard:</strong> the pressure to win is real, rosters get large, and it is easy to let a bench player disappear. Larger rosters make the floor mathematically impossible past 22 players, and much harder well before that.</p>
+    <p>Elite settings show it can be done. The Player Development Project notes that even elite academies often use a minimum of about 50% game time, and the Belgian model described above uses the same floor for young players. The Madrid academy research is a caution as well. Even at this age, playing time can track physical maturity as much as ability. A floor protects the late developer from a system that only sees size.</p>
+    <p><strong>What works:</strong></p>
+    <ul class="plain">
+      <li>Tell players how minutes are earned, in plain language, before the season starts.</li>
+      <li>Use starts, positions and closing minutes to reward effort and commitment. Keep the floor for everyone.</li>
+      <li>Keep the roster honest. If you cannot give every player half a game, you are carrying too many players.</li>
+      <li>Track it. At this age, coaches who feel sure they are being fair are often surprised by the numbers.</li>
+    </ul>
+
+    <h2 id="tracking"><span class="tag">The real problem</span>Fair on paper, hard on the sideline</h2>
+
+    <p>Nearly every coach agrees with equal playing time. Far fewer can prove they delivered it. During a game you are watching play, coaching, handling a parent's question, and trying to remember who sat out last. Memory is the weakest tool on the sideline, and a clipboard tally falls apart the moment a substitution or an injury scrambles the plan.</p>
+    <p>That is why we built SubGo, a free substitution and game tracker for soccer coaches. It does the counting so you can do the coaching.</p>
+
+    <ul class="plain">
+      <li><strong>Live time for every player.</strong> The bench alert highlights anyone who has been sitting longer than your threshold (5 minutes by default) and buzzes your phone. The on field alert does the same for players who have been out there too long (20 minutes by default). Set them to match your rotation length.</li>
+      <li><strong>Queue and call out subs.</strong> Line up several substitutions, then confirm them together when play stops. A full screen Call Out card shows each swap as incoming player, position and outgoing player, easy to read aloud on the sideline.</li>
+      <li><strong>Minutes that survive halftime.</strong> The clock resets at the half, but every player's minutes carry forward, so you can check totals and fix imbalances in the second half. You can also restore the first half lineup with one tap.</li>
+      <li><strong>Absent players handled.</strong> Mark a player as unavailable and they stay out of the picture for that game.</li>
+      <li><strong>A record you can show.</strong> The summary lists every player sorted by total time played, with minutes at each position, and you can export it as a CSV. When a parent asks about playing time, you have an answer that is not a guess.</li>
+      <li><strong>Saved lineups and multiple teams.</strong> Set up a lineup once and load it any time.</li>
+    </ul>
+
+    <p>SubGo is free, needs no account, and runs in your phone's browser.</p>
+
+    <h3>A simple sideline routine</h3>
+    <ol class="plain">
+      <li>Before the game, mark absent players unavailable and set your starting lineup.</li>
+      <li>Pick a rotation length and set the bench alert to match.</li>
+      <li>Queue subs as the alerts fire, and confirm them at the next stoppage.</li>
+      <li>At halftime, glance at minutes. Anyone behind gets on early in the second half.</li>
+      <li>After the game, open the summary. That is your season record for fairness.</li>
+    </ol>
+
+    <div class="callout orange">
+      <span class="label">Talking to parents</span>
+      <p>Tell parents your standard before the first game. Something like: "In our program every healthy player plays at least half of every game, and through age 12 we work toward equal minutes over the season." Parents rarely argue with a rule they heard in advance, and a minutes report backs you up when it matters.</p>
+    </div>
+
+    <div class="cta">
+      <h2>Make fair playing time the easy part</h2>
+      <p>SubGo tracks minutes, alerts you when players are due, and gives you a summary you can share. Free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these numbers come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://projectplay.org/news/2018/1/11/why-project-play-recommends-equal-playing-time-for-kids" rel="noopener">Why Project Play recommends equal playing time for kids</a>, Aspen Institute Project Play.</li>
+      <li><a href="https://projectplay.org/news/aspen-institute-national-survey-of-youth-and-sports-15-key-findings" rel="noopener">Aspen Institute national survey of youth and sports: 15 key findings</a>, Project Play (2025 survey, 3,827 youth ages 10 to 17).</li>
+      <li><a href="https://www.epysa.org/u-s-soccer-player-development-initiatives/" rel="noopener">U.S. Soccer Player Development Initiatives</a>, Eastern Pennsylvania Youth Soccer.</li>
+      <li><a href="https://digitalcommons.wku.edu/ijesab/vol8/iss3/16/" rel="noopener">Small sided soccer games improve game intelligence and ball possession of U/12 boys</a>, International Journal of Exercise Science: Applied Biomechanics.</li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13265563/" rel="noopener">Influence of the relative age effect and maturity status on competitive playing time in an elite football academy</a>, Frontiers in Sports and Active Living.</li>
+      <li><a href="https://playerdevelopmentproject.com/qa-should-i-give-my-players-equal-playing-time/" rel="noopener">Should we give kids equal playing time in youth soccer?</a>, Player Development Project.</li>
+      <li><a href="https://www.soccerparenting.com/blog/importance-small-sided-soccer-games-equal-playing-time-forgetting-late-bloomers/" rel="noopener">John O'Sullivan and Kris van der Haegen on small sided games, equal playing time and the late bloomer</a>, Soccer Parenting.</li>
+      <li><a href="https://addisonunitedvt.com/wp-content/uploads/2012/03/US_Youth_Soccer_Player_Development_Model.pdf" rel="noopener">A Player Centered Curriculum for US Youth Soccer Clubs (Player Development Model)</a>, US Youth Soccer.</li>
+      <li><a href="https://www.slysa.org/playing-rules" rel="noopener">Playing rules</a>, St. Louis Youth Soccer Association.</li>
+    </ul>
+    <p class="note">Your league, club or tournament rules always take priority over the guidance here. This guide reflects our coaching philosophy and the sources above, not a league mandate.</p>
+  </article>
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

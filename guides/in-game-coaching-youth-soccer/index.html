@@ -1,0 +1,484 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>In Game Coaching: What to Say, and When to Stay Quiet</title>
+
+<!-- SEO -->
+<meta name="description" content="What a youth soccer coach should actually say during a game, and how often silence is the better call, as the coach companion to our parent sideline guide." />
+<link rel="canonical" href="https://stldev.com/guides/in-game-coaching-youth-soccer/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="In Game Coaching: What to Say From the Sideline, and When to Stay Quiet" />
+<meta property="og:description" content="The coach half of the sideline conversation: what to actually say during play, when to stay quiet, and why less coaching often teaches more." />
+<meta property="og:url" content="https://stldev.com/guides/in-game-coaching-youth-soccer/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-23" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="In Game Coaching: What to Say From the Sideline, and When to Stay Quiet" />
+<meta name="twitter:description" content="The coach half of the sideline conversation: what to actually say during play, when to stay quiet, and why less coaching often teaches more." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/in-game-coaching-youth-soccer/#article",
+      "headline": "In Game Coaching: What to Say From the Sideline, and When to Stay Quiet",
+      "description": "What a youth soccer coach should say from the sideline during a game, why joystick coaching hurts development, and how to use silence, off ball coaching, and halftime conversations more effectively.",
+      "datePublished": "2026-09-23",
+      "dateModified": "2026-09-23",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/in-game-coaching-youth-soccer/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Coaching",
+        "Player development"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "MatchTap",
+        "url": "https://stldev.com/matchtap/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "In Game Coaching",
+          "item": "https://stldev.com/guides/in-game-coaching-youth-soccer/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / In Game Coaching</p>
+
+  <article>
+    <h1>In Game Coaching: <span class="accent">What to Say From the Sideline, and When to Stay Quiet</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 23, 2026 &middot; 5 min read</p>
+
+    <p class="lead">Our <a href="../youth-soccer-parent-sideline-guide/">parent sideline guide</a> asks parents to cheer instead of coach during games. This is the other half of that same deal. If a coach is calling out every touch a player takes, asking parents to stay quiet is a little rich. Here is what a coach's own voice should actually be doing during play, and how often the right answer is nothing at all.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches thinking about their own sideline voice during games, as the companion piece to our <a href="../youth-soccer-parent-sideline-guide/">guide for parents</a> on the same topic.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Do not joystick your players,</strong> calling out every pass, dribble and shot as if you were holding a controller.</li>
+        <li><strong>Coach the players off the ball</strong> more than the one who has it, and do it sparingly.</li>
+        <li><strong>Save detailed corrections</strong> for the next stoppage, halftime, or practice, not the middle of a play.</li>
+        <li><strong>Catch them being good,</strong> loudly and specifically, more often than you correct them.</li>
+        <li><strong>Sit down.</strong> Standing and pacing feeds the urge to narrate every second of the game.</li>
+      </ul>
+    </div>
+
+    <h2 id="why"><span class="tag">Why it matters</span>Decisions are the skill you are actually teaching</h2>
+
+    <p>Researcher Rianne Kannekens' work on player development found that the players who go the farthest are the ones who developed strong decision making skills early, not the ones who were told the right answer the most often. Trevor Brooking, former technical director of England's Football Association, describes the shift this way: "the old vision of the coach shouting do this or do that has gone," in favor of letting players discover the answer themselves.</p>
+
+    <p>Landon Donovan has made a similar point about American development specifically, noting that some players have been "told their whole life exactly what to do in what situation," instead of learning to read the game on their own. His observation about the countries that produce the best players is blunt: they let youth players "be decision makers, and they're able to do it without coaches and parents yelling constantly at them on the sidelines."</p>
+
+    <h2 id="joystick"><span class="tag">What not to say</span>Do not joystick your players</h2>
+
+    <p>One coaching guide describes the pattern to avoid clearly: coaches who "tell their players when to pass, who to pass to, when to dribble, when to shoot, when to tackle" end up controlling the game like a joystick rather than coaching it, and the result "robs the enjoyment of the sport" while earning little respect from the players themselves.</p>
+
+    <p>A simple test for whether you are about to cross that line: if the instruction you are about to shout has a verb in it, telling a specific player to do a specific thing right now, it is probably an instruction that belongs to the player, not to you. Ask yourself whether you would stand over a student's desk narrating every answer during a math test. A soccer game, for the player on the ball, is closer to that test than it is to a rehearsal.</p>
+
+    <h2 id="what-to-say"><span class="tag">What to say instead</span>A few things worth your voice</h2>
+
+    <p>Silence is not the same as having nothing useful to offer. A few things are genuinely worth saying out loud during play.</p>
+
+    <ul class="plain">
+      <li><strong>Coach the players without the ball.</strong> A reminder to a defender to step up, a midfielder to check their shoulder, or a fullback to get forward is far less disruptive than coaching the ball carrier, and it still shapes the game. Use it sparingly rather than constantly.</li>
+      <li><strong>Keep cues to the ball carrier short and open ended.</strong> Something like "heads up" invites a player to look for their own options rather than handing them the answer.</li>
+      <li><strong>Catch them being good, loudly.</strong> A specific, enthusiastic "great vision, way to get your head up" after a good decision teaches at least as much as any correction, and it costs you nothing.</li>
+      <li><strong>Save the detailed feedback for after the play.</strong> A note like "you missed a chance to go forward because your body was not open when you received it" is genuinely useful, delivered at the next stoppage or at halftime rather than shouted in the middle of play when the player cannot act on it anyway.</li>
+    </ul>
+
+    <h2 id="sit"><span class="tag">A physical trick</span>Sit down</h2>
+
+    <p>One piece of practical advice worth taking literally: sit during the game instead of pacing the touchline. Standing and moving with the play feeds the urge to narrate every moment of it. Sitting keeps you calmer, makes the occasional comment you do make land with more weight, and models exactly the composure you are hoping to see from your players when things go wrong on the field.</p>
+
+    <h2 id="halftime"><span class="tag">Halftime</span>Let players talk first</h2>
+
+    <p>Before giving your own halftime analysis, ask the players what they think is working and what needs to change, then fold your own observations in around theirs. It is a small habit that turns halftime into something players participate in rather than something that happens to them, and it fits naturally alongside the individual check ins described in our <a href="../youth-soccer-player-development-tracking/">player development guide</a>.</p>
+
+    <h2 id="mistakes-learning"><span class="tag">On mistakes</span>Let mistakes stay the currency of learning</h2>
+
+    <p>A player who is corrected loudly in front of the field the moment they make a mistake tends to remember the embarrassment more than the lesson. The same correction, delivered privately at the next stoppage or after the game, tends to actually change something, the same private over public principle covered in our <a href="../youth-soccer-behavior-and-effort/">guide on discipline and effort</a>. Mistakes made in real time, under real pressure, are how players actually learn the game. Narrating every one of them as it happens does not speed that process up. It mostly just adds noise.</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Coaching every touch of the ball carrier,</strong> which leaves no room for the player to actually decide anything.</li>
+      <li><strong>Correcting mistakes loudly, in the moment,</strong> instead of privately at the next natural break.</li>
+      <li><strong>Pacing the touchline</strong> in a way that makes constant commentary feel almost automatic.</li>
+      <li><strong>Asking parents to stay quiet</strong> while coaching every play yourself, which undercuts the standard before you have even set it.</li>
+      <li><strong>Doing all the talking at halftime,</strong> instead of asking players what they noticed first.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Give your halftime talk something to point to</h2>
+      <p>MatchTap tags events to the player who made them, so when you praise a specific good decision, you can pull up that exact moment later instead of relying on memory. Free, with no account.</p>
+      <a class="btn" href="../../matchtap/">Try MatchTap Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://www.soccerdrive.com/learn-how-to-coach-soccer/under-coaching-vs-over-coaching" rel="noopener">Lesson 14: Game Day Under Coaching vs. Over Coaching</a>, SoccerDrive.</li>
+      <li><a href="https://www.socceramerica.com/publications/article/75741/why-we-over-coach-why-we-shouldnt-and-how-not-t.html" rel="noopener">Why We Over-Coach, Why We Shouldn't, and How Not To</a>, Soccer America.</li>
+      <li><a href="https://www.deseret.com/2015/7/3/20567758/we-re-doing-youth-soccer-wrong-stop-yelling-instructions-from-the-sidelines/" rel="noopener">We're Doing Youth Soccer Wrong: Stop Yelling Instructions From the Sidelines</a>, Deseret News.</li>
+      <li><a href="https://www.soccerparenting.com/blog/addressing-improper-sideline-behavior/" rel="noopener">Identifying and Addressing Improper Sideline Behavior in Youth Soccer</a>, Soccer Parenting.</li>
+    </ul>
+    <p class="note">The phrases suggested here are examples of tone, not a script to repeat word for word. Adjust them to sound like you, and to fit the age and personality of your own team.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,540 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Track Player Development Over a Season, Not One Game</title>
+
+<!-- SEO -->
+<meta name="description" content="How to track one youth soccer player's development across a season instead of judging one game, with a simple system built on MatchTap's history." />
+<link rel="canonical" href="https://stldev.com/guides/youth-soccer-player-development-tracking/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Tracking Player Development Over a Season, Not Just One Game" />
+<meta property="og:description" content="Pick one or two goals per player, log the same number after every game, and show parents a real trend instead of a gut feeling." />
+<meta property="og:url" content="https://stldev.com/guides/youth-soccer-player-development-tracking/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/matchtap/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="MatchTap app icon" />
+<meta property="article:published_time" content="2026-09-23" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Tracking Player Development Over a Season, Not Just One Game" />
+<meta name="twitter:description" content="Pick one or two goals per player, log the same number after every game, and show parents a real trend instead of a gut feeling." />
+<meta name="twitter:image" content="https://stldev.com/matchtap/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/youth-soccer-player-development-tracking/#article",
+      "headline": "Tracking Player Development Over a Season, Not Just One Game",
+      "description": "How to track one youth soccer player's development across a season: pick one or two goals, log the same number after every game with MatchTap, check in periodically, and show parents a real trend.",
+      "datePublished": "2026-09-23",
+      "dateModified": "2026-09-23",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/matchtap/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/youth-soccer-player-development-tracking/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Player development",
+        "Goal setting"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "MatchTap",
+        "url": "https://stldev.com/matchtap/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Player Development Tracking",
+          "item": "https://stldev.com/guides/youth-soccer-player-development-tracking/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 600px) { .table-wrap.wide table { min-width: 620px; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Player Development</p>
+
+  <article>
+    <h1>Tracking Player Development Over a Season, <span class="accent">Not Just One Game</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 23, 2026 &middot; 8 min read</p>
+
+    <p class="lead">One game tells you almost nothing about a player. A quiet Saturday can follow a great week of practice, and a big game can follow a rough one. If you want to tell a parent something true about their child's development, you need a trend across several games, not a memory of the last one.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches who already track games, with MatchTap or anything else, and want to turn those games into a season long picture for each player instead of a running impression.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>One game is a small sample.</strong> Do not judge a player's development from a single performance, good or bad.</li>
+        <li><strong>Pick one or two goals per player,</strong> tied to something they control, not the scoreboard.</li>
+        <li><strong>Log the same one or two numbers after every game.</strong> MatchTap's player tagged events and CSV export make this quick.</li>
+        <li><strong>Check in every few games,</strong> not every game, so normal ups and downs do not look like real changes.</li>
+        <li><strong>Show parents the trend,</strong> not a single number, and frame it around development rather than the scoreboard.</li>
+      </ul>
+    </div>
+
+    <h2 id="one-game"><span class="tag">Why it matters</span>One game does not tell you much</h2>
+
+    <p>Sports statistics need a certain number of tries before they mean anything, a principle sometimes called the law of large numbers. The Power Rank illustrates this with an NFL example: the 2009 Denver Broncos started 6 and 0 under a new coach, prompting a national analyst to call him "one of the great ones." Denver finished the season 2 and 8 and missed the playoffs. The hot start was not a preview of the season. It was a small sample that happened to run one direction before it evened out.</p>
+
+    <p>Young players are noisier than NFL teams. A single game folds in the opponent, the weather, how much sleep a ten year old got, and plain luck, on top of whatever skill they actually have. Vanta Sports, which studies performance tracking for youth clubs, puts it simply: "One test day can be noisy. A sequence of check-ins is more useful." Judge the trend across several games, not the headline from Saturday.</p>
+
+    <h2 id="goals"><span class="tag">Step one</span>Pick one or two goals per player</h2>
+
+    <p>Our <a href="../coaching-first-season-youth-soccer/">first season guide</a> covers picking one or two goals for the whole team before a game. This is the same idea aimed at one player across a whole season.</p>
+
+    <p>David Feigley of the Rutgers Youth Sports Research Council explains why this works: performance goals succeed because the athlete controls them directly, while outcomes are "frequently controlled by others." A player cannot control whether the team wins. She can control whether she tries her strong foot, whether she calls for the ball, or whether she gets goal side of her mark before the ball arrives.</p>
+
+    <p>TrueSport's guide to setting goals with young athletes suggests starting with the player, not the coach. Have the player list a strength and something they want to improve, then agree together on the goal instead of assigning it. TrueSport also recommends writing it down and giving the player a copy to keep somewhere they will see it, such as their bag or their room. A goal nobody looks at again is not a goal, it is a wish.</p>
+
+    <p>Keep it small. One goal for most players, two at most for an older or more experienced one. A list of five things to fix will not fit in a ten year old's head during a game, and it will not fit in yours while you are also watching the whole field.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>If the player needs to</th><th>A goal that fits in one game</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Get more involved</td><td>Call for the ball at least five times</td></tr>
+          <tr><td>Use both feet</td><td>Take three touches with the weak foot</td></tr>
+          <tr><td>Improve first touch</td><td>Track completed first touches out of pressure</td></tr>
+          <tr><td>Track back on defense</td><td>Count recovery runs after losing the ball</td></tr>
+          <tr><td>Shoot more often</td><td>Take at least one shot from a good position</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="log-it"><span class="tag">Step two</span>Log the same number after every game</h2>
+
+    <p>Once you have a goal, you need a consistent way to measure it, and this is where a match tracker earns its keep. If you use <a href="../youth-soccer-stat-tracking/">MatchTap</a> in Team Individual mode, every event gets tagged with the player who did it, and every finished game is saved to Past Games with its own log. The CSV export includes a player column alongside the event and the time, so you can find one player's numbers inside any game you tracked without watching the game again.</p>
+
+    <p>Being direct about what MatchTap does and does not do: it gives you clean, player tagged numbers for one game at a time. It does not add those numbers up across a season for you. That part is on you, and it does not need to be complicated. A single page per player, on paper or in a notes app, with one row added after every game, is enough. A basic spreadsheet works too, and lets you paste in a new game's CSV and filter it down to one player's rows in a few seconds.</p>
+
+    <ul class="plain">
+      <li><strong>Track it during the game.</strong> Use Team Individual mode so the event you care about gets tagged with the right player automatically.</li>
+      <li><strong>Pull the number after the game.</strong> Export the CSV or just check the Log screen, and count that player's events for the goal you set.</li>
+      <li><strong>Add one row.</strong> Date, opponent, the number, and anything you noticed. That is the whole system.</li>
+      <li><strong>Repeat for every game.</strong> The value is in the row you add today plus every row before it, not in any single row.</li>
+    </ul>
+
+    <h2 id="check-in"><span class="tag">Step three</span>Check in every few games, not every game</h2>
+
+    <p>Reviewing a goal after every single game invites you to overreact to normal noise. TrueSport recommends checking in "at various points in the season" rather than constantly, and treats the end of season conversation as the most important one, worth having even if it is brief. A good rhythm for most teams is a quick look every three or four games, plus a longer conversation at the midpoint and one at the end of the season.</p>
+
+    <p>When you check in, look at the shape of the numbers, not any single point. If a player's completed first touches were 2, 1, 4, 3 and 6 over five games, the 1 does not mean she got worse. The overall climb is the story. Vanta Sports frames the payoff this way: when the numbers trend in the right direction over time, "development becomes visible, not vague."</p>
+
+    <p>Be ready to change the goal too. TrueSport is direct that goals "are not etched in stone," and a goal a player has clearly outgrown should be replaced with a harder one rather than kept just because it was written down first.</p>
+
+    <h2 id="parents"><span class="tag">Step four</span>Show parents the trend, not a feeling</h2>
+
+    <p>This is the payoff for the work above. Instead of telling a parent "she's coming along," you can show them five numbers going in the right direction, or explain honestly that a number has been flat and here is what you are both going to try next.</p>
+
+    <p>A few things make that conversation go well:</p>
+
+    <ul class="plain">
+      <li><strong>Set the frame at the start of the season.</strong> The Positive Coaching Alliance advises framing conversations "around development, not just outcomes," and holding a preseason meeting where you explain how you track progress before anyone is anxious about playing time.</li>
+      <li><strong>Pick your moment.</strong> TeamSnap's coaching advice is blunt about timing: avoid talking about a player's progress right before or right after a game, and do it somewhere private, not next to the field where other parents can hear.</li>
+      <li><strong>Use the numbers to add context, not to win an argument.</strong> Vanta Sports puts it well: use data "to personalise development, not to flatten children into a leaderboard." The goal is showing one child's own trend, never ranking her against a teammate.</li>
+      <li><strong>Point the conversation forward.</strong> End with what the player can work on next, not just where they stand today. TeamSnap suggests coaching players to ask "What do I need to do to improve?" and that habit works just as well in a parent conversation as a player one.</li>
+    </ul>
+
+    <p>None of this requires software built for it. A screenshot of a simple table, or just reading the numbers out loud, is usually enough. What matters is that the numbers are real and collected the same way every time, which is exactly what a consistent per game habit with <a href="../youth-soccer-stat-tracking/">MatchTap</a> gives you.</p>
+
+    <h2 id="example"><span class="tag">Example</span>What a season of tracking looks like</h2>
+
+    <p>Here is a simple example for one player with a goal of getting more touches on the ball by calling for it.</p>
+
+    <div class="table-wrap wide">
+      <table>
+        <thead>
+          <tr><th>Game</th><th>Opponent</th><th>Calls for the ball</th><th>Note</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Eagles</td><td>2</td><td>Quiet first half, better after halftime talk</td></tr>
+          <tr><td>2</td><td>Rangers</td><td>3</td><td>Small step, still hanging near the sideline</td></tr>
+          <tr><td>3</td><td>Comets</td><td>2</td><td>Tough opponent, less time on the ball for anyone</td></tr>
+          <tr><td>4</td><td>Thunder</td><td>5</td><td>Best game yet, asked for it out loud twice</td></tr>
+          <tr><td>5</td><td>Strikers</td><td>6</td><td>Consistent now, ready for a new goal</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Game 3 looks like a step back if you only glance at the number. Looked at across all five games, it is a normal dip inside a real upward trend, exactly the kind of noise the law of large numbers predicts and exactly why you check the trend and not the last data point.</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Tracking too many things.</strong> One number per player is plenty. A list of ten stats will not get updated after week two.</li>
+      <li><strong>Reacting to a single game.</strong> A bad number in one game is data, not a verdict.</li>
+      <li><strong>Comparing players to each other.</strong> This is a record of one player against her own past games, not a leaderboard.</li>
+      <li><strong>Never updating the goal.</strong> A goal a player mastered in October should not still be the goal in March.</li>
+      <li><strong>Saving all the feedback for the end of the season.</strong> Check in along the way so nothing you say at the final meeting is a surprise.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Get the per player numbers to track</h2>
+      <p>MatchTap's Team Individual mode tags every event with the player who did it, and exports each game to CSV with a player column built in. Free, with no account.</p>
+      <a class="btn" href="../../matchtap/">Try MatchTap Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://youthsports.rutgers.edu/wp-content/uploads/Goal-Setting.pdf" rel="noopener">Effective Goal Setting for Youth Sports</a>, David Feigley, Rutgers Youth Sports Research Council.</li>
+      <li><a href="https://truesport.org/goal-setting/how-to-set-goals-with-youth-athletes/" rel="noopener">How To Set Goals With Youth Athletes</a>, TrueSport.</li>
+      <li><a href="https://thepowerrank.com/reason-small-sample-size/" rel="noopener">The Reason You Can't Avoid The Curse of Small Sample Size</a>, The Power Rank.</li>
+      <li><a href="https://www.vantasports.ai/blog/benchmarking-performance" rel="noopener">Benchmarking Performance: A Youth Sports Club Playbook</a>, Vanta Sports.</li>
+      <li><a href="https://www.teamsnap.com/blog/coaching/how-coaches-can-successfully-talk-to-parents-about-playing-time" rel="noopener">How Coaches Can Successfully Talk To Parents About Playing Time</a>, TeamSnap.</li>
+      <li><a href="https://positivecoach.org/resource-zone/getting-parents-caregivers-on-your-side-turning-challenges-into-collaboration-in-youth-sports/" rel="noopener">Getting Parents and Caregivers on Your Side</a>, Positive Coaching Alliance.</li>
+    </ul>
+    <p class="note">The example in this guide is illustrative, not a real player's data. MatchTap stores each game separately and does not total a player's numbers across a season automatically. The tracking system described here is a simple habit we recommend building around it, not a built in feature.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

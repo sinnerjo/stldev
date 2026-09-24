@@ -1,0 +1,478 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guest Players and Tournament Rosters: Staying Fair</title>
+
+<!-- SEO -->
+<meta name="description" content="How to add guest players to a tournament roster fairly, for your own team and the player you borrowed, including the actual rules on guest playing." />
+<link rel="canonical" href="https://stldev.com/guides/guest-players-tournament-rosters-youth-soccer/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Guest Players and Tournament Rosters: Staying Fair for a Weekend" />
+<meta property="og:description" content="Guest player rules, why to use them, and how to keep a tournament weekend fair to both your own roster and the players you borrow for it." />
+<meta property="og:url" content="https://stldev.com/guides/guest-players-tournament-rosters-youth-soccer/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-27" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Guest Players and Tournament Rosters: Staying Fair for a Weekend" />
+<meta name="twitter:description" content="Guest player rules, why to use them, and how to keep a tournament weekend fair to both your own roster and the players you borrow for it." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/guest-players-tournament-rosters-youth-soccer/#article",
+      "headline": "Guest Players and Tournament Rosters: Staying Fair for a Weekend",
+      "description": "How to use guest players on a youth soccer tournament roster fairly, including the official rules on guest playing, why to use a guest player versus stacking a roster, protecting your own rostered players' minutes across a weekend, treating a guest player fairly, and the paperwork needed before a tournament.",
+      "datePublished": "2026-09-27",
+      "dateModified": "2026-09-27",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/guest-players-tournament-rosters-youth-soccer/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Coaching",
+        "Tournaments"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Tournaments",
+          "item": "https://stldev.com/guides/guest-players-tournament-rosters-youth-soccer/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Tournaments</p>
+
+  <article>
+    <h1>Guest Players and Tournament Rosters: <span class="accent">Staying Fair When You Borrow Players for a Weekend</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 27, 2026 &middot; 6 min read</p>
+
+    <p class="lead">A tournament weekend has a way of exposing a thin roster. Someone is on vacation, someone is injured, and suddenly you are three players short of a full squad for three games in two days. Borrowing a guest player from another team solves the immediate problem, but it creates two new ones if you are not careful, a guest player who does not know what to expect, and a group of your own players whose minutes just got squeezed by someone who was not even on the team a week ago.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches adding one or more guest players to a tournament roster, who want the weekend to be fair to their own team and to the player they borrowed. Our <a href="../equal-playing-time-youth-soccer/">equal playing time guide</a> covers the underlying standard this guide is protecting during an unusual weekend.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Check the actual tournament's rules first.</strong> Guest player limits are set by the tournament host, not a single national number.</li>
+        <li><strong>Use guest players to fill a real gap,</strong> an injury or a scheduling conflict, not to stack a roster for a trophy.</li>
+        <li><strong>Measure fairness across the whole weekend,</strong> not game by game, and use later games to correct any imbalance.</li>
+        <li><strong>A guest player is a teammate for the weekend,</strong> not a body to plug a hole. Give them a real role.</li>
+        <li><strong>Get expectations about cost and paperwork in writing</strong> before the tournament starts, not during it.</li>
+        <li><strong>Your own rostered players' development still comes first,</strong> even on a weekend built around an outside guest.</li>
+      </ul>
+    </div>
+
+    <h2 id="rules"><span class="tag">Rules first</span>Know the actual rule before you build the roster</h2>
+
+    <p>Guest playing has an official definition in U.S. Youth Soccer's national policy: a guest player is "a registered player participating in a competition for a team to which the player is not rostered for purposes of league play." Importantly, guest players are only permitted in tournament competitions, never in regular league games, where "every player listed on the game roster must be included on the team roster to be eligible to participate with the team."</p>
+
+    <p>Beyond that, there is no single national number for how many guest players a team can carry. U.S. Club Soccer's own guidance leaves loan rules for tournament play up to the individual tournament host to decide as part of that event's competition rules. In practice, that means the tournament you are entering this weekend may allow two guest players, or five, or none at all, and the only way to know is to read that specific tournament's rules rather than assuming last year's tournament's limit still applies.</p>
+
+    <h2 id="why"><span class="tag">Purpose</span>Be honest about why you are doing it</h2>
+
+    <p>There is a real difference between guest playing to solve a genuine shortage and guest playing to build a stronger team than the one you actually coach all season. One tournament planning resource draws that line clearly: "guest players solve shortages, they do not erase your team's fairness standard." A team that is short two players because of a family vacation and a minor injury has a legitimate reason to guest a couple of players. A team that regularly stacks its tournament roster with outside talent to chase a bracket is doing something different, and it comes at a real cost. One youth soccer commentary on the practice notes a common complaint from parents on the receiving end of that decision, that "regularly rostered players of the team utilizing the guest players are being left on the bench rather than playing and gaining valuable experience," which is exactly the outcome a fairness minded coach is trying to avoid.</p>
+
+    <h2 id="fairness-regulars"><span class="tag">Your own team</span>Protect your rostered players' minutes first</h2>
+
+    <p>The easiest way to keep a guest heavy weekend fair is to stop measuring fairness game by game and start measuring it across the whole event. One planning framework for exactly this situation lays out a simple sequence: set a minimum share of minutes every rostered player should get across the weekend, commonly around half of available minutes for younger ages, plan roughly how substitutions will go before the first game, track actual minutes as each game happens rather than trusting memory afterward, and use the games still ahead to correct anything that got out of balance early. The guiding principle behind all of it is straightforward: a guest player exists to fill a gap, not to quietly take development time away from the players who show up to training every week.</p>
+
+    <h2 id="fairness-guest"><span class="tag">The guest player</span>Be fair to the player you borrowed too</h2>
+
+    <p>Fairness runs in both directions. A family agreeing to guest their child for a weekend deserves clarity up front, not surprises once the tournament starts. One guide aimed at families going through this recommends getting cost expectations settled early, since a coach may cover uniforms and tournament fees but still expect a contribution toward travel, and the advice cuts both ways: "when it comes to money, always ask for the expectations in writing to ensure everyone is on the same page." The same applies to playing time. If you are borrowing a player specifically because you need real minutes from them, say so. If they are depth insurance who may only see one half all weekend, say that too, before they show up expecting a starting role.</p>
+
+    <h2 id="onboarding"><span class="tag">Game day</span>Set them up to succeed in one weekend</h2>
+
+    <p>A guest player does not have the benefit of a full season learning your team's habits, so do not hand them a complicated system and expect it to click by kickoff. Introduce them to the group before the first game, tell them plainly what position or role you need from them, and keep any tactical instruction simple and specific rather than assuming context they do not have. Pairing them with one regular player who can give them a quiet cue during the game, where to stand on a throw in, who covers what on a corner, does more for a guest player's first game than any amount of pregame explanation. The goal for the weekend is for them to feel like a real teammate, not a substitute part bolted on to fill a gap in the lineup.</p>
+
+    <h2 id="paperwork"><span class="tag">Logistics</span>Get the paperwork right before you travel</h2>
+
+    <p>Once a player is carded with a club, that card legally belongs to the club, not the family, which means guest playing requires the home club's cooperation, typically through a release form that lets the guest player's card move to the hosting team for the event. Confirm this is handled well before the tournament, not the morning of, since a missing form can mean a player is not actually eligible to take the field no matter how good the on field arrangement sounded. One writer pushing for simpler, stricter guest rules summarizes the standard worth aiming for even where the official rule allows more: "one player, one tournament, one team," which keeps the arrangement clean for everyone involved, the player, both coaches, and both sets of teammates.</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Assuming a guest player limit from a past tournament</strong> applies to this one, instead of checking its specific rules.</li>
+      <li><strong>Stacking a roster with guests</strong> to chase a bracket instead of filling a genuine, specific gap.</li>
+      <li><strong>Judging fairness game by game</strong> instead of across the full weekend, where it is easier to correct.</li>
+      <li><strong>Leaving a guest player's role unclear</strong> until they are already standing on the sideline at kickoff.</li>
+      <li><strong>Skipping the release paperwork</strong> until the morning of the tournament.</li>
+      <li><strong>Letting a guest player's minutes quietly come out of your own rostered players' development time.</strong></li>
+    </ul>
+
+    <div class="cta">
+      <h2>Keep the whole weekend's minutes straight</h2>
+      <p>Adding a guest player to the mix makes manual playing time tracking even harder. SubGo tracks every player's minutes automatically across every game of the weekend, guests included, so nobody's development time quietly disappears. Free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://www.usyouthsoccer.org/wp-content/uploads/sites/160/2025/12/Policy-on-Players-and-Playing-Rules-_APP-12.05.2025.pdf" rel="noopener">Policy on Players and Playing Rules</a>, U.S. Youth Soccer.</li>
+      <li><a href="https://www.soccerdrillbook.com/us-club-soccer-guest-player-rule/" rel="noopener">US Club Soccer Guest Player Rule</a>, SoccerDrillBook.</li>
+      <li><a href="https://pitch-planner.app/blog/fair-playing-time-weekend-event-guest-players/" rel="noopener">Fair Playing Time With Guest Players in Youth Soccer</a>, Pitch Planner.</li>
+      <li><a href="https://soccermomsanddads.com/the-guest-player-dilemma-balancing-fairness-and-competition-in-youth-soccer/" rel="noopener">The Guest Player Dilemma: Balancing Fairness and Competition in Youth Soccer</a>, Ohio Soccer Moms and Dads.</li>
+      <li><a href="https://anytime-soccer.com/answering-your-top-questions-on-guest-player-opportunities-and-more-in-youth-soccer/" rel="noopener">Answering Your Top Questions on Guest Player Opportunities</a>, Anytime Soccer Training.</li>
+    </ul>
+    <p class="note">Guest player rules vary by tournament, league, and state association, and can change from year to year. Always confirm the specific rules of the tournament you are entering and check with your own club before finalizing a guest arrangement.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

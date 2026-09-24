@@ -1,0 +1,509 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Planning a Youth Soccer Practice: A One Hour Template</title>
+
+<!-- SEO -->
+<meta name="description" content="A one hour practice template fitting warm up, technical work, and small sided games together, without wasting time on lines, laps, or lectures." />
+<link rel="canonical" href="https://stldev.com/guides/planning-a-youth-soccer-practice-session/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Planning a Practice: Fitting Warm Up, Technical Work, and Games Into One Hour" />
+<meta property="og:description" content="Two respected practice structures, a one hour template blending them, and how to stop losing a third of practice to setup, lines, and long explanations." />
+<meta property="og:url" content="https://stldev.com/guides/planning-a-youth-soccer-practice-session/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-26" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Planning a Practice: Fitting Warm Up, Technical Work, and Games Into One Hour" />
+<meta name="twitter:description" content="Two respected practice structures, a one hour template blending them, and how to stop losing a third of practice to setup, lines, and long explanations." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/planning-a-youth-soccer-practice-session/#article",
+      "headline": "Planning a Practice: Fitting Warm Up, Technical Work, and Games Into One Hour",
+      "description": "How to plan a one hour youth soccer practice so warm up, technical work, and small sided games all fit without wasted time, including the Play Practice Play model, a traditional practice structure, a one hour template, and how to match activity length to attention span by age.",
+      "datePublished": "2026-09-26",
+      "dateModified": "2026-09-26",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/planning-a-youth-soccer-practice-session/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Coaching",
+        "Practice planning"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Practice Planning",
+          "item": "https://stldev.com/guides/planning-a-youth-soccer-practice-session/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Practice Planning</p>
+
+  <article>
+    <h1>Planning a Practice Session: <span class="accent">Fitting Warm Up, Technical Work, and Small Sided Games Into One Hour</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 26, 2026 &middot; 7 min read</p>
+
+    <p class="lead">Most coaches do not lose practice time to any one bad decision. They lose it in small pieces, five minutes setting up cones while players stand around, a long explanation before a drill anyone could have picked up in one demonstration, a line of six kids waiting for one ball. None of that shows up as a mistake in the moment. It just adds up to a session that feels rushed by the time the actual game at the end arrives. A little structure, decided before you ever get to the field, fixes almost all of it.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches building a repeatable structure for a one hour practice, so warm up, technical work, and small sided games all fit without the session running long or feeling rushed. If you are new to coaching entirely, our <a href="../coaching-first-season-youth-soccer/">first season guide</a> covers the broader basics, and our <a href="../youth-soccer-formations-by-age/">formations by age guide</a> covers what to actually coach once players are on the field.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Start with the ball moving,</strong> not a line or a lap, from the very first minute.</li>
+        <li><strong>Set up your grids and cones before players arrive,</strong> not while they wait on you.</li>
+        <li><strong>Match activity length to attention span,</strong> which is shorter than most coaches assume for younger ages.</li>
+        <li><strong>Move from technical work to pressure to a real game,</strong> in that order, every session.</li>
+        <li><strong>End with something that looks like the actual sport,</strong> a small sided game, not a drill.</li>
+        <li><strong>Cut explanations short.</strong> A quick demonstration teaches faster than a long one ever will.</li>
+      </ul>
+    </div>
+
+    <h2 id="two-models"><span class="tag">The framework</span>Two respected ways to structure it, and where they agree</h2>
+
+    <p>U.S. Soccer's own grassroots curriculum is built around a model called Play, Practice, Play. Rather than starting with drills, the session opens with a small sided game that the players largely run themselves, while the coach mostly observes. The middle of the session becomes targeted practice built around whatever the coach actually saw players struggle with in that opening game, and the session closes with another small sided game where players apply what they just worked on. As the model's own description puts it, the goal is not a rigid formula to repeat every time, but "a conceptual tool" aimed at one thing, keeping players moving and engaged instead of standing in lines.</p>
+
+    <p>A more traditional structure, used widely across youth coaching guides, moves the other direction: technical fundamentals first, in a low pressure setting, then the same skill applied under some opposition, then a full small sided game that puts it all together. Both approaches agree on far more than they disagree. Neither one wants a long lecture up front, both want players touching the ball constantly rather than waiting in line, and both end the session with something that actually resembles the real game. Which one you pick matters less than making sure your own hour actually reflects one of them on purpose, instead of drifting into whatever feels easiest to plan that week.</p>
+
+    <h2 id="template"><span class="tag">Template</span>A one hour structure you can start from</h2>
+
+    <p>Blending both approaches into a simple hour looks something like this. Treat the minutes as a starting point to adjust for your own team's age and attention span, not a rule to follow to the second.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Time</th><th>What is happening</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0 to 10 min</td>
+            <td>Arrival and warm up as a small sided game, 1v1 or 2v2, so players are touching the ball and moving from the moment they step on the field, not standing in a line stretching.</td>
+          </tr>
+          <tr>
+            <td>10 to 25 min</td>
+            <td>Technical work on one specific skill, in a low pressure setting at first, then with some light competition added once the group looks comfortable.</td>
+          </tr>
+          <tr>
+            <td>25 to 45 min</td>
+            <td>The same skill applied under real pressure, an opposed, game like scenario such as a small overload, where players have to use the skill to solve an actual problem.</td>
+          </tr>
+          <tr>
+            <td>45 to 58 min</td>
+            <td>A full small sided game, with a light coaching constraint tied to the day's theme if it fits naturally, otherwise just let them play.</td>
+          </tr>
+          <tr>
+            <td>58 to 60 min</td>
+            <td>A short water break and a quick, two sentence recap of one thing that went well, not a long postmortem.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="attention"><span class="tag">Attention span</span>Match activity length to age, not ambition</h2>
+
+    <p>A useful rule of thumb for how long any single activity should run before a young player's focus genuinely starts to drift, is a child's age in years plus one minute. For a group of six year olds, that means an individual activity holding real attention for roughly six to seven minutes before it is time to switch to something new, even if the drill itself is a good one. For eight year olds, that is closer to eight to ten minutes, and for ten year olds, ten to twelve. The broader principle worth remembering below that age range is that frequency beats length, more, shorter practices generally beat fewer, longer ones for actual development, which is worth knowing before assuming a longer practice is automatically a better one.</p>
+
+    <h2 id="setup"><span class="tag">Before they arrive</span>Do your setup before practice starts, not during it</h2>
+
+    <p>Most youth coaches only get sixty to ninety minutes of field time in a week, and every minute spent setting up cones or explaining a drill at length is a minute that comes directly out of that budget. One coaching guide puts the math on this plainly: spend fifteen minutes setting up cones and ten minutes lecturing, and you have already lost nearly a third of the entire session before a single ball has been kicked with intent. Show up with your grids marked and your equipment staged before the first player arrives, and save the explaining for a thirty second demonstration rather than a speech.</p>
+
+    <h2 id="waste"><span class="tag">What actually wastes time</span>Lines, laps, and lectures</h2>
+
+    <p>One long running piece of advice aimed specifically at volunteer coaches sums up what to avoid in three words: "no lines, no laps, no lectures." A line of players waiting for one ball is time nobody on that line is actually developing. A lap around the field does very little for a young player's coordination or touch on the ball, which is what actually needs the repetition. And a long explanation loses a group of kids well before it finishes, no matter how useful the point being made actually is. Almost everything about a well run hour comes down to eliminating those three things wherever they show up in your plan.</p>
+
+    <h2 id="example"><span class="tag">Example</span>What this looks like with a real theme</h2>
+
+    <p>Say the theme for the week is first touch. Warm up is a simple 2v2 in a tight grid, nothing structured yet, just movement and touches. Technical work is receiving the ball on the half turn, first alone against a wall or a partner's throw, then with a passive defender jogging in to add just enough pressure to matter. The pressure phase becomes a 3v2 to a small goal, where a clean first touch is what actually creates the scoring chance, so the skill is doing real work rather than being practiced in isolation. The session closes with a regular small sided game, no constraint needed, since the whole point was to let that first touch show up naturally once the pressure is real.</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Starting with a lecture or a lap</strong> instead of the ball moving in the first minute.</li>
+      <li><strong>Setting up equipment while players wait,</strong> instead of having it ready before anyone arrives.</li>
+      <li><strong>Running one activity far longer</strong> than a young player's actual attention span for it.</li>
+      <li><strong>Skipping straight from a drill to a full game,</strong> with no pressure phase in between to bridge the two.</li>
+      <li><strong>Ending practice with more technical work</strong> instead of something that actually looks like the sport.</li>
+      <li><strong>Explaining a drill at length</strong> instead of showing it once and letting players learn by doing it.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Carry that same discipline into game day</h2>
+      <p>The structure you build in practice deserves to show up on the scoreboard too. SubGo keeps substitutions and playing time on a fair, automatic schedule during games, so the same care you put into planning practice does not stop at kickoff. Free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://www.ussoccer.com/stories/2018/02/five-things-to-know-about-playpracticeplay" rel="noopener">Five Things to Know About Play-Practice-Play</a>, U.S. Soccer.</li>
+      <li><a href="https://coachtoph.substack.com/p/play-practice-play" rel="noopener">Play-Practice-Play</a>, Coach Toph.</li>
+      <li><a href="https://www.icoachfootball.net/the-60-minute-plan-structuring-the-perfect-youth-soccer-session/" rel="noopener">The 60 Minute Plan</a>, iCoachFootball.</li>
+      <li><a href="https://coachtube.com/soccer/articles/structure-soccer-practice-sessions" rel="noopener">How to Structure Practice Sessions</a>, CoachTube.</li>
+      <li><a href="https://www.soccerparenting.com/blog/national-curriculum-volunteer-recreational-youth-soccer-coaches/" rel="noopener">A National Curriculum for Volunteer Recreational Youth Soccer Coaches</a>, Soccer Parenting.</li>
+      <li><a href="https://hobbit.football/guides/how-long-should-youth-soccer-practice-be" rel="noopener">How Long Should Youth Soccer Practice Be?</a>, Hobbit AI.</li>
+    </ul>
+    <p class="note">The one hour template and the example session here are starting points to adjust for your own team's age, field space, and squad size, not a fixed script. Timing suggestions are general guidance, not a rule to apply identically to every age group or league.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

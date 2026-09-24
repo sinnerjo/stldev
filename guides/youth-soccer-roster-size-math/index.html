@@ -1,0 +1,540 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Youth Soccer Roster Size: How Many Players to Carry</title>
+
+<!-- SEO -->
+<meta name="description" content="How many players to carry on a youth soccer roster by format, the real forfeit minimums, and the tradeoff between roster size and playing time." />
+<link rel="canonical" href="https://stldev.com/guides/youth-soccer-roster-size-math/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Roster Size Math: How Many Players to Actually Carry, by Format" />
+<meta property="og:description" content="Format size, a rotation plan, and a realistic injury and absence buffer, so you are not stuck with 9 available bodies for an 11v11 game." />
+<meta property="og:url" content="https://stldev.com/guides/youth-soccer-roster-size-math/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-30" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Roster Size Math: How Many Players to Actually Carry, by Format" />
+<meta name="twitter:description" content="Format size, a rotation plan, and a realistic injury and absence buffer, so you are not stuck with 9 available bodies for an 11v11 game." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/youth-soccer-roster-size-math/#article",
+      "headline": "Roster Size Math: How Many Players to Actually Carry, by Format",
+      "description": "How many players to actually carry on a youth soccer roster given your format, your substitution plan, and a realistic injury or absence buffer, including published US Youth Soccer roster caps, the real forfeit minimum for 11v11, and an honest look at what guest player rules do and do not cover.",
+      "datePublished": "2026-09-30",
+      "dateModified": "2026-09-30",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/youth-soccer-roster-size-math/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Coaching",
+        "Roster management"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Roster Size",
+          "item": "https://stldev.com/guides/youth-soccer-roster-size-math/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Roster Size</p>
+
+  <article>
+    <h1>Roster Size Math: <span class="accent">How Many Players to Actually Carry</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 30, 2026 &middot; 9 min read</p>
+
+    <p class="lead">Roster size feels like a simple number until the week you show up with two players sick, one on a family trip, and one still in a boot from last week's game, and suddenly your 11v11 team has nine bodies for a game that needs eleven. Getting this right before the season starts is mostly arithmetic: your format's field size, how much bench you want for a real rotation, and a buffer for the players who will not show up on a given Saturday, whether you know it yet or not.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches building a roster before the season starts, or realizing midseason that theirs is too thin or too thick. This assumes you already have a playing time standard in mind, ours is covered in the <a href="../equal-playing-time-youth-soccer/">equal playing time guide</a>, and a rotation plan, covered in the <a href="../youth-soccer-substitution-patterns/">substitution patterns guide</a>. Roster size is the number that makes both of those actually work on a Saturday.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Lean toward a smaller roster when you can.</strong> Every extra player on the roster is real minutes taken from someone else.</li>
+        <li><strong>There is no governing body formula for the injury and absence buffer.</strong> The real data does not translate into a clean number, so this is judgment, not science.</li>
+        <li><strong>Know your league's actual minimum to avoid a forfeit,</strong> not just the general rule you have heard secondhand.</li>
+        <li><strong>A big club's real advantage is depth,</strong> more teams and coaches to lean on, but check what your own league's guest player rule actually allows before you plan around it.</li>
+        <li><strong>A small club or rec team without that safety net should carry more,</strong> since a thin roster with no backup plan is the version of this that actually forfeits games.</li>
+      </ul>
+    </div>
+
+    <h2 id="formula"><span class="tag">The math</span>Three numbers, not one</h2>
+
+    <p>Roster size math has three separate inputs, and most of the frustration with a bad roster comes from only thinking about one of them. The first is your format's field size, seven for 7v7, nine for 9v9, eleven for 11v11, which is fixed and not up for debate. The second is how much bench you want for a real rotation, enough players that your sub pattern actually spreads minutes around instead of running the same seven kids into the ground. The third is a buffer for the players who will not be there on a given day, sick, hurt, out of town, or just done for the season, which is the number coaches most often skip until it costs them a game.</p>
+
+    <p>Add those three together and you get a roster size. Skip the third one and you get a roster that works fine for six weeks and then does not.</p>
+
+    <h2 id="caps"><span class="tag">What the numbers say</span>Published roster sizes, where they actually exist</h2>
+
+    <p>US Soccer's own youth framework puts real numbers on two of the three small sided formats. Its Player Development Initiatives standard states plainly that for 7v7, "rosters should include no more than 12 players," and for 9v9, "rosters should include no more than 16 players." Those are national, and they are caps, not targets, the document is describing a ceiling meant to protect playing time, not a number every team should aim for.</p>
+
+    <p>For 11v11, there is no equivalent national maximum. It is left to states and leagues, and they do not agree with each other. One state association's competitive rules list a range of 7 to 12 players for 7v7, 9 to 14 for 9v9, and 11 to 18 for 11v11 in the younger high school age range, rising to 11 to 22 for older age groups. A separate recreational league sets its own 11v11 ceiling at 22 players on the team roster, with a maximum of 18 allowed to suit up for any single game. If you coach 11v11, your actual ceiling is whatever your own league says it is, not a national standard, so check your own rulebook before you plan a number.</p>
+
+    <h2 id="floor"><span class="tag">The hard floor</span>What it actually takes to avoid a forfeit</h2>
+
+    <p>The number that matters more than any ceiling is the floor, the point at which a game cannot continue at all. For 11v11, this one is real and consistent across sources. The Laws of the Game state that "a match may not start or continue if either team has fewer than seven players." That same seven player minimum is echoed in NCAA rules and in the high school rulebook, which states a game "shall not be started with fewer than seven properly uniformed players on each team," and that after kickoff, it "may not be continued with fewer than seven players on either team," or it is forfeited. Seven, for an eleven player format, is the number to know cold.</p>
+
+    <p>For 7v7 and 9v9, there is no equivalent national rule that we could confirm, the only concrete numbers we found came from a single recreational league, which sets its own minimum to start at four players for 7v7 and six for 9v9, including the goalkeeper. Treat that as one league's local rule, not a standard, and check your own league's actual policy rather than assuming a number.</p>
+
+    <h2 id="cost"><span class="tag">The real cost</span>A bigger roster is fewer minutes for everyone</h2>
+
+    <p>Here is the part a lot of roster discussions skip. Total playing minutes in a game are fixed, one hour for most 9v9 and 11v11 youth games, and every player you add to the roster divides that fixed pool into smaller pieces. This is the same math behind our <a href="../equal-playing-time-youth-soccer/">equal playing time guide</a>: minutes on the field divided by roster size is roughly what each kid gets, and a roster padded past what your format and sub plan actually need is minutes quietly taken away from every player on the team, not just the ones on the bench.</p>
+
+    <p>That is the whole case for leaning smaller when your situation allows it. A 9v9 team carrying 12 players instead of 14 is not a small difference, it is two extra rotations worth of minutes redistributed back to the kids already on the roster. The tradeoff is real, though, a smaller roster has less room to absorb the week two players are out, which is exactly why the buffer number below matters, and why it depends on what kind of club you coach for.</p>
+
+    <h2 id="buffer"><span class="tag">Honest gap</span>Why there is no clean formula for the buffer</h2>
+
+    <p>We looked for real data to justify a specific buffer number, an actual study on how often youth players miss a game or practice, and could not find one. What exists on this is coach anecdote, not a citable study, so we are not going to dress up a guess as science. Injury data does exist, and it is real, one peer reviewed analysis of youth football injuries found an overall rate around 5.7 to 6.8 injuries per 1,000 hours of play, rising notably in older age groups, but that number is expressed in exposure hours across a whole season and does not convert cleanly into "carry two extra players." Anyone who tells you a specific buffer number is backed by a study is overstating what the research actually says.</p>
+
+    <p>What we can say with confidence is where the buffer number should land, somewhere between your format's floor and its published ceiling, sized to your own club situation. That is a judgment call grounded in real rules and real coach experience, not a formula, and we would rather tell you that plainly than invent a number that sounds more scientific than it is.</p>
+
+    <h2 id="club"><span class="tag">Club size</span>Big club versus small club changes the math</h2>
+
+    <p>A real advantage of coaching at a medium or large club is depth. More teams in your age group usually means more relationships between coaches, and a realistic chance of borrowing a player from a sister team when someone gets hurt. That is a genuine benefit worth factoring into your roster plan, and it is one of the better reasons to prefer a bigger club if you have the choice.</p>
+
+    <p>It is worth being precise about what that actually is before you build a season around it, though. Guest player rules exist, and we cover them fully in our <a href="../guest-players-tournament-rosters-youth-soccer/">guest players and tournament rosters guide</a>, but the policies themselves are usually written for planned absences and tournament play, not open ended injury coverage. One league's own guest player policy states directly that it "is NOT intended for emergencies, but for use in filling in for planned absences of players throughout the season," and that its purpose "is not to encourage clubs to enter teams with fewer players, so that the team could not function on its own." At the national level, guest players in official US Youth Soccer play are limited to tournament competitions, not regular season league games, unless your own league has separately adopted a broader rule.</p>
+
+    <p>In practice, plenty of clubs handle a midseason injury informally anyway, a coach two teams over with a full bench lets you borrow a player for a weekend, and that kind of relationship is genuinely more available at a bigger club. Just hold it as a soft advantage of club culture and depth, not a guaranteed rule you can lean on the way you can lean on your own bench. If you coach at a small club or in a recreational league without that kind of depth to borrow from, carry more of your own buffer instead of counting on a favor that may not be there. For families weighing whether a bigger club is worth it for reasons beyond roster depth, our <a href="../recreational-to-competitive-club-soccer/">recreational to competitive club guide</a> covers what else actually changes.</p>
+
+    <h2 id="table"><span class="tag">Putting it together</span>A starting point by format and situation</h2>
+
+    <p>These are not official numbers, they are our own recommendation, built from the published ceilings and floors above plus a smaller roster bias when your situation allows it. Adjust up if your league's minimum to start is higher than you expected, or if you genuinely have no bench depth to borrow from.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Format</th>
+            <th>On the field</th>
+            <th>Legal floor</th>
+            <th>Published ceiling</th>
+            <th>Lean roster (big club depth)</th>
+            <th>Buffer roster (no safety net)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>7v7</td>
+            <td>7</td>
+            <td>Not set nationally, one league uses 4</td>
+            <td>US Youth Soccer caps at 12</td>
+            <td>9</td>
+            <td>10 to 11</td>
+          </tr>
+          <tr>
+            <td>9v9</td>
+            <td>9</td>
+            <td>Not set nationally, one league uses 6</td>
+            <td>US Youth Soccer caps at 16</td>
+            <td>12</td>
+            <td>13 to 14</td>
+          </tr>
+          <tr>
+            <td>11v11</td>
+            <td>11</td>
+            <td>7, per the Laws of the Game</td>
+            <td>No national cap, states run 16 to 22</td>
+            <td>14 to 15</td>
+            <td>16 to 18</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Building a roster around a published ceiling</strong> instead of your own format, sub plan, and situation.</li>
+      <li><strong>Counting on a guest player who may not actually be available</strong> under your league's real rules.</li>
+      <li><strong>Carrying so many players that even a full roster with zero absences cannot hit your own playing time standard.</strong></li>
+      <li><strong>Waiting until two players are out at once</strong> to discover the roster cannot absorb it.</li>
+      <li><strong>Treating the legal minimum to avoid a forfeit as a comfortable number,</strong> rather than the absolute last resort it is.</li>
+      <li><strong>Copying a roster size from a different format or a different club's situation</strong> instead of running the actual math for your own.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Do the math once, then let SubGo track it</h2>
+      <p>Once you have picked a roster size, SubGo handles the actual rotation, so every player's minutes stay visible in real time, and you can see exactly how a bench of nine plays out differently than a bench of twelve. Free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these numbers come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://www.usyouthsoccer.org/wp-content/uploads/sites/160/2023/09/Player-Development-Initiatives-2017.pdf" rel="noopener">Player Development Initiatives 2017</a>, US Youth Soccer.</li>
+      <li><a href="https://www.usyouthsoccer.org/wp-content/uploads/sites/160/2025/12/Policy-on-Players-and-Playing-Rules-_APP-12.05.2025.pdf" rel="noopener">Policy on Players and Playing Rules</a>, US Youth Soccer, effective December 5, 2025.</li>
+      <li><a href="https://www.theifab.com/laws/latest/the-players/" rel="noopener">Laws of the Game, Law 3, The Players</a>, IFAB.</li>
+      <li><a href="https://assets.nfhs.org/umbraco/media/7213076/2024-25-soccer-guide-final.pdf" rel="noopener">2024 to 25 Soccer Rules Comparison</a>, NFHS.</li>
+      <li><a href="https://www.maysa.org/layout_container/show_layout_tab?layout_container_id=21524784&page_node_id=2357799&tab_element_id=75810" rel="noopener">Roster and Minimum Player Rules</a>, Madison Area Youth Soccer Association.</li>
+      <li><a href="https://cdn3.sportngin.com/attachments/document/0107/0332/Roster_size__length_of_game__game__ball_size__ref_fees.pdf" rel="noopener">Roster Size, Length of Game, Game Ball Size, Referee Fees</a>, Utah competitive rules reference.</li>
+      <li><a href="https://bays.org/content/bays-guest-player-policy" rel="noopener">Guest Player Policy</a>, Boston Area Youth Soccer.</li>
+      <li><a href="https://www.sciencedirect.com/science/article/pii/S2095254621001095" rel="noopener">Epidemiology of Injuries in Male and Female Youth Football Players</a>, Journal of Sport and Health Science.</li>
+      <li><a href="https://www.healthychildren.org/English/news/Pages/Soccer-Injuries-in-Children-and-Adolescents.aspx" rel="noopener">Soccer Injuries in Children and Adolescents</a>, American Academy of Pediatrics via HealthyChildren.org.</li>
+      <li><a href="https://socalsoccer.com/threads/ideal-roster-size.19079/" rel="noopener">Ideal Roster Size</a>, SoCal Soccer coaches forum.</li>
+      <li><a href="https://flicktec.io/blog/how-many-players-on-a-youth-soccer-team" rel="noopener">How Many Players Are on a Youth Soccer Team</a>, FlickTec.</li>
+    </ul>
+    <p class="note">We looked specifically for a study on typical youth sports absence rates and could not find one, so any buffer number in this guide, including our own recommendation table, is judgment built from published caps, forfeit rules, and coach experience, not a scientific formula. The injury data above is real but reported in exposure hours across a season, which does not translate cleanly into a roster spot count, so we used it as context rather than a justification for a specific number. The guest player forum and blog sources are coach discussion, not governing body policy, and are labeled that way above.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

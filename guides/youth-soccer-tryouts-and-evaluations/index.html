@@ -1,0 +1,532 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Running Fair Soccer Tryouts: How to Score Players</title>
+
+<!-- SEO -->
+<meta name="description" content="How to run youth soccer tryouts fairly: a scoring rubric, using more than one evaluator, and how to tell a family their child did not make the team." />
+<link rel="canonical" href="https://stldev.com/guides/youth-soccer-tryouts-and-evaluations/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Running Fair Soccer Tryouts: Scoring Players Objectively, Without Burning Bridges" />
+<meta property="og:description" content="A scoring rubric, more than one evaluator, and a plan for sharing results so tryout decisions hold up and families still trust the process." />
+<meta property="og:url" content="https://stldev.com/guides/youth-soccer-tryouts-and-evaluations/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-24" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Running Fair Soccer Tryouts: Scoring Players Objectively, Without Burning Bridges" />
+<meta name="twitter:description" content="A scoring rubric, more than one evaluator, and a plan for sharing results so tryout decisions hold up and families still trust the process." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/youth-soccer-tryouts-and-evaluations/#article",
+      "headline": "Running Fair Soccer Tryouts: Scoring Players Objectively, Without Burning Bridges",
+      "description": "How to run fair, objective youth soccer tryouts and evaluations, including a scoring rubric, using multiple evaluators to reduce bias, communicating the process to families in advance, and how to deliver tryout results with care.",
+      "datePublished": "2026-09-24",
+      "dateModified": "2026-09-24",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/youth-soccer-tryouts-and-evaluations/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Coaching",
+        "Player evaluation"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Tryouts and Evaluations",
+          "item": "https://stldev.com/guides/youth-soccer-tryouts-and-evaluations/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Tryouts and Evaluations</p>
+
+  <article>
+    <h1>Running Fair Soccer Tryouts: <span class="accent">Scoring Players Objectively, Without Burning Bridges</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 24, 2026 &middot; 9 min read</p>
+
+    <p class="lead">Tryouts are the one part of the season where a coach's judgment gets examined the hardest, by kids who want to know where they stand and by parents watching every step of how that decision got made. A gut feeling about forty players over the course of an hour is exactly how a good coach ends up defending a decision after the fact instead of explaining it plainly up front. A written rubric, more than one set of eyes, and a plan for how you deliver results fix most of what actually goes wrong.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches or clubs running any kind of competitive evaluation, whether that is a full club tryout, an all star selection, or simply deciding who moves up when a growing rec program needs to split into teams. If your roster is already set and the challenge now is playing time and communication all season, our <a href="../preseason-parent-meeting-youth-soccer/">preseason parent meeting guide</a> and <a href="../youth-soccer-player-development-tracking/">player development guide</a> cover what comes next.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Score against a written rubric,</strong> not a memory of who looked good in the moment.</li>
+        <li><strong>Use more than one evaluator,</strong> and calibrate them together before a single player steps on the field.</li>
+        <li><strong>Tell families the process, timeline, and roster size</strong> before tryouts begin, not after.</li>
+        <li><strong>Deliver results the same way every time,</strong> promptly and without exceptions for whoever asks the loudest.</li>
+        <li><strong>Never leave a family with false hope.</strong> A vague "it was close" feels kinder in the moment and lands worse the next day.</li>
+        <li><strong>Give every player something honest to build on,</strong> whether the news is good or hard to hear.</li>
+      </ul>
+    </div>
+
+    <h2 id="rubric"><span class="tag">Scoring</span>Score against a rubric, not a memory</h2>
+
+    <p>A common way clubs structure tryout scoring is around a handful of categories such as technical ability, passing, tactical awareness, physical traits, and coachability. One youth sports platform puts the case for doing this on purpose plainly: organizations that use "a consistent rubric built around categories like these tend to produce more defensible, comparable rankings" than evaluations based on gut feel alone, and it gives every evaluator on your staff a shared language for discussing where a player actually stands.</p>
+
+    <p>You do not need eight categories to get the benefit. Four or five that you can genuinely watch for in real time, first touch and ball control, decision making with and without the ball, physical traits like speed and effort, and coachability, cover most of what separates players at a tryout. What matters more than the exact list is writing it down before tryouts start and scoring every player against the same list.</p>
+
+    <p>For the scale itself, a soccer specific evaluation guide recommends five levels rather than a simple pass or fail. As it explains, "a five-level rubric provides enough resolution to track meaningful progress without creating false precision," running from an emerging skill up through an elite one. A simple version of that scale, adapted to your own categories, might look like this.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Level</th><th>What it looks like</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1. Emerging</td>
+            <td>The skill shows up rarely or breaks down under any pressure. Still learning the basic mechanics.</td>
+          </tr>
+          <tr>
+            <td>2. Developing</td>
+            <td>The skill is inconsistent. Works in open space, breaks down when a defender closes in.</td>
+          </tr>
+          <tr>
+            <td>3. Solid</td>
+            <td>The skill holds up in a normal game situation most of the time.</td>
+          </tr>
+          <tr>
+            <td>4. Advanced</td>
+            <td>The skill holds up under real pressure and the player can use it to create an advantage.</td>
+          </tr>
+          <tr>
+            <td>5. Elite</td>
+            <td>The skill is a clear strength relative to the whole group being evaluated, not just for their age.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="evaluators"><span class="tag">Bias</span>Get more than one set of eyes on every player</h2>
+
+    <p>A single coach trying to rate every player on every category at once is where most tryout bias creeps in, not out of bad intentions but because attention is limited. One evaluation guide is direct about the fix: "if you have multiple coaches on the session, assign one coach per skill category," since "one observer per category is more reliable than one coach rating everything."</p>
+
+    <p>That only works if evaluators are actually calibrated to the same standard before players arrive. A soccer specific tryout guide describes doing this with examples: run through video clips or live demonstrations together and agree out loud, this first touch is a 3, this one is a 4, "when evaluators see the same examples, they apply the same bar." Ten minutes of this before the first player steps on the field saves a lot of disagreement later.</p>
+
+    <p>When scores from different evaluators land far apart on the same player, treat that as useful information rather than an error to smooth over. The same guide frames it well: "players with wide score variance deserve discussion," since "disagreements often highlight players worth a second look," a player one evaluator noticed something the others missed on, not just a scoring mistake to average away.</p>
+
+    <h2 id="before"><span class="tag">Communication</span>Tell families the rules before anyone shows up</h2>
+
+    <p>Most of the frustration that shows up after a tryout was actually created weeks earlier, by families who did not know what to expect. One club communication guide recommends sharing tryout dates, locations, what to bring, expected skills, and roster sizes well in advance, ideally one to three months ahead, precisely so families can prepare their kids and understand that cuts are a real possibility rather than a surprise. A director quoted in that same piece sums up the underlying goal in one line: "I believe in transparency in the tryout process."</p>
+
+    <p>That advance communication is worth repeating in person on the day itself. Walk parents through who is evaluating, how tryout numbers work, how big the roster will be, and exactly when they will hear results. A sports psychologist's advice for this kind of written communication applies here too, treat it "as a resource to point parents back to if they have questions during or after tryouts," rather than something you only mention once and hope everyone remembers.</p>
+
+    <h2 id="day"><span class="tag">Tryout day</span>What the day itself should look like</h2>
+
+    <p>Set up your grids, cones, and stations before players arrive, not while they are standing around waiting. One evaluation guide notes this plainly: preparing logistics ahead of time means evaluators can focus on players instead of setup, which is exactly where your attention should be during the limited time you have with each player.</p>
+
+    <p>If your format allows more than a single session, take it. A soccer evaluation resource makes the case for repeated looks over a one time snapshot: "two evaluations establish a baseline and one change point," while "three evaluations begin to show a trend," and five or more start to produce data reliable enough to make real decisions with confidence. Most tryouts cannot run five sessions, but even two nights instead of one meaningfully reduces how much a single bad ten minutes can define a player's whole evaluation. If you are limited to one day, give every player multiple touches across more than one small sided game rather than judging off one drill.</p>
+
+    <h2 id="results"><span class="tag">Results</span>Decide promptly, and share results the same way every time</h2>
+
+    <p>A youth soccer club's own guidelines for this process put the standard directly: make decisions promptly and honestly, without stringing a family along with false hope, and communicate your selection criteria clearly before tryouts so the standard was never a secret in the first place.</p>
+
+    <p>How you share the news matters almost as much as the decision itself. One club director's recommendation is specific: "the best way to communicate results is an individual email to parents," while a sports psychologist advising on the same question favors a phone call or one on one conversation over any group announcement, adding that a coach should "be authentic, share reasons why," and let the moment be "a growth opportunity" rather than a verdict. Whichever method fits your club, remain available afterward. Parents and players who have specific questions deserve a real answer, not just a posted list and silence.</p>
+
+    <p>Age changes who hears the news first. For younger players, tell the parents first and let them decide how and when to tell their child, in a way that fits their own kid. For middle and high school aged players, talk to the player directly, so they hear firsthand what to work on and what making the team next time would actually require.</p>
+
+    <h2 id="cuts"><span class="tag">The hard conversation</span>What to say when a player does not make the team</h2>
+
+    <p>The same club guidelines above are blunt about the one thing to avoid: do not soften a cut by shifting the focus. "Be honest and caring, and don't try to shift the focus, e.g. don't say, 'it was a close decision.'" A vague explanation feels gentler to deliver in the moment, but it leaves a family with nothing to actually work on, and often more hurt once they realize there was a real reason that was never said out loud.</p>
+
+    <p>Give one honest, specific reason tied to what you actually saw, and pair it with something the player can do next. Where you can, point the family toward a real next step, a lower level team, a specific skill to develop, a coach who might be a better fit. And keep some perspective available for the family too. As one youth sports resource puts it plainly, "it's incredibly rare for a person to make every single team they tryout for," a fact worth saying out loud in the moment, because it usually does not feel true to a disappointed kid or parent.</p>
+
+    <h2 id="example"><span class="tag">Example</span>What an honest conversation can sound like</h2>
+
+    <p>For a player who made the team, keep it short and specific: "Congratulations, you made the team. Your first touch under pressure and your work rate really stood out this weekend. We will send full details on the schedule by Friday."</p>
+
+    <p>For a player who did not: "Thank you for trying out. This was not a decision about effort, you worked hard all weekend. Right now, the players we selected were a bit further along with quick decision making under pressure, and that is something very learnable between now and next season. I would love to see [Player's Name] try out again, and in the meantime, [Lower Level Team or League] would be a great fit this year."</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Scoring off memory or reputation</strong> instead of a rubric written down before tryouts started.</li>
+      <li><strong>Letting one adult evaluate every player alone,</strong> with no second set of eyes to catch what got missed.</li>
+      <li><strong>Announcing roster size or criteria only after tryouts,</strong> once it is too late for it to feel like it was ever fair.</li>
+      <li><strong>Softening a cut with a vague reason</strong> instead of one honest, specific one a family can actually use.</li>
+      <li><strong>Posting a public list as the only communication,</strong> with no way for a family to ask a real question.</li>
+      <li><strong>Never following up with a cut player</strong> about what to work on before the next opportunity.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Whoever makes the roster still needs a fair season</h2>
+      <p>SubGo tracks every player's minutes automatically, so the trust you build during tryouts carries all the way through to the last game of the season. Free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://teamgenius.com/soccer-scoring-criteria-tryouts/" rel="noopener">The 8 Most Common Soccer Scoring Criteria at Tryouts</a>, TeamGenius.</li>
+      <li><a href="https://laceupsoccer.com/guides/youth-soccer-evaluation" rel="noopener">The Complete Guide to Youth Soccer Player Evaluation</a>, LaceUp Soccer.</li>
+      <li><a href="https://joinstriveon.com/blog/soccer-tryout-evaluation-form" rel="noopener">Soccer Tryout Evaluation Form</a>, StriveOn.</li>
+      <li><a href="https://teamgenius.com/tips-for-communicating-with-soccer-parents-during-tryouts/" rel="noopener">3 Tips for Communicating with Soccer Parents During Tryouts</a>, TeamGenius.</li>
+      <li><a href="https://www.brycsoccer.org/coaches-corner/coaching-tools/guidelines-for-cutting-players-and-dealing-with-parents" rel="noopener">Guidelines for Cutting Players and Dealing with Parents</a>, Braddock Road Youth Club.</li>
+      <li><a href="https://www.winningyouthcoaching.com/the-ultimate-guide-to-sharing-tryout-results-guest-post-from-teamgenius/" rel="noopener">The Ultimate Guide to Sharing Tryout Results</a>, Winning Youth Coaching.</li>
+      <li><a href="https://www.teamsnap.com/blog/sports-parents-2/what-to-say-if-your-child-doesnt-make-a-team" rel="noopener">What To Say If Your Child Doesn't Make a Team</a>, TeamSnap.</li>
+    </ul>
+    <p class="note">The rubric, scale, and communication steps here are a framework to adapt to your own club's age group, tryout format, and league rules, not a fixed procedure. The sample conversations are examples of tone, not scripts to read word for word, and every name in them is a placeholder.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

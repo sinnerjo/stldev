@@ -1,0 +1,490 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coaching Soccer When You Never Played: The Real Gaps</title>
+
+<!-- SEO -->
+<meta name="description" content="What actually makes a youth soccer coach good when you never played, versus what parents assume you need to know, and how to close the real gaps fast." />
+<link rel="canonical" href="https://stldev.com/guides/coaching-soccer-without-playing-experience/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Coaching Youth Soccer When You Never Played It Yourself" />
+<meta property="og:description" content="Playing experience and coaching ability are different skills. Here is what actually matters, what to ignore, and how to close the real gaps in a weekend." />
+<meta property="og:url" content="https://stldev.com/guides/coaching-soccer-without-playing-experience/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-24" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Coaching Youth Soccer When You Never Played It Yourself" />
+<meta name="twitter:description" content="Playing experience and coaching ability are different skills. Here is what actually matters, what to ignore, and how to close the real gaps in a weekend." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/coaching-soccer-without-playing-experience/#article",
+      "headline": "Coaching Youth Soccer When You Never Played It Yourself",
+      "description": "Why playing experience and coaching ability are different skills, what actually makes a youth soccer coach effective, what parents assume a coach needs to know versus what young players actually need, and how a coach with no playing background can close the real gaps.",
+      "datePublished": "2026-09-24",
+      "dateModified": "2026-09-24",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/coaching-soccer-without-playing-experience/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Coaching",
+        "New coaches"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "MatchTap",
+        "url": "https://stldev.com/matchtap/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "New to the Sport",
+          "item": "https://stldev.com/guides/coaching-soccer-without-playing-experience/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / New to the Sport</p>
+
+  <article>
+    <h1>Coaching Youth Soccer When You Never Played: <span class="accent">What Actually Matters, Versus What Parents Assume You Need to Know</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 24, 2026 &middot; 8 min read</p>
+
+    <p class="lead">Every rec league needs more coaches than it has former players to fill those spots, so a lot of teams end up led by a parent who has never kicked a competitive ball in their life. If that is you, the anxiety is usually less about the players and more about the sideline, worrying that some parent who did play will spot the gap right away. Here is the more useful truth: the things that actually make a coach good have very little to do with your own playing history, and the specific gaps that do matter are closable in a weekend, not a career.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches, often parent volunteers, taking on a team without ever having played soccer themselves, and wondering what they actually need to learn versus what they are only assuming they need. If this is also your very first season coaching anything, our <a href="../coaching-first-season-youth-soccer/">first season guide</a> covers the broader basics.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Playing experience and teaching ability are different skills.</strong> Plenty of former players never learned to coach, and plenty of non players teach it well.</li>
+        <li><strong>Most coaches, including ones who played, are not formally trained either.</strong> You are closer to the norm than you think.</li>
+        <li><strong>What actually matters is communication, fairness, and genuine investment</strong> in each player, not tactical depth.</li>
+        <li><strong>Young players need far less technical instruction</strong> than most new coaches assume, and far more time actually playing.</li>
+        <li><strong>Close real gaps on purpose,</strong> with a free course and a season's worth of practice plans, rather than trying to fake expertise.</li>
+        <li><strong>When you cannot demonstrate something yourself,</strong> that is a solvable logistics problem, not a disqualifying one.</li>
+      </ul>
+    </div>
+
+    <h2 id="myth"><span class="tag">The myth</span>"If you cannot do it, you cannot teach it"</h2>
+
+    <p>This is the belief doing most of the damage to new coaches before they have even run a practice, and it does not hold up. One coaching resource makes the case by pulling apart three things people tend to lump together: never having played the sport, being inexperienced as a coach, and giving low quality instruction. Those are three separate variables, not three names for the same problem, and a coach can be new to soccer while being excellent at the actual job of teaching it.</p>
+
+    <p>That same resource breaks down what effective teaching of any physical skill actually requires: content knowledge, meaning you understand the skill deeply, practical experience observing and coaching it, the ability to communicate clearly, and pedagogy, which is the skill of breaking a movement into parts, designing a good practice environment, and giving useful feedback. Notice what is missing from that list. Personal elite execution of the skill yourself is not one of the requirements. As the same piece puts it, slowing a skill down and breaking it into parts is "the standard method for teaching almost any physical movement," and demonstrating it yourself at game speed was never actually the pedagogically necessary part.</p>
+
+    <p>It is also worth naming honestly why most coaches did play growing up. Coaching, especially at the youth level, tends to pay little or nothing, which draws people motivated by love of the game rather than a paycheck, and people who loved a game growing up are more likely to have played it. That is a fact about who tends to volunteer, not a fact about what the job of coaching actually demands.</p>
+
+    <h2 id="matters"><span class="tag">Reality check</span>What actually makes a coach good</h2>
+
+    <p>One coach who built a career after never playing at a competitive level puts the whole case in a single line: "it's not the playing experience that makes you successful at coaching soccer, it's the ability to connect with your players and inspire them to want to grow and improve." She also points out an upside to starting without a playing background, not having a shortcut through instinct forced her to actually learn concepts thoroughly before she could explain them, which made her a clearer teacher, not a worse one.</p>
+
+    <p>The Positive Coaching Alliance lists what separates a good youth coach from an average one, and none of the five items on the list is a soccer résumé: empathy for the athlete as a whole person, clear and specific communication, a focus on development over winning, consistency and integrity in how standards get applied, and the emotional regulation to keep the environment calm under pressure. Their conclusion is direct: "being a good coach requires much more than technical knowledge or competitive experience."</p>
+
+    <p>You are also in far more company than the anxiety suggests. Research cited by the Aspen Institute's Project Play found that in 2017, only 36 percent of youth coaches nationally had received training in effective coaching techniques, and the number for soccer specifically was even lower, at 28 percent. Most of the coaches on the opposing sideline who did play never received formal training either. Feeling underprepared is closer to the default experience of coaching than the exception to it.</p>
+
+    <h2 id="assume"><span class="tag">Expectations</span>What parents assume you need, versus what you actually need</h2>
+
+    <p>Parents watching from the sideline often assume a coach needs deep tactical knowledge, a real formation, and the instincts of someone who played the game at a high level. What young players actually need looks almost nothing like that. One long time coaching resource focused specifically on volunteer recreational coaches puts it bluntly: at this level, the entire approach should be "no lines, no laps, no lectures," built around small sided games like 1v1, 2v1, and 2v2 rather than formal drills borrowed from adult training.</p>
+
+    <p>That same guidance also corrects a specific misconception new coaches often import from other sports without realizing it. A young player who keeps tripping over the ball is not lacking strength or muscle, and stretching or sprinting drills will not fix it. What that player is missing is coordination and simple familiarity with the ball, which only comes from touching it far more often, not from anything resembling a fitness program. Letting players actually play, far more than any tactical instruction you deliver, is the single most effective teaching tool available to a coach at this level, and it costs you nothing in soccer specific expertise.</p>
+
+    <h2 id="close-gap"><span class="tag">Closing the gap</span>Learn the real gaps on purpose</h2>
+
+    <p>None of this means there is nothing to learn. It means the learning curve is narrower and faster than it feels from the outside, and it is worth closing on purpose rather than hoping nobody notices. The coach quoted earlier describes doing this herself through focused self study of tactics, history, and the game, treating it the same way anyone picks up a new subject seriously, plus pursuing coaching courses specifically, both to build real knowledge and to build credibility with families who may be quick to doubt an unfamiliar coach.</p>
+
+    <p>The most direct version of that path already exists and is free. U.S. Soccer's Grassroots coaching pathway starts with an introductory module, followed by format specific courses for 4v4, 7v7, 9v9, and 11v11, each available as a two hour online course. The stated goals are exactly the gaps a new coach actually has: understanding the basic needs of players at that age, the basic structure of the game, the basic structure of a training session, and the basic tasks of a grassroots coach. Finishing the introductory module also comes with four ready made practice plans, which solves the separate, very real problem of not knowing how to fill an hour on the field.</p>
+
+    <h2 id="demo"><span class="tag">On the field</span>When you cannot demonstrate a skill yourself</h2>
+
+    <p>This is the moment new coaches dread most, a player asking you to show them a move you cannot actually perform. It is a logistics problem, not a career ending one. Pick a player on your own team who can demonstrate it well and let them show the group while you narrate what to watch for, point to a video if you have one handy, or be honest and use a little humor about it. Players generally respect a coach who is straightforward about a limit far more than one who is caught faking it, and none of it changes whether you can still explain what a good version of the skill looks like, break it into steps, and give useful feedback once a player attempts it, which is the part of teaching that actually matters.</p>
+
+    <h2 id="own-kid"><span class="tag">A common wrinkle</span>If you are also coaching your own child</h2>
+
+    <p>Plenty of new coaches take the job specifically because their own kid is on the team, which adds a layer worth planning for separately from the playing experience question. One coaching resource focused on parent coaches recommends building in support and transparency from the start, recruiting an assistant coach rather than running the team entirely solo, and setting clear, written standards for playing time and positions that apply the same way to your own child as to everyone else's. It is also worth a real conversation with your own kid beforehand about what having a parent as coach will actually be like for them, since it changes their season too, not just yours.</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Assuming you need deep tactical knowledge</strong> before you can run a good practice for young players.</li>
+      <li><strong>Copying adult training methods,</strong> like laps and lecture heavy drills, instead of letting players actually play.</li>
+      <li><strong>Faking a demonstration</strong> instead of handing it to a capable player or simply being honest about it.</li>
+      <li><strong>Trying to learn everything at once</strong> instead of starting with one free, structured course built for exactly this gap.</li>
+      <li><strong>Running the team entirely alone</strong> when a parent of your own child, an assistant coach and a written playing time policy would remove most of the pressure.</li>
+      <li><strong>Assuming the coach on the other sideline knows more than you do.</strong> Most coaches, regardless of background, were never formally trained either.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Let the numbers help you coach</h2>
+      <p>You do not need years of tactical experience to give a player useful feedback. MatchTap tags real events to real players during the game, so you can point to something specific and true after the final whistle instead of relying on memory or instinct. Free, with no account.</p>
+      <a class="btn" href="../../matchtap/">Try MatchTap Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://expandyourgame.com/can-you-be-a-good-soccer-coach-without-playing/" rel="noopener">Can You Be a Good Soccer Coach Without Playing Experience?</a>, Expand Your Game.</li>
+      <li><a href="https://www.anytime-soccer.com/blog/you-dont-have-to-play-it-to-teach-it" rel="noopener">You Don't Have to Play It to Teach It</a>, Anytime Soccer Training.</li>
+      <li><a href="https://positivecoach.org/the-pca-blog/what-makes-a-good-coach/" rel="noopener">What Makes a Good Coach?</a>, Positive Coaching Alliance.</li>
+      <li><a href="https://projectplay.org/news/2022/2/15/why-good-coaches-matter" rel="noopener">Why Good Coaches Matter</a>, Aspen Institute Project Play.</li>
+      <li><a href="https://www.soccerparenting.com/blog/national-curriculum-volunteer-recreational-youth-soccer-coaches/" rel="noopener">A National Curriculum for Volunteer Recreational Youth Soccer Coaches</a>, Soccer Parenting.</li>
+      <li><a href="https://thephysicalmovement.substack.com/p/how-a-parent-coach-can-be-a-great" rel="noopener">How a Parent Coach Can Be a Great One</a>, The Physical Movement.</li>
+      <li><a href="https://ohio-soccer.org/coaches/education/us-soccer-grassroots-pathway/" rel="noopener">U.S. Soccer Grassroots Pathway</a>, Ohio Soccer Association.</li>
+    </ul>
+    <p class="note">Course formats, hours, and requirements for U.S. Soccer's Grassroots pathway can vary by state association and change over time, so confirm current details with your own state association before enrolling. Everything else here is general guidance to adapt to your own team and league.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

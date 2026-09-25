@@ -1,0 +1,936 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STL Soccer Dev Lab | Free Soccer Coaching Apps from St. Louis</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Free soccer software built in St. Louis: SubGo substitution tracker, MatchTap live match stats, and FlappyBall arcade game. Made by a coach." />
+  <link rel="canonical" href="https://stldev.com/" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="Joseph Warren" />
+  <meta name="theme-color" content="#0a1f0e" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+  <!-- Open Graph (Facebook, LinkedIn, iMessage, Slack, Discord) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="STL Soccer Dev Lab" />
+  <meta property="og:title" content="STL Soccer Dev Lab | Free Soccer Coaching Apps from St. Louis" />
+  <meta property="og:description" content="Free soccer software built in St. Louis: SubGo substitution tracker, MatchTap live match stats, and FlappyBall arcade game." />
+  <meta property="og:url" content="https://stldev.com/" />
+  <meta property="og:locale" content="en_US" />
+  <!-- When you have a 1200x630 share image, upload it and uncomment these three lines:
+  <meta property="og:image" content="https://stldev.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  -->
+
+  <!-- Twitter / X card (switch "summary" to "summary_large_image" once og-image exists) -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="STL Soccer Dev Lab | Free Soccer Coaching Apps from St. Louis" />
+  <meta name="twitter:description" content="Free soccer software built in St. Louis: SubGo, MatchTap, and FlappyBall." />
+  <!-- <meta name="twitter:image" content="https://stldev.com/og-image.png" /> -->
+
+  <!-- Structured data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://stldev.com/#organization",
+        "name": "STL Soccer Dev Lab",
+        "alternateName": "STLDev",
+        "url": "https://stldev.com/",
+        "description": "Software for soccer coaches, managers, parents, and fans, built in St. Louis, Missouri.",
+        "founder": { "@type": "Person", "name": "Joseph Warren" },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "St. Louis",
+          "addressRegion": "MO",
+          "addressCountry": "US"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://stldev.com/#website",
+        "url": "https://stldev.com/",
+        "name": "STL Soccer Dev Lab",
+        "inLanguage": "en-US",
+        "publisher": { "@id": "https://stldev.com/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/",
+        "description": "Substitution and game management app for soccer coaches. Track lineups, rotations, and player time live on the sideline.",
+        "applicationCategory": "SportsApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@id": "https://stldev.com/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "MatchTap",
+        "url": "https://stldev.com/matchtap/",
+        "description": "Live match event tracker for coaches and parents. Log passes, shots, cards, and more, then review the stats after the game.",
+        "applicationCategory": "SportsApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@id": "https://stldev.com/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "FlappyBall",
+        "url": "https://stldev.com/flappyball/",
+        "description": "A soccer themed arcade game. Tap to dribble through the defenders without getting tackled, and beat your best score.",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@id": "https://stldev.com/#organization" }
+      },
+      {
+        "@type": "ItemList",
+        "name": "Coaching Guides",
+        "url": "https://stldev.com/guides/",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "url": "https://stldev.com/guides/equal-playing-time-youth-soccer/", "name": "Equal Playing Time in Rec and Club Soccer" },
+          { "@type": "ListItem", "position": 2, "url": "https://stldev.com/guides/youth-soccer-stat-tracking/", "name": "Youth Soccer Stat Tracking Without the Hardware" },
+          { "@type": "ListItem", "position": 3, "url": "https://stldev.com/guides/youth-soccer-formations-by-age/", "name": "Youth Soccer Formations by Age" },
+          { "@type": "ListItem", "position": 4, "url": "https://stldev.com/guides/youth-soccer-parent-sideline-guide/", "name": "Youth Soccer Sideline Guide for Parents" },
+          { "@type": "ListItem", "position": 5, "url": "https://stldev.com/guides/coaching-first-season-youth-soccer/", "name": "Coaching Youth Soccer for the First Time" },
+          { "@type": "ListItem", "position": 6, "url": "https://stldev.com/guides/youth-soccer-player-development-tracking/", "name": "Tracking Player Development Over a Season, Not Just One Game" },
+          { "@type": "ListItem", "position": 7, "url": "https://stldev.com/guides/ending-the-soccer-season-well/", "name": "Ending a Youth Soccer Season Well" },
+          { "@type": "ListItem", "position": 8, "url": "https://stldev.com/guides/preseason-parent-meeting-youth-soccer/", "name": "The Preseason Parent Meeting" },
+          { "@type": "ListItem", "position": 9, "url": "https://stldev.com/guides/recreational-to-competitive-club-soccer/", "name": "Moving From Recreational to Competitive Club Soccer" },
+          { "@type": "ListItem", "position": 10, "url": "https://stldev.com/guides/youth-soccer-behavior-and-effort/", "name": "Handling a Player Who Is Struggling With Behavior or Effort" },
+          { "@type": "ListItem", "position": 11, "url": "https://stldev.com/guides/in-game-coaching-youth-soccer/", "name": "In Game Coaching: What to Say From the Sideline" },
+          { "@type": "ListItem", "position": 12, "url": "https://stldev.com/guides/youth-soccer-tryouts-and-evaluations/", "name": "Running Fair Soccer Tryouts: Scoring Players Objectively" },
+          { "@type": "ListItem", "position": 13, "url": "https://stldev.com/guides/coaching-soccer-without-playing-experience/", "name": "Coaching Youth Soccer When You Never Played It Yourself" },
+          { "@type": "ListItem", "position": 14, "url": "https://stldev.com/guides/handling-the-sideline-coaching-parent/", "name": "When One Parent Won't Stop Coaching From the Sideline" },
+          { "@type": "ListItem", "position": 15, "url": "https://stldev.com/guides/youth-soccer-team-culture-that-lasts/", "name": "Building a Team Culture That Outlasts the Season" },
+          { "@type": "ListItem", "position": 16, "url": "https://stldev.com/guides/planning-a-youth-soccer-practice-session/", "name": "Planning a Practice: Fitting Warm Up, Technical Work, and Games Into One Hour" },
+          { "@type": "ListItem", "position": 17, "url": "https://stldev.com/guides/guest-players-tournament-rosters-youth-soccer/", "name": "Guest Players and Tournament Rosters: Staying Fair" },
+          { "@type": "ListItem", "position": 18, "url": "https://stldev.com/guides/youth-soccer-substitution-patterns/", "name": "Substitution Patterns That Actually Work" },
+          { "@type": "ListItem", "position": 19, "url": "https://stldev.com/guides/coaching-the-quiet-or-anxious-player/", "name": "The Player Who Freezes Up: Building Confidence in a Quiet or Anxious Kid" },
+          { "@type": "ListItem", "position": 20, "url": "https://stldev.com/guides/youth-soccer-roster-size-math/", "name": "Roster Size Math: How Many Players to Actually Carry, by Format" },
+          { "@type": "ListItem", "position": 21, "url": "https://stldev.com/guides/coaching-a-multilingual-youth-soccer-team/", "name": "Coaching a Multilingual Team: Communication Habits That Actually Work" },
+          { "@type": "ListItem", "position": 22, "url": "https://stldev.com/guides/the-disengaged-parent-youth-soccer/", "name": "The Disengaged Parent in Youth Soccer: What to Do" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pitch: #0a1f0e;
+      --turf: #12320f;
+      --lime: #b8f20a;
+      --lime-dim: #8abc06;
+      --chalk: #e8f5e9;
+      --terminal: #1a3a1e;
+      --accent: #f97316;
+      --muted: #4a7a50;
+      --grid: rgba(184,242,10,0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--pitch);
+      color: var(--chalk);
+      font-family: 'DM Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(10,31,14,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184,242,10,0.15);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
+      color: var(--lime);
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 36px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--lime); }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 48px 80px;
+      overflow: hidden;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+
+    .hero-eyebrow::before {
+      content: '//';
+      margin-right: 8px;
+      opacity: 0.5;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.5rem, 12vw, 10rem);
+      line-height: 0.92;
+      letter-spacing: 0.03em;
+      color: var(--chalk);
+      max-width: 900px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.35s forwards;
+    }
+
+    h1 .accent { color: var(--lime); }
+    h1 .orange { color: var(--accent); }
+
+    .hero-sub {
+      margin-top: 32px;
+      max-width: 480px;
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.7s 0.5s forwards;
+    }
+
+    .hero-cta {
+      margin-top: 48px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.65s forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--lime);
+      color: var(--pitch);
+      font-weight: 500;
+    }
+
+    .btn-primary:hover {
+      background: var(--chalk);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--lime);
+      border: 1px solid rgba(184,242,10,0.4);
+    }
+
+    .btn-outline:hover {
+      background: rgba(184,242,10,0.08);
+      border-color: var(--lime);
+    }
+
+    .hero-deco {
+      position: absolute;
+      right: -40px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36vw;
+      color: rgba(184,242,10,0.03);
+      pointer-events: none;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .ticker-wrap {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      border-top: 1px solid rgba(184,242,10,0.15);
+      border-bottom: 1px solid rgba(184,242,10,0.15);
+      background: var(--turf);
+      padding: 12px 0;
+    }
+
+    .ticker {
+      display: flex;
+      gap: 0;
+      width: max-content;
+      animation: ticker 28s linear infinite;
+    }
+
+    .ticker-item {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lime-dim);
+      white-space: nowrap;
+      padding: 0 48px;
+    }
+
+    .ticker-item span { color: var(--accent); margin-right: 8px; }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 100px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 16px;
+    }
+
+    .section-label::before { content: '[ '; }
+    .section-label::after { content: ' ]'; }
+
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--chalk);
+      margin-bottom: 24px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px;
+      margin-top: 48px;
+    }
+
+    .card {
+      background: var(--terminal);
+      padding: 36px 32px;
+      border: 1px solid rgba(184,242,10,0.08);
+      transition: border-color 0.2s, transform 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .card:hover {
+      border-color: rgba(184,242,10,0.35);
+      transform: translateY(-4px);
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      margin-bottom: 20px;
+      background: rgba(184,242,10,0.1);
+      color: var(--lime);
+    }
+
+    .card-tag.orange {
+      background: rgba(249,115,22,0.12);
+      color: var(--accent);
+    }
+
+    .card-tag.coming {
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+    }
+
+    .card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--chalk);
+    }
+
+    .card p {
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .card-arrow {
+      display: inline-block;
+      margin-top: 24px;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--lime);
+    }
+
+    .card-arrow.dim { color: var(--muted); }
+
+    .about-strip {
+      position: relative;
+      z-index: 1;
+      background: var(--turf);
+      border-top: 1px solid rgba(184,242,10,0.1);
+      border-bottom: 1px solid rgba(184,242,10,0.1);
+      padding: 80px 48px;
+    }
+
+    .about-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .stat-box {
+      background: var(--pitch);
+      border: 1px solid rgba(184,242,10,0.08);
+      padding: 28px 24px;
+    }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--lime);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(184,242,10,0.1);
+      padding: 40px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.12em;
+      color: var(--lime);
+    }
+
+    .footer-logo span { color: var(--accent); }
+
+    footer p {
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      nav ul { display: none; }
+      .hero { padding: 100px 24px 60px; }
+      section { padding: 72px 24px; }
+      .about-inner { grid-template-columns: 1fr; gap: 40px; }
+      .about-strip { padding: 60px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+      .hero-deco { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">STL<span>Dev</span>Lab</div>
+    <ul>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="./subgo/">SubGo</a></li>
+      <li><a href="./flappyball/">FlappyBall</a></li>
+      <li><a href="./matchtap/">MatchTap</a></li>
+      <li><a href="./guides/">Guides</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="max-width:100%; padding-left:clamp(24px,5vw,80px); padding-right:clamp(24px,5vw,80px);">
+    <div class="hero-eyebrow">STL Soccer Dev Lab &mdash; St. Louis, MO</div>
+    <h1>
+      Soccer<br />
+      <span class="accent">Runs</span> on<br />
+      <span class="orange">Code.</span>
+    </h1>
+    <p class="hero-sub">
+      Building software at the intersection of the beautiful game and modern tech.
+      Tools for coaches, managers, and fans&mdash;made in STL.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">See What We're Building</a>
+      <a href="./subgo/" class="btn btn-outline">Launch SubGo &rarr;</a>
+      <a href="./matchtap/" class="btn btn-outline">Launch MatchTap &rarr;</a>
+      <a href="./guides/" class="btn btn-outline">Coaching Guides &rarr;</a>
+    </div>
+    <div class="hero-deco" aria-hidden="true">10</div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker">
+      <div class="ticker-item"><span>&bull;</span> Game Management</div>
+      <div class="ticker-item"><span>&bull;</span> STL Soccer Dev Lab</div>
+      <div class="ticker-item"><span>&bull;</span> SubGo App</div>
+      <div class="ticker-item"><span>&bull;</span> MatchTap App</div>
+      <div class="ticker-item"><span>&bull;</span> Open Source</div>
+      <div class="ticker-item"><span>&bull;</span> Built in St. Louis</div>
+      <div class="ticker-item"><span>&bull;</span> Soccer Software</div>
+      <div class="ticker-item"><span>&bull;</span> Game Management</div>
+      <div class="ticker-item"><span>&bull;</span> STL Soccer Dev Lab</div>
+      <div class="ticker-item"><span>&bull;</span> SubGo App</div>
+      <div class="ticker-item"><span>&bull;</span> MatchTap App</div>
+      <div class="ticker-item"><span>&bull;</span> Open Source</div>
+      <div class="ticker-item"><span>&bull;</span> Built in St. Louis</div>
+      <div class="ticker-item"><span>&bull;</span> Soccer Software</div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label">Projects</p>
+    <h2>What We're Building</h2>
+    <div class="cards">
+
+      <a href="./subgo/" class="card">
+        <div class="card-tag">Live</div>
+        <h3>SubGo</h3>
+        <p>
+          Substitution and game management software for soccer coaches.
+          Track lineups, rotations, and player time&mdash;live on the sideline.
+        </p>
+        <div class="card-arrow">Launch SubGo &rarr;</div>
+      </a>
+
+      <a href="./flappyball/" class="card">
+        <div class="card-tag orange">Live</div>
+        <h3>FlappyBall</h3>
+        <p>
+          A soccer-themed Flappy Bird&ndash;style arcade game. Tap to keep the
+          ball in play, dodge defenders, and climb the leaderboard.
+        </p>
+        <div class="card-arrow">Play Now &rarr;</div>
+      </a>
+
+      <a href="./matchtap/" class="card">
+        <div class="card-tag">Live</div>
+        <h3>MatchTap</h3>
+        <p>
+          Live match event tracker for coaches and parents. Tap to log passes,
+          shots, cards, and more, then review the stats after the whistle.
+        </p>
+        <div class="card-arrow">Launch MatchTap &rarr;</div>
+      </a>
+
+      <div class="card">
+        <div class="card-tag coming">Planned</div>
+        <h3>Next Project</h3>
+        <p>
+          More tools for the pitch are on the whiteboard.
+          Ideas? Reach out.
+        </p>
+        <div class="card-arrow dim">Stay Tuned</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GUIDES -->
+  <section id="guides">
+    <p class="section-label">Guides</p>
+    <h2>Coaching Guides</h2>
+    <div class="cards">
+
+      <a href="./guides/equal-playing-time-youth-soccer/" class="card">
+        <div class="card-tag">Playing Time</div>
+        <h3>Equal Playing Time</h3>
+        <p>
+          For recreational and club coaches: why game time and repetitions
+          matter more than winning now, and how to make playing time fair
+          at every format.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-stat-tracking/" class="card">
+        <div class="card-tag orange">Stat Tracking</div>
+        <h3>Stat Tracking Without Hardware</h3>
+        <p>
+          Why coaches are replacing pen and paper and costly cameras with
+          a free phone app, and how to give every parent a small set of
+          stats to follow.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-formations-by-age/" class="card">
+        <div class="card-tag">Formations</div>
+        <h3>Formations by Age</h3>
+        <p>
+          Pick the 11v11 shape you want players ready for, then build
+          backwards through 9v9, 7v7 and 4v4, with benefits and downsides
+          for each.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-parent-sideline-guide/" class="card">
+        <div class="card-tag orange">Parents</div>
+        <h3>Sideline Guide for Parents</h3>
+        <p>
+          What to say, and what to skip, at your child's game and on the
+          car ride home&mdash;backed by sports psychology research.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/coaching-first-season-youth-soccer/" class="card">
+        <div class="card-tag">New Coaches</div>
+        <h3>Coaching Your First Season</h3>
+        <p>
+          Keep training fun with a ball for every player, bring a backup
+          plan, share playing time equally, and set game goals beyond
+          the score.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-player-development-tracking/" class="card">
+        <div class="card-tag orange">Development</div>
+        <h3>Track Development Over a Season</h3>
+        <p>
+          Pick one or two goals per player, log the same number after
+          every game with MatchTap, and show parents a real trend
+          instead of a gut feeling.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/ending-the-soccer-season-well/" class="card">
+        <div class="card-tag">Season Wrap Up</div>
+        <h3>Ending a Season Well</h3>
+        <p>
+          Recognize every player instead of one MVP, run a short player
+          and parent feedback survey, and close on the same fun first
+          note you started with.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/preseason-parent-meeting-youth-soccer/" class="card">
+        <div class="card-tag">New Coaches</div>
+        <h3>The Preseason Parent Meeting</h3>
+        <p>
+          What to cover in one thirty minute meeting, from playing time
+          to communication, plus a simple before, during and after
+          checklist.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/recreational-to-competitive-club-soccer/" class="card">
+        <div class="card-tag">Club Soccer</div>
+        <h3>Rec to Club: What Changes</h3>
+        <p>
+          Cost, time, playing time and coaching style all shift when a
+          player moves to competitive club, plus questions worth asking
+          before you sign.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-behavior-and-effort/" class="card">
+        <div class="card-tag">Team Culture</div>
+        <h3>Discipline That Teaches</h3>
+        <p>
+          Behavior problems and effort problems need different
+          responses, not the same bench for the rest of the season.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/in-game-coaching-youth-soccer/" class="card">
+        <div class="card-tag">On The Sideline</div>
+        <h3>In Game Coaching</h3>
+        <p>
+          What is actually worth saying during play, and why silence
+          often teaches more than instruction.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-tryouts-and-evaluations/" class="card">
+        <div class="card-tag">Tryouts</div>
+        <h3>Running Fair Tryouts</h3>
+        <p>
+          A scoring rubric, more than one evaluator, and how to share
+          results so families still trust the process.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/coaching-soccer-without-playing-experience/" class="card">
+        <div class="card-tag">New to the Sport</div>
+        <h3>Never Played? Coach Anyway</h3>
+        <p>
+          What actually makes a coach good, and how to close the real
+          gaps fast, without a playing background.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/handling-the-sideline-coaching-parent/" class="card">
+        <div class="card-tag">Difficult Conversations</div>
+        <h3>The Sideline Coaching Parent</h3>
+        <p>
+          What to say, one on one, when the general reminder has not
+          worked, plus how to escalate calmly if it continues.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-team-culture-that-lasts/" class="card">
+        <div class="card-tag">Team Culture</div>
+        <h3>A Culture That Outlasts the Season</h3>
+        <p>
+          Why players actually quit, and how to build a team players
+          want to come back to year after year.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/planning-a-youth-soccer-practice-session/" class="card">
+        <div class="card-tag">Practice Planning</div>
+        <h3>The One Hour Practice Template</h3>
+        <p>
+          Fit warm up, technical work, and small sided games together
+          without losing a third of practice to wasted time.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/guest-players-tournament-rosters-youth-soccer/" class="card">
+        <div class="card-tag">Tournaments</div>
+        <h3>Guest Players, Staying Fair</h3>
+        <p>
+          The actual guest player rules, and how to keep a tournament
+          weekend fair to your roster and the players you borrow.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-substitution-patterns/" class="card">
+        <div class="card-tag">Substitutions</div>
+        <h3>Substitution Patterns That Work</h3>
+        <p>
+          A concrete rotation system for 7v7, 9v9, and 11v11, so equal
+          minutes does not mean chaos at the sideline.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/coaching-the-quiet-or-anxious-player/" class="card">
+        <div class="card-tag">Player Confidence</div>
+        <h3>The Player Who Freezes Up</h3>
+        <p>
+          A different problem than low effort or acting out, and what
+          the research does and does not support for building it back.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-roster-size-math/" class="card">
+        <div class="card-tag">Roster Size</div>
+        <h3>Roster Size Math</h3>
+        <p>
+          Format size, a rotation plan, and a realistic buffer, so you
+          are not stuck with 9 bodies for an 11v11 game.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/coaching-a-multilingual-youth-soccer-team/" class="card">
+        <div class="card-tag">Multilingual Families</div>
+        <h3>Coaching a Multilingual Team</h3>
+        <p>
+          Real communication habits, not just translation apps, for
+          families who do not speak English as a first language.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/the-disengaged-parent-youth-soccer/" class="card">
+        <div class="card-tag">Disengaged Parents</div>
+        <h3>The Disengaged Parent</h3>
+        <p>
+          What to do over a season when a family shows almost no
+          involvement, and what the research says about a player
+          seeking connection from the coach instead.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/" class="card">
+        <div class="card-tag coming">All Guides</div>
+        <h3>Browse Every Guide</h3>
+        <p>
+          More guides are on the whiteboard. See the full list, or send
+          us a topic you want covered.
+        </p>
+        <div class="card-arrow dim">View All Guides &rarr;</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <div class="about-strip" id="about">
+    <div class="about-inner">
+      <div>
+        <p class="section-label">About</p>
+        <h2>Software Rooted in the Game</h2>
+        <p style="font-size:0.82rem; line-height:1.8; color:var(--muted); margin-top:12px;">
+          STL Soccer Dev Lab started on the sideline and moved to the terminal.
+          Every tool here is built by someone who has counted minutes on a clipboard
+          and wished the software just worked. Based in St. Louis&mdash;home of one
+          of the most passionate soccer cultures in the US.
+        </p>
+        <a href="./subgo/" class="btn btn-primary" style="margin-top:32px;">Try SubGo Free</a>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-num">03</div>
+          <div class="stat-label">Live Apps</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">STL</div>
+          <div class="stat-label">Based</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">0$</div>
+          <div class="stat-label">Cost to Use</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">&infin;</div>
+          <div class="stat-label">More to Come</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">STL<span>Dev</span>Lab</div>
+    <p>stldev.com &mdash; St. Louis Soccer Software</p>
+    <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:rgba(184,242,10,0.5);font-size:0.75rem;text-decoration:underline">Send Feedback</a></p>
+    <p style="color:rgba(184,242,10,0.3); font-size:0.6rem;">&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+  </footer>
+
+</body>
+</html>

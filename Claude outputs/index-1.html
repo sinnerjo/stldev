@@ -1,0 +1,585 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Preseason Parent Meeting: A Coach's Checklist</title>
+
+<!-- SEO -->
+<meta name="description" content="Run a preseason parent meeting that heads off problems before they start: what to cover, in what order, plus a simple before, during and after checklist." />
+<link rel="canonical" href="https://stldev.com/guides/preseason-parent-meeting-youth-soccer/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="The Preseason Parent Meeting: What to Cover, and a Simple Checklist" />
+<meta property="og:description" content="Most mid season parent conflict starts with something never said out loud in week one. What to cover in a preseason meeting, plus a simple checklist." />
+<meta property="og:url" content="https://stldev.com/guides/preseason-parent-meeting-youth-soccer/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-23" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="The Preseason Parent Meeting: What to Cover, and a Simple Checklist" />
+<meta name="twitter:description" content="Most mid season parent conflict starts with something never said out loud in week one. What to cover in a preseason meeting, plus a simple checklist." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/preseason-parent-meeting-youth-soccer/#article",
+      "headline": "The Preseason Parent Meeting: What to Cover, and a Simple Checklist",
+      "description": "How to run a preseason parent meeting for a youth soccer team, covering playing time policy, communication expectations, progress tracking, sideline behavior, and a simple before, during and after checklist.",
+      "datePublished": "2026-09-23",
+      "dateModified": "2026-09-23",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/preseason-parent-meeting-youth-soccer/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Parent communication",
+        "Team culture"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Preseason Meeting",
+          "item": "https://stldev.com/guides/preseason-parent-meeting-youth-soccer/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Preseason Meeting</p>
+
+  <article>
+    <h1>The Preseason Parent Meeting: <span class="accent">What to Cover, and a Simple Checklist</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 23, 2026 &middot; 10 min read</p>
+
+    <p class="lead">Almost every frustrating parent conversation a coach has in October was avoidable in August. Playing time, communication, sideline behavior, how progress gets tracked, most of the friction that builds over a season comes from something that was never actually said out loud at the start. A preseason meeting is where you say it out loud, once, to everyone at the same time.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches about to hold, or thinking about skipping, a preseason parent meeting for a recreational or club team. Read it alongside our <a href="../coaching-first-season-youth-soccer/">first season guide</a> if this is also your first year coaching. If your team includes a family who is more comfortable in a language other than English, our <a href="../coaching-a-multilingual-youth-soccer-team/">multilingual team guide</a> covers how to actually reach them.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Hold the meeting before the first game,</strong> ideally before or right after your first practice, and keep it to thirty minutes.</li>
+        <li><strong>Bring a written agenda.</strong> A meeting without one tends to wander and run long.</li>
+        <li><strong>State your playing time policy plainly,</strong> in the same words you will use all season.</li>
+        <li><strong>Set communication rules,</strong> including when and how parents should reach you, and when they should not.</li>
+        <li><strong>Explain how you track progress,</strong> so a parent's first data point is not an anxious guess in week six.</li>
+      </ul>
+    </div>
+
+    <h2 id="why"><span class="tag">Why it matters</span>Unstated expectations become conflict</h2>
+
+    <p>The Positive Coaching Alliance frames the preseason meeting simply: "you can avoid problems later by being clear now." That is the entire case for holding one. A parent who never heard your playing time policy will form their own guess about it, usually from the sideline, usually mid game, which is the worst possible place to learn a policy for the first time.</p>
+
+    <p>It also sets the tone for the whole season, not just the logistics. PCA suggests framing the goals of the season honestly with families in the room, aiming for something like this: "athletes will love the sport at least as much at the end of the season as at the beginning." Our <a href="../coaching-first-season-youth-soccer/">first season guide</a> cites a 2025 Aspen Institute survey where kids most often quit because they felt "not good enough" or cited "bad coaching." A meeting where you say plainly that development and enjoyment come first, not just results, is a direct answer to that, made in week one instead of hoped for in week ten.</p>
+
+    <p>Our <a href="../youth-soccer-player-development-tracking/">player development guide</a> makes this same point about progress specifically: talk to parents about development, not just outcomes, and hold a preseason meeting to explain how you track it before anyone is anxious about playing time. This guide is that meeting.</p>
+
+    <h2 id="before"><span class="tag">Before the meeting</span>A little prep goes a long way</h2>
+
+    <p>TeamSnap's advice on parent meetings is blunt about the single biggest lever: "the best-run meetings are those that start with an agenda." Without one, a meeting easily turns into what TeamSnap calls "unstructured commentary that darts from issue to issue" instead of covering what actually matters. A written agenda, even a simple one you print or share ahead of time, also signals that you came prepared, which buys you a little credibility before you have coached a single game.</p>
+
+    <ul class="plain">
+      <li><strong>Pick the timing.</strong> Right before or right after your first practice usually gets the best turnout, since parents are already there dropping off or picking up.</li>
+      <li><strong>Write a one page agenda</strong> and share it ahead of time if you can, even a simple list of topics and rough times.</li>
+      <li><strong>Set up your team communication tool</strong> beforehand, such as a group text or team app, so you can invite everyone in the room to join it on the spot.</li>
+      <li><strong>Collect emergency contacts</strong> and any medical or allergy information you do not already have.</li>
+      <li><strong>Recruit help ahead of the meeting</strong> if you know you need an assistant coach, a team manager, or someone to organize snacks, so you can ask the room directly instead of hoping someone volunteers cold.</li>
+    </ul>
+
+    <h2 id="agenda"><span class="tag">The meeting</span>What to actually cover</h2>
+
+    <p>Keep it to five or six topics. A meeting that tries to cover everything covers nothing well, and thirty minutes is about the limit of a group of tired parents standing on a sideline.</p>
+
+    <h3>Introduce yourself, briefly</h3>
+    <p>Who you are, your background with the sport or with coaching, and why you are doing this. QuickStartSoccer's guidance here is simple: a little personal context builds trust with families before you ask them to trust you with their kid for a season.</p>
+
+    <h3>Your coaching philosophy and season goals</h3>
+    <p>Say plainly what you are optimizing for. If your approach is fun first, with gamified drills and small sided games, tell them that here, the same philosophy covered in our <a href="../coaching-first-season-youth-soccer/">first season guide</a>. PCA also recommends asking the room a question rather than only talking at them: what do the parents and players hope to get out of the season. As PCA puts it, "this is their experience, and they should have their voice heard."</p>
+
+    <h3>Playing time, stated once and stated plainly</h3>
+    <p>This is the single topic most likely to cause a mid season complaint if it is left vague. State your actual policy in one or two sentences. Our own standard, covered in the <a href="../equal-playing-time-youth-soccer/">equal playing time guide</a>, is that through 9v9 play should be as close to equal as you can make it, with no healthy and available player getting less than half a game at any age including 11v11. Whatever your policy is, say it here, in the same words you intend to repeat all season if anyone asks.</p>
+
+    <h3>How you track and share progress</h3>
+    <p>Tell parents that you will be watching more than the scoreboard. If you are setting individual goals and checking in every few games, the approach in our <a href="../youth-soccer-player-development-tracking/">player development guide</a>, say so now. A parent who knows a check in is coming in a few weeks is a parent who is not left guessing until pickup day.</p>
+
+    <h3>Communication expectations</h3>
+    <p>QuickStartSoccer calls this "probably the most important thing" you cover, and recommends a specific rule worth adopting directly: give it 24 hours after a game before reaching out about anything emotional, so the conversation happens once feelings have cooled rather than in the parking lot. Also say how you prefer to be contacted, and how quickly you can realistically respond.</p>
+
+    <h3>Sideline behavior</h3>
+    <p>This is a good moment to set the tone described in our <a href="../youth-soccer-parent-sideline-guide/">parent sideline guide</a>, cheering rather than coaching from the sideline, and letting the coaching staff give the instructions during play. It lands better coming from you directly in week one than as a correction shouted across a field in week four.</p>
+
+    <h3>Schedule and logistics</h3>
+    <p>Practice days and times, the game schedule if you have it, uniform and equipment needs, and anything about fees or registration that is not already handled elsewhere.</p>
+
+    <h3>Ask for help</h3>
+    <p>Volunteer roles left open at the end of a meeting rarely fill themselves later. Ask directly, in the room, for an assistant coach, a team manager, or a rotation for snacks.</p>
+
+    <h2 id="script"><span class="tag">Example</span>A sample agenda you can read from</h2>
+
+    <p>If standing in front of a group of parents and improvising is not your favorite part of coaching, you do not have to improvise. Below is a sample script covering the same seven topics above, timed for a thirty minute meeting. Copy it, swap in your own team's details wherever you see brackets, and read from it directly. Nothing here needs to be memorized.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Time</th><th>What you can say</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0:00</td>
+            <td>"Thanks, everyone, for coming out. I am [Coach's Name], and I will be coaching [Team Name] this season, along with [Assistant Coach's Name]. This will take about thirty minutes, and then you are free to go."</td>
+          </tr>
+          <tr>
+            <td>2:00</td>
+            <td>"My goal this season is simple. I want every player to have fun and to leave better than they started, in that order. Practices will lean on small sided games and activities players can jump into right away, not standing in lines. Before we go further, I would love to hear from you too. What does a good season look like for your player?"</td>
+          </tr>
+          <tr>
+            <td>7:00</td>
+            <td>"Here is our playing time policy, so it is not a mystery once games start. Every healthy, available player will get close to equal minutes, and no one will play less than half a game at any point this season. I will keep to this every game, and you are welcome to ask me about it at any time."</td>
+          </tr>
+          <tr>
+            <td>12:00</td>
+            <td>"I will also be paying attention to each player's individual development, not just wins and losses. I will set a small goal with each player, check in every few games, and share how that is going, so you hear about real progress rather than a general impression."</td>
+          </tr>
+          <tr>
+            <td>16:00</td>
+            <td>"For communication, the best way to reach me is [preferred contact method], and I will respond within [timeframe]. If something happens in a game that upsets you, I ask that you wait 24 hours before reaching out, so we can both talk once things have cooled down. I will also be posting updates in [team app or group name], so please join before you leave today."</td>
+          </tr>
+          <tr>
+            <td>21:00</td>
+            <td>"During games, I would ask that the coaching staff be the ones giving instructions from the sideline. Cheering is always welcome, and honestly encouraged. Coaching from the sideline, even well meant, tends to confuse players who are already listening to us."</td>
+          </tr>
+          <tr>
+            <td>24:00</td>
+            <td>"A few logistics. Practices are [day and time] at [location]. Games start [date], and the schedule is posted in [team app or group name]. Please make sure your player has [uniform or equipment needs] by [date]."</td>
+          </tr>
+          <tr>
+            <td>27:00</td>
+            <td>"Last thing. I could use help this season with [assistant coach, team manager, snack schedule, or whatever role is open]. If you are interested, or just curious what it involves, find me after we wrap up."</td>
+          </tr>
+          <tr>
+            <td>29:00</td>
+            <td>"That is everything I had planned. Any questions before we head out? Thanks again for being here, I am looking forward to the season."</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note">Every name, team, time and location above is a placeholder, not a real player, parent or team. Fill in your own details and trim or adjust any line that does not fit your league or your personality as a coach.</p>
+
+    <h2 id="checklist"><span class="tag">Checklist</span>A simple before, during, after list</h2>
+
+    <p>Print this, or copy it into your notes app, and work down it once per season.</p>
+
+    <h3>Two weeks before</h3>
+    <ul class="plain">
+      <li>Pick a date, ideally around your first practice.</li>
+      <li>Write a one page agenda covering five or six topics.</li>
+      <li>Decide your playing time policy in one or two sentences you can say the same way all season.</li>
+      <li>Decide how you will track and share development progress.</li>
+      <li>Set up a team communication tool so families can join on the spot.</li>
+    </ul>
+
+    <h3>At the meeting</h3>
+    <ul class="plain">
+      <li>Introduce yourself and your background.</li>
+      <li>Share your coaching philosophy and season goals, and ask parents and players what they hope to get out of the season.</li>
+      <li>State your playing time policy plainly.</li>
+      <li>Explain how and when you will share progress updates.</li>
+      <li>Set communication expectations, including a cooling off rule after games.</li>
+      <li>Set sideline behavior expectations.</li>
+      <li>Share the schedule and any logistics.</li>
+      <li>Ask for volunteers by name for open roles.</li>
+    </ul>
+
+    <h3>After the meeting</h3>
+    <ul class="plain">
+      <li>Send a short written recap of the policies you covered, so nobody has to rely on memory.</li>
+      <li>Add any new contacts to your communication tool and emergency contact list.</li>
+      <li>Follow up individually with anyone who could not attend.</li>
+    </ul>
+
+    <p>Most families will engage with at least some of this. A few will not, no reply to the recap, no reply to the personal follow up. That is worth watching over the season rather than writing off; see <a href="../the-disengaged-parent-youth-soccer/">the disengaged parent</a> for what to do when that pattern holds.</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Skipping the meeting because the season feels informal.</strong> Recreational teams need this exactly as much as competitive ones, arguably more, since expectations are less standardized.</li>
+      <li><strong>Winging it without an agenda.</strong> A meeting that wanders leaves out the topics that actually prevent problems.</li>
+      <li><strong>Stating a policy you do not intend to keep.</strong> Parents remember what was promised in week one far better than coaches do.</li>
+      <li><strong>Covering logistics and skipping philosophy.</strong> The schedule matters, but it is not what determines whether a family trusts you by October.</li>
+      <li><strong>Never following up in writing.</strong> A verbal policy fades. A short recap message does not.</li>
+    </ul>
+
+    <p>Whatever you promise in this meeting, our <a href="../ending-the-soccer-season-well/">ending the season guide</a> is where you close the loop on it, asking parents in a short survey whether communication and playing time lived up to what you said back in week one.</p>
+
+    <div class="cta">
+      <h2>Back up your playing time policy with real numbers</h2>
+      <p>Once you have told parents how playing time will work, SubGo tracks who is on the field and for how long, so the policy you stated in the meeting is easy to keep all season. Free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://positivecoach.org/resource-zone/pre-season-meeting-agenda/" rel="noopener">Pre-Season Meeting Agenda</a>, Positive Coaching Alliance.</li>
+      <li><a href="https://www.teamsnap.com/blog/how-to/using-an-agenda-to-effectively-manage-a-youth-sports-parent-meeting" rel="noopener">Using an Agenda to Effectively Manage a Youth Sports Parent Meeting</a>, TeamSnap.</li>
+      <li><a href="https://quickstartsoccer.com/soccer-parent-meeting-agenda/" rel="noopener">Soccer Parent Meeting Agenda: 7 Essential Items To Include</a>, QuickStartSoccer.</li>
+      <li><a href="https://coach.heja.io/youth-sports-coaches-preseason-checklist/" rel="noopener">The Youth Sports Coaches' Preseason Checklist</a>, Heja.</li>
+    </ul>
+    <p class="note">The agenda order and checklist here are our own suggestions, adapted from common practice across several coaching organizations rather than one single source. Adjust the topics and the order to fit your league's own rules and your team's age group.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

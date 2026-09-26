@@ -1,0 +1,501 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Goalkeeper Basics for Coaches Who Never Played</title>
+
+<!-- SEO -->
+<meta name="description" content="What to actually teach a young goalkeeper in the first few sessions: stance, catching, footwork, safe falling, and when not to specialize." />
+<link rel="canonical" href="https://stldev.com/guides/goalkeeper-basics-for-youth-soccer-coaches/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="The Goalkeeper Basics Nobody Taught You to Coach" />
+<meta property="og:description" content="A plain, sourced starting curriculum for a coach who never played goalkeeper: stance, catching, footwork, and a safe way to fall before diving." />
+<meta property="og:url" content="https://stldev.com/guides/goalkeeper-basics-for-youth-soccer-coaches/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-10-09" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="The Goalkeeper Basics Nobody Taught You to Coach" />
+<meta name="twitter:description" content="A plain, sourced starting curriculum for a coach who never played goalkeeper: stance, catching, footwork, and a safe way to fall before diving." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/goalkeeper-basics-for-youth-soccer-coaches/#article",
+      "headline": "Goalkeeper Basics for Coaches Who Never Played: What to Actually Teach First",
+      "description": "What to actually teach a young goalkeeper in the first few sessions: stance, catching, footwork, safe falling, and when not to specialize.",
+      "datePublished": "2026-10-09",
+      "dateModified": "2026-10-09",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/goalkeeper-basics-for-youth-soccer-coaches/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Goalkeeper training",
+        "Coaching education"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Goalkeeper Basics",
+          "item": "https://stldev.com/guides/goalkeeper-basics-for-youth-soccer-coaches/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+
+  /* formation figures */
+  .shape { display: flex; gap: 24px; align-items: flex-start; margin-top: 24px; padding: 22px; background: var(--terminal); border-left: 3px solid var(--lime); }
+  .shape-figs { flex: 0 0 120px; display: flex; flex-direction: column; gap: 16px; }
+  .shape-fig { flex: 0 0 120px; margin: 0; text-align: center; }
+  .shape-fig svg { width: 120px; height: auto; display: block; }
+  .shape-fig figcaption { margin-top: 6px; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; color: var(--lime); }
+  .shape-body { flex: 1; min-width: 0; }
+  .shape-body h3 { margin-top: 0; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 14px; }
+  .cols h4 { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lime); font-weight: 500; margin-bottom: 6px; }
+  .cols h4.down { color: var(--accent); }
+  @media (max-width: 600px) {
+    .shape { flex-direction: column; padding: 18px; }
+    .shape-figs { flex-direction: row; flex-basis: auto; }
+    .cols { grid-template-columns: 1fr; gap: 6px; }
+    .table-wrap.wide table { min-width: 620px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Goalkeeper Basics</p>
+
+  <article>
+    <h1>Goalkeeper Basics for Coaches Who Never Played: <span class="accent">What to Actually Teach First</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; October 9, 2026 &middot; 8 min read</p>
+
+    <p class="lead">Most volunteer coaches never played goalkeeper, and almost all goalkeeper coaching content assumes you did. This is a starting curriculum for the rest of us: the stance, two ways to catch, footwork before diving, a safe way to fall, and the handling rule that most coaches still explain wrong.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>A coach with a young goalkeeper, roughly ages 8 to 12, and no goalkeeping background yourself. This covers the first few sessions, not a full goalkeeper coaching course.</p>
+    </div>
+
+    <h2 id="the-rule"><span class="tag">Know this first</span>The handling rule most coaches explain wrong</h2>
+
+    <p>If you learned the "six second rule" at some point, it is worth unlearning. As of the 2025/26 season, IFAB, the body that writes the actual Laws of the Game, changed both the number and the penalty. The current wording is direct: "A corner kick is awarded if a goalkeeper, inside their penalty area, controls the ball with their hand(s)/arm(s) for more than eight seconds before releasing it." That is a real change from the old rule, where holding it too long gave the other team an indirect free kick instead of a corner. The referee counts down the last five seconds with a raised hand, so a young keeper can actually see it coming rather than being surprised by a whistle.</p>
+
+    <p>The other rule worth knowing before you ever mention it to a kid is the back pass rule. A goalkeeper cannot pick up the ball with their hands after a teammate deliberately kicks it to them, or after receiving it directly from a teammate's throw in. The Law states it as an offense if the keeper "touches the ball with the hand/arm, unless the goalkeeper has clearly kicked or attempted to kick the ball to release it into play, after it has been deliberately kicked to the goalkeeper by a team mate." In plain terms for a young player: feet only if a teammate passes it back with their foot or throws it in, hands are fine for everything else inside the box.</p>
+
+    <h2 id="stance"><span class="tag">Start here</span>The stance everything else builds from</h2>
+
+    <p>Before catching, footwork, or diving, a goalkeeper needs a ready position that lets them move in any direction immediately. The United Soccer Coaches goalkeeping curriculum describes it plainly: "the goalkeeper's weight should be forward in a balanced position on the balls of their feet," with "feet about shoulder width apart" and "hands out in front of the goalkeeper with their palms facing diagonally down." That is the entire first lesson. A kid standing flat footed with their weight back cannot react to anything, no matter how good their hands are.</p>
+
+    <p>Have them hold the position, then react to a rolled ball, then a thrown ball, before a single shot is taken. The stance is boring to teach and easy to skip, which is exactly why most young keepers never really learn it.</p>
+
+    <h2 id="catching"><span class="tag">The core skill</span>Catching what comes at them</h2>
+
+    <p>For a ball above the waist, most coaches teach a hand shape that gets called the "W technique," fingers spread and thumbs close together behind the ball. Worth knowing as you teach it: that specific name is common shorthand in coaching circles, not an official term from a published curriculum, so do not be surprised if you cannot find it in a rulebook. The mechanic itself is what matters: hands behind the ball, not underneath it, so a miscatch still gets smothered against the body instead of squirting through.</p>
+
+    <p>For a ball on the ground, the official curriculum name is the "basket catch": "hands and arms parallel, the goalkeeper's fingers point towards the ground," and "the ball is brought into the body to secure it." Picture a scoop that closes into a hug. Teach the low one first. Young keepers get hurt far more often misjudging a ball on the ground than misjudging one in the air, and the basket catch is a more forgiving mistake than a stiff armed stab at a bouncing ball.</p>
+
+    <h2 id="footwork"><span class="tag">Before diving</span>Footwork, not diving, comes next</h2>
+
+    <p>The instinct is to jump straight to diving saves because they look like real goalkeeping. Footwork is what actually gets a keeper to the ball in time to make a save without diving at all. United Soccer Coaches names three specific movements worth teaching by name: the shuffle, "used when the goalkeeper needs to travel a short distance in their goal quickly," keeping the hips level; the crossover, for "a greater distance across the goal," where the keeper should "only cross over their feet in front, never behind"; and the drop step, "used for crossed balls and balls played towards the crossbar," stepping backward with one foot while keeping their eyes up the field. Teaching these three by name gives a young keeper a specific answer to "how do I get there" instead of just "get there."</p>
+
+    <h2 id="angle"><span class="tag">Positioning</span>Cutting the angle</h2>
+
+    <p>A young keeper's instinct is to stand on the goal line, which leaves the most net exposed. The curriculum concept here is called the angle arc: "this imaginary arc starts just outside the post and peaks at the center of the six yard box." In plain language for a kid: as the ball moves toward the middle of the field, take a few steps off the line toward the shooter, which shrinks the amount of open net they can actually see. This one idea, taught early, does more for a young keeper's save percentage than any amount of diving practice.</p>
+
+    <h2 id="falling"><span class="tag">Safety first</span>Teach a safe fall before a real dive</h2>
+
+    <p>This is the step most impatient coaches skip, and it is the one most likely to prevent an actual injury. United Soccer Coaches' own diploma course teaches a progression before a keeper ever leaves their feet: start on both knees and reach for the ball, then move to a "3/4 position (1 knee down, 1 foot down)," and only then finish from a standing dive. Each stage gets repeated until it looks controlled before moving to the next one.</p>
+
+    <p>The falling technique itself matters as much as the save. The same course is specific: "the ball should be the first thing that hits the ground, and then the body follows behind by flexing at the knee and lowering themselves to the ground," with elbows "tucked in" and "relaxed and in front of the chest," never used to brace a fall. A pediatric sports medicine physician writing on youth goalkeeper injuries adds a related, practical caution: a wrist fracture is a common injury "in children or adolescents who have hands driven backwards towards the wrist when trying to make a save on a direct shot," which is exactly what the ball first, elbows tucked technique is meant to prevent. One thing worth knowing before you tell parents that better gloves fix this: that same physician states plainly that "there is no solid evidence that use of goalkeeper braces or gloves provide adequate injury reduction." Good technique, taught patiently and in this order, is the actual protection. A good glove is comfort and grip, not a safety device.</p>
+
+    <h2 id="distribution"><span class="tag">Getting it back out</span>The four ways a keeper restarts play</h2>
+
+    <p>A young keeper who only knows how to punt the ball as far as possible is giving up half the position. The curriculum groups distribution into four categories worth naming for a kid: a goal kick, a punt, a throw, and a roll or bowl along the ground to a nearby teammate's feet. At the youngest ages, the roll to an open teammate is worth teaching first and praising when it happens, since it is the one option that actually keeps possession instead of trading it for field position.</p>
+
+    <h2 id="rotate"><span class="tag">The bigger picture</span>Do not lock one kid into the position too early</h2>
+
+    <p>It is tempting to find the one kid who is not afraid of the ball and leave them in net all season. The Official US Youth Soccer Coaching Manual is direct about the age to even start: "the authors believe that initiating goalkeeping in games prior to age nine is inappropriate," and once players reach that age, "players at the U10 level and older should be encouraged, not forced, to be exposed to goalkeeping roles in practice." Encouraged and exposed, not assigned permanently.</p>
+
+    <p>A US Soccer Federation position statement on youth player development, though now a legacy document rather than something currently linked on their site, makes the same point even more directly: "requiring a player to be only a goalkeeper at too early of an age may have a negative effect and eliminate them from future participation in soccer," adding that "it is impossible to predict who will be the best goalkeeper at age twenty when they are ten." The broader research on early specialization backs the same instinct: the American Academy of Pediatrics has found that delaying specialization in a single sport until after puberty leads to a higher likelihood of long term success, and that playing multiple sports, or in this case multiple positions, "decreases the chances of injuries, stress, and burnout in young athletes." Our <a href="../youth-soccer-positions-explained-simply/">guide to positions by format</a> covers rotating every player through different roles as players move from small sided to full sided games, and goalkeeper belongs in that rotation, not outside it.</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Skipping the falling progression</strong> and putting a young keeper straight into diving saves.</li>
+      <li><strong>Training the goalkeeper alone,</strong> away from the rest of the team, instead of folding them into regular technical work with the ball at their feet.</li>
+      <li><strong>Praising the save count</strong> instead of the stance, angle, or footwork that made the save possible in the first place.</li>
+      <li><strong>Assigning one player as "the goalkeeper"</strong> for an entire season before age nine, or without rotating other willing players through the role.</li>
+      <li><strong>Telling parents better gloves prevent injuries,</strong> when technique, not equipment, is what the evidence actually supports.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Keep the rotation fair and visible</h2>
+      <p>If more than one player takes a turn in goal across the season, SubGo tracks who played where and for how long, so the goalkeeper rotation stays as fair and visible as playing time anywhere else on the field. Free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://www.theifab.com/laws/latest/fouls-and-misconduct/" rel="noopener">Laws of the Game, Law 12: Fouls and Misconduct</a>, IFAB (current handling time limit and back pass rule).</li>
+      <li>Goalkeeping Level I Diploma Course Handout, United Soccer Coaches (formerly NSCAA), for the set position, basket catch, footwork, angle arc, and collapse dive progression.</li>
+      <li><a href="https://www.usyouthsoccer.org/wp-content/uploads/sites/160/2023/09/Official-US-Youth-Soccer-Coaching-Manual-1.pdf" rel="noopener">Official US Youth Soccer Coaching Manual</a>, US Youth Soccer, Chapter 7, "What About Goalkeeping?"</li>
+      <li>U.S. Soccer Federation Position Statements &amp; Best Practices for Player Development (legacy document, youth goalkeeper specialization guidance).</li>
+      <li>Koutures, C., <a href="https://activekidmd.com/soccergoalkeepers/" rel="noopener">Saving Soccer Goalkeepers from Injuries</a>, ActiveKidMD.</li>
+      <li>Brenner, J.S., American Academy of Pediatrics Council on Sports Medicine and Fitness, <a href="https://publications.aap.org/pediatrics/article/138/3/e20162148/52612/" rel="noopener">Sports Specialization and Intensive Training in Young Athletes</a>, <em>Pediatrics</em>, 2016.</li>
+    </ul>
+    <p class="note">Coaching diploma and curriculum terminology can vary between organizations and change over time. Check your own club or league's current goalkeeper training resources alongside this guide, especially for the current Laws of the Game, which IFAB updates most summers.</p>
+
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

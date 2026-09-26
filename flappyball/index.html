@@ -169,7 +169,7 @@ canvas {
 </head>
 <body>
 <h1 class="sr-only">FlappyBall: Free Soccer Arcade Game</h1>
-<p class="sr-only">Tap, click, or press the spacebar to dribble a soccer ball through the defenders without getting tackled. Choose Easy, Normal, or Hard difficulty and try to beat your best score. A free browser game from STL Soccer Dev Lab in St. Louis.</p>
+<p class="sr-only">Tap, click, or press the spacebar to dribble a soccer ball through the defenders without getting tackled. Choose Easy, Normal, or Hard difficulty, try to beat your best score, and enter your initials on the global top 10 leaderboard. A free browser game from STL Soccer Dev Lab in St. Louis.</p>
 <div id="wrap">
   <div id="hud">
     <span id="score-display">Score: 0</span>
@@ -193,6 +193,62 @@ const DIFFS={
   hard:   {gravity:0.45,jump:-8.5}
 };
 let diff='normal',state,player,pipes,score,bests={easy:0,normal:0,hard:0},frame,parts;
+
+// ===== Global Top 10 leaderboard (Supabase) =====
+const SB_URL='https://rwxicipfkhbmcekkxaaq.supabase.co';
+const SB_KEY='sb_publishable_lPBsfLiVhYqEJJPUp9fp3g_fLerQWJZ'; // publishable key, safe to be public
+const MAX_SCORE=500; // keep in sync with the check constraint on the scores table
+const boards={easy:undefined,normal:undefined,hard:undefined}; // undefined = loading, null = unavailable, array = rows
+const BLOCKED=new Set(['ASS','ARS','CUM','CUN','KUM','COC','COK','KOK','DIC','DIK','DIX','FAG','FAP','FCK','FKU','FUC','FUK','FUQ','FUX','HOE','JIZ','KKK','KYS','NIG','NGR','NGA','NAZ','PIS','SEX','SHT','SLT','TIT','TWT','VAG','WTF','XXX','POS','GFY']);
+let entry=null,saveStatus='',saveToken=0,boardHi=null,deadAt=0;
+
+function getSaved(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;}}
+function setSaved(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+(function(){const b=getSaved('fb_bests',{});for(const k in bests){if(Number.isFinite(b[k]))bests[k]=b[k];}})();
+
+function sbFetch(path,opts={}){
+  const ctrl=new AbortController(),t=setTimeout(()=>ctrl.abort(),8000);
+  return fetch(SB_URL+'/rest/v1/'+path,Object.assign({},opts,{signal:ctrl.signal,
+    headers:Object.assign({apikey:SB_KEY,'Content-Type':'application/json'},opts.headers||{})}))
+    .finally(()=>clearTimeout(t));
+}
+async function loadBoard(d){
+  try{
+    const r=await sbFetch('scores?select=initials,score&difficulty=eq.'+d+'&order=score.desc,created_at.asc&limit=10');
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    boards[d]=await r.json();
+  }catch(e){if(boards[d]===undefined)boards[d]=null;}
+}
+async function postScore(initials,s,d){
+  const r=await sbFetch('scores',{method:'POST',headers:{Prefer:'return=minimal'},
+    body:JSON.stringify({initials,score:s,difficulty:d})});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+}
+function qualifies(s){
+  const b=boards[diff];
+  if(!Array.isArray(b)||s<1||s>MAX_SCORE)return false;
+  return b.length<10||s>b[b.length-1].score;
+}
+function beginEntry(){
+  const last=getSaved('fb_initials','AAA');
+  const letters=(typeof last==='string'&&/^[A-Z]{3}$/.test(last)?last:'AAA').split('');
+  entry={letters,cur:0,err:'',rank:boards[diff].filter(r=>r.score>=score).length+1};
+  state='entry';
+}
+function cycleLetter(i,dir){
+  const c=entry.letters[i].charCodeAt(0)-65;
+  entry.letters[i]=String.fromCharCode(65+(c+dir+26)%26);entry.cur=i;entry.err='';
+}
+async function submitEntry(){
+  const ini=entry.letters.join('');
+  if(BLOCKED.has(ini)){entry.err='Please pick different initials';return;}
+  setSaved('fb_initials',ini);
+  const s=score,d=diff,tok=++saveToken;
+  boardHi={d,ini,s};state='dead';saveStatus='saving';deadAt=performance.now();
+  try{await postScore(ini,s,d);if(tok===saveToken)saveStatus='saved';}
+  catch(e){if(tok===saveToken)saveStatus='error';}
+  await loadBoard(d);
+}
 
 // Fit canvas to available space
 function resize(){
@@ -354,34 +410,117 @@ const BTNS=[
   {key:'normal',label:'Normal', color:'#e67e22'},
   {key:'hard',  label:'Hard',   color:'#e74c3c'}
 ];
-const BW=90,BH=34;
 let hoveredBtn=null;
-function getBtnX(i){return W/2-135+i*150;}
+function diffLabel(){return BTNS.find(b=>b.key===diff).label;}
 
+// Menus are laid out on a fixed 640x380 grid and scaled to fit the canvas
+const UW=640,UH=380,MONO='ui-monospace,Menlo,Consolas,monospace';
+function uiScale(){const s=Math.min(W/UW,H/UH);return{s,ox:(W-UW*s)/2,oy:(H-UH*s)/2};}
+function toUI(x,y){const t=uiScale();return[(x-t.ox)/t.s,(y-t.oy)/t.s];}
+function inBox(mx,my,b){return mx>=b.x&&mx<=b.x+b.w&&my>=b.y&&my<=b.y+b.h;}
+function diffBtn(i){return{x:185+i*150,y:178,w:90,h:34};}
+const SCORES_BTN={x:250,y:264,w:140,h:30};
+function tabBtn(i){return{x:170+i*105,y:54,w:90,h:26};}
+function slotX(i){return 320+(i-1)*80;}
+function upBox(i){return{x:slotX(i)-30,y:106,w:60,h:42};}
+function slotBox(i){return{x:slotX(i)-30,y:150,w:60,h:70};}
+function downBox(i){return{x:slotX(i)-30,y:222,w:60,h:42};}
+const DONE_BTN={x:260,y:278,w:120,h:38};
+
+function btn(b,fill,label,font,stroke){
+  ctx.beginPath();ctx.roundRect(b.x,b.y,b.w,b.h,8);ctx.fillStyle=fill;ctx.fill();
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}
+  ctx.fillStyle='#fff';ctx.font=font;ctx.textAlign='center';ctx.fillText(label,b.x+b.w/2,b.y+b.h/2+5);
+}
+function drawDiffBtns(boxFn,size){
+  BTNS.forEach((b,i)=>{
+    const sel=diff===b.key,hov=hoveredBtn===b.key;
+    btn(boxFn(i),sel?b.color:hov?b.color+'88':'#ffffff18',b.label,(sel?'bold ':'')+size+'px system-ui',sel?b.color:null);
+  });
+}
+function tri(cx,cy,up){
+  ctx.beginPath();
+  if(up){ctx.moveTo(cx,cy-10);ctx.lineTo(cx+15,cy+8);ctx.lineTo(cx-15,cy+8);}
+  else{ctx.moveTo(cx,cy+10);ctx.lineTo(cx+15,cy-8);ctx.lineTo(cx-15,cy-8);}
+  ctx.closePath();ctx.fill();
+}
+function drawBoardList(cx,y,rowH,d){
+  const b=boards[d];ctx.textAlign='center';ctx.font='15px system-ui';ctx.fillStyle='#aaa';
+  if(b===undefined){ctx.fillText('Loading...',cx,y+rowH*4);return;}
+  if(b===null){ctx.fillText('Leaderboard unavailable right now',cx,y+rowH*4);return;}
+  if(!b.length){ctx.fillText('No scores yet. Be the first!',cx,y+rowH*4);return;}
+  const blink=Math.floor(performance.now()/300)%2===0;let hiDone=false;
+  for(let i=0;i<10;i++){
+    const r=b[i],yy=y+i*rowH;let isHi=false;
+    if(r&&!hiDone&&boardHi&&boardHi.d===d&&r.initials===boardHi.ini&&r.score===boardHi.s){isHi=true;hiDone=true;}
+    ctx.fillStyle=isHi?(blink?'#FFD700':'#fff'):!r?'#666':i===0?'#FFD700':i<3?'#fff':'#ccc';
+    ctx.font=(isHi||i===0?'bold ':'')+'16px '+MONO;
+    ctx.textAlign='right';ctx.fillText((i+1)+'.',cx-60,yy);
+    ctx.textAlign='left';ctx.fillText(r?r.initials:'...',cx-45,yy);
+    ctx.textAlign='right';ctx.fillText(r?String(r.score):'',cx+85,yy);
+  }
+  ctx.textAlign='center';
+}
+
+function drawIdle(){
+  ctx.fillStyle='#fff';ctx.font='bold 36px system-ui';ctx.fillText('FlappyBall',320,100);
+  ctx.font='14px system-ui';ctx.fillStyle='#ccc';
+  ctx.fillText('Dribble through the defenders without getting tackled',320,132);
+  ctx.font='12px system-ui';ctx.fillStyle='#999';ctx.fillText('difficulty',320,166);
+  drawDiffBtns(diffBtn,13);
+  ctx.fillStyle='#FFD700';ctx.font='bold 15px system-ui';
+  ctx.fillText('tap / click / spacebar to start',320,240);
+  btn(SCORES_BTN,hoveredBtn==='scores'?'#ffffff30':'#ffffff18','🏆 High Scores','13px system-ui');
+}
+function drawDead(){
+  const lx=170;ctx.textAlign='center';
+  ctx.fillStyle='#ff4444';ctx.font='bold 30px system-ui';ctx.fillText('Tackled!',lx,120);
+  ctx.fillStyle='#fff';ctx.font='20px system-ui';ctx.fillText('Score: '+score,lx,160);
+  if(score>0&&score>=bests[diff]){ctx.fillStyle='#FFD700';ctx.font='bold 15px system-ui';ctx.fillText('New best!',lx,188);}
+  if(saveStatus){
+    const m={saving:['Saving score...','#aaa'],saved:['Score saved!','#7CFC00'],error:["Couldn't save score",'#ff8888']}[saveStatus];
+    ctx.fillStyle=m[1];ctx.font='14px system-ui';ctx.fillText(m[0],lx,216);
+  }
+  ctx.fillStyle='#ccc';ctx.font='14px system-ui';ctx.fillText('tap to try again',lx,268);
+  ctx.fillStyle='#ffffff22';ctx.fillRect(330,40,1,290);
+  ctx.fillStyle='#FFD700';ctx.font='bold 16px system-ui';ctx.fillText('TOP 10  ·  '+diffLabel().toUpperCase(),490,62);
+  drawBoardList(490,96,24,diff);
+}
+function drawEntry(){
+  ctx.textAlign='center';
+  ctx.fillStyle='#FFD700';ctx.font='bold 28px system-ui';ctx.fillText('NEW HIGH SCORE!',320,56);
+  ctx.fillStyle='#fff';ctx.font='16px system-ui';
+  ctx.fillText('Score '+score+'   ·   Rank #'+entry.rank+'   ·   '+diffLabel(),320,86);
+  const blink=Math.floor(performance.now()/400)%2===0;
+  for(let i=0;i<3;i++){
+    const cx=slotX(i),active=entry.cur===i,sb=slotBox(i);
+    ctx.fillStyle=hoveredBtn==='up'+i?'#fff':'#ffffffaa';tri(cx,128,true);
+    ctx.fillStyle=hoveredBtn==='down'+i?'#fff':'#ffffffaa';tri(cx,243,false);
+    ctx.beginPath();ctx.roundRect(sb.x,sb.y,sb.w,sb.h,8);
+    ctx.fillStyle=active?'#ffffff26':'#ffffff12';ctx.fill();
+    ctx.strokeStyle=active?'#FFD700':'#ffffff44';ctx.lineWidth=active?3:1.5;ctx.stroke();
+    ctx.fillStyle=active&&blink?'#FFD700':'#fff';ctx.font='bold 44px '+MONO;
+    ctx.fillText(entry.letters[i],cx,sb.y+51);
+  }
+  btn(DONE_BTN,hoveredBtn==='done'?'#2ecc71':'#27ae60','DONE','bold 16px system-ui');
+  if(entry.err){ctx.fillStyle='#ff8888';ctx.font='bold 14px system-ui';ctx.fillText(entry.err,320,342);}
+  else{ctx.fillStyle='#999';ctx.font='12px system-ui';ctx.fillText('type your initials or tap the arrows, then press Enter or DONE',320,342);}
+}
+function drawScores(){
+  ctx.textAlign='center';
+  ctx.fillStyle='#FFD700';ctx.font='bold 26px system-ui';ctx.fillText('HIGH SCORES',320,38);
+  drawDiffBtns(tabBtn,12);
+  drawBoardList(320,112,22,diff);
+  ctx.fillStyle='#ccc';ctx.font='13px system-ui';ctx.fillText('tap anywhere to go back',320,356);
+}
 function drawOverlay(){
   ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,0,W,H);
-  ctx.textAlign='center';
-  if(state==='idle'){
-    ctx.fillStyle='#fff';ctx.font='bold 36px system-ui';ctx.fillText('FlappyBall',W/2,H/2-90);
-    ctx.font='14px system-ui';ctx.fillStyle='#ccc';
-    ctx.fillText('Dribble through the defenders without getting tackled',W/2,H/2-58);
-    ctx.font='12px system-ui';ctx.fillStyle='#999';ctx.fillText('difficulty',W/2,H/2-24);
-    BTNS.forEach((b,i)=>{
-      const sel=diff===b.key,hov=hoveredBtn===b.key,bx=getBtnX(i),by=H/2-12;
-      ctx.beginPath();ctx.roundRect(bx,by,BW,BH,8);
-      ctx.fillStyle=sel?b.color:hov?b.color+'88':'#ffffff18';ctx.fill();
-      if(sel){ctx.strokeStyle=b.color;ctx.lineWidth=2;ctx.stroke();}
-      ctx.fillStyle='#fff';ctx.font=(sel?'bold ':'')+'13px system-ui';
-      ctx.fillText(b.label,bx+BW/2,by+BH/2+5);
-    });
-    ctx.fillStyle='#FFD700';ctx.font='bold 15px system-ui';
-    ctx.fillText('tap / click / spacebar to start',W/2,H/2+50);
-  } else if(state==='dead'){
-    ctx.fillStyle='#ff4444';ctx.font='bold 30px system-ui';ctx.fillText('Tackled!',W/2,H/2-55);
-    ctx.fillStyle='#fff';ctx.font='20px system-ui';ctx.fillText('Score: '+score,W/2,H/2-18);
-    if(score>0&&score>=bests[diff]){ctx.fillStyle='#FFD700';ctx.font='bold 15px system-ui';ctx.fillText('New best!',W/2,H/2+8);}
-    ctx.fillStyle='#ccc';ctx.font='14px system-ui';ctx.fillText('tap to try again',W/2,H/2+40);
-  }
+  const t=uiScale();ctx.save();ctx.translate(t.ox,t.oy);ctx.scale(t.s,t.s);ctx.textAlign='center';
+  if(state==='idle')drawIdle();
+  else if(state==='dead')drawDead();
+  else if(state==='entry')drawEntry();
+  else if(state==='scores')drawScores();
+  ctx.restore();
 }
 
 function checkHit(){
@@ -392,50 +531,83 @@ function checkHit(){
 }
 
 function doJump(){player.vy=DIFFS[diff].jump;}
-function startGame(){state='playing';doJump();}
+function startGame(){state='playing';boardHi=null;saveStatus='';saveToken++;loadBoard(diff);doJump();}
+function setDiff(k){diff=k;document.getElementById('best-display').textContent='Best: '+bests[diff];}
+function openScores(){state='scores';boardHi=null;loadBoard(diff);}
+function locked(){return performance.now()-deadAt<600;} // stops frantic taps from skipping the end screens
 
-function handleInput(mx,my,isClick){
+function handleInput(x,y){
+  const[mx,my]=toUI(x,y);
   if(state==='idle'){
-    const by=H/2-12;
-    for(let i=0;i<BTNS.length;i++){
-      const bx=getBtnX(i);
-      if(mx>=bx&&mx<=bx+BW&&my>=by&&my<=by+BH){
-        if(isClick){diff=BTNS[i].key;document.getElementById('best-display').textContent='Best: '+bests[diff];}
-        return;
-      }
-    }
-    if(isClick)startGame();
-  } else if(state==='playing'&&isClick){
+    for(let i=0;i<BTNS.length;i++)if(inBox(mx,my,diffBtn(i))){setDiff(BTNS[i].key);return;}
+    if(inBox(mx,my,SCORES_BTN)){openScores();return;}
+    startGame();
+  } else if(state==='playing'){
     doJump();
-  } else if(state==='dead'&&isClick){
+  } else if(state==='scores'){
+    for(let i=0;i<BTNS.length;i++)if(inBox(mx,my,tabBtn(i))){setDiff(BTNS[i].key);loadBoard(diff);return;}
+    state='idle';
+  } else if(state==='entry'){
+    if(locked())return;
+    for(let i=0;i<3;i++){
+      if(inBox(mx,my,upBox(i))){cycleLetter(i,1);return;}
+      if(inBox(mx,my,downBox(i))){cycleLetter(i,-1);return;}
+      if(inBox(mx,my,slotBox(i))){entry.cur=i;return;}
+    }
+    if(inBox(mx,my,DONE_BTN))submitEntry();
+  } else if(state==='dead'){
+    if(locked())return;
     init();startGame();
   }
 }
 
 function getCanvasXY(clientX,clientY){
   const r=canvas.getBoundingClientRect();
+  if(matchMedia('(orientation: portrait)').matches){
+    // the page is rotated 90deg in portrait, so screen axes are swapped
+    return [(clientY-r.top)*(W/r.height),(r.right-clientX)*(H/r.width)];
+  }
   return [(clientX-r.left)*(W/r.width),(clientY-r.top)*(H/r.height)];
 }
 
-canvas.addEventListener('click',e=>{const[mx,my]=getCanvasXY(e.clientX,e.clientY);handleInput(mx,my,true);});
+canvas.addEventListener('click',e=>{const[x,y]=getCanvasXY(e.clientX,e.clientY);handleInput(x,y);});
 canvas.addEventListener('mousemove',e=>{
-  if(state!=='idle'){hoveredBtn=null;return;}
-  const[mx,my]=getCanvasXY(e.clientX,e.clientY);
-  const by=H/2-12;hoveredBtn=null;
-  for(let i=0;i<BTNS.length;i++){const bx=getBtnX(i);if(mx>=bx&&mx<=bx+BW&&my>=by&&my<=by+BH){hoveredBtn=BTNS[i].key;break;}}
+  const[x,y]=getCanvasXY(e.clientX,e.clientY),[mx,my]=toUI(x,y);hoveredBtn=null;
+  if(state==='idle'){
+    BTNS.forEach((b,i)=>{if(inBox(mx,my,diffBtn(i)))hoveredBtn=b.key;});
+    if(inBox(mx,my,SCORES_BTN))hoveredBtn='scores';
+  } else if(state==='scores'){
+    BTNS.forEach((b,i)=>{if(inBox(mx,my,tabBtn(i)))hoveredBtn=b.key;});
+  } else if(state==='entry'){
+    for(let i=0;i<3;i++){if(inBox(mx,my,upBox(i)))hoveredBtn='up'+i;if(inBox(mx,my,downBox(i)))hoveredBtn='down'+i;}
+    if(inBox(mx,my,DONE_BTN))hoveredBtn='done';
+  }
 });
 canvas.addEventListener('touchstart',e=>{
   e.preventDefault();
   const t=e.touches[0];
-  const[mx,my]=getCanvasXY(t.clientX,t.clientY);
-  handleInput(mx,my,true);
+  const[x,y]=getCanvasXY(t.clientX,t.clientY);
+  handleInput(x,y);
 },{passive:false});
 document.addEventListener('keydown',e=>{
+  if(state==='entry'){
+    const k=e.key;
+    if(k===' '||k.startsWith('Arrow')||k==='Backspace'||k==='Enter')e.preventDefault();
+    if(/^[a-zA-Z]$/.test(k)){entry.letters[entry.cur]=k.toUpperCase();entry.err='';if(entry.cur<2)entry.cur++;}
+    else if(k==='Backspace'||k==='ArrowLeft'){entry.cur=Math.max(0,entry.cur-1);}
+    else if(k==='ArrowRight'){entry.cur=Math.min(2,entry.cur+1);}
+    else if(k==='ArrowUp'){cycleLetter(entry.cur,1);}
+    else if(k==='ArrowDown'){cycleLetter(entry.cur,-1);}
+    else if(k==='Enter'&&!locked()){submitEntry();}
+    return; // letters like F must not trigger shortcuts while typing initials
+  }
   if(e.code==='Space'){e.preventDefault();
     if(state==='idle')startGame();
     else if(state==='playing')doJump();
-    else if(state==='dead'){init();startGame();}
+    else if(state==='scores')state='idle';
+    else if(state==='dead'&&!locked()){init();startGame();}
   }
+  if(e.code==='Escape'&&state==='scores')state='idle';
   if(e.code==='KeyF')toggleFS();
 });
 
@@ -452,8 +624,9 @@ function update(){
   for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.life-=0.04;if(p.life<=0)parts.splice(i,1);}
   if(checkHit()){
     spawnParts(PX,player.y+20);
-    if(score>bests[diff]){bests[diff]=score;document.getElementById('best-display').textContent='Best: '+bests[diff];}
-    state='dead';
+    if(score>bests[diff]){bests[diff]=score;setSaved('fb_bests',bests);document.getElementById('best-display').textContent='Best: '+bests[diff];}
+    deadAt=performance.now();
+    if(qualifies(score))beginEntry();else state='dead';
   }
 }
 
@@ -462,13 +635,13 @@ function draw(){
   if(state==='playing'){
     ctx.fillStyle='#fff';ctx.font='bold 26px system-ui';ctx.textAlign='center';
     ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=4;ctx.fillText(score,W/2,42);ctx.shadowBlur=0;
-  }
-  if(state==='idle'||state==='dead')drawOverlay();
+  } else drawOverlay();
 }
 
 function loop(){update();draw();requestAnimationFrame(loop);}
 resize();
 init();
+['easy','normal','hard'].forEach(loadBoard);
 loop();
 </script>
 </body>

@@ -435,6 +435,16 @@
       color: var(--muted);
     }
 
+    .card-tag.ai {
+      background: transparent;
+      border: 1px solid rgba(184,242,10,0.35);
+      color: var(--lime);
+    }
+
+    .card-tag + .card-tag {
+      margin-left: 6px;
+    }
+
     .card h3 {
       font-family: 'Syne', sans-serif;
       font-size: 1.35rem;
@@ -659,73 +669,31 @@
     <h2>Coaching Guides + an AI Assistant Coach</h2>
     <div class="cards">
 
-      <a href="./guides/equal-playing-time-youth-soccer/" class="card">
-        <div class="card-tag">Playing Time</div>
-        <h3>Equal Playing Time</h3>
+      <a href="./guides/train-ai-on-your-coaching-philosophy/" class="card">
+        <div class="card-tag">AI Tools</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Train AI on Your Coaching Philosophy First</h3>
         <p>
-          For recreational and club coaches: why game time and repetitions
-          matter more than winning now, and how to make playing time fair
-          at every format.
+          A guided prompt for building a reusable coaching profile,
+          and the real features that make it stick across future chats.
         </p>
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
-      <a href="./guides/youth-soccer-stat-tracking/" class="card">
-        <div class="card-tag orange">Stat Tracking</div>
-        <h3>Stat Tracking Without Hardware</h3>
+      <a href="./guides/how-to-use-ai-as-a-youth-soccer-coach/" class="card">
+        <div class="card-tag">AI Tools</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>How to Use AI as a Youth Soccer Coach</h3>
         <p>
-          Why coaches are replacing pen and paper and costly cameras with
-          a free phone app, and how to give every parent a small set of
-          stats to follow.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
-      <a href="./guides/youth-soccer-formations-by-age/" class="card">
-        <div class="card-tag">Formations</div>
-        <h3>Formations by Age</h3>
-        <p>
-          Pick the 11v11 shape you want players ready for, then build
-          backwards through 9v9, 7v7 and 4v4, with benefits and downsides
-          for each.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
-      <a href="./guides/youth-soccer-parent-sideline-guide/" class="card">
-        <div class="card-tag orange">Parents</div>
-        <h3>Sideline Guide for Parents</h3>
-        <p>
-          What to say, and what to skip, at your child's game and on the
-          car ride home&mdash;backed by sports psychology research.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
-      <a href="./guides/coaching-first-season-youth-soccer/" class="card">
-        <div class="card-tag">New Coaches</div>
-        <h3>Coaching Your First Season</h3>
-        <p>
-          Keep training fun with a ball for every player, bring a backup
-          plan, share playing time equally, and set game goals beyond
-          the score.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
-      <a href="./guides/youth-soccer-player-development-tracking/" class="card">
-        <div class="card-tag orange">Development</div>
-        <h3>Track Development Over a Season</h3>
-        <p>
-          Pick one or two goals per player, log the same number after
-          every game with MatchTap, and show parents a real trend
-          instead of a gut feeling.
+          Practice plans, schedule imports, weekly updates, and admin
+          work, plus the one habit that catches wrong answers before you repeat them.
         </p>
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
       <a href="./guides/ending-the-soccer-season-well/" class="card">
         <div class="card-tag">Season Wrap Up</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Ending a Season Well</h3>
         <p>
           Recognize every player instead of one MVP, run a short player
@@ -737,6 +705,7 @@
 
       <a href="./guides/preseason-parent-meeting-youth-soccer/" class="card">
         <div class="card-tag">New Coaches</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>The Preseason Parent Meeting</h3>
         <p>
           What to cover in one thirty minute meeting, from playing time
@@ -746,8 +715,79 @@
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
+      <a href="./guides/in-game-coaching-youth-soccer/" class="card">
+        <div class="card-tag">On The Sideline</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>In Game Coaching</h3>
+        <p>
+          What is actually worth saying during play, and why silence
+          often teaches more than instruction.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/equal-playing-time-youth-soccer/" class="card">
+        <div class="card-tag">Playing Time</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Equal Playing Time</h3>
+        <p>
+          For recreational and club coaches: why game time and repetitions
+          matter more than winning now, and how to make playing time fair
+          at every format.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-stat-tracking/" class="card">
+        <div class="card-tag orange">Stat Tracking</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Stat Tracking Without Hardware</h3>
+        <p>
+          Why coaches are replacing pen and paper and costly cameras with
+          a free phone app, and how to give every parent a small set of
+          stats to follow.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-parent-sideline-guide/" class="card">
+        <div class="card-tag orange">Parents</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Sideline Guide for Parents</h3>
+        <p>
+          What to say, and what to skip, at your child's game and on the
+          car ride home&mdash;backed by sports psychology research.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/coaching-first-season-youth-soccer/" class="card">
+        <div class="card-tag">New Coaches</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Coaching Your First Season</h3>
+        <p>
+          Keep training fun with a ball for every player, bring a backup
+          plan, share playing time equally, and set game goals beyond
+          the score.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-player-development-tracking/" class="card">
+        <div class="card-tag orange">Development</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Track Development Over a Season</h3>
+        <p>
+          Pick one or two goals per player, log the same number after
+          every game with MatchTap, and show parents a real trend
+          instead of a gut feeling.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
       <a href="./guides/recreational-to-competitive-club-soccer/" class="card">
         <div class="card-tag">Club Soccer</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Rec to Club: What Changes</h3>
         <p>
           Cost, time, playing time and coaching style all shift when a
@@ -759,6 +799,7 @@
 
       <a href="./guides/youth-soccer-behavior-and-effort/" class="card">
         <div class="card-tag">Team Culture</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Discipline That Teaches</h3>
         <p>
           Behavior problems and effort problems need different
@@ -767,18 +808,9 @@
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
-      <a href="./guides/in-game-coaching-youth-soccer/" class="card">
-        <div class="card-tag">On The Sideline</div>
-        <h3>In Game Coaching</h3>
-        <p>
-          What is actually worth saying during play, and why silence
-          often teaches more than instruction.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
       <a href="./guides/youth-soccer-tryouts-and-evaluations/" class="card">
         <div class="card-tag">Tryouts</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Running Fair Tryouts</h3>
         <p>
           A scoring rubric, more than one evaluator, and how to share
@@ -789,6 +821,7 @@
 
       <a href="./guides/coaching-soccer-without-playing-experience/" class="card">
         <div class="card-tag">New to the Sport</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Never Played? Coach Anyway</h3>
         <p>
           What actually makes a coach good, and how to close the real
@@ -799,6 +832,7 @@
 
       <a href="./guides/handling-the-sideline-coaching-parent/" class="card">
         <div class="card-tag">Difficult Conversations</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>The Sideline Coaching Parent</h3>
         <p>
           What to say, one on one, when the general reminder has not
@@ -807,18 +841,9 @@
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
-      <a href="./guides/youth-soccer-team-culture-that-lasts/" class="card">
-        <div class="card-tag">Team Culture</div>
-        <h3>A Culture That Outlasts the Season</h3>
-        <p>
-          Why players actually quit, and how to build a team players
-          want to come back to year after year.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
       <a href="./guides/planning-a-youth-soccer-practice-session/" class="card">
         <div class="card-tag">Practice Planning</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>The One Hour Practice Template</h3>
         <p>
           Fit warm up, technical work, and small sided games together
@@ -829,6 +854,7 @@
 
       <a href="./guides/guest-players-tournament-rosters-youth-soccer/" class="card">
         <div class="card-tag">Tournaments</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Guest Players, Staying Fair</h3>
         <p>
           The actual guest player rules, and how to keep a tournament
@@ -837,18 +863,9 @@
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
-      <a href="./guides/youth-soccer-substitution-patterns/" class="card">
-        <div class="card-tag">Substitutions</div>
-        <h3>Substitution Patterns That Work</h3>
-        <p>
-          A concrete rotation system for 7v7, 9v9, and 11v11, so equal
-          minutes does not mean chaos at the sideline.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
       <a href="./guides/coaching-the-quiet-or-anxious-player/" class="card">
         <div class="card-tag">Player Confidence</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>The Player Who Freezes Up</h3>
         <p>
           A different problem than low effort or acting out, and what
@@ -859,6 +876,7 @@
 
       <a href="./guides/youth-soccer-roster-size-math/" class="card">
         <div class="card-tag">Roster Size</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Roster Size Math</h3>
         <p>
           Format size, a rotation plan, and a realistic buffer, so you
@@ -867,29 +885,9 @@
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
-      <a href="./guides/coaching-a-multilingual-youth-soccer-team/" class="card">
-        <div class="card-tag">Multilingual Families</div>
-        <h3>Coaching a Multilingual Team</h3>
-        <p>
-          Real communication habits, not just translation apps, for
-          families who do not speak English as a first language.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
-      <a href="./guides/the-disengaged-parent-youth-soccer/" class="card">
-        <div class="card-tag">Disengaged Parents</div>
-        <h3>The Disengaged Parent</h3>
-        <p>
-          What to do over a season when a family shows almost no
-          involvement, and what the research says about a player
-          seeking connection from the coach instead.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
       <a href="./guides/growth-and-maturity-in-youth-soccer/" class="card">
         <div class="card-tag">Growth &amp; Maturity</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Growth Spurts, Not Talent</h3>
         <p>
           Some players in the same age group are biologically a year
@@ -901,6 +899,7 @@
 
       <a href="./guides/talking-to-a-coach-about-playing-time/" class="card">
         <div class="card-tag">For Parents</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Talking to a Coach About Playing Time</h3>
         <p>
           Your child is getting well under half the game. A step by
@@ -911,6 +910,7 @@
 
       <a href="./guides/youth-soccer-positions-explained-simply/" class="card">
         <div class="card-tag">Positions</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Positions Explained Simply</h3>
         <p>
           Skip the formation numbers. A plain, honest job for every
@@ -919,28 +919,9 @@
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
-      <a href="./guides/youth-soccer-glossary-for-parents/" class="card">
-        <div class="card-tag">Parents</div>
-        <h3>The Soccer Parent Glossary</h3>
-        <p>
-          Offside, marking, overlap, build out line. Every term you
-          have nodded along to, checked against the actual rules.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
-      <a href="./guides/recognizing-burnout-in-young-athletes/" class="card">
-        <div class="card-tag">Burnout</div>
-        <h3>Recognizing Burnout in a Young Athlete</h3>
-        <p>
-          What real research says burnout actually looks like before
-          a kid quits, what causes it, and what actually helps.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
       <a href="./guides/youth-soccer-team-social-media-page/" class="card">
         <div class="card-tag">Team Social Media</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Running a Team Social Media Page</h3>
         <p>
           A page that never posts the score: specific player highlights,
@@ -951,6 +932,7 @@
 
       <a href="./guides/goalkeeper-basics-for-youth-soccer-coaches/" class="card">
         <div class="card-tag">Goalkeeping</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Goalkeeper Basics for Coaches Who Never Played</h3>
         <p>
           What to actually teach in the first few sessions: stance,
@@ -959,8 +941,88 @@
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
+      <a href="./guides/youth-soccer-formations-by-age/" class="card">
+        <div class="card-tag">Formations</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Formations by Age</h3>
+        <p>
+          Pick the 11v11 shape you want players ready for, then build
+          backwards through 9v9, 7v7 and 4v4, with benefits and downsides
+          for each.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-team-culture-that-lasts/" class="card">
+        <div class="card-tag">Team Culture</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>A Culture That Outlasts the Season</h3>
+        <p>
+          Why players actually quit, and how to build a team players
+          want to come back to year after year.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-substitution-patterns/" class="card">
+        <div class="card-tag">Substitutions</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Substitution Patterns That Work</h3>
+        <p>
+          A concrete rotation system for 7v7, 9v9, and 11v11, so equal
+          minutes does not mean chaos at the sideline.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/coaching-a-multilingual-youth-soccer-team/" class="card">
+        <div class="card-tag">Multilingual Families</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Coaching a Multilingual Team</h3>
+        <p>
+          Real communication habits, not just translation apps, for
+          families who do not speak English as a first language.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/the-disengaged-parent-youth-soccer/" class="card">
+        <div class="card-tag">Disengaged Parents</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>The Disengaged Parent</h3>
+        <p>
+          What to do over a season when a family shows almost no
+          involvement, and what the research says about a player
+          seeking connection from the coach instead.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/youth-soccer-glossary-for-parents/" class="card">
+        <div class="card-tag">Parents</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>The Soccer Parent Glossary</h3>
+        <p>
+          Offside, marking, overlap, build out line. Every term you
+          have nodded along to, checked against the actual rules.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
+      <a href="./guides/recognizing-burnout-in-young-athletes/" class="card">
+        <div class="card-tag">Burnout</div>
+        <div class="card-tag ai">AI Prompts Included</div>
+        <h3>Recognizing Burnout in a Young Athlete</h3>
+        <p>
+          What real research says burnout actually looks like before
+          a kid quits, what causes it, and what actually helps.
+        </p>
+        <div class="card-arrow">Read the Guide &rarr;</div>
+      </a>
+
       <a href="./guides/youth-soccer-dribbling-before-passing/" class="card">
         <div class="card-tag">Philosophy</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Why Dribbling Comes Before Passing</h3>
         <p>
           Developing dribblers young and letting passing emerge as the
@@ -971,6 +1033,7 @@
 
       <a href="./guides/coaching-licenses-worth-getting-as-a-volunteer/" class="card">
         <div class="card-tag">Coach Education</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Coaching Licenses Worth Getting as a Volunteer</h3>
         <p>
           What each credential actually costs and covers, and an honest
@@ -979,32 +1042,13 @@
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>
 
-      <a href="./guides/how-to-use-ai-as-a-youth-soccer-coach/" class="card">
-        <div class="card-tag">AI Tools</div>
-        <h3>How to Use AI as a Youth Soccer Coach</h3>
-        <p>
-          Practice plans, schedule imports, weekly updates, and admin
-          work, plus the one habit that catches wrong answers before you repeat them.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
       <a href="./guides/gamification-in-youth-soccer-practice/" class="card">
         <div class="card-tag">Practice Design</div>
+        <div class="card-tag ai">AI Prompts Included</div>
         <h3>Why Youth Soccer Practice Should Feel Like a Game</h3>
         <p>
           Fun with a felt purpose, not a drill, plus the research on
           skipping the lines for more touches on the ball.
-        </p>
-        <div class="card-arrow">Read the Guide &rarr;</div>
-      </a>
-
-      <a href="./guides/train-ai-on-your-coaching-philosophy/" class="card">
-        <div class="card-tag">AI Tools</div>
-        <h3>Train AI on Your Coaching Philosophy First</h3>
-        <p>
-          A guided prompt for building a reusable coaching profile,
-          and the real features that make it stick across future chats.
         </p>
         <div class="card-arrow">Read the Guide &rarr;</div>
       </a>

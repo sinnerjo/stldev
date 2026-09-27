@@ -856,6 +856,69 @@
     color: var(--chalk-dim);
   }
   .qr-conflict-choices button.chosen { background: var(--lime-dim); border-color: var(--lime); color: var(--pitch-dark); }
+
+  /* Live sharing */
+  .share-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    background: var(--pitch-dark);
+    border: 1px solid var(--lime-dim);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--chalk-dim);
+    cursor: pointer;
+  }
+  .share-status b { color: var(--chalk); letter-spacing: 1px; }
+  .share-status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); flex: 0 0 8px; }
+  .share-status.offline { border-color: var(--amber); }
+  .share-status.offline .dot { background: var(--amber); }
+  .share-code-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; color: var(--chalk-dim); }
+  .share-code { font-size: 26px; font-weight: 800; letter-spacing: 4px; color: var(--lime); }
+  .share-hint { margin-top: 4px; color: var(--chalk-dim); font-size: 12px; line-height: 1.5; }
+  .share-tracker {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background: var(--pitch-dark);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .share-tracker .who { font-weight: 700; }
+  .share-tracker .what { color: var(--chalk-dim); font-size: 12px; text-align: right; }
+  .share-tracker .away { color: var(--amber); font-weight: 600; font-size: 11px; margin-left: 6px; }
+  .share-empty-btn {
+    grid-column: 1 / -1;
+    padding: 18px 12px;
+    background: var(--pitch-dark);
+    border: 1px dashed var(--lime-dim);
+    color: var(--lime);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .claim-card { text-align: left; max-width: 420px; max-height: 88vh; overflow-y: auto; }
+  .claim-section-label { color: var(--amber); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 12px 0 6px; }
+  .claim-cat-label { color: var(--chalk-dim); font-size: 11px; font-weight: 700; margin: 10px 0 4px; }
+  .claim-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    margin-bottom: 4px;
+    background: var(--pitch-dark);
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  .claim-item input { width: 18px; height: 18px; accent-color: var(--lime); flex: 0 0 18px; }
+  .claim-item .claim-name { flex: 1; }
+  .claim-taken { color: var(--amber); font-size: 11px; font-weight: 600; text-align: right; }
+  .claim-error { color: var(--red); font-size: 12px; line-height: 1.5; margin: 10px 0 0; }
+  .claim-actions { position: sticky; bottom: -20px; background: var(--card); padding: 12px 0 0; margin-top: 12px; }
 </style>
 </head>
 
@@ -873,7 +936,7 @@
   <div class="screen active" id="screen-setup">
     <div class="setup-block">
       <h2>Opponent</h2>
-      <input type="text" id="opponent-input" placeholder="e.g. StlDev FC">
+      <input type="text" id="opponent-input" placeholder="e.g. StlDev FC" onchange="sharedSetupFieldChanged()">
     </div>
 
     <div class="setup-block">
@@ -888,12 +951,12 @@
 
     <div class="setup-block" id="team-name-block" style="display:none;">
       <h2>Team name</h2>
-      <input type="text" id="team-name-input" placeholder="e.g. StlDev FC">
+      <input type="text" id="team-name-input" placeholder="e.g. StlDev FC" onchange="sharedSetupFieldChanged()">
     </div>
 
     <div class="setup-block" id="player-name-block" style="display:none;">
       <h2>Player name</h2>
-      <input type="text" id="player-name-input" placeholder="e.g. Emma">
+      <input type="text" id="player-name-input" placeholder="e.g. Emma" onchange="sharedSetupFieldChanged()">
       <div class="add-row">
         <input type="text" id="player-number-input" placeholder="Number (optional)" inputmode="numeric" maxlength="2" style="flex:1;">
         <select id="player-position-input" style="flex:1;">
@@ -932,9 +995,15 @@
       <div style="margin-top:8px; color:var(--chalk-dim); font-size:12px;">Adds two linked buttons to the top of Track. Tapping one turns off the other automatically. Time in each state is calculated from the game clock, so it pauses whenever the clock does.</div>
     </div>
 
-    <div class="setup-block">
+    <div class="setup-block" id="events-block">
       <h2>Events to track</h2>
       <div class="event-config" id="event-config"></div>
+    </div>
+
+    <div class="setup-block" id="shared-events-block" style="display:none;">
+      <h2>Events to track</h2>
+      <button class="qr-btn" onclick="openClaimPicker()">Choose what I'm tracking</button>
+      <div class="share-hint">In a shared game, your buttons come from what you've picked to track, so nobody counts the same thing twice.</div>
     </div>
 
     <div class="setup-block">
@@ -949,7 +1018,28 @@
       </label>
     </div>
 
-    <div class="setup-block">
+    <div class="setup-block" id="share-block">
+      <h2>Share live with other trackers</h2>
+      <div id="share-off">
+        <input type="text" id="tracker-name-input" placeholder="Your name, e.g. Coach Joe" maxlength="30" oninput="setTrackerName(this.value)">
+        <button class="qr-btn" style="margin-top:8px;" onclick="startSharedGame()">Start a shared game</button>
+        <div class="add-row">
+          <input type="text" id="join-code-input" placeholder="Game code" maxlength="6" autocapitalize="characters" autocomplete="off" style="text-transform:uppercase; letter-spacing:2px;">
+          <button onclick="joinSharedGame()">Join</button>
+        </div>
+        <div class="share-hint">Several people can track the same game at once. One person starts it, everyone else joins with the code. Each phone picks which players or stats it covers, and every tap shows up on all phones within a few seconds.</div>
+      </div>
+      <div id="share-on" style="display:none;">
+        <div class="share-code-row"><span>Game code</span><span class="share-code" id="share-code"></span></div>
+        <button class="qr-btn" onclick="openInviteQr()">Invite others</button>
+        <button class="qr-btn" onclick="openClaimPicker()">Choose what I'm tracking</button>
+        <div id="share-trackers"></div>
+        <button class="reset-btn" style="margin-top:6px;" onclick="leaveSharedGame()">Leave shared game</button>
+        <div class="share-hint">Leaving keeps everything already on this phone. The others can keep tracking.</div>
+      </div>
+    </div>
+
+    <div class="setup-block" id="qr-combine-block">
       <h2>Combine data from another device</h2>
       <button class="qr-btn" onclick="openImportScanner()">Import game data (scan QR)</button>
       <div style="margin-top:4px; color:var(--chalk-dim); font-size:12px;">Scan another phone's tracked data into this game. Modes must match, and this device must be on Setup or have a game in progress in the same mode.</div>
@@ -998,6 +1088,9 @@
         <p class="help-heading">Combining data from another device</p>
         <p>If two people split tracking duties on the same game, Share via QR on Log or on a Past games card displays a code, or a cycling sequence of codes for larger games, that another device can scan. On the receiving side, Import game data on Setup opens the camera to scan it in. If no game is in progress, the scanned data becomes a new game outright. If a game is already in progress, the modes have to match exactly, and anything that overlaps, like both devices tracking the same event for the same player, prompts you to pick which version to keep rather than combining them.</p>
 
+        <p class="help-heading">Sharing live with other trackers</p>
+        <p>Type your name under Share live, then tap Start a shared game. You get a six character code, and Invite others shows a QR code and link so other parents or coaches can join from their phones. Everyone picks what they're covering with Choose what I'm tracking, either some of the players, some of the stats, or both. Anything another tracker already has is marked with their name and can't be doubled up. Every tap uploads right away and all phones pull in each other's taps every few seconds, so the score, the clock, the Log, and the percentages match on every phone. If a phone loses signal, its taps wait and upload once it's back. Undo last only undoes your own taps. When the game is over, each person taps End game to save their own copy to Past games.</p>
+
         <p class="help-heading">Past games tab</p>
         <p>Every saved game lives here. Tap a card to see its full event list, export it to CSV, share a text summary, share it as a QR code for another device to import, or delete it.</p>
 
@@ -1016,6 +1109,7 @@
   </div>
 
   <div class="screen" id="screen-track">
+    <div class="share-status" id="share-status" style="display:none;" onclick="showScreen('setup')"></div>
     <div class="scoreboard" id="scoreboard" style="display:none;">
       <button class="score-side" onclick="tapScore('us')">
         <span class="score-label" id="score-us-label">You</span>
@@ -1093,7 +1187,8 @@
     <div class="qr-meta" id="qr-export-meta"></div>
     <div class="qr-canvas-wrap"><canvas id="qr-export-canvas"></canvas></div>
     <div class="qr-progress" id="qr-export-progress"></div>
-    <p class="qr-hint">Hold this steady while the other phone scans. It cycles automatically through all codes.</p>
+    <p class="qr-hint" id="qr-export-hint">Hold this steady while the other phone scans. It cycles automatically through all codes.</p>
+    <button class="qr-btn" id="qr-invite-share-btn" style="display:none;" onclick="shareInviteLink()">Share invite link</button>
     <button class="qr-close-btn" onclick="closeExportQr()">Done</button>
   </div>
 </div>
@@ -1114,6 +1209,24 @@
     <div class="qr-meta">These event types already have data on this device. Pick which to keep for each.</div>
     <div id="qr-conflict-list"></div>
     <button class="qr-close-btn" id="qr-conflict-apply-btn" onclick="applyImportMerge()" disabled>Apply merge</button>
+  </div>
+</div>
+
+<div class="qr-overlay" id="claim-overlay" style="display:none;">
+  <div class="qr-card claim-card">
+    <h3>What are you tracking?</h3>
+    <div class="qr-meta">Pick your share of the game. Anything another tracker already covers is marked with their name, so nobody counts the same thing twice.</div>
+    <div id="claim-players-wrap">
+      <div class="claim-section-label">Players</div>
+      <div id="claim-players"></div>
+    </div>
+    <div class="claim-section-label">Stats</div>
+    <div id="claim-stats"></div>
+    <div class="claim-error" id="claim-error"></div>
+    <div class="claim-actions note-actions">
+      <button class="note-cancel" onclick="closeClaimPicker()">Cancel</button>
+      <button class="note-save" style="background:var(--lime);" onclick="saveClaims()">Save</button>
+    </div>
   </div>
 </div>
 
@@ -1138,7 +1251,7 @@
 <script>
 const STORAGE_KEY = 'matchtap_state_v1';
 const TUTORIAL_SEEN_KEY = 'matchtap_tutorial_seen_v1';
-const APP_VERSION = 'v1.1.0';
+const APP_VERSION = 'v1.2.0';
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
 const DEV_MODE = URL_PARAMS.get('devmode') === 'true';
@@ -1237,7 +1350,10 @@ let state = {
   trackScore: true,
   clockAccumulatedMs: 0,
   clockRunningSince: null,
-  clockIntervals: []
+  clockIntervals: [],
+  deviceId: null,
+  trackerName: '',
+  shared: null
 };
 
 function load() {
@@ -1256,6 +1372,10 @@ function load() {
       ? [{ start: new Date(state.gameDate).getTime(), end: state.clockRunningSince ? null : new Date(state.gameDate).getTime() + state.clockAccumulatedMs }]
       : [];
   }
+  if (!state.deviceId) state.deviceId = 'd_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  if (state.shared) {
+    state.shared = Object.assign({ outbox: [], tomb: [], others: [], claims: { players: [], stats: [] }, since: null, metaRev: 0, metaDirty: false }, state.shared);
+  }
 }
 function save() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
@@ -1267,7 +1387,11 @@ const MODE_HINTS = {
   team_individual: 'Tap a player, then tap the event. More detail, more taps.'
 };
 
-function setMode(m) {
+function setMode(m, force) {
+  if (state.shared && !force && m !== state.mode) {
+    alert('The mode is locked while you are in a shared game, so every phone stays in sync. Leave the shared game to change it.');
+    m = state.mode;
+  }
   state.mode = m;
   ['player', 'team_whole', 'team_individual'].forEach(mode => {
     document.getElementById('mode-' + mode).classList.toggle('selected', m === mode);
@@ -1278,6 +1402,7 @@ function setMode(m) {
   document.getElementById('roster-block').style.display = m === 'team_individual' ? 'block' : 'none';
   document.getElementById('mode-hint').textContent = MODE_HINTS[m] || '';
   save();
+  renderShareSetup();
 }
 
 function addRosterPlayer() {
@@ -1296,12 +1421,16 @@ function addRosterPlayer() {
   positionInput.value = '';
   renderRoster();
   save();
+  shareMetaChanged();
 }
 
 function removeRosterPlayer(idx) {
+  const removed = state.roster[idx];
+  if (state.shared && removed && !confirm(`Remove ${removed.name} from the roster on every phone in this shared game?`)) return;
   state.roster.splice(idx, 1);
   renderRoster();
   save();
+  shareMetaChanged();
 }
 
 function renderRoster() {
@@ -1372,6 +1501,7 @@ function beginGame() {
     if (!state.currentPlayer || !state.roster.some(p => p.name === state.currentPlayer)) {
       state.currentPlayer = state.roster[0].name;
     }
+    ensureClaimedCurrentPlayer();
   } else {
     state.teamName = document.getElementById('team-name-input').value.trim();
     state.currentPlayer = null;
@@ -1382,7 +1512,7 @@ function beginGame() {
   state.clockIntervals = [{ start: state.clockRunningSince, end: null }];
 
   if (state.trackPossession && (state.mode === 'team_whole' || state.mode === 'team_individual') && getCurrentPossessionState() === null) {
-    state.events.push({
+    const possEntry = tagLocalEvent({
       id: generateEventId(),
       eventId: 'poss_in',
       player: null,
@@ -1390,9 +1520,12 @@ function beginGame() {
       ts: state.clockRunningSince,
       clockMs: 0
     });
+    state.events.push(possEntry);
+    shareQueueEvent(possEntry);
   }
 
   save();
+  shareMetaChanged();
   renderTrackScreen();
 }
 
@@ -1436,7 +1569,10 @@ function renderTrackScreen() {
   if (state.mode === 'team_individual') {
     wrap.style.display = 'block';
     const strip = document.getElementById('player-strip');
-    strip.innerHTML = state.roster.map(p => {
+    const stripRoster = state.shared
+      ? state.roster.filter(p => (state.shared.claims.players || []).includes(p.name))
+      : state.roster;
+    strip.innerHTML = stripRoster.map(p => {
       const displayName = (p.number ? '#' + escapeHtml(p.number) + ' ' : '') + escapeHtml(p.name);
       return `<button class="${p.name === state.currentPlayer ? 'selected' : ''}" onclick="selectPlayer('${escapeAttr(p.name)}')">${displayName}</button>`;
     }).join('');
@@ -1450,7 +1586,10 @@ function renderTrackScreen() {
   const possState = showPossession ? getCurrentPossessionState() : null;
   const possHtml = showPossession ? renderPossessionButtonsHtml(possState) : '';
   const active = MASTER_EVENTS.filter(ev => state.activeEvents.includes(ev.id));
-  grid.innerHTML = possHtml + active.map(ev => {
+  const needsClaim = state.shared && active.length === 0 && !showPossession;
+  grid.innerHTML = needsClaim
+    ? `<button class="share-empty-btn" onclick="openClaimPicker()">You're in a shared game but haven't picked anything to track yet. Tap here to choose.</button>`
+    : possHtml + active.map(ev => {
     const count = countFor(ev.id);
     return `<button class="event-btn ${ev.type}" onclick="logEvent('${ev.id}')">
       <span class="count">${count}</span>
@@ -1460,6 +1599,7 @@ function renderTrackScreen() {
 
   document.getElementById('half-1').classList.toggle('selected', state.currentHalf === 1);
   document.getElementById('half-2').classList.toggle('selected', state.currentHalf === 2);
+  renderShareStatus();
 }
 
 function renderPossessionButtonsHtml(possState) {
@@ -1599,6 +1739,7 @@ function toggleClock() {
     state.clockIntervals.push({ start: now, end: null });
   }
   save();
+  shareMetaChanged();
   updateClockDisplay();
   ensureClockInterval();
 }
@@ -1612,6 +1753,7 @@ function selectPlayer(name) {
 function setHalf(h) {
   state.currentHalf = h;
   save();
+  shareMetaChanged();
   renderTrackScreen();
 }
 
@@ -1640,15 +1782,16 @@ function getCurrentPossessionState() {
 function togglePossession(newState) {
   if (state.mode !== 'team_whole' && state.mode !== 'team_individual') return;
   if (getCurrentPossessionState() === newState) return;
-  const entry = {
+  const entry = tagLocalEvent({
     id: generateEventId(),
     eventId: newState === 'in' ? 'poss_in' : 'poss_out',
     player: null,
     half: state.currentHalf,
     ts: Date.now(),
     clockMs: currentClockSnapshot()
-  };
+  });
   state.events.push(entry);
+  shareQueueEvent(entry);
   save();
   renderTrackScreen();
 }
@@ -1684,21 +1827,34 @@ function logEvent(eventId) {
   let player = null;
   if (state.mode === 'player') player = state.playerName || 'Player';
   if (state.mode === 'team_individual') player = state.currentPlayer;
-  const entry = {
+  const entry = tagLocalEvent({
     id: generateEventId(),
     eventId: eventId,
     player: player,
     half: state.currentHalf,
     ts: Date.now(),
     clockMs: currentClockSnapshot()
-  };
+  });
   state.events.push(entry);
+  shareQueueEvent(entry);
   save();
   renderTrackScreen();
 }
 
 function tapScore(side) {
-  logEvent(side === 'us' ? 'goal' : 'goal_conceded');
+  const eventId = side === 'us' ? 'goal' : 'goal_conceded';
+  if (state.shared) {
+    const player = state.mode === 'team_individual' ? state.currentPlayer : null;
+    if (!myClaimCovers(eventId, player)) {
+      const owners = claimOwnersFor(eventId, player);
+      const label = side === 'us' ? 'Goals for your side' : 'Goals against';
+      alert(owners.length
+        ? `${label} ${player ? 'for ' + player + ' ' : ''}are being tracked by ${owners.join(', ')}, so the score will update from their phone.`
+        : `${label} aren't in what you've picked to track. Add ${side === 'us' ? 'Goal' : 'Goal conceded'} under Choose what I'm tracking to use this side of the scoreboard.`);
+      return;
+    }
+  }
+  logEvent(eventId);
 }
 
 function currentTrackingPlayerLabel() {
@@ -1727,7 +1883,7 @@ function saveNote() {
     alert('Write something before saving, or tap Cancel.');
     return;
   }
-  const entry = {
+  const entry = tagLocalEvent({
     id: generateEventId(),
     eventId: 'note',
     text: text,
@@ -1735,8 +1891,9 @@ function saveNote() {
     half: state.currentHalf,
     ts: Date.now(),
     clockMs: currentClockSnapshot()
-  };
+  });
   state.events.push(entry);
+  shareQueueEvent(entry);
   save();
   closeNoteModal();
   if (document.getElementById('screen-log').classList.contains('active')) renderLogScreen();
@@ -1744,7 +1901,21 @@ function saveNote() {
 
 function undoLast() {
   if (state.events.length === 0) return;
-  state.events.pop();
+  if (state.shared) {
+    // Only undo this phone's own most recent tap, never someone else's
+    let idx = -1;
+    for (let i = state.events.length - 1; i >= 0; i--) {
+      if (state.events[i].dev === state.deviceId) { idx = i; break; }
+    }
+    if (idx === -1) {
+      alert('Nothing from this phone to undo yet.');
+      return;
+    }
+    const removed = state.events.splice(idx, 1)[0];
+    shareQueueDelete(removed);
+  } else {
+    state.events.pop();
+  }
   save();
   renderTrackScreen();
 }
@@ -1769,7 +1940,7 @@ function showScreen(name) {
     document.getElementById('track-possession-toggle').checked = !!state.trackPossession;
     renderRoster();
     renderEventConfig();
-    setMode(state.mode);
+    setMode(state.mode, true);
   }
 }
 
@@ -1790,7 +1961,8 @@ function renderLogScreen() {
   `;
 
   const pctWrap = document.getElementById('log-percentages');
-  const applicablePairs = STAT_PAIRS.filter(p => state.activeEvents.includes(p.a) && state.activeEvents.includes(p.b));
+  const logActive = logActiveEvents();
+  const applicablePairs = STAT_PAIRS.filter(p => logActive.includes(p.a) && logActive.includes(p.b));
   if (applicablePairs.length === 0) {
     pctWrap.innerHTML = '';
   } else {
@@ -1816,7 +1988,7 @@ function renderLogScreen() {
 
   const possWrap = document.getElementById('log-possession');
   const hasPossData = state.events.some(e => e.eventId === 'poss_in' || e.eventId === 'poss_out');
-  if (state.trackPossession && hasPossData) {
+  if ((state.trackPossession || state.shared) && hasPossData) {
     const totals = computePossessionTotals(state.events, state.clockIntervals, Date.now());
     const totalMs = totals.inMs + totals.outMs;
     const inPct = totalMs > 0 ? Math.round((totals.inMs / totalMs) * 100) : 0;
@@ -1848,7 +2020,7 @@ function renderLogScreen() {
       return `<div class="log-entry is-note">
         <span class="note-text">"${escapeHtml(e.text)}"${e.player ? ' - ' + escapeHtml(e.player) : ''}</span>
         <span class="log-entry-right">
-          <span class="meta">H${e.half} - ${time}</span>
+          <span class="meta">H${e.half} - ${time}${e.by ? ' - ' + escapeHtml(e.by) : ''}</span>
           <button class="log-remove-btn" onclick="removeLogEvent('${e.id}')" aria-label="Remove note">&times;</button>
         </span>
       </div>`;
@@ -1857,7 +2029,7 @@ function renderLogScreen() {
     return `<div class="log-entry">
       <span>${ev ? ev.label : e.eventId}${state.mode === 'team_individual' && e.player ? ' - ' + escapeHtml(e.player) : ''}</span>
       <span class="log-entry-right">
-        <span class="meta">H${e.half} - ${time}</span>
+        <span class="meta">H${e.half} - ${time}${e.by ? ' - ' + escapeHtml(e.by) : ''}</span>
         <button class="log-remove-btn" onclick="removeLogEvent('${e.id}')" aria-label="Remove event">&times;</button>
       </span>
     </div>`;
@@ -1865,8 +2037,13 @@ function renderLogScreen() {
 }
 
 function removeLogEvent(id) {
-  if (!confirm('Remove this event? This cannot be undone.')) return;
+  const target = state.events.find(e => e.id === id);
+  const msg = state.shared && target && target.dev !== state.deviceId
+    ? `Remove this event? ${target.by ? target.by + ' logged it, and it' : 'It'} will be removed from every phone in the shared game. This cannot be undone.`
+    : 'Remove this event? This cannot be undone.';
+  if (!confirm(msg)) return;
   state.events = state.events.filter(e => e.id !== id);
+  if (target) shareQueueDelete(target);
   save();
   renderLogScreen();
 }
@@ -1903,12 +2080,16 @@ function downloadEventsCSV(events, opponent, dateStr) {
   URL.revokeObjectURL(url);
 }
 
-function finishGame() {
+async function finishGame() {
   if (state.events.length === 0) {
     alert('No events logged yet, nothing to save.');
     return;
   }
-  if (!confirm('Save this game to history and clear the board for a new game?')) return;
+  if (state.shared) {
+    if (!confirm('Save this game to history on this phone and leave the shared game? The other trackers can keep going and save their own copy.')) return;
+    const left = await leaveSharedGameQuietly();
+    if (!left) return;
+  } else if (!confirm('Save this game to history and clear the board for a new game?')) return;
   const record = {
     id: 'g_' + Date.now(),
     date: state.gameDate || new Date().toISOString(),
@@ -1933,12 +2114,15 @@ function finishGame() {
   showScreen('past');
 }
 
-function resetGame() {
-  if (state.events.length === 0 && !state.gameDate) {
+async function resetGame() {
+  if (state.events.length === 0 && !state.gameDate && !state.shared) {
     alert('There is no game in progress to reset.');
     return;
   }
-  if (!confirm('Reset the current game? This clears every event, the score, and the clock. Nothing gets saved to Past games. This cannot be undone.')) return;
+  if (state.shared) {
+    if (!confirm('Reset the current game on this phone? This also takes this phone out of the shared game. The other trackers and their data are not affected. Nothing gets saved to Past games.')) return;
+    await leaveSharedGameQuietly(true);
+  } else if (!confirm('Reset the current game? This clears every event, the score, and the clock. Nothing gets saved to Past games. This cannot be undone.')) return;
   state.events = [];
   state.gameDate = null;
   state.currentHalf = 1;
@@ -2018,13 +2202,13 @@ function renderPastGameEvents(g) {
     if (e.eventId === 'note') {
       return `<div class="log-entry is-note">
         <span class="note-text">"${escapeHtml(e.text)}"${e.player ? ' - ' + escapeHtml(e.player) : ''}</span>
-        <span class="meta">H${e.half} - ${time}</span>
+        <span class="meta">H${e.half} - ${time}${e.by ? ' - ' + escapeHtml(e.by) : ''}</span>
       </div>`;
     }
     const ev = MASTER_EVENTS.find(m => m.id === e.eventId);
     return `<div class="log-entry">
       <span>${ev ? ev.label : e.eventId}${g.mode === 'team_individual' && e.player ? ' - ' + escapeHtml(e.player) : ''}</span>
-      <span class="meta">H${e.half} - ${time}</span>
+      <span class="meta">H${e.half} - ${time}${e.by ? ' - ' + escapeHtml(e.by) : ''}</span>
     </div>`;
   }).join('');
 }
@@ -2249,6 +2433,9 @@ function openExportQr(source) {
   }
   exportChunks = chunkPayload(payload);
   exportChunkIndex = 0;
+  document.getElementById('qr-export-overlay').querySelector('h3').textContent = 'Share via QR';
+  document.getElementById('qr-export-hint').textContent = 'Hold this steady while the other phone scans. It cycles automatically through all codes.';
+  document.getElementById('qr-invite-share-btn').style.display = 'none';
   document.getElementById('qr-export-meta').textContent =
     `${payload.events.length} events, ${exportChunks.length} code${exportChunks.length > 1 ? 's' : ''}`;
   document.getElementById('qr-export-overlay').style.display = 'flex';
@@ -2279,6 +2466,10 @@ let importScanInterval = null;
 let importCollected = {};
 
 async function openImportScanner() {
+  if (state.shared) {
+    alert('This phone is in a shared game, so everyone\'s taps already sync automatically. Leave the shared game first if you need to import from a QR code.');
+    return;
+  }
   if (typeof jsQR === 'undefined') {
     alert('QR scanning library did not load. Check your internet connection and try again.');
     return;
@@ -2513,6 +2704,766 @@ function applyImportMerge() {
   alert('Merge applied.');
 }
 
+// ===== Live sharing (Supabase, same project as FlappyBall) =====
+// All database access goes through the mt_* functions in supabase-matchtap.sql.
+// The tables have row level security on with no policies, so the only way in is with a game code.
+const SB_URL = 'https://rwxicipfkhbmcekkxaaq.supabase.co';
+const SB_KEY = 'sb_publishable_lPBsfLiVhYqEJJPUp9fp3g_fLerQWJZ'; // publishable key, safe to be public
+const SHARE_POLL_MS = 4000;
+const SHARE_HEARTBEAT_MS = 30000;
+const SHARE_AWAY_MS = 90000;
+const SHARE_BATCH = 200;
+const SHARE_CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+const POSSESSION_CLAIM = 'possession';
+
+let shareTimer = null;
+let shareBusy = false;
+let shareLastHeartbeat = 0;
+let shareNudgeTimer = null;
+let shareFlushPromise = null;
+let claimDraft = null;
+let claimOthersSig = '';
+
+function sbRpc(fn, args) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 8000);
+  return fetch(SB_URL + '/rest/v1/rpc/' + fn, {
+    method: 'POST',
+    signal: ctrl.signal,
+    headers: { apikey: SB_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify(args || {})
+  }).then(async r => {
+    const txt = await r.text();
+    if (!r.ok) throw new Error('Server said ' + r.status + (txt ? ': ' + txt.slice(0, 160) : ''));
+    return txt ? JSON.parse(txt) : null;
+  }).finally(() => clearTimeout(timer));
+}
+
+function generateShareCode() {
+  const bytes = new Uint32Array(6);
+  crypto.getRandomValues(bytes);
+  let s = '';
+  for (let i = 0; i < 6; i++) s += SHARE_CODE_ALPHABET[bytes[i] % SHARE_CODE_ALPHABET.length];
+  return s;
+}
+
+function normalizeShareCode(s) {
+  return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+}
+
+function setTrackerName(v) {
+  state.trackerName = String(v || '').trim().slice(0, 30);
+  save();
+}
+
+function requireTrackerName() {
+  const input = document.getElementById('tracker-name-input');
+  const v = input.value.trim();
+  if (!v) {
+    alert('Type your name first so everyone can see who is tracking what.');
+    input.focus();
+    return null;
+  }
+  setTrackerName(v);
+  return state.trackerName;
+}
+
+function readSetupFields() {
+  state.opponent = document.getElementById('opponent-input').value.trim();
+  if (state.mode === 'player') {
+    state.playerName = document.getElementById('player-name-input').value.trim() || 'Player';
+    state.playerNumber = document.getElementById('player-number-input').value.trim();
+    state.playerPosition = document.getElementById('player-position-input').value;
+    state.currentPlayer = state.playerName;
+  } else {
+    state.teamName = document.getElementById('team-name-input').value.trim();
+  }
+}
+
+function sharedSetupFieldChanged() {
+  if (!state.shared) return;
+  readSetupFields();
+  save();
+  shareMetaChanged();
+}
+
+function refreshSetupFieldsFromState() {
+  const set = (id, v) => {
+    const el = document.getElementById(id);
+    if (el && document.activeElement !== el) el.value = v || '';
+  };
+  set('opponent-input', state.opponent);
+  set('team-name-input', state.teamName);
+  set('player-name-input', state.playerName);
+  set('player-number-input', state.playerNumber);
+  set('player-position-input', state.playerPosition);
+  document.getElementById('track-possession-toggle').checked = !!state.trackPossession;
+  renderRoster();
+  setMode(state.mode, true);
+}
+
+function refreshActiveScreen() {
+  const active = document.querySelector('.screen.active');
+  const name = active ? active.id.replace('screen-', '') : '';
+  if (name === 'track') renderTrackScreen();
+  if (name === 'log') renderLogScreen();
+  if (name === 'setup') renderShareSetup();
+  renderShareStatus();
+}
+
+// Stamps an event with which phone (and person) logged it
+function tagLocalEvent(entry) {
+  entry.dev = state.deviceId;
+  if (state.shared && state.trackerName) entry.by = state.trackerName;
+  return entry;
+}
+
+function shareQueueEvent(entry) {
+  if (!state.shared) return;
+  state.shared.outbox.push({ id: entry.id, device_id: entry.dev || state.deviceId, data: entry, deleted: false });
+  nudgeShare();
+}
+
+function shareQueueDelete(entry) {
+  if (!state.shared) return;
+  state.shared.tomb.push(entry.id);
+  if (state.shared.tomb.length > 500) state.shared.tomb = state.shared.tomb.slice(-500);
+  state.shared.outbox.push({ id: entry.id, device_id: entry.dev || '', data: entry, deleted: true });
+  nudgeShare();
+}
+
+function shareMetaChanged() {
+  if (!state.shared) return;
+  state.shared.metaDirty = true;
+  state.shared.metaLocalSeq = (state.shared.metaLocalSeq || 0) + 1;
+  save();
+  nudgeShare();
+}
+
+function nudgeShare() {
+  if (shareNudgeTimer) clearTimeout(shareNudgeTimer);
+  shareNudgeTimer = setTimeout(() => { shareNudgeTimer = null; shareTick(); }, 250);
+}
+
+function sharedMetaSnapshot() {
+  return {
+    v: 1,
+    mode: state.mode,
+    teamName: state.teamName || '',
+    opponent: state.opponent || '',
+    playerName: state.playerName || '',
+    playerNumber: state.playerNumber || '',
+    playerPosition: state.playerPosition || '',
+    roster: state.roster.map(p => ({ name: p.name, number: p.number || '', position: p.position || '' })),
+    gameDate: state.gameDate,
+    clockAccumulatedMs: state.clockAccumulatedMs || 0,
+    clockRunningSince: state.clockRunningSince || null,
+    clockIntervals: state.clockIntervals || [],
+    currentHalf: state.currentHalf
+  };
+}
+
+function applyRemoteMeta(meta, rev) {
+  const sh = state.shared;
+  if (!sh || !meta) return false;
+  const modes = ['player', 'team_whole', 'team_individual'];
+  state.mode = modes.includes(meta.mode) ? meta.mode : state.mode;
+  state.teamName = meta.teamName || '';
+  state.opponent = meta.opponent || '';
+  state.playerName = meta.playerName || '';
+  state.playerNumber = meta.playerNumber || '';
+  state.playerPosition = meta.playerPosition || '';
+  state.roster = Array.isArray(meta.roster)
+    ? meta.roster.filter(p => p && p.name).map(p => ({ name: String(p.name), number: p.number || '', position: p.position || '' }))
+    : [];
+  state.gameDate = meta.gameDate || null;
+  state.clockAccumulatedMs = meta.clockAccumulatedMs || 0;
+  state.clockRunningSince = meta.clockRunningSince || null;
+  state.clockIntervals = Array.isArray(meta.clockIntervals)
+    ? meta.clockIntervals.map(iv => ({ start: iv.start, end: iv.end === undefined ? null : iv.end }))
+    : [];
+  state.currentHalf = meta.currentHalf === 2 ? 2 : 1;
+  sh.metaRev = rev || 0;
+  if (state.mode === 'player') state.currentPlayer = state.playerName || 'Player';
+  const keptPlayers = (sh.claims.players || []).filter(n => state.roster.some(p => p.name === n));
+  if (keptPlayers.length !== (sh.claims.players || []).length) {
+    sh.claims.players = keptPlayers;
+    shareLastHeartbeat = 0;
+  }
+  ensureClaimedCurrentPlayer();
+  refreshSetupFieldsFromState();
+  return true;
+}
+
+function ensureClaimedCurrentPlayer() {
+  if (!state.shared || state.mode !== 'team_individual') return;
+  const mine = state.shared.claims.players || [];
+  if (!mine.includes(state.currentPlayer)) {
+    state.currentPlayer = mine.find(n => state.roster.some(p => p.name === n)) || null;
+  }
+}
+
+function flushShareOutbox(sh) {
+  if (!shareFlushPromise) {
+    shareFlushPromise = doFlushShareOutbox(sh).finally(() => { shareFlushPromise = null; });
+  }
+  return shareFlushPromise;
+}
+
+async function doFlushShareOutbox(sh) {
+  if (!sh || state.shared !== sh) return;
+  if (sh.metaDirty) {
+    const seq = sh.metaLocalSeq;
+    const rev = await sbRpc('mt_set_meta', { p_code: sh.code, p_meta: sharedMetaSnapshot() });
+    if (state.shared === sh) {
+      if (typeof rev === 'number') sh.metaRev = rev;
+      if (sh.metaLocalSeq === seq) sh.metaDirty = false;
+      save();
+    }
+  }
+  while (state.shared === sh && sh.outbox.length) {
+    const batch = sh.outbox.slice(0, SHARE_BATCH);
+    const byId = new Map();
+    batch.forEach(op => {
+      const prev = byId.get(op.id);
+      byId.set(op.id, {
+        id: op.id,
+        device_id: op.device_id || (prev && prev.device_id) || '',
+        data: op.data,
+        deleted: !!op.deleted || !!(prev && prev.deleted)
+      });
+    });
+    await sbRpc('mt_push_events', { p_code: sh.code, p_rows: Array.from(byId.values()) });
+    sh.outbox.splice(0, batch.length);
+    save();
+  }
+}
+
+async function pushMyClaims(sh) {
+  await sbRpc('mt_set_claim', {
+    p_code: sh.code,
+    p_device: state.deviceId,
+    p_name: state.trackerName || '',
+    p_claims: sh.claims
+  });
+  shareLastHeartbeat = Date.now();
+}
+
+// Merges one mt_pull response into local state. Returns true if anything changed.
+function ingestPull(sh, res) {
+  let changed = false;
+  const tomb = new Set(sh.tomb || []);
+  const pendingDeletes = new Set(sh.outbox.filter(o => o.deleted).map(o => o.id));
+  const have = new Set(state.events.map(e => e.id));
+  const toRemove = new Set();
+  (res.events || []).forEach(row => {
+    if (row.deleted) {
+      if (have.has(row.id)) toRemove.add(row.id);
+      if (!tomb.has(row.id)) { sh.tomb.push(row.id); tomb.add(row.id); }
+      return;
+    }
+    if (tomb.has(row.id) || pendingDeletes.has(row.id) || have.has(row.id)) return;
+    const d = row.data || {};
+    if (!d.eventId) return;
+    state.events.push(Object.assign({}, d, { id: row.id }));
+    have.add(row.id);
+    changed = true;
+  });
+  if (toRemove.size) {
+    state.events = state.events.filter(e => !toRemove.has(e.id));
+    changed = true;
+  }
+  if (sh.tomb.length > 500) sh.tomb = sh.tomb.slice(-500);
+  if (changed) state.events.sort((a, b) => (a.ts || 0) - (b.ts || 0));
+
+  const serverNow = res.now ? new Date(res.now).getTime() : Date.now();
+  sh.serverNow = serverNow;
+  sh.since = new Date(serverNow - 10000).toISOString();
+  sh.others = (res.claims || [])
+    .filter(c => c.device_id !== state.deviceId)
+    .map(c => ({
+      device_id: c.device_id,
+      name: c.name || 'Someone',
+      claims: {
+        players: Array.isArray(c.claims && c.claims.players) ? c.claims.players : [],
+        stats: Array.isArray(c.claims && c.claims.stats) ? c.claims.stats : []
+      },
+      seen: c.updated_at ? new Date(c.updated_at).getTime() : serverNow
+    }));
+
+  const remoteRev = res.meta_rev || 0;
+  if (remoteRev > (sh.metaRev || 0) && !sh.metaDirty) {
+    if (applyRemoteMeta(res.meta, remoteRev)) changed = true;
+  }
+  return changed;
+}
+
+async function pullShared(sh) {
+  const res = await sbRpc('mt_pull', { p_code: sh.code, p_since: sh.since });
+  if (state.shared !== sh) return;
+  if (!res) { handleSharedGameGone(); return; }
+  const changed = ingestPull(sh, res);
+  save();
+  if (changed) refreshActiveScreen();
+  else if (document.getElementById('screen-setup').classList.contains('active')) renderShareSetup();
+  if (claimDraft) {
+    const sig = JSON.stringify((sh.others || []).map(o => [o.name, o.claims, isAway(o)]));
+    if (sig !== claimOthersSig) renderClaimPicker();
+  }
+}
+
+async function shareTick() {
+  const sh = state.shared;
+  if (!sh || shareBusy) return;
+  shareBusy = true;
+  let err = null;
+  try { await flushShareOutbox(sh); } catch (e) { err = e; }
+  try {
+    if (Date.now() - shareLastHeartbeat > SHARE_HEARTBEAT_MS) await pushMyClaims(sh);
+    await pullShared(sh);
+  } catch (e) { err = err || e; }
+  shareBusy = false;
+  if (state.shared === sh) {
+    sh.lastError = err ? String(err.message || err) : null;
+    if (!err) sh.lastOk = Date.now();
+  }
+  renderShareStatus();
+}
+
+function startSharePolling() {
+  if (!shareTimer) {
+    shareTimer = setInterval(() => {
+      if (document.visibilityState !== 'hidden') shareTick();
+    }, SHARE_POLL_MS);
+  }
+  shareLastHeartbeat = 0;
+  shareTick();
+}
+
+function stopSharePolling() {
+  if (shareTimer) { clearInterval(shareTimer); shareTimer = null; }
+  if (shareNudgeTimer) { clearTimeout(shareNudgeTimer); shareNudgeTimer = null; }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && state.shared) shareTick();
+});
+window.addEventListener('online', () => { if (state.shared) shareTick(); });
+
+function newSharedState(code) {
+  return {
+    code: code,
+    since: null,
+    metaRev: 0,
+    metaDirty: false,
+    metaLocalSeq: 0,
+    outbox: [],
+    tomb: [],
+    others: [],
+    claims: { players: [], stats: [] },
+    serverNow: Date.now(),
+    lastOk: null,
+    lastError: null,
+    inviteAfterClaim: false
+  };
+}
+
+async function startSharedGame() {
+  if (state.shared) return;
+  if (!requireTrackerName()) return;
+  readSetupFields();
+  if (state.mode === 'team_individual' && state.roster.length === 0) {
+    alert('Add your roster first so the other trackers can pick players.');
+    return;
+  }
+  state.events.forEach(e => { if (!e.dev) e.dev = state.deviceId; });
+  let code = null;
+  try {
+    for (let i = 0; i < 5 && !code; i++) {
+      const candidate = generateShareCode();
+      const ok = await sbRpc('mt_create_game', { p_code: candidate, p_meta: sharedMetaSnapshot() });
+      if (ok) code = candidate;
+    }
+  } catch (e) {
+    alert('Could not reach the server to start a shared game. Check your connection and try again.\n\n' + e.message);
+    return;
+  }
+  if (!code) {
+    alert('Could not create a game code. Please try again.');
+    return;
+  }
+  const sh = newSharedState(code);
+  sh.metaRev = 1;
+  const teamMode = state.mode === 'team_whole' || state.mode === 'team_individual';
+  sh.claims = {
+    players: state.mode === 'team_individual' ? state.roster.map(p => p.name) : [],
+    stats: MASTER_EVENTS.filter(ev => state.activeEvents.includes(ev.id) && ev.category !== 'Possession').map(ev => ev.id)
+      .concat(teamMode && state.trackPossession ? [POSSESSION_CLAIM] : [])
+  };
+  sh.outbox = state.events.map(e => ({ id: e.id, device_id: e.dev, data: e, deleted: false }));
+  sh.inviteAfterClaim = true;
+  state.shared = sh;
+  save();
+  renderShareSetup();
+  startSharePolling();
+  openClaimPicker(true);
+}
+
+async function joinSharedGame(codeArg) {
+  if (state.shared) {
+    alert(`This phone is already in shared game ${state.shared.code}. Leave it first to join a different one.`);
+    return;
+  }
+  const codeInput = document.getElementById('join-code-input');
+  const code = normalizeShareCode(codeArg || codeInput.value);
+  if (code.length !== 6) {
+    alert('Enter the 6 character game code.');
+    codeInput.focus();
+    return;
+  }
+  if (!requireTrackerName()) return;
+  if (state.events.length > 0 || state.gameDate) {
+    if (!confirm('Joining replaces the game in progress on this phone with the shared one. If you want to keep what is here, tap Cancel and save it to Past games first. Join anyway?')) return;
+  }
+  let res;
+  try {
+    res = await sbRpc('mt_pull', { p_code: code, p_since: null });
+  } catch (e) {
+    alert('Could not reach the server. Check your connection and try again.\n\n' + e.message);
+    return;
+  }
+  if (!res) {
+    alert(`No shared game found with code ${code}. Double check it with the person who started the game.`);
+    return;
+  }
+  stopClock();
+  state.events = [];
+  state.shared = newSharedState(code);
+  ingestPull(state.shared, res);
+  if (!state.shared.metaRev) applyRemoteMeta(res.meta, res.meta_rev || 1);
+  state.activeEvents = [];
+  state.trackPossession = false;
+  save();
+  codeInput.value = '';
+  renderShareSetup();
+  startSharePolling();
+  openClaimPicker();
+}
+
+async function leaveSharedGame() {
+  if (!state.shared) return;
+  if (!confirm('Leave the shared game? Everything already on this phone stays, and you can keep tracking on your own. The other trackers are not affected.')) return;
+  await leaveSharedGameQuietly();
+}
+
+// Returns false if the person decided not to leave after all
+async function leaveSharedGameQuietly(skipPendingCheck) {
+  const sh = state.shared;
+  if (!sh) return true;
+  try { await flushShareOutbox(sh); } catch (e) {}
+  if (sh.outbox.length && !skipPendingCheck) {
+    const n = sh.outbox.length;
+    if (!confirm(`${n} tap${n === 1 ? '' : 's'} from this phone haven't uploaded yet, probably because there's no signal. If you leave now the other trackers won't get ${n === 1 ? 'it' : 'them'}. Leave anyway?`)) return false;
+  }
+  try { await sbRpc('mt_leave', { p_code: sh.code, p_device: state.deviceId }); } catch (e) {}
+  stopSharePolling();
+  state.shared = null;
+  claimDraft = null;
+  document.getElementById('claim-overlay').style.display = 'none';
+  save();
+  renderShareSetup();
+  refreshActiveScreen();
+  return true;
+}
+
+function handleSharedGameGone() {
+  stopSharePolling();
+  state.shared = null;
+  save();
+  renderShareSetup();
+  refreshActiveScreen();
+  alert('This shared game is no longer on the server. You are back to tracking on this phone only, and everything already here is kept.');
+}
+
+function isAway(o) {
+  const now = (state.shared && state.shared.serverNow) || Date.now();
+  return now - (o.seen || 0) > SHARE_AWAY_MS;
+}
+
+function claimStatLabel(key) {
+  if (key === POSSESSION_CLAIM) return 'Possession';
+  const ev = MASTER_EVENTS.find(m => m.id === key);
+  return ev ? ev.label : key;
+}
+
+// Every player and stat pair that both "mine" and someone in "others" cover
+function computeClaimOverlaps(mine, others, mode) {
+  const out = [];
+  (others || []).forEach(o => {
+    const theirStats = (o.claims && o.claims.stats) || [];
+    const theirPlayers = (o.claims && o.claims.players) || [];
+    const sharedStats = (mine.stats || []).filter(s => theirStats.includes(s));
+    sharedStats.forEach(s => {
+      if (mode !== 'team_individual' || s === POSSESSION_CLAIM) {
+        out.push({ who: o, player: null, stat: s });
+      } else {
+        (mine.players || []).filter(p => theirPlayers.includes(p)).forEach(p => out.push({ who: o, player: p, stat: s }));
+      }
+    });
+  });
+  return out;
+}
+
+function myClaimCovers(eventId, player) {
+  if (!state.shared) return true;
+  const c = state.shared.claims;
+  if (!(c.stats || []).includes(eventId)) return false;
+  if (state.mode === 'team_individual' && player) return (c.players || []).includes(player);
+  return true;
+}
+
+function claimOwnersFor(eventId, player) {
+  if (!state.shared) return [];
+  return (state.shared.others || []).filter(o => {
+    if (!(o.claims.stats || []).includes(eventId)) return false;
+    if (state.mode === 'team_individual' && player) return (o.claims.players || []).includes(player);
+    return true;
+  }).map(o => o.name);
+}
+
+function logActiveEvents() {
+  if (!state.shared) return state.activeEvents;
+  const set = new Set(state.activeEvents);
+  (state.shared.others || []).forEach(o => (o.claims.stats || []).forEach(s => set.add(s)));
+  state.events.forEach(e => set.add(e.eventId));
+  return Array.from(set);
+}
+
+function claimSummary(claims) {
+  const stats = claims.stats || [];
+  const statText = stats.length === 0 ? 'nothing picked yet'
+    : stats.length <= 3 ? stats.map(claimStatLabel).join(', ')
+    : stats.length + ' stats';
+  if (state.mode !== 'team_individual') return statText;
+  const pl = claims.players || [];
+  const playerText = pl.length === 0 ? 'no players' : pl.length <= 3 ? pl.join(', ') : pl.length + ' players';
+  return `${playerText}: ${statText}`;
+}
+
+function renderShareSetup() {
+  const off = document.getElementById('share-off');
+  const on = document.getElementById('share-on');
+  if (!off || !on) return;
+  const sh = state.shared;
+  const teamMode = state.mode === 'team_whole' || state.mode === 'team_individual';
+  off.style.display = sh ? 'none' : 'block';
+  on.style.display = sh ? 'block' : 'none';
+  const nameInput = document.getElementById('tracker-name-input');
+  if (document.activeElement !== nameInput) nameInput.value = state.trackerName || '';
+  document.getElementById('events-block').style.display = sh ? 'none' : 'block';
+  document.getElementById('shared-events-block').style.display = sh ? 'block' : 'none';
+  document.getElementById('possession-block').style.display = (!sh && teamMode) ? 'block' : 'none';
+  document.getElementById('qr-combine-block').style.display = sh ? 'none' : 'block';
+  if (!sh) return;
+  document.getElementById('share-code').textContent = sh.code;
+  const rows = [
+    `<div class="share-tracker"><span class="who">You${state.trackerName ? ' (' + escapeHtml(state.trackerName) + ')' : ''}</span><span class="what">${escapeHtml(claimSummary(sh.claims))}</span></div>`
+  ].concat((sh.others || []).map(o =>
+    `<div class="share-tracker"><span class="who">${escapeHtml(o.name)}${isAway(o) ? '<span class="away">away</span>' : ''}</span><span class="what">${escapeHtml(claimSummary(o.claims))}</span></div>`
+  ));
+  document.getElementById('share-trackers').innerHTML = rows.join('');
+}
+
+function renderShareStatus() {
+  const el = document.getElementById('share-status');
+  if (!el) return;
+  const sh = state.shared;
+  if (!sh) { el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  const liveOthers = (sh.others || []).filter(o => !isAway(o));
+  const count = liveOthers.length + 1;
+  const pending = sh.outbox.length;
+  const offline = !!sh.lastError;
+  el.classList.toggle('offline', offline);
+  let text;
+  if (offline) {
+    text = `Can't reach the server${pending ? ', ' + pending + ' tap' + (pending === 1 ? '' : 's') + ' waiting to upload' : ''}. Keep tracking, it catches up on its own.`;
+  } else {
+    text = `${count} tracker${count === 1 ? '' : 's'} live${pending ? ', uploading ' + pending : ', all synced'}`;
+  }
+  const overlaps = computeClaimOverlaps(sh.claims, liveOthers, state.mode);
+  if (overlaps.length) {
+    const names = Array.from(new Set(overlaps.map(o => o.who.name))).join(', ');
+    text += `. You and ${names} are both tracking some of the same things, tap to fix.`;
+  }
+  el.innerHTML = `<span class="dot"></span><span>Shared game <b>${escapeHtml(sh.code)}</b> &middot; ${escapeHtml(text)}</span>`;
+}
+
+function inviteLink() {
+  return location.origin + location.pathname + '?join=' + state.shared.code;
+}
+
+function openInviteQr() {
+  if (!state.shared) return;
+  if (typeof QRCode === 'undefined') { shareInviteLink(); return; }
+  if (exportCycleInterval) { clearInterval(exportCycleInterval); exportCycleInterval = null; }
+  exportChunks = [inviteLink()];
+  exportChunkIndex = 0;
+  const overlay = document.getElementById('qr-export-overlay');
+  overlay.querySelector('h3').textContent = 'Invite others';
+  document.getElementById('qr-export-meta').textContent = 'Scan with a phone camera to join this game';
+  document.getElementById('qr-export-hint').textContent = 'Or tap Share invite link to text it. They can also type the code under Share live on the Setup tab.';
+  document.getElementById('qr-invite-share-btn').style.display = 'block';
+  overlay.style.display = 'flex';
+  renderExportChunk();
+  document.getElementById('qr-export-progress').textContent = 'Game code ' + state.shared.code;
+}
+
+async function shareInviteLink() {
+  if (!state.shared) return;
+  const url = inviteLink();
+  const text = `Join my MatchTap game${state.opponent ? ' vs ' + state.opponent : ''}. Code ${state.shared.code}`;
+  if (navigator.share) {
+    try { await navigator.share({ title: 'MatchTap', text: text, url: url }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  try {
+    await navigator.clipboard.writeText(text + '\n' + url);
+    alert('Invite link copied. Paste it into a text to the other trackers.');
+  } catch (e) {
+    prompt('Copy this invite link:', url);
+  }
+}
+
+function openClaimPicker() {
+  if (!state.shared) { alert('Start or join a shared game first.'); return; }
+  const c = state.shared.claims;
+  claimDraft = { players: (c.players || []).slice(), stats: (c.stats || []).slice() };
+  document.getElementById('claim-error').textContent = '';
+  renderClaimPicker();
+  document.getElementById('claim-overlay').style.display = 'flex';
+}
+
+function closeClaimPicker() {
+  claimDraft = null;
+  document.getElementById('claim-overlay').style.display = 'none';
+  if (state.shared && state.shared.inviteAfterClaim) {
+    state.shared.inviteAfterClaim = false;
+    save();
+    openInviteQr();
+  }
+}
+
+function ownersTagHtml(owners, showPlayers) {
+  if (!owners.length) return '';
+  const parts = owners.map(o => {
+    let s = escapeHtml(o.name);
+    if (showPlayers) {
+      const pl = o.claims.players || [];
+      if (pl.length) s += ': ' + escapeHtml(pl.length <= 2 ? pl.join(', ') : pl.slice(0, 2).join(', ') + ' +' + (pl.length - 2));
+    }
+    if (isAway(o)) s += ' (away)';
+    return s;
+  });
+  return `<span class="claim-taken">${parts.join('<br>')}</span>`;
+}
+
+function claimItemHtml(kind, key, label, ownersHtml) {
+  const checked = claimDraft[kind].includes(key) ? 'checked' : '';
+  return `<label class="claim-item">
+    <input type="checkbox" data-kind="${kind}" data-key="${escapeQuoted(key)}" ${checked} onchange="toggleClaimDraft(this)">
+    <span class="claim-name">${escapeHtml(label)}</span>${ownersHtml}
+  </label>`;
+}
+
+function renderClaimPicker() {
+  const sh = state.shared;
+  if (!sh || !claimDraft) return;
+  const others = sh.others || [];
+  claimOthersSig = JSON.stringify(others.map(o => [o.name, o.claims, isAway(o)]));
+  const indiv = state.mode === 'team_individual';
+  const teamMode = indiv || state.mode === 'team_whole';
+
+  document.getElementById('claim-players-wrap').style.display = indiv ? 'block' : 'none';
+  if (indiv) {
+    document.getElementById('claim-players').innerHTML = state.roster.length
+      ? state.roster.map(p => {
+          const owners = others.filter(o => (o.claims.players || []).includes(p.name));
+          const label = (p.number ? '#' + p.number + ' ' : '') + p.name;
+          return claimItemHtml('players', p.name, label, ownersTagHtml(owners, false));
+        }).join('')
+      : '<div class="share-hint">No roster yet. Add players on the Setup tab.</div>';
+  }
+
+  let statsHtml = '';
+  if (teamMode) {
+    const owners = others.filter(o => (o.claims.stats || []).includes(POSSESSION_CLAIM));
+    statsHtml += claimItemHtml('stats', POSSESSION_CLAIM, 'Possession (in / out)', ownersTagHtml(owners, false));
+  }
+  statsHtml += EVENT_CATEGORIES.map(cat => {
+    const items = MASTER_EVENTS.filter(ev => ev.category === cat);
+    return `<div class="claim-cat-label">${escapeHtml(cat)}</div>` + items.map(ev => {
+      const owners = others.filter(o => (o.claims.stats || []).includes(ev.id));
+      return claimItemHtml('stats', ev.id, ev.label, ownersTagHtml(owners, indiv));
+    }).join('');
+  }).join('');
+  document.getElementById('claim-stats').innerHTML = statsHtml;
+}
+
+function toggleClaimDraft(el) {
+  if (!claimDraft) return;
+  const list = claimDraft[el.dataset.kind];
+  const key = el.dataset.key;
+  const i = list.indexOf(key);
+  if (el.checked && i === -1) list.push(key);
+  if (!el.checked && i !== -1) list.splice(i, 1);
+  document.getElementById('claim-error').textContent = '';
+}
+
+function saveClaims() {
+  const sh = state.shared;
+  if (!sh || !claimDraft) return;
+  const errEl = document.getElementById('claim-error');
+  const indiv = state.mode === 'team_individual';
+  if (claimDraft.stats.length === 0) {
+    errEl.textContent = 'Pick at least one stat to track.';
+    return;
+  }
+  if (indiv && claimDraft.players.length === 0 && claimDraft.stats.some(s => s !== POSSESSION_CLAIM)) {
+    errEl.textContent = 'Pick at least one player, or only possession.';
+    return;
+  }
+  const overlaps = computeClaimOverlaps(claimDraft, sh.others || [], state.mode);
+  const blocking = overlaps.filter(o => !isAway(o.who));
+  if (blocking.length) {
+    const lines = blocking.slice(0, 6).map(o =>
+      `${claimStatLabel(o.stat)}${o.player ? ' for ' + o.player : ''} is already covered by ${o.who.name}.`);
+    if (blocking.length > 6) lines.push(`Plus ${blocking.length - 6} more.`);
+    lines.push('Uncheck those, or ask them to hand them off first.');
+    errEl.innerHTML = lines.map(escapeHtml).join('<br>');
+    return;
+  }
+  if (overlaps.length) {
+    const names = Array.from(new Set(overlaps.map(o => o.who.name))).join(', ');
+    if (!confirm(`${names} had some of these but hasn't been seen for a few minutes. Take them over?`)) return;
+  }
+  sh.claims = { players: claimDraft.players.slice(), stats: claimDraft.stats.slice() };
+  state.activeEvents = MASTER_EVENTS.filter(ev => sh.claims.stats.includes(ev.id)).map(ev => ev.id);
+  state.trackPossession = sh.claims.stats.includes(POSSESSION_CLAIM);
+  ensureClaimedCurrentPlayer();
+  save();
+  shareLastHeartbeat = 0;
+  nudgeShare();
+  closeClaimPicker();
+  renderShareSetup();
+  refreshActiveScreen();
+}
+
+function escapeQuoted(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function escapeHtml(s) {
   if (s === null || s === undefined) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -2537,7 +3488,7 @@ function runUnitTests() {
     return new Set(ids).size === ids.length;
   });
   t('default active ids all exist', () => DEFAULT_ACTIVE.every(id => MASTER_EVENTS.some(e => e.id === id)));
-  t('every event has a valid category', () => MASTER_EVENTS.every(e => EVENT_CATEGORIES.includes(e.category)));
+  t('every event has a valid category', () => MASTER_EVENTS.every(e => EVENT_CATEGORIES.includes(e.category) || e.category === 'Possession'));
   t('escapeHtml handles null', () => escapeHtml(null) === '');
   t('escapeHtml handles undefined', () => escapeHtml(undefined) === '');
   t('escapeHtml escapes tags', () => escapeHtml('<b>&') === '&lt;b&gt;&amp;');
@@ -2552,6 +3503,19 @@ function runUnitTests() {
     return ok;
   });
   t('countFor returns 0 with no events for a fresh id', () => countFor('__nonexistent_event__') === 0);
+  t('share codes are 6 characters from the safe alphabet', () => {
+    const c = generateShareCode();
+    return c.length === 6 && c.split('').every(ch => SHARE_CODE_ALPHABET.includes(ch));
+  });
+  t('normalizeShareCode cleans input', () => normalizeShareCode(' ab-c12 3x ') === 'ABC123');
+  t('claim overlap found for the same stat in team whole mode', () =>
+    computeClaimOverlaps({ players: [], stats: ['pass_c'] }, [{ name: 'A', claims: { players: [], stats: ['pass_c'] } }], 'team_whole').length === 1);
+  t('no claim overlap for different players in team individual mode', () =>
+    computeClaimOverlaps({ players: ['Emma'], stats: ['pass_c'] }, [{ name: 'A', claims: { players: ['Mia'], stats: ['pass_c'] } }], 'team_individual').length === 0);
+  t('no claim overlap for different stats on the same player', () =>
+    computeClaimOverlaps({ players: ['Emma'], stats: ['pass_c'] }, [{ name: 'A', claims: { players: ['Emma'], stats: ['tackle_won'] } }], 'team_individual').length === 0);
+  t('possession overlaps no matter which players', () =>
+    computeClaimOverlaps({ players: ['Emma'], stats: [POSSESSION_CLAIM] }, [{ name: 'A', claims: { players: ['Mia'], stats: [POSSESSION_CLAIM] } }], 'team_individual').length === 1);
 
   return results;
 }
@@ -2645,11 +3609,39 @@ document.getElementById('version-footer-text').textContent = APP_VERSION;
 renderRoster();
 renderEventConfig();
 showScreen(state.events.length > 0 || state.playerName || state.roster.length > 0 ? 'track' : 'setup');
+renderShareSetup();
+if (state.shared) startSharePolling();
 if (SHOW_PANEL) renderTestPanel();
+
+// Invite links look like stldev.com/matchtap/?join=ABC123
+const joinFromLink = normalizeShareCode(URL_PARAMS.get('join'));
+if (URL_PARAMS.has('join')) {
+  const cleanParams = new URLSearchParams(window.location.search);
+  cleanParams.delete('join');
+  const qs = cleanParams.toString();
+  try { history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : '')); } catch (e) {}
+}
+if (joinFromLink.length === 6) {
+  if (state.shared && state.shared.code === joinFromLink) {
+    // Already in this game, nothing to do
+  } else if (state.shared) {
+    alert(`This phone is already in shared game ${state.shared.code}. Leave it on the Setup tab first to join ${joinFromLink}.`);
+  } else {
+    showScreen('setup');
+    document.getElementById('join-code-input').value = joinFromLink;
+    document.getElementById('share-block').scrollIntoView({ block: 'start' });
+    if (state.trackerName) {
+      joinSharedGame(joinFromLink);
+    } else {
+      document.getElementById('tracker-name-input').focus();
+      alert(`You've been invited to shared game ${joinFromLink}. Type your name under Share live, then tap Join.`);
+    }
+  }
+}
 
 let tutorialAlreadySeen = false;
 try { tutorialAlreadySeen = localStorage.getItem(TUTORIAL_SEEN_KEY) === 'true'; } catch (e) {}
-if (!tutorialAlreadySeen) startTutorial();
+if (!tutorialAlreadySeen && joinFromLink.length !== 6) startTutorial();
 </script>
 
 </body>

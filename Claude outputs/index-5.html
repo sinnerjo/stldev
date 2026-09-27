@@ -1,0 +1,512 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How to Use AI as a Youth Soccer Coach: A Detailed Guide</title>
+
+<!-- SEO -->
+<meta name="description" content="A detailed, honest guide to using AI for practice plans, parent emails, and research, plus the one habit that catches confident, wrong answers." />
+<link rel="canonical" href="https://stldev.com/guides/how-to-use-ai-as-a-youth-soccer-coach/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="How to Actually Use AI as a Youth Soccer Coach" />
+<meta property="og:description" content="Practice plans, parent emails, translation, and stats, plus the real mistakes an AI research process made building this site, and how we caught them." />
+<meta property="og:url" content="https://stldev.com/guides/how-to-use-ai-as-a-youth-soccer-coach/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-10-12" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="How to Actually Use AI as a Youth Soccer Coach" />
+<meta name="twitter:description" content="Practice plans, parent emails, translation, and stats, plus the real mistakes an AI research process made building this site, and how we caught them." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/how-to-use-ai-as-a-youth-soccer-coach/#article",
+      "headline": "How to Actually Use AI as a Youth Soccer Coach: A Detailed, Honest Guide",
+      "description": "A detailed, honest guide to using AI for practice plans, parent emails, and research, plus the one habit that catches confident, wrong answers.",
+      "datePublished": "2026-10-12",
+      "dateModified": "2026-10-12",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/how-to-use-ai-as-a-youth-soccer-coach/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Artificial intelligence",
+        "Coaching tools"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "AI for Coaches",
+          "item": "https://stldev.com/guides/how-to-use-ai-as-a-youth-soccer-coach/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+
+  /* formation figures */
+  .shape { display: flex; gap: 24px; align-items: flex-start; margin-top: 24px; padding: 22px; background: var(--terminal); border-left: 3px solid var(--lime); }
+  .shape-figs { flex: 0 0 120px; display: flex; flex-direction: column; gap: 16px; }
+  .shape-fig { flex: 0 0 120px; margin: 0; text-align: center; }
+  .shape-fig svg { width: 120px; height: auto; display: block; }
+  .shape-fig figcaption { margin-top: 6px; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; color: var(--lime); }
+  .shape-body { flex: 1; min-width: 0; }
+  .shape-body h3 { margin-top: 0; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 14px; }
+  .cols h4 { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lime); font-weight: 500; margin-bottom: 6px; }
+  .cols h4.down { color: var(--accent); }
+  @media (max-width: 600px) {
+    .shape { flex-direction: column; padding: 18px; }
+    .shape-figs { flex-direction: row; flex-basis: auto; }
+    .cols { grid-template-columns: 1fr; gap: 6px; }
+    .table-wrap.wide table { min-width: 620px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / AI for Coaches</p>
+
+  <article>
+    <h1>How to Actually Use AI as a Youth Soccer Coach: <span class="accent">A Detailed, Honest Guide</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; October 12, 2026 &middot; 10 min read</p>
+
+    <p class="lead">This entire site, every guide, every glossary entry, every cited study, was built using AI as a research and drafting assistant, checked and rewritten by a real coach along the way. That process taught us a lot, including where AI is genuinely useful for a volunteer coach and where it will confidently hand you something wrong. This is the detailed version of what we actually learned, not a hype piece.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Any coach curious about using a tool like Claude or ChatGPT for the paperwork, planning, and research side of coaching. This is not about replacing your own judgment on the field, and it says so more than once.</p>
+    </div>
+
+    <h2 id="why-bother"><span class="tag">Why bother</span>Think of it as an assistant coach for the desk work</h2>
+
+    <p>A volunteer coach's job is not just the field. It is a practice plan for Tuesday, a preseason email nobody reads twice, a season wrap up message, a glossary entry for a confused parent, a caption for the team page that says more than "great game." None of that requires your soccer judgment specifically, and all of it takes real time away from the parts of coaching that do. Used well, AI takes a first pass at the desk work so you spend your actual attention on the players in front of you. Used badly, it hands you a confident sounding paragraph that is wrong, and you repeat it to forty parents before anyone catches it. This guide is about doing the first thing and avoiding the second.</p>
+
+    <h2 id="practice-planning"><span class="tag">Use one</span>Building and adapting practice plans</h2>
+
+    <p>This is the easiest, lowest risk use, and a good place to start if you have never tried any of this. Describe your actual constraints, age group, format, roster size, field space, time, and what you worked on last practice, and ask for a session built around our own <a href="../planning-a-youth-soccer-practice-session/">practice planning structure</a>, warm up, technical work, small sided games, scrimmage. The real value shows up when something changes at the last minute: rain moves you indoors, three players are out sick, or you only have half your usual field. Rather than improvising cold, describe the new constraint and ask for a revised plan in the same structure. It takes thirty seconds and saves you standing in front of ten kids with no plan.</p>
+
+    <p class="note">Coaching cue: always read the plan before you run it. AI does not know your field, your equipment, or which of your players cannot stand standing in line. You are still the editor.</p>
+
+    <h2 id="philosophy"><span class="tag">Use one</span>Pressure testing your own coaching philosophy</h2>
+
+    <p>This is the single most valuable thing we found AI good for, and it is different from asking it to agree with you. Our own <a href="../youth-soccer-dribbling-before-passing/">guide on developing dribblers before passers</a> exists because we did exactly this: took a real coaching belief and asked an AI research process to go find out what was actually true about it, not what would be comfortable to hear. The useful move is asking directly for the counterargument, not just the support: "find the strongest research or expert opinion that disagrees with this idea," not just "find support for this idea." That single guide ended up citing real, credible research on both sides, including a legitimate school of thought that disagrees with the whole premise, because we asked for it honestly instead of only asking for backup. A coaching philosophy that has only ever heard agreement is a weaker one than it thinks it is.</p>
+
+    <h2 id="fact-check"><span class="tag">The most important rule</span>Verify before you repeat it</h2>
+
+    <p>Here is the part of this guide that matters most. Over the course of building this site's guides, an AI research pass got things wrong more than once, always stated with total confidence. A rule quoted as "the goalkeeper has six seconds to release the ball" turned out to be outdated, IFAB changed it to eight seconds in 2025, with a different penalty entirely. A widely repeated stat that "70 percent of kids quit organized sports by age 13" did not hold up when we asked for its actual source. A commonly used coaching term, the "W technique" for catching, got presented at first like official curriculum language when it is really just informal shorthand coaches use. None of these were obscure trick questions. They were normal, everyday coaching facts, and an AI stated each one fluently and wrongly before a second, more targeted check caught it.</p>
+
+    <p>This is not a random glitch, it is how these tools work. OpenAI's own research on the subject explains the mechanism plainly: language models are trained to predict text from patterns, so "arbitrary low frequency facts... cannot be predicted from patterns alone and hence lead to hallucinations," and most evaluations of these models reward a confident guess over an honest "I don't know," the same incentive a student has guessing on a multiple choice test instead of leaving it blank. The U.S. government's own standards body describes the same phenomenon in its official AI risk guidance, defining "confabulation" as "the production of confidently stated but erroneous or false content." Anthropic, the company behind Claude, says it plainly about its own product: "even the most advanced language models, like Claude, can sometimes generate text that is factually incorrect or inconsistent with the given context."</p>
+
+    <p>The fix is not to distrust every answer, it is one specific habit: for any factual claim you plan to repeat to a parent, a player, or on your team page, a rule, a statistic, a safety guideline, ask for the exact verbatim quote and the exact source URL, then actually open that source yourself before you repeat the claim. If the AI cannot produce a real, checkable quote, or the source turns out to say something different once you look, that is your answer. Every guide on this site was built exactly this way, and it is the one habit worth taking from all of this even if you use AI for nothing else.</p>
+
+    <h2 id="communication"><span class="tag">Use one</span>Drafting parent communication</h2>
+
+    <p>A first draft is the hardest part of most emails, and this is where AI earns its keep. A preseason meeting agenda built around our own <a href="../preseason-parent-meeting-youth-soccer/">preseason parent meeting checklist</a>, a season ending message that recognizes every player rather than one MVP, a short note explaining a schedule change, all of it starts faster from a draft you edit down to your own voice than from a blank page. The higher value, less obvious use is rehearsal. Before an actually difficult conversation, a playing time dispute, a <a href="../the-disengaged-parent-youth-soccer/">disengaged parent</a>, a <a href="../handling-the-sideline-coaching-parent/">sideline coaching parent</a>, describe the situation and ask the AI to role play the parent's likely reactions so you can practice your response before the real conversation happens. It will not get the specific person right, but it is a genuinely useful way to hear your own talking points out loud before the stakes are real.</p>
+
+    <h2 id="glossaries"><span class="tag">Use one</span>Building your own team reference material</h2>
+
+    <p>Our <a href="../youth-soccer-glossary-for-parents/">glossary for parents guide</a> and our <a href="../youth-soccer-positions-explained-simply/">positions explained guide</a> both started as exactly this kind of project, take the terms and concepts your own parents actually ask about, and build a short, plain language reference document specific to your team. A one page handout explaining your formation, your substitution pattern, and three or four terms you use most on the sideline takes an AI assistant minutes to draft and you minutes more to fact check and personalize. Keep the same discipline from the section above: any rule or definition that could be wrong gets verified before it goes home in a kid's backpack.</p>
+
+    <h2 id="translation"><span class="tag">Use one, carefully</span>Supporting a multilingual team</h2>
+
+    <p>If you coach families who do not speak English as a first language, our <a href="../coaching-a-multilingual-youth-soccer-team/">multilingual team guide</a> covers real communication habits beyond translation apps, and AI translation is a genuine improvement on nothing. Use it for routine, low stakes messages, a schedule reminder, a general update, where an imperfect translation still gets the point across. For anything with real consequences, a safety concern, a discipline situation, a medical question, get a bilingual parent, staff member, or a professional interpreter to confirm the message before it goes out. A translation mistake in a practice reminder is annoying. A translation mistake in anything involving a child's safety is not a risk worth taking to save ten minutes.</p>
+
+    <h2 id="stats"><span class="tag">Use one</span>Turning exported stats into an actual trend</h2>
+
+    <p>If you track games with <a href="../../matchtap/">MatchTap</a> or minutes with <a href="../../subgo/">SubGo</a>, export a season of data as a CSV and ask an AI assistant to summarize it, who is trending up, where the team's completed pass rate has moved over the last five games, whether one player's minutes have been unusually uneven. This turns a spreadsheet nobody wants to read into a plain English summary in a minute. Keep the same caution our own <a href="../youth-soccer-formations-by-age/">formations guide</a> gives about the underlying data: a handful of games is a small sample, and a confident sounding trend from four data points is not the same thing as a real pattern. Ask the AI to say so explicitly, and do not hand a parent a definitive sounding conclusion built on three games.</p>
+
+    <h2 id="social-captions"><span class="tag">Use one</span>Writing specific, technical praise for team posts</h2>
+
+    <p>Our <a href="../youth-soccer-team-social-media-page/">team social media guide</a> covers real research showing that specific, technical praise, "dribbling with her head up," "finding the overlapping fullback," works better for a kid's motivation than generic praise like "great game." AI is genuinely useful here: describe what actually happened in the photo or clip in plain language, and ask for a short caption that names the specific skill rather than the outcome. This is drafting help for a habit that is proven to matter, not a shortcut around learning to describe what you are actually seeing.</p>
+
+    <h2 id="privacy"><span class="tag">Never do this</span>What does not go into a general AI tool</h2>
+
+    <p>This section is not optional reading. General purpose AI chatbots were not built with children's data in mind, and their own rules say so. OpenAI's own policy states plainly that "ChatGPT is not meant for children under 13," and that even in an approved education setting for that age group, "the actual interaction with ChatGPT must be conducted by an adult." Anthropic's consumer terms for Claude set the bar even higher: "you must be at least 18 years old... to use the Services." Neither product was designed to hold a real child's personal information, and the companies say so directly rather than implying it.</p>
+
+    <p>In practice, that means a few concrete habits. Do not upload a photo of a player to a general AI tool. Do not paste a full roster with players' full names, addresses, birthdates, or medical notes into a chat window, even to ask for something as harmless sounding as an alphabetized list. When you want AI's help organizing anything roster related, use a first name only, an initial, or a jersey number instead of a full identity, the same way our own <a href="../youth-soccer-team-social-media-page/">team social media guide</a> recommends keeping full names away from public photos. We could not find a single named authority spelling out this exact "use initials, not photos" rule for AI tools specifically, so treat this paragraph as our own practical recommendation built from the terms of service above, not a quote from a child safety organization. It is a low cost habit regardless, and the downside of skipping it is not.</p>
+
+    <h2 id="limits"><span class="tag">Never do this</span>What AI should not decide for you</h2>
+
+    <p>Both major AI companies are explicit that their tools should not make high stakes decisions alone. Anthropic's usage policy requires that "a qualified professional in that field must review the content or decision prior to dissemination or finalization" for advice or decisions in fields including healthcare. OpenAI's usage policy separately prohibits "automation of high stakes decisions in sensitive areas without human review," naming medical decisions specifically as one of those areas. Translated to a sideline: never let an AI response be the deciding factor on whether an injured player returns to the field, never let it settle a genuine playing time dispute between you and a parent, and never let a drafted message go out in a real discipline situation without you personally deciding every word of it first. AI drafts. You decide. That order does not reverse for anything that actually matters to a kid or a family.</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Repeating a rule or stat without checking the source</strong> the AI provided, especially anything about safety, injury, or a Law of the Game that can genuinely change season to season.</li>
+      <li><strong>Pasting a full roster with personal details</strong> into a general purpose AI tool instead of using initials or first names only.</li>
+      <li><strong>Sending a drafted parent email unedited,</strong> in a voice that is not actually yours, on a topic where your own tone matters.</li>
+      <li><strong>Treating a small sample stat trend as settled fact</strong> instead of a starting point for a real conversation.</li>
+      <li><strong>Letting a draft decide a real dispute</strong> about playing time, discipline, or an injury instead of using it only to prepare for that conversation.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Give AI something real to work with</h2>
+      <p>Export a season of minutes from SubGo or events from MatchTap, and you have exactly the kind of real, specific data that makes an AI summary useful instead of generic. Both are free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li>Kalai, A.T., Nachum, O., et al., <a href="https://openai.com/index/why-language-models-hallucinate/" rel="noopener">Why Language Models Hallucinate</a>, OpenAI, 2025.</li>
+      <li><a href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations" rel="noopener">Reduce Hallucinations</a>, Anthropic developer documentation.</li>
+      <li><a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf" rel="noopener">Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile</a>, National Institute of Standards and Technology, 2024.</li>
+      <li><a href="https://help.openai.com/en/articles/8313401-is-chatgpt-safe-for-all-ages" rel="noopener">Is ChatGPT Safe for All Ages?</a>, OpenAI Help Center.</li>
+      <li><a href="https://anthropic.com/legal/terms" rel="noopener">Consumer Terms of Service</a>, Anthropic.</li>
+      <li><a href="https://www.anthropic.com/legal/aup" rel="noopener">Usage Policy</a>, Anthropic.</li>
+      <li><a href="https://openai.com/policies/usage-policies/" rel="noopener">Usage Policies</a>, OpenAI.</li>
+    </ul>
+    <p class="note">AI products, their terms of service, and their capabilities change quickly. Confirm current age requirements and usage policies directly with the provider before relying on anything above.</p>
+
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

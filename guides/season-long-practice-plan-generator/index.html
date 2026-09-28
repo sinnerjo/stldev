@@ -1,0 +1,490 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A Season Long Practice Plan Generator With AI</title>
+
+<!-- SEO -->
+<meta name="description" content="Feed an AI assistant your team's real weaknesses and get a six to eight week practice progression back, not just one more single session plan." />
+<link rel="canonical" href="https://stldev.com/guides/season-long-practice-plan-generator/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="The Season Long Practice Plan: Turning Weaknesses Into a Real Progression With AI" />
+<meta property="og:description" content="A six to eight week practice progression built from your team's actual weaknesses, not a single session planned in isolation the night before." />
+<meta property="og:url" content="https://stldev.com/guides/season-long-practice-plan-generator/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-27" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="The Season Long Practice Plan: Turning Weaknesses Into a Real Progression With AI" />
+<meta name="twitter:description" content="A six to eight week practice progression built from your team's actual weaknesses, not a single session planned in isolation the night before." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/season-long-practice-plan-generator/#article",
+      "headline": "The Season Long Practice Plan: Turning Weaknesses Into a Real Progression With AI",
+      "description": "How to use an AI assistant to turn a short list of real team weaknesses into a six to eight week practice progression, instead of planning one disconnected session at a time, including the exact prompts to build and revise the plan.",
+      "datePublished": "2026-09-27",
+      "dateModified": "2026-09-27",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/season-long-practice-plan-generator/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Coaching",
+        "Practice planning",
+        "Artificial intelligence"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Season Planning",
+          "item": "https://stldev.com/guides/season-long-practice-plan-generator/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Season Planning</p>
+
+  <article>
+    <h1>The Season Long Practice Plan: <span class="accent">Turning Weaknesses Into a Real Progression With AI</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 27, 2026 &middot; 7 min read</p>
+
+    <p class="lead">Most youth practice plans get built one week at a time, the night before or the morning of, in response to whatever went wrong at the last game. That is not a bad instinct, reacting to what you actually saw matters, but it rarely adds up to anything bigger than a string of disconnected sessions. A team that struggles to keep possession under pressure in September is often still struggling with the exact same thing in November, because no single practice was ever asked to build toward it on purpose. An AI assistant is well suited to the part of this that is tedious rather than creative, turning a short list of real weaknesses into an actual six to eight week arc, one theme building on the last.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches who already have a solid single session template, ours is in the <a href="../planning-a-youth-soccer-practice-session/">one hour practice guide</a>, and want to string several weeks of it into a real progression aimed at specific weaknesses, instead of picking a fresh, unrelated topic every week. This pairs well with a <a href="../train-ai-on-your-coaching-philosophy/">coaching profile</a> already in place, so the plan reflects your actual format and priorities from the first prompt.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Name two or three weaknesses, not ten.</strong> A plan trying to fix everything at once fixes nothing in particular.</li>
+        <li><strong>Ask for a progression, not a list.</strong> Each week should build on what the last one covered, not repeat it or start over.</li>
+        <li><strong>Expect four to eight weeks before a skill visibly improves,</strong> which is what makes a season long view worth building in the first place.</li>
+        <li><strong>Keep every week in your existing one hour structure,</strong> so only the theme changes, not the whole shape of practice.</li>
+        <li><strong>Revise the plan when real life interrupts it,</strong> a missed week, bad weather, or a skill clicking faster than expected, instead of quietly abandoning the rest of it.</li>
+      </ul>
+    </div>
+
+    <h2 id="why-one-session"><span class="tag">The problem</span>Why one good session rarely fixes anything on its own</h2>
+
+    <p>A single well run practice can absolutely improve a specific moment, a cleaner first touch that day, a better decision in one small sided game. What it cannot do is create the kind of lasting change coaches actually want, because skill development runs on a longer clock than one Tuesday night. U.S. Soccer's own coaching education materials on periodization state it plainly: "it typically takes from four to eight weeks to see significant improvements in skills such as strength, speed, power or endurance," organized into what the same framework calls a microcycle, one week of training, nested inside a longer mesocycle of about a month, all built around dividing the season into distinct phases rather than treating every week the same.</p>
+
+    <p>None of that requires a sports science degree to apply. It just requires deciding on a theme before the season gets away from you, and building several weeks toward it on purpose, which is exactly the part an AI assistant is good at once you hand it real information instead of a blank prompt.</p>
+
+    <h2 id="name-weaknesses"><span class="tag">Step one</span>Name two or three real weaknesses, not everything at once</h2>
+
+    <p>The instinct to fix every problem at once is understandable and almost always backfires. One youth coaching framework for structuring a season recommends assessing the team early and identifying "2 to 3 development priorities" to build toward, rather than a long list nobody will actually track. If you already log stats with <a href="../youth-soccer-stat-tracking/">MatchTap</a> or track individual development over time, that data is the fastest way to get specific, a completion rate under pressure, a pattern of losing the ball in the same third of the field, a set piece that never quite executes. If you do not have numbers, your own honest memory of the last few games works fine, specificity matters more than the source.</p>
+
+    <blockquote>
+      "I coach [age group] [format] soccer. Based on the last few games and practices, here is what I have noticed: [describe two or three specific weaknesses in plain language, for example late runs into the box, losing composure under pressure near our own goal, or a slow first touch that gives defenders time to close down]. Ask me clarifying questions if you need more detail, then help me narrow this to the two or three priorities most worth building a multi week plan around."
+      <cite>Paste this first, before asking for the actual plan</cite>
+    </blockquote>
+
+    <h2 id="build-progression"><span class="tag">Step two</span>Turn the priorities into an actual progression</h2>
+
+    <p>Once you have settled on real priorities, the next prompt is the one that does the actual work of this guide, asking for a multi week arc rather than a single session. Anchor it to whatever single practice structure you already trust, so the AI is filling in a theme each week rather than reinventing the whole shape of practice from scratch.</p>
+
+    <blockquote>
+      "Using the one hour practice structure of warm up, technical work, pressure phase, small sided game, and recap, build me a six week practice progression for [age group] [format] focused on these priorities, in order: [list your two or three priorities]. Each week should build on the last rather than repeating it, moving from an isolated version of the skill toward a version under real game pressure by the final week. For each week, give me the specific theme and one sentence on how it connects to the week before it."
+      <cite>Paste this once you have named your real priorities</cite>
+    </blockquote>
+
+    <p>Read the six week overview before asking for any single week's full session detail. It is much faster to catch a progression that jumps around or repeats itself at the outline stage than after you have already generated six full practice plans. Once the arc looks right, ask for one week's plan in full detail at a time, the same way you would generate any single session, so you are not carrying six weeks of content into your notes before you actually need it.</p>
+
+    <h2 id="phase-shape"><span class="tag">The shape of a season</span>Matching a progression to where you are in the year</h2>
+
+    <p>What a six to eight week block should emphasize changes depending on where it falls in your season, and it is worth saying so explicitly in your prompt rather than assuming the AI knows. One youth season planning framework breaks a typical year into a preseason block weighted heavily toward technical work and team habits, an early season block that reacts to what shows up in actual games, a longer midseason stretch, and an end of season block that shifts toward evaluation and tapering volume down. You do not need to follow that exact structure, but naming which part of your season you are in, preseason, midseason, or a final stretch before playoffs, changes what a sensible six week plan should actually contain, and is worth a single sentence in your prompt.</p>
+
+    <h2 id="revise"><span class="tag">Step three</span>Revising the plan when real life interrupts it</h2>
+
+    <p>No six week plan survives a season untouched. A rained out week, a skill that clicked in three weeks instead of six, a tournament that eats a normal practice slot, all of it is completely normal, and none of it means starting over. Go back to the same conversation and ask for an adjustment rather than a fresh plan, so the AI keeps the context of what you already covered.</p>
+
+    <blockquote>
+      "We are now on week [number] of the six week plan. [Describe what actually happened, for example we missed week 3 to weather, or the team picked up the pressing theme faster than expected and is ready to move on]. Adjust the remaining weeks of the plan to account for this, keeping the same overall priorities and end goal."
+      <cite>Paste this whenever the plan needs to bend to what actually happened</cite>
+    </blockquote>
+
+    <p>Our <a href="../how-to-use-ai-as-a-youth-soccer-coach/">detailed guide to using AI as a coach</a> covers the broader habit worth applying here too, checking anything the AI states as settled fact, a claimed timeline for skill improvement or a specific training ratio, against a real source before repeating it to parents or other coaches as established science.</p>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Naming too many priorities at once,</strong> which produces a plan that touches everything and builds toward nothing in particular.</li>
+      <li><strong>Asking for a full six weeks of detailed sessions before reviewing the overall arc,</strong> making a jumbled progression far more expensive to fix.</li>
+      <li><strong>Ignoring where you actually are in the season</strong> and asking for a generic plan that does not match a preseason, midseason, or tapering stretch.</li>
+      <li><strong>Abandoning the plan entirely after one missed week</strong> instead of asking for a quick adjustment to the remaining weeks.</li>
+      <li><strong>Expecting a visible change after one or two sessions,</strong> when four to eight weeks is the realistic timeline for most skills to actually show improvement.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Track whether the plan is actually working</h2>
+      <p>A multi week theme is only useful if you can tell whether it is landing. MatchTap logs the specific actions tied to whatever you are working on, and SubGo keeps minutes and rotations fair while you run the plan itself. Both are free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://learning.ussoccer.com/articles/hip/article/periodization-for-youth-soccer" rel="noopener">Periodization for Youth Soccer</a>, U.S. Soccer Learning Center.</li>
+      <li><a href="https://flicktec.io/blog/how-to-structure-soccer-season-plan-youth" rel="noopener">How to Structure a Soccer Season Plan for Youth Teams</a>, FlickTec.</li>
+      <li><a href="https://www.ussoccer.com/stories/2018/02/five-things-to-know-about-playpracticeplay" rel="noopener">Five Things to Know About Play-Practice-Play</a>, U.S. Soccer.</li>
+    </ul>
+    <p class="note">The week counts and phase breakdowns above are general coaching guidance meant to be adapted, not a fixed schedule every team should follow identically. Your own league's game calendar and your team's actual pace of improvement should always take priority over a generic timeline.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,484 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Small Sided Game Generator: One Skill, Four Games, With AI</title>
+
+<!-- SEO -->
+<meta name="description" content="Describe the one skill you want to drill and get three or four small sided game variations back, scaled to your actual numbers and space, using AI." />
+<link rel="canonical" href="https://stldev.com/guides/small-sided-game-generator/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="The Small Sided Game Generator: One Skill, Four Variations, With AI" />
+<meta property="og:description" content="Why small sided games produce more touches per player than a scrimmage, and the AI prompts that turn one skill into three or four game variations." />
+<meta property="og:url" content="https://stldev.com/guides/small-sided-game-generator/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/subgo/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="SubGo app icon" />
+<meta property="article:published_time" content="2026-09-27" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="The Small Sided Game Generator: One Skill, Four Variations, With AI" />
+<meta name="twitter:description" content="Why small sided games produce more touches per player than a scrimmage, and the AI prompts that turn one skill into three or four game variations." />
+<meta name="twitter:image" content="https://stldev.com/subgo/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/small-sided-game-generator/#article",
+      "headline": "The Small Sided Game Generator: One Skill, Four Variations, With AI",
+      "description": "The research behind why small sided games produce more touches and more technical repetition per player than a full sided scrimmage, and how to use AI to turn one target skill into three or four game variations scaled to your own roster and space.",
+      "datePublished": "2026-09-27",
+      "dateModified": "2026-09-27",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/subgo/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/small-sided-game-generator/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Coaching",
+        "Practice planning",
+        "Artificial intelligence"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "SubGo",
+        "url": "https://stldev.com/subgo/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Small Sided Games",
+          "item": "https://stldev.com/guides/small-sided-game-generator/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Small Sided Games</p>
+
+  <article>
+    <h1>The Small Sided Game Generator: <span class="accent">One Skill, Four Variations, With AI</span></h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 27, 2026 &middot; 5 min read</p>
+
+    <p class="lead">A small sided game does more actual coaching work per minute than almost anything else in practice, more touches, more decisions, more repetition of whatever skill you are trying to build. The part that takes real time is inventing several different versions of one, scaled correctly to however many players showed up and however much space you actually have that day. That is a narrow, well defined task, and it is exactly the kind of thing an AI assistant produces in seconds once you describe the skill and your real numbers.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches who already believe in small sided games as the backbone of practice and want a faster way to generate fresh variations, rather than running the same three or four games on repeat all season. Our <a href="../gamification-in-youth-soccer-practice/">guide on why practice should feel like a game</a> covers the broader case for this approach, and our <a href="../planning-a-youth-soccer-practice-session/">one hour practice guide</a> shows where a game like this fits into a full session.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Smaller formats mean more touches, reliably.</strong> The research on this is consistent and the effect is large.</li>
+        <li><strong>Name one skill per game,</strong> not several at once, so the constraint you add actually targets something specific.</li>
+        <li><strong>Give the real numbers,</strong> exactly how many players showed up and exactly how much space you have, not a rough guess.</li>
+        <li><strong>Ask for a few variations of the same theme,</strong> not unrelated games, so you can rotate through them without reinventing the skill each time.</li>
+        <li><strong>Try the smallest version first</strong> if you are not sure how a new constraint will land with your group.</li>
+      </ul>
+    </div>
+
+    <h2 id="why-small"><span class="tag">Why it works</span>Smaller formats mean more touches, and the research backs it up</h2>
+
+    <p>The core case for small sided games is not just coaching intuition, it shows up clearly in the research. One analysis found that ball touches increased significantly, by roughly 30 to 39 percent, when the same group of players moved from a 3v3 format to 5v5, and that reducing the number of players on the field is one of the most reliable ways to increase how often each individual player actually touches the ball. A separate comparison puts a rough real world number on the gap, estimating players get somewhere around 20 to 30 touches during a 20 minute stretch of an 11v11 scrimmage, compared to roughly 40 to 80 touches in the same 20 minutes of 4v4 or 5v5, a two to four times increase depending on the exact format. That difference compounds fast over a season, which is the whole case for making small sided games the default rather than an occasional change of pace.</p>
+
+    <h2 id="one-skill"><span class="tag">The rule</span>One skill per game, not several at once</h2>
+
+    <p>The most common mistake in designing a small sided game is trying to make it do too much, a game meant to work on first touch that also somehow wants to build passing and defending shape all at the same time ends up building none of them particularly well. Pick one skill, then let the game's actual constraints, the size of the grid, the number of touches allowed, a specific way to score, do the work of forcing that skill to show up, rather than trying to coach three things through commentary from the sideline.</p>
+
+    <h2 id="generate"><span class="tag">Step one</span>Generate three or four variations of one skill</h2>
+
+    <p>Give the AI your real numbers rather than a round guess. The scaling only works if the space and player count you provide match what you are actually working with that day.</p>
+
+    <blockquote>
+      "I coach [age group] youth soccer and today I have [number] players and a space roughly [dimensions or a description, such as half of a 9v9 field or a 20 by 30 yard grid]. I want to design small sided games that all target one skill: [name the skill, for example first touch under pressure, switching the point of attack, or 1v1 defending]. Give me three or four different game variations that all target this same skill, each with a grid size, team sizes, a scoring method, and one key coaching point to watch for. Scale everything to my actual player count and space."
+      <cite>Paste this with your real numbers for that day</cite>
+    </blockquote>
+
+    <h2 id="scale-down"><span class="tag">Step two</span>Scale a game up or down on the fly</h2>
+
+    <p>Some days the numbers do not match what you planned, two extra players show up, or three are out sick. Rather than abandoning the plan, ask for the same game rescaled.</p>
+
+    <blockquote>
+      "I planned this game: [paste the game you generated or already had]. Today I actually have [new number] players instead of [original number]. Adjust the grid size, team sizes, or rules so the same skill focus and level of challenge still work with my actual numbers today."
+      <cite>Paste this when the roster that shows up does not match what you planned for</cite>
+    </blockquote>
+
+    <h2 id="progress"><span class="tag">Step three</span>Make a game harder once it gets easy</h2>
+
+    <p>A game that was challenging in week one usually gets easy by week three, once players adjust to it. Rather than switching to something unrelated, ask for the same core game with the difficulty turned up, so the skill focus stays the same while the challenge keeps pace with the team's improvement.</p>
+
+    <blockquote>
+      "This game has become too easy for my team: [paste the game]. Suggest two or three ways to increase the difficulty while keeping the same core skill focus, for example a touch restriction, a smaller grid, an added defender, or a time pressure element."
+      <cite>Paste this once a game stops being challenging</cite>
+    </blockquote>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Targeting several skills in one game,</strong> which usually means none of them get real, focused repetition.</li>
+      <li><strong>Giving a rough guess instead of your real numbers,</strong> producing a game scaled for a group that is not the one actually on the field.</li>
+      <li><strong>Running the same game every week without adjusting the challenge,</strong> once it has clearly stopped being difficult for the group.</li>
+      <li><strong>Explaining a new game at length</strong> instead of a short demonstration, the same setup cost covered in our <a href="../planning-a-youth-soccer-practice-session/">practice planning guide</a>.</li>
+      <li><strong>Assuming a game that works for one age group</strong> will automatically scale to a much younger or older team without adjustment.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Rotate players through the same fair system</h2>
+      <p>The same rotation habit that makes a small sided game fair at practice carries straight into game day. SubGo keeps substitutions and playing time automatic and even, so it stays fair without you tracking it by memory. Free, with no account.</p>
+      <a class="btn" href="../../subgo/">Try SubGo Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these numbers come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://journals.sagepub.com/doi/10.1177/17479541261450910" rel="noopener">Touch Restrictions and Player Numbers During Small-Sided Games in Youth Soccer Players: Effects on Physical and Technical Parameters</a>, International Journal of Sports Science and Coaching.</li>
+      <li><a href="https://flicktec.io/blog/how-many-touches-youth-soccer-player-needs" rel="noopener">How Many Touches on the Ball Does a Youth Soccer Player Need</a>, FlickTec.</li>
+      <li><a href="https://www.usyouthsoccer.org/wp-content/uploads/sites/160/2023/09/Player-Development-Initiatives-2017.pdf" rel="noopener">Player Development Initiatives 2017</a>, US Youth Soccer.</li>
+    </ul>
+    <p class="note">Touch counts vary by study, age group, and how a game is set up, and the figures above are general findings, not a guarantee for any specific game. The core direction, smaller formats producing more individual touches, is consistent across the research we reviewed.</p>
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

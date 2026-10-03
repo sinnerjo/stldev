@@ -437,6 +437,23 @@
     border-style: solid;
   }
   .poss-btn.poss-active .poss-time { color: var(--pitch-dark); opacity: 0.75; }
+  .field-btn {
+    border: 1px dashed var(--amber);
+  }
+  .field-btn .field-time {
+    display: block;
+    font-size: 11px;
+    color: var(--chalk-dim);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .field-btn.field-active {
+    background: var(--amber);
+    color: var(--pitch-dark);
+    border: 1px solid var(--amber);
+    border-style: solid;
+  }
+  .field-btn.field-active .field-time { color: var(--pitch-dark); opacity: 0.75; }
   .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -496,6 +513,20 @@
   .pct-n { font-size: 20px; font-weight: 700; color: var(--amber); }
   .pct-l { font-size: 11px; color: var(--chalk); margin-top: 2px; font-weight: 600; }
   .pct-f { font-size: 10px; color: var(--chalk-dim); margin-top: 1px; }
+  .field-summary { margin-bottom: 14px; }
+  .field-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card);
+    border: 1px solid var(--pitch-line);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+  .field-summary-name { color: var(--chalk); font-weight: 600; }
+  .field-summary-time { color: var(--amber); font-weight: 700; font-size: 12px; }
   .log-entry-right { display: flex; align-items: center; gap: 10px; }
   .log-remove-btn {
     background: none;
@@ -995,6 +1026,15 @@
       <div style="margin-top:8px; color:var(--chalk-dim); font-size:12px;">Adds two linked buttons to the top of Track. Tapping one turns off the other automatically. Time in each state is calculated from the game clock, so it pauses whenever the clock does.</div>
     </div>
 
+    <div class="setup-block" id="playing-time-block" style="display:none;">
+      <h2>Playing time tracking</h2>
+      <label style="display:flex; align-items:center; gap:10px; padding:8px 10px; background:var(--pitch-dark); border-radius:8px; font-size:14px;">
+        <input type="checkbox" id="track-playing-time-toggle" style="width:18px; height:18px; accent-color: var(--lime);" onchange="toggleTrackPlayingTime()">
+        Track playing time (on field / on bench)
+      </label>
+      <div style="margin-top:8px; color:var(--chalk-dim); font-size:12px;">Adds two linked buttons for whichever player you're currently tracking. Nobody starts marked as on field automatically, since not everyone starts the match, tap On field as each player actually takes the pitch.</div>
+    </div>
+
     <div class="setup-block" id="events-block">
       <h2>Events to track</h2>
       <div class="event-config" id="event-config"></div>
@@ -1073,6 +1113,9 @@
         <p class="help-heading">Possession</p>
         <p>Available in Team whole and Team individual modes. Turn it on in Setup and two linked buttons appear at the top of Track. Tapping one turns off the other automatically. Time in each state is calculated from the game clock, so it pauses whenever the clock pauses, and totals show up in Log, Past games, and shared summaries as time and percentage.</p>
 
+        <p class="help-heading">Playing time</p>
+        <p>Available in Player and Team individual modes. Turn it on in Setup and two linked buttons, On field and On bench, appear for whichever player you're currently tracking. Nobody starts marked as on field automatically, since not every player starts the match, tap it yourself as each one actually takes the pitch. Time pauses with the game clock the same way possession does, and totals for every player you've tracked show up in Log, Past games, and shared summaries.</p>
+
         <p class="help-heading">Game clock</p>
         <p>The clock bar on Track is also the start button. Tap it once to begin the game. Tap it again any time to pause, tap again to resume, it remembers exactly where it left off. The Show game clock setting only controls whether the running time is visible, the bar still starts and pauses the game either way. While Track is open, the screen is also kept from locking automatically, so it won't dim mid game just from sitting idle.</p>
 
@@ -1089,7 +1132,7 @@
         <p>If two people split tracking duties on the same game, Share via QR on Log or on a Past games card displays a code, or a cycling sequence of codes for larger games, that another device can scan. On the receiving side, Import game data on Setup opens the camera to scan it in. If no game is in progress, the scanned data becomes a new game outright. If a game is already in progress, the modes have to match exactly, and anything that overlaps, like both devices tracking the same event for the same player, prompts you to pick which version to keep rather than combining them.</p>
 
         <p class="help-heading">Sharing live with other trackers</p>
-        <p>Type your name under Share live, then tap Start a shared game. You get a six character code, and Invite others shows a QR code and link so other parents or coaches can join from their phones. Everyone picks what they're covering with Choose what I'm tracking, either some of the players, some of the stats, or both. Anything another tracker already has is marked with their name and can't be doubled up. Every tap uploads right away and all phones pull in each other's taps every few seconds, so the score, the clock, the Log, and the percentages match on every phone. If a phone loses signal, its taps wait and upload once it's back. Undo last only undoes your own taps. When the game is over, each person taps End game to save their own copy to Past games.</p>
+        <p>Type your name under Share live, then tap Start a shared game. You get a six character code, and Invite others shows a QR code and link so other parents or coaches can join from their phones. Everyone picks what they're covering with Choose what I'm tracking, either some of the players, some of the stats, or both. Possession and playing time can be picked there too. Anything another tracker already has is marked with their name and can't be doubled up. Every tap uploads right away and all phones pull in each other's taps every few seconds, so the score, the clock, the Log, and the percentages match on every phone. If a phone loses signal, its taps wait and upload once it's back. Undo last only undoes your own taps. When the game is over, each person taps End game to save their own copy to Past games.</p>
 
         <p class="help-heading">Past games tab</p>
         <p>Every saved game lives here. Tap a card to see its full event list, export it to CSV, share a text summary, share it as a QR code for another device to import, or delete it.</p>
@@ -1161,6 +1204,7 @@
     <div class="log-summary" id="log-summary"></div>
     <div class="log-percentages" id="log-percentages"></div>
     <div class="log-percentages" id="log-possession"></div>
+    <div id="log-playing-time"></div>
     <button class="export-btn" onclick="exportCSV()">Export CSV</button>
     <button class="share-btn" onclick="shareCurrentGameSummary()">Share summary</button>
     <button class="qr-btn" onclick="openExportQr('current')">Share via QR</button>
@@ -1251,7 +1295,7 @@
 <script>
 const STORAGE_KEY = 'matchtap_state_v1';
 const TUTORIAL_SEEN_KEY = 'matchtap_tutorial_seen_v1';
-const APP_VERSION = 'v1.2.0';
+const APP_VERSION = 'v1.3.0';
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
 const DEV_MODE = URL_PARAMS.get('devmode') === 'true';
@@ -1314,7 +1358,11 @@ const MASTER_EVENTS = [
 
   // Possession (linked pair, controlled by its own setup toggle, not the general checklist)
   { id: 'poss_in', label: 'In possession', type: 'positive', category: 'Possession' },
-  { id: 'poss_out', label: 'Out of possession', type: 'negative', category: 'Possession' }
+  { id: 'poss_out', label: 'Out of possession', type: 'negative', category: 'Possession' },
+
+  // Playing time (linked pair per player, controlled by its own setup toggle)
+  { id: 'sub_in', label: 'On field', type: 'positive', category: 'PlayingTime' },
+  { id: 'sub_out', label: 'On bench', type: 'negative', category: 'PlayingTime' }
 ];
 
 const EVENT_CATEGORIES = ['Passing', 'Shooting', 'Defending', 'Goalkeeping', 'Discipline', 'Set pieces', 'General'];
@@ -1341,6 +1389,7 @@ let state = {
   roster: [],
   activeEvents: [...DEFAULT_ACTIVE],
   trackPossession: false,
+  trackPlayingTime: false,
   currentPlayer: null,
   currentHalf: 1,
   events: [],
@@ -1398,6 +1447,7 @@ function setMode(m, force) {
   });
   document.getElementById('team-name-block').style.display = (m === 'team_whole' || m === 'team_individual') ? 'block' : 'none';
   document.getElementById('possession-block').style.display = (m === 'team_whole' || m === 'team_individual') ? 'block' : 'none';
+  document.getElementById('playing-time-block').style.display = (m === 'player' || m === 'team_individual') ? 'block' : 'none';
   document.getElementById('player-name-block').style.display = m === 'player' ? 'block' : 'none';
   document.getElementById('roster-block').style.display = m === 'team_individual' ? 'block' : 'none';
   document.getElementById('mode-hint').textContent = MODE_HINTS[m] || '';
@@ -1482,6 +1532,11 @@ function toggleTrackScore() {
 
 function toggleTrackPossession() {
   state.trackPossession = document.getElementById('track-possession-toggle').checked;
+  save();
+}
+
+function toggleTrackPlayingTime() {
+  state.trackPlayingTime = document.getElementById('track-playing-time-toggle').checked;
   save();
 }
 
@@ -1582,14 +1637,17 @@ function renderTrackScreen() {
   }
 
   const grid = document.getElementById('event-grid');
+  const showPlayingTime = state.trackPlayingTime && (state.mode === 'player' || state.mode === 'team_individual') && currentTrackingPlayerLabel();
+  const fieldState = showPlayingTime ? getPlayerFieldState(state.events, currentTrackingPlayerLabel()) : null;
+  const fieldHtml = showPlayingTime ? renderPlayingTimeButtonsHtml(fieldState) : '';
   const showPossession = state.trackPossession && (state.mode === 'team_whole' || state.mode === 'team_individual');
   const possState = showPossession ? getCurrentPossessionState() : null;
   const possHtml = showPossession ? renderPossessionButtonsHtml(possState) : '';
   const active = MASTER_EVENTS.filter(ev => state.activeEvents.includes(ev.id));
-  const needsClaim = state.shared && active.length === 0 && !showPossession;
+  const needsClaim = state.shared && active.length === 0 && !showPossession && !showPlayingTime;
   grid.innerHTML = needsClaim
     ? `<button class="share-empty-btn" onclick="openClaimPicker()">You're in a shared game but haven't picked anything to track yet. Tap here to choose.</button>`
-    : possHtml + active.map(ev => {
+    : fieldHtml + possHtml + active.map(ev => {
     const count = countFor(ev.id);
     return `<button class="event-btn ${ev.type}" onclick="logEvent('${ev.id}')">
       <span class="count">${count}</span>
@@ -1615,6 +1673,23 @@ function renderPossessionButtonsHtml(possState) {
     <button class="event-btn poss-btn ${possState === 'out' ? 'poss-active' : ''}" onclick="togglePossession('out')">
       <span class="poss-time" id="poss-out-time">${formatElapsed(totals.outMs)} (${outPct}%)</span>
       Out of possession
+    </button>`;
+}
+
+function renderPlayingTimeButtonsHtml(fieldState) {
+  const player = currentTrackingPlayerLabel();
+  const totals = computePlayerFieldTotals(state.events, state.clockIntervals, Date.now(), player);
+  const totalMs = totals.onMs + totals.offMs;
+  const onPct = totalMs > 0 ? Math.round((totals.onMs / totalMs) * 100) : 0;
+  const offPct = totalMs > 0 ? 100 - onPct : 0;
+  return `
+    <button class="event-btn field-btn ${fieldState === 'in' ? 'field-active' : ''}" onclick="togglePlayingTime('in')">
+      <span class="field-time" id="field-in-time">${formatElapsed(totals.onMs)} (${onPct}%)</span>
+      On field
+    </button>
+    <button class="event-btn field-btn ${fieldState === 'out' ? 'field-active' : ''}" onclick="togglePlayingTime('out')">
+      <span class="field-time" id="field-out-time">${formatElapsed(totals.offMs)} (${offPct}%)</span>
+      On bench
     </button>`;
 }
 
@@ -1690,6 +1765,7 @@ function updateClockDisplay() {
     }
   }
   updatePossessionTimeLabels();
+  updatePlayingTimeLabels();
 }
 
 function updatePossessionTimeLabels() {
@@ -1704,9 +1780,24 @@ function updatePossessionTimeLabels() {
   outEl.textContent = `${formatElapsed(totals.outMs)} (${outPct}%)`;
 }
 
+function updatePlayingTimeLabels() {
+  const inEl = document.getElementById('field-in-time');
+  const outEl = document.getElementById('field-out-time');
+  if (!inEl || !outEl) return;
+  const player = currentTrackingPlayerLabel();
+  if (!player) return;
+  const totals = computePlayerFieldTotals(state.events, state.clockIntervals, Date.now(), player);
+  const totalMs = totals.onMs + totals.offMs;
+  const onPct = totalMs > 0 ? Math.round((totals.onMs / totalMs) * 100) : 0;
+  const offPct = totalMs > 0 ? 100 - onPct : 0;
+  inEl.textContent = `${formatElapsed(totals.onMs)} (${onPct}%)`;
+  outEl.textContent = `${formatElapsed(totals.offMs)} (${offPct}%)`;
+}
+
 function ensureClockInterval() {
   const possessionLive = state.trackPossession && (state.mode === 'team_whole' || state.mode === 'team_individual') && state.clockRunningSince;
-  if ((state.showClock || possessionLive) && state.clockRunningSince) {
+  const playingTimeLive = state.trackPlayingTime && (state.mode === 'player' || state.mode === 'team_individual') && state.clockRunningSince;
+  if ((state.showClock || possessionLive || playingTimeLive) && state.clockRunningSince) {
     if (!clockInterval) clockInterval = setInterval(updateClockDisplay, 1000);
   } else {
     stopClock();
@@ -1817,6 +1908,63 @@ function computePossessionTotals(events, clockIntervals, endTs) {
     if (possEvents[i].eventId === 'poss_in') inMs += overlap; else outMs += overlap;
   }
   return { inMs: inMs, outMs: outMs };
+}
+
+function getPlayerFieldState(events, player) {
+  if (!player) return null;
+  for (let i = events.length - 1; i >= 0; i--) {
+    const e = events[i];
+    if (e.player !== player) continue;
+    if (e.eventId === 'sub_in') return 'in';
+    if (e.eventId === 'sub_out') return 'out';
+  }
+  return null;
+}
+
+function togglePlayingTime(newState) {
+  if (state.mode !== 'player' && state.mode !== 'team_individual') return;
+  if (state.mode === 'team_individual' && !state.currentPlayer) {
+    alert('Select a player first.');
+    return;
+  }
+  const player = currentTrackingPlayerLabel();
+  if (!player) return;
+  if (getPlayerFieldState(state.events, player) === newState) return;
+  logEvent(newState === 'in' ? 'sub_in' : 'sub_out');
+}
+
+function computePlayerFieldTotals(events, clockIntervals, endTs, player) {
+  const subEvents = events.filter(e => (e.eventId === 'sub_in' || e.eventId === 'sub_out') && e.player === player).slice().sort((a, b) => a.ts - b.ts);
+  let onMs = 0, offMs = 0;
+  for (let i = 0; i < subEvents.length; i++) {
+    const segStart = subEvents[i].ts;
+    const segEnd = (i + 1 < subEvents.length) ? subEvents[i + 1].ts : endTs;
+    const overlap = sumOverlapWithIntervals(segStart, segEnd, clockIntervals);
+    if (subEvents[i].eventId === 'sub_in') onMs += overlap; else offMs += overlap;
+  }
+  return { onMs: onMs, offMs: offMs };
+}
+
+function allTrackedPlayingTimePlayers(events) {
+  const names = [];
+  events.forEach(e => {
+    if ((e.eventId === 'sub_in' || e.eventId === 'sub_out') && e.player && !names.includes(e.player)) names.push(e.player);
+  });
+  return names;
+}
+
+function renderPlayingTimeSummaryHtml(events, clockIntervals, endTs) {
+  const players = allTrackedPlayingTimePlayers(events);
+  if (players.length === 0) return '';
+  return `<div class="field-summary">` + players.map(p => {
+    const totals = computePlayerFieldTotals(events, clockIntervals, endTs, p);
+    const totalMs = totals.onMs + totals.offMs;
+    const onPct = totalMs > 0 ? Math.round((totals.onMs / totalMs) * 100) : 0;
+    return `<div class="field-summary-row">
+      <span class="field-summary-name">${escapeHtml(p)}</span>
+      <span class="field-summary-time">${formatElapsed(totals.onMs)} (${onPct}%)</span>
+    </div>`;
+  }).join('') + `</div>`;
 }
 
 function logEvent(eventId) {
@@ -1938,6 +2086,7 @@ function showScreen(name) {
     document.getElementById('show-clock-toggle').checked = !!state.showClock;
     document.getElementById('track-score-toggle').checked = !!state.trackScore;
     document.getElementById('track-possession-toggle').checked = !!state.trackPossession;
+    document.getElementById('track-playing-time-toggle').checked = !!state.trackPlayingTime;
     renderRoster();
     renderEventConfig();
     setMode(state.mode, true);
@@ -2007,6 +2156,9 @@ function renderLogScreen() {
   } else {
     possWrap.innerHTML = '';
   }
+
+  const fieldWrap = document.getElementById('log-playing-time');
+  fieldWrap.innerHTML = renderPlayingTimeSummaryHtml(state.events, state.clockIntervals, Date.now());
 
   const list = document.getElementById('log-list');
   if (state.events.length === 0) {
@@ -2160,6 +2312,7 @@ function renderPastScreen() {
       </div>
       <div class="past-card-detail" id="past-detail-${g.id}">
         ${renderPastGamePossession(g)}
+        ${renderPlayingTimeSummaryHtml(g.events, g.clockIntervals || [], g.events.length ? g.events[g.events.length - 1].ts : Date.now())}
         ${renderPastGameEvents(g)}
         <div class="past-card-actions">
           <button onclick="exportPastGame('${g.id}')">Export CSV</button>
@@ -2263,6 +2416,19 @@ function buildGameSummaryText(events, meta) {
     const outPct = possTotalMs > 0 ? 100 - inPct : 0;
     lines.push('');
     lines.push(`Possession: ${inPct}% (${formatElapsed(possTotals.inMs)}) to ${outPct}% (${formatElapsed(possTotals.outMs)})`);
+  }
+
+  const fieldPlayers = allTrackedPlayingTimePlayers(events);
+  if (fieldPlayers.length > 0) {
+    const endTs = meta.endTs || Date.now();
+    lines.push('');
+    lines.push('Playing time');
+    fieldPlayers.forEach(p => {
+      const totals = computePlayerFieldTotals(events, meta.clockIntervals || [], endTs, p);
+      const totalMs = totals.onMs + totals.offMs;
+      const onPct = totalMs > 0 ? Math.round((totals.onMs / totalMs) * 100) : 0;
+      lines.push(`${p}: ${formatElapsed(totals.onMs)} (${onPct}%)`);
+    });
   }
 
   const countsById = {};
@@ -2715,6 +2881,7 @@ const SHARE_AWAY_MS = 90000;
 const SHARE_BATCH = 200;
 const SHARE_CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const POSSESSION_CLAIM = 'possession';
+const PLAYING_TIME_CLAIM = 'playing_time';
 
 let shareTimer = null;
 let shareBusy = false;
@@ -2798,6 +2965,7 @@ function refreshSetupFieldsFromState() {
   set('player-number-input', state.playerNumber);
   set('player-position-input', state.playerPosition);
   document.getElementById('track-possession-toggle').checked = !!state.trackPossession;
+  document.getElementById('track-playing-time-toggle').checked = !!state.trackPlayingTime;
   renderRoster();
   setMode(state.mode, true);
 }
@@ -3097,8 +3265,9 @@ async function startSharedGame() {
   const teamMode = state.mode === 'team_whole' || state.mode === 'team_individual';
   sh.claims = {
     players: state.mode === 'team_individual' ? state.roster.map(p => p.name) : [],
-    stats: MASTER_EVENTS.filter(ev => state.activeEvents.includes(ev.id) && ev.category !== 'Possession').map(ev => ev.id)
+    stats: MASTER_EVENTS.filter(ev => state.activeEvents.includes(ev.id) && EVENT_CATEGORIES.includes(ev.category)).map(ev => ev.id)
       .concat(teamMode && state.trackPossession ? [POSSESSION_CLAIM] : [])
+      .concat(playingTimeMode() && state.trackPlayingTime ? [PLAYING_TIME_CLAIM] : [])
   };
   sh.outbox = state.events.map(e => ({ id: e.id, device_id: e.dev, data: e, deleted: false }));
   sh.inviteAfterClaim = true;
@@ -3143,6 +3312,7 @@ async function joinSharedGame(codeArg) {
   if (!state.shared.metaRev) applyRemoteMeta(res.meta, res.meta_rev || 1);
   state.activeEvents = [];
   state.trackPossession = false;
+  state.trackPlayingTime = false;
   save();
   codeInput.value = '';
   renderShareSetup();
@@ -3190,8 +3360,13 @@ function isAway(o) {
   return now - (o.seen || 0) > SHARE_AWAY_MS;
 }
 
+function playingTimeMode() {
+  return state.mode === 'player' || state.mode === 'team_individual';
+}
+
 function claimStatLabel(key) {
   if (key === POSSESSION_CLAIM) return 'Possession';
+  if (key === PLAYING_TIME_CLAIM) return 'Playing time';
   const ev = MASTER_EVENTS.find(m => m.id === key);
   return ev ? ev.label : key;
 }
@@ -3263,6 +3438,7 @@ function renderShareSetup() {
   document.getElementById('events-block').style.display = sh ? 'none' : 'block';
   document.getElementById('shared-events-block').style.display = sh ? 'block' : 'none';
   document.getElementById('possession-block').style.display = (!sh && teamMode) ? 'block' : 'none';
+  document.getElementById('playing-time-block').style.display = (!sh && playingTimeMode()) ? 'block' : 'none';
   document.getElementById('qr-combine-block').style.display = sh ? 'none' : 'block';
   if (!sh) return;
   document.getElementById('share-code').textContent = sh.code;
@@ -3400,6 +3576,10 @@ function renderClaimPicker() {
     const owners = others.filter(o => (o.claims.stats || []).includes(POSSESSION_CLAIM));
     statsHtml += claimItemHtml('stats', POSSESSION_CLAIM, 'Possession (in / out)', ownersTagHtml(owners, false));
   }
+  if (playingTimeMode()) {
+    const owners = others.filter(o => (o.claims.stats || []).includes(PLAYING_TIME_CLAIM));
+    statsHtml += claimItemHtml('stats', PLAYING_TIME_CLAIM, 'Playing time (on field / on bench)', ownersTagHtml(owners, indiv));
+  }
   statsHtml += EVENT_CATEGORIES.map(cat => {
     const items = MASTER_EVENTS.filter(ev => ev.category === cat);
     return `<div class="claim-cat-label">${escapeHtml(cat)}</div>` + items.map(ev => {
@@ -3450,6 +3630,7 @@ function saveClaims() {
   sh.claims = { players: claimDraft.players.slice(), stats: claimDraft.stats.slice() };
   state.activeEvents = MASTER_EVENTS.filter(ev => sh.claims.stats.includes(ev.id)).map(ev => ev.id);
   state.trackPossession = sh.claims.stats.includes(POSSESSION_CLAIM);
+  state.trackPlayingTime = sh.claims.stats.includes(PLAYING_TIME_CLAIM);
   ensureClaimedCurrentPlayer();
   save();
   shareLastHeartbeat = 0;
@@ -3488,7 +3669,7 @@ function runUnitTests() {
     return new Set(ids).size === ids.length;
   });
   t('default active ids all exist', () => DEFAULT_ACTIVE.every(id => MASTER_EVENTS.some(e => e.id === id)));
-  t('every event has a valid category', () => MASTER_EVENTS.every(e => EVENT_CATEGORIES.includes(e.category) || e.category === 'Possession'));
+  t('every event has a valid category', () => MASTER_EVENTS.every(e => EVENT_CATEGORIES.includes(e.category) || e.category === 'Possession' || e.category === 'PlayingTime'));
   t('escapeHtml handles null', () => escapeHtml(null) === '');
   t('escapeHtml handles undefined', () => escapeHtml(undefined) === '');
   t('escapeHtml escapes tags', () => escapeHtml('<b>&') === '&lt;b&gt;&amp;');
@@ -3514,6 +3695,9 @@ function runUnitTests() {
     computeClaimOverlaps({ players: ['Emma'], stats: ['pass_c'] }, [{ name: 'A', claims: { players: ['Mia'], stats: ['pass_c'] } }], 'team_individual').length === 0);
   t('no claim overlap for different stats on the same player', () =>
     computeClaimOverlaps({ players: ['Emma'], stats: ['pass_c'] }, [{ name: 'A', claims: { players: ['Emma'], stats: ['tackle_won'] } }], 'team_individual').length === 0);
+  t('playing time overlaps only on the same player', () =>
+    computeClaimOverlaps({ players: ['Emma'], stats: [PLAYING_TIME_CLAIM] }, [{ name: 'A', claims: { players: ['Mia'], stats: [PLAYING_TIME_CLAIM] } }], 'team_individual').length === 0 &&
+    computeClaimOverlaps({ players: ['Emma'], stats: [PLAYING_TIME_CLAIM] }, [{ name: 'A', claims: { players: ['Emma'], stats: [PLAYING_TIME_CLAIM] } }], 'team_individual').length === 1);
   t('possession overlaps no matter which players', () =>
     computeClaimOverlaps({ players: ['Emma'], stats: [POSSESSION_CLAIM] }, [{ name: 'A', claims: { players: ['Mia'], stats: [POSSESSION_CLAIM] } }], 'team_individual').length === 1);
 
@@ -3605,6 +3789,7 @@ document.getElementById('player-position-input').value = state.playerPosition ||
 document.getElementById('show-clock-toggle').checked = !!state.showClock;
 document.getElementById('track-score-toggle').checked = !!state.trackScore;
 document.getElementById('track-possession-toggle').checked = !!state.trackPossession;
+document.getElementById('track-playing-time-toggle').checked = !!state.trackPlayingTime;
 document.getElementById('version-footer-text').textContent = APP_VERSION;
 renderRoster();
 renderEventConfig();

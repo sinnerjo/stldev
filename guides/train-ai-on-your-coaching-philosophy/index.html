@@ -409,7 +409,7 @@
 
   <article>
     <h1>How to Train AI on Your Coaching Philosophy <span class="accent">First</span></h1>
-    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 27, 2026, updated October 18, 2026 &middot; 8 min read</p>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 27, 2026, updated October 18, 2026 &middot; 10 min read</p>
 
     <p class="lead">Before you ask AI for a single practice plan or parent email, spend ten minutes building something more useful than any one request: a short, reusable profile of who you are as a coach. Your age group, your format, your priorities, your tone. Answer a guided set of questions once, save the result, and every future request starts from your actual situation instead of a generic one. This guide walks through building that profile, the exact starting prompt to hand the AI, and the real product features that make it stick across future conversations.</p>
 
@@ -422,18 +422,21 @@
 
     <p>Ask a general purpose AI chatbot for a soccer practice plan with no other information and it has to guess: what age, what format, how long, what you already worked on, whether you care more about winning Saturday or building skill over a season. It will guess reasonably and hand you something plausible and generic. Ask the same question after it already knows you coach a U10 7v7 team, that you prioritize equal playing time and individual ball skill over results, and that your field time is short, and the answer changes from plausible to actually useful, without you typing any of that out again.</p>
 
-    <p>This is not a trick, it is how these tools are actually designed to work. Anthropic's own developer documentation on prompting is direct about it: "setting a role in the system prompt focuses Claude's behavior and tone for your use case. Even a single sentence makes a difference," and more generally, "providing context or motivation behind your instructions... can help Claude better understand your goals and deliver more targeted responses." A coaching profile is exactly that kind of context, written once and reused, instead of a single sentence buried in one request and forgotten by the next.</p>
+    <p>This is not a trick. Anthropic's developer documentation on prompting, written for people building products with Claude, makes the same point for its own tool: "setting a role in the system prompt focuses Claude's behavior and tone for your use case. Even a single sentence makes a difference," and more generally, "providing context or motivation behind your instructions... can help Claude better understand your goals and deliver more targeted responses." A coaching profile is exactly that kind of context, written once and reused, instead of a single sentence buried in one request and forgotten by the next.</p>
 
     <h2 id="build-profile"><span class="tag">Step one</span>What actually goes into a coaching profile</h2>
 
     <p>Answer these in plain language, a paragraph or a few bullet points is plenty. There is no required format, only real specifics instead of vague ones.</p>
 
     <ul class="plain">
-      <li><strong>The basics.</strong> Age group, format, roster size, practice days and length, and how much of a season you have left.</li>
+      <li><strong>The basics.</strong> Age group, format, roster size, and practice days and length. Leave out anything that changes every few weeks, like games left or this week's focus, and add those to each chat instead.</li>
       <li><strong>Your priorities, in order.</strong> Development versus results, and where equal playing time sits for you. Our <a href="../equal-playing-time-youth-soccer/">equal playing time guide</a> is a useful reference point if you have not put this into words before.</li>
-      <li><strong>Your actual coaching philosophy.</strong> Anything you believe strongly, dribbling before passing, small sided games over lines, a specific formation you are building toward. Our guides on <a href="../youth-soccer-dribbling-before-passing/">developing dribblers first</a>, <a href="../gamification-in-youth-soccer-practice/">practice as a game, not a drill</a>, and <a href="../youth-soccer-formations-by-age/">formations by age</a> are examples of the kind of belief worth stating up front, instead of explaining it over again every time.</li>
+      <li><strong>Your actual coaching philosophy.</strong> Not sure what yours is yet? Write "still figuring this out" and treat the profile as a draft you will revise. Otherwise, anything you believe strongly, dribbling before passing, small sided games over lines, a specific formation you are building toward. Our guides on <a href="../youth-soccer-dribbling-before-passing/">developing dribblers first</a>, <a href="../gamification-in-youth-soccer-practice/">practice as a game, not a drill</a>, and <a href="../youth-soccer-formations-by-age/">formations by age</a> are examples of the kind of belief worth stating up front, instead of explaining it over again every time. Then add a line asking the AI to challenge your beliefs when the evidence disagrees, so the profile does not turn into a yes machine.</li>
+      <li><strong>Your level and requirements.</strong> Recreational or competitive, any club or league curriculum you are expected to follow, and the one or two goals you have for the season.</li>
+      <li><strong>Your team in general terms.</strong> The things you have noticed, such as several players new to the sport or a wide mix of ability, with no names attached.</li>
       <li><strong>Your communication style.</strong> Direct and brief, warm and detailed, formal or casual with parents. Whatever tone you actually want your drafted emails to sound like.</li>
       <li><strong>Real constraints.</strong> Field access, equipment, weather patterns, a multilingual roster, anything that changes what advice is actually usable for your team.</li>
+      <li><strong>How you want it to behave.</strong> Flag anything it is unsure about, say "I don't know" instead of guessing, and give a checkable source for any rule or statistic.</li>
       <li><strong>What you will not paste in.</strong> No full names, no photos, no addresses, no birthdates. State this in the profile itself, the same standing rule our <a href="../how-to-use-ai-as-a-youth-soccer-coach/">detailed AI guide</a> covers, so it travels with every future request automatically instead of being something you have to remember each time.</li>
     </ul>
 
@@ -442,31 +445,54 @@
     <p>You do not have to write the profile from a blank page yourself. Ask the AI to interview you for it. This is the literal prompt to start with:</p>
 
     <blockquote>
-      "I coach youth soccer and want to build a short, reusable profile of my coaching philosophy and team so I do not have to explain myself all over again every time I ask you something. Interview me one question at a time about my age group, format, roster size, season length, my coaching priorities and philosophy, and my communication style. When you have enough, write a short profile summarizing my answers in plain language, written so I can paste it at the start of future conversations. Do not include any player names, photos, or personal details in the profile, only team level information."
+      "I coach youth soccer and want to build a short, reusable profile of my coaching philosophy and team so I do not have to explain myself all over again every time I ask you something. Interview me one question at a time about my age group, format, roster size, my level and any club curriculum, my season goals, what I have noticed about my players in general terms, my coaching priorities and philosophy, and my communication style. Also ask how I want you to behave, including flagging anything you are unsure about and challenging my beliefs when the evidence disagrees. When you have enough, write a short profile summarizing my answers in plain language, written so I can paste it at the start of future conversations. Do not include any player names, photos, or personal details in the profile, only team level information."
       <cite>Paste this into a new conversation to start</cite>
     </blockquote>
 
     <p>Answer its questions honestly and specifically. A finished profile usually reads something like this, roughly a paragraph:</p>
 
-    <p class="note">"I coach a U10 girls 7v7 recreational team, twelve players, two practices a week at an hour each, with about eight games left this season. My top priority is equal playing time and individual ball skill, ahead of winning. I believe in developing dribblers first and letting passing emerge later as the field grows, and I run practice as small sided games rather than lines and drills. I want practice plans built around a 4-2-1 shape we are working toward. My communication style with parents is warm but brief, and I always want specific, checkable sources for any rule or statistic before I repeat it to a family. Do not include any player names, photos, or personal details in anything you draft for me."</p>
+    <p class="note">"I coach a U10 girls 7v7 recreational team, twelve players, two practices a week at an hour each. My top priority is equal playing time and individual ball skill, ahead of winning. I believe in developing dribblers first and letting passing emerge later as the field grows, and I run practice as small sided games rather than lines and drills, but challenge that if the evidence disagrees. We are working toward a 2-3-1 shape. Several players are new to the sport, and ability varies a lot. My communication style with parents is warm but brief. Flag anything you are unsure about, say 'I don't know' instead of guessing, and give me a specific, checkable source for any rule or statistic before I repeat it to a family. Do not include any player names, photos, or personal details in anything you draft for me."</p>
+
+    <p>To see what the profile buys you, ask the same question with and without it: "Build me a practice plan for Tuesday." These are illustrative examples written to show the shape of each answer, so your wording will differ.</p>
+
+    <div class="callout">
+      <span class="label">Example answer without a profile</span>
+      <p>"Start with a dynamic warm up and a lap around the field. Then run dribbling drills in lines, followed by a passing drill in pairs, and finish with a scrimmage. Cool down with stretching."</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">Example answer with the profile</span>
+      <p>"60 minutes, 12 players. Warm up with a ball each in small grids, no laps. Then a 15 minute dribbling game where every player is moving the whole time. Then two 4v4 small sided games on two small fields, so everyone touches the ball often, with teams reshuffled halfway through to keep playing time even. Finish with a short 6v6 game. Ask players what they noticed about keeping the ball."</p>
+    </div>
 
     <p>Save that result somewhere you can find it again, a notes app, a document, a saved message, whatever you already use.</p>
 
     <h2 id="making-it-stick"><span class="tag">Step three</span>Making it actually persistent, not just saved</h2>
 
-    <p>A saved paragraph only helps if it actually reaches every future conversation. How you get there depends on which AI tool you use, and for Claude specifically, it takes less setup than you might expect.</p>
+    <p>A saved paragraph only helps if it actually reaches every future conversation. The simplest path is one of two: paste it yourself, which works anywhere, or, if you use Claude, let its built in memory carry it. ChatGPT users have a third option below.</p>
 
     <p><strong>Paste it manually, every time.</strong> Works with any AI tool, no account feature required. Keep the profile somewhere you can copy from in a few seconds, and paste it at the top of a new conversation before your actual question. This is the most reliable method because nothing is hidden. You always know exactly what context the AI has.</p>
 
-    <p><strong>ChatGPT's Custom Instructions.</strong> OpenAI's own help documentation describes the feature plainly: "custom instructions allow you to share anything you'd like ChatGPT to consider in its response," and once saved, "your custom instructions are applied immediately to all chats," existing and new. Paste your coaching profile in here once and it applies automatically going forward, without retyping it. ChatGPT also has a separate, automatic memory feature on top of that, which OpenAI's documentation describes as noticing "relevant preferences and details from your chats" on its own. Treat that as a bonus on top of Custom Instructions, not a replacement for it, since it builds up gradually and is less complete than a profile you wrote and reviewed yourself.</p>
+    <p><strong>Claude's memory.</strong> For Claude, you do not need to set up a project just to make a profile persistent. Anthropic's support documentation says Claude "saves memory as a set of individual topics as you chat," and that memory is "on by default" on the web, Claude Desktop, and Claude Mobile. State your profile once, in an ordinary conversation, the way you would introduce yourself to a new assistant coach, and Claude carries pieces of it forward into future conversations on its own, no pasting and no project required. One caution: memory keeps summaries of topics, not your profile word for word, so for anything that must be exact, paste it.</p>
 
-    <p><strong>Claude's memory.</strong> For Claude, you do not need to set up a project just to make a profile persistent. Anthropic's support documentation says Claude "saves memory as a set of individual topics as you chat," and that memory is "on by default" on the web, Claude Desktop, and Claude Mobile. State your profile once, in an ordinary conversation, the way you would introduce yourself to a new assistant coach, and Claude carries pieces of it forward into future conversations on its own, no pasting and no project required.</p>
+    <p>Do not assume it worked. Test it in a brand new chat:</p>
+
+    <blockquote>
+      "What do you know about my team and how I like to work? List it, and tell me what you are unsure about."
+      <cite>Ask this in a new chat to see what actually stuck</cite>
+    </blockquote>
+
+    <p>If something is wrong or missing, tell Claude to correct it, and look in your settings for the memory section, where Anthropic says you can view and edit what Claude has saved.</p>
+
+
+
+    <p><strong>If you use ChatGPT: Custom Instructions.</strong> OpenAI's own help documentation describes the feature plainly: "custom instructions allow you to share anything you'd like ChatGPT to consider in its response," and once saved, "your custom instructions are applied immediately to all chats," existing and new. Paste your coaching profile in here once and it applies automatically going forward, without retyping it. Custom Instructions have a length limit, so keep the profile short. ChatGPT also has a separate, automatic memory feature on top of that, which OpenAI's documentation describes as noticing "relevant preferences and details from your chats" on its own. Treat that as a bonus on top of Custom Instructions, not a replacement for it, since it builds up gradually and is less complete than a profile you wrote and reviewed yourself.</p>
 
     <p class="note">Projects are still worth knowing about, just for a different reason. Anthropic describes a project as a "self-contained workspace" with its own chat histories and knowledge base, and its memory is kept separate from your other projects and from chats outside any project. That is useful if you coach more than one team and want each one's profile kept apart, or if you want one place to also hold a roster, schedule, or season notes alongside the profile. It is a tool for organizing your work, not a requirement for making a profile persistent. Regular Claude memory already handles that on its own.</p>
 
     <h2 id="keep-updating"><span class="tag">Step four</span>Treat it as a living document, not a one time setup</h2>
 
-    <p>Revisit the profile when something real changes: a new season, a format change from 7v7 to 9v9, a shift in priorities after tryouts, a philosophy you have refined since the season started. A profile from last August describing a team that has since changed rosters, formats, or goals will quietly steer every future answer in the wrong direction, confidently and without any warning that it is doing so. Set a reminder to reread and update it at the start of every season, the same way you would revisit a <a href="../preseason-parent-meeting-youth-soccer/">preseason parent meeting</a> checklist.</p>
+    <p>Revisit the profile when something real changes: a new season, a format change from 7v7 to 9v9, a shift in priorities after tryouts, a philosophy you have refined since the season started. A profile from last August describing a team that has since changed rosters, formats, or goals will quietly steer every future answer in the wrong direction, confidently and without any warning that it is doing so. Set a reminder to reread and update it at the start of every season, the same way you would revisit a <a href="../preseason-parent-meeting-youth-soccer/">preseason parent meeting</a> checklist. If you rely on Claude's memory, check what it has saved at the same time.</p>
 
     <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
 
@@ -475,6 +501,7 @@
       <li><strong>Making it too vague to matter,</strong> "I coach kids and want them to have fun" gives the AI almost nothing more specific than no profile at all. Real numbers and real stated priorities are what make this work.</li>
       <li><strong>Putting a player's name, photo, or personal detail into a persistent profile,</strong> which is worse than a one off mention in a single chat, since a persistent profile resurfaces in every future conversation by design.</li>
       <li><strong>Assuming a saved profile in one AI tool carries over to a different one.</strong> Custom Instructions, Claude's memory, a project, and a manually pasted profile are each specific to the product you set them up in.</li>
+      <li><strong>Stating strong beliefs with no counterweight.</strong> A profile that only says what you believe nudges an agreeable assistant to confirm it every time. Keep the line asking it to challenge you.</li>
       <li><strong>Skipping the interview prompt and writing the profile solo when you are not sure what to include.</strong> Letting the AI ask the questions usually surfaces details you would not have thought to write down unprompted.</li>
     </ul>
 

@@ -410,7 +410,7 @@
 
   <article>
     <h1>How to Actually Use AI as a Youth Soccer Coach: <span class="accent">A Detailed, Honest Guide</span></h1>
-    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 26, 2026, updated October 18, 2026 &middot; 18 min read</p>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 26, 2026, updated October 18, 2026 &middot; 20 min read</p>
 
     <p class="lead">This entire site, every guide, every glossary entry, every cited study, was built using AI as a research and drafting assistant, checked and rewritten by a real coach along the way. That process taught us a lot, including where AI is genuinely useful for a volunteer coach and where it will confidently hand you something wrong. This is the detailed version of what we actually learned, not a hype piece.</p>
 
@@ -419,16 +419,54 @@
       <p>Any coach curious about using a tool like Claude or ChatGPT for the paperwork, planning, and research side of coaching. This is not about replacing your own judgment on the field, and it says so more than once. If you have never used AI at all and are not sure where to begin, start with our <a href="../getting-started-with-claude-for-soccer-coaches/">beginner guide to getting started with Claude</a> first. If you have not set up a reusable coaching profile yet, our <a href="../train-ai-on-your-coaching-philosophy/">guide to training AI on your coaching philosophy first</a> is worth doing before this one, so every example below already knows your actual team.</p>
     </div>
 
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Verify before you repeat.</strong> AI states wrong rules and statistics with total confidence, so check any fact against a real source before it reaches a parent.</li>
+        <li><strong>Use it for desk work and rehearsal,</strong> such as drafts, schedules, handouts, and practicing a hard conversation. Do not use it to make decisions about injuries, discipline, or playing time.</li>
+        <li><strong>Keep children's personal details out of the chat.</strong> Use initials or jersey numbers, never photos, addresses, or full rosters.</li>
+        <li><strong>Treat every plan and draft as a first pass.</strong> You are the editor, and you know your field and your players.</li>
+      </ul>
+    </div>
+
+    <p class="note">Jump to: <a href="#fact-check">Verify first</a> &middot; <a href="#practice-planning">Practice plans</a> &middot; <a href="#philosophy">Pressure testing</a> &middot; <a href="#communication">Parent communication</a> &middot; <a href="#scheduling">Schedules</a> &middot; <a href="#weekly-update">Weekly updates</a> &middot; <a href="#stats">Stats</a> &middot; <a href="#privacy">Privacy</a> &middot; <a href="#limits">What AI should not decide</a></p>
+
     <h2 id="why-bother"><span class="tag">Why bother</span>Think of it as an assistant coach for the desk work</h2>
 
     <p>A volunteer coach's job is not just the field. It is a practice plan for Tuesday, a preseason email nobody reads twice, a season wrap up message, a glossary entry for a confused parent, a caption for the team page that says more than "great game." None of that requires your soccer judgment specifically, and all of it takes real time away from the parts of coaching that do. Used well, AI takes a first pass at the desk work so you spend your actual attention on the players in front of you. Used badly, it hands you a confident sounding paragraph that is wrong, and you repeat it to forty parents before anyone catches it. This guide is about doing the first thing and avoiding the second.</p>
 
-    <h2 id="practice-planning"><span class="tag">Use one</span>Building and adapting practice plans</h2>
+    <h2 id="fact-check"><span class="tag">The most important rule</span>Verify before you repeat it</h2>
 
-    <p>This is the easiest, lowest risk use, and a good place to start if you have never tried any of this. Describe your actual constraints, age group, format, roster size, field space, time, and what you worked on last practice, and ask for a session built around our own <a href="../planning-a-youth-soccer-practice-session/">practice planning structure</a>, warm up, technical work, small sided games, scrimmage. The real value shows up when something changes at the last minute: rain moves you indoors, three players are out sick, or you only have half your usual field. Rather than improvising cold, describe the new constraint and ask for a revised plan in the same structure. It takes thirty seconds and saves you standing in front of ten kids with no plan.</p>
+    <p>Here is the part of this guide that matters most. Over the course of building this site's guides, an AI research pass got things wrong more than once, always stated with total confidence. A rule quoted as "the goalkeeper has six seconds to release the ball" turned out to be outdated, IFAB changed it to eight seconds in 2025, with a different penalty entirely. A widely repeated stat that "70 percent of kids quit organized sports by age 13" did not hold up when we asked for its actual source. A commonly used coaching term, the "W technique" for catching, got presented at first like official curriculum language when it is really just informal shorthand coaches use. None of these were obscure trick questions. They were normal, everyday coaching facts, and an AI stated each one fluently and wrongly before a second, more targeted check caught it.</p>
+
+    <p>This is not a random glitch, it is how these tools work. OpenAI's own research on the subject explains the mechanism plainly: language models are trained to predict text from patterns, so "arbitrary low frequency facts... cannot be predicted from patterns alone and hence lead to hallucinations," and most evaluations of these models reward a confident guess over an honest "I don't know," the same incentive a student has guessing on a multiple choice test instead of leaving it blank. The U.S. government's own standards body describes the same phenomenon in its official AI risk guidance, defining "confabulation" as "the production of confidently stated but erroneous or false content." Anthropic, the company behind Claude, says it plainly about its own product: "even the most advanced language models, like Claude, can sometimes generate text that is factually incorrect or inconsistent with the given context."</p>
+
+    <p>The fix is not to distrust every answer. It is one habit for any claim you plan to repeat to a parent, a player, or your team page, such as a rule, a statistic, or a safety guideline: make the claim checkable, then check it yourself. Asking the AI "are you sure?" does not do this, because an assistant that tends to agree with you may just say yes. Instead, work in this order:</p>
+
+    <ul class="plain">
+      <li><strong>Strongest:</strong> find the real source yourself, such as the league rulebook or the governing body's page, paste the text into the chat, and ask Claude to answer only from what you pasted and quote the line it used.</li>
+      <li><strong>Next best:</strong> if you do not have the source, ask for the exact quote and URL, and make sure web search is on in the plus menu. Without it, an assistant can invent a convincing quote and a link that goes nowhere.</li>
+      <li><strong>Always:</strong> open the link yourself. If it is dead, if the page does not say that, or if the wording differs, the claim fails. Drop it, or reword it to match what the source really says.</li>
+    </ul>
 
     <blockquote>
-      "I coach [age group] [format] soccer with [number] players and [length] minutes of practice time. We worked on [last practice's focus] last time. Build a session using a warm up, technical work, small sided games, and a scrimmage, focused on [this week's focus]."
+      "Here is the official text: [paste the rule or page]. Using only this text, answer: [your question]. Quote the exact sentence you used, and if the text does not answer it, say 'the text does not say.'"
+      <cite>Use this when you have the real source in hand</cite>
+    </blockquote>
+
+    <blockquote>
+      "You just told me [paste the exact claim, rule, or statistic]. Give me the exact verbatim quote and the exact source URL this comes from. If you cannot produce a real, checkable source, tell me directly instead of restating the claim with more confidence."
+      <cite>Paste this when you do not have the source, then open the link yourself before repeating the claim</cite>
+    </blockquote>
+
+    <p>Every guide on this site was built this way, and it is the one habit worth taking from all of this even if you use AI for nothing else.</p>
+
+    <h2 id="practice-planning"><span class="tag">Use one</span>Building and adapting practice plans</h2>
+
+    <p>This is an easy place to start, but not a risk free one: a polished plan can still be a bad one, with long lines and kids waiting. Describe your actual constraints, age group, format, roster size, field space, time, and one specific thing you saw last game, and ask for a session built around our own <a href="../planning-a-youth-soccer-practice-session/">practice planning structure</a>, warm up, technical work, small sided games, scrimmage. The real value shows up when something changes at the last minute: rain moves you indoors, three players are out sick, or you only have half your usual field. Rather than improvising cold, describe the new constraint and ask for a revised plan in the same structure. It takes thirty seconds and saves you standing in front of ten kids with no plan.</p>
+
+    <blockquote>
+      "I coach [age group] [format] soccer with [number] players and [length] minutes of practice time on [describe your space]. In our last game I saw [one specific thing]. Build a session using a warm up, technical work, small sided games, and a scrimmage that works on that one thing. For each activity give me the objective in one sentence, what the players are doing the whole time, two questions I can ask players instead of telling them, and one way to make it easier and one way to make it harder. Keep every player active, with no long lines and no elimination games."
       <cite>Paste this the night before practice, swapping in this week's details</cite>
     </blockquote>
 
@@ -437,33 +475,20 @@
       <cite>Paste this the moment a last minute constraint changes your plan</cite>
     </blockquote>
 
-    <p class="note">Coaching cue: always read the plan before you run it. AI does not know your field, your equipment, or which of your players cannot stand standing in line. You are still the editor.</p>
+    <p class="note">Coaching cue: read the plan as a coach, not as a reader. Is every player moving and touching a ball, does it fit your numbers and space, and does it work on one clear thing? AI does not know your field, your equipment, or which of your players cannot stand standing in line. You are still the editor. Our <a href="../getting-started-with-claude-for-soccer-coaches/#first-coaching-task">beginner guide</a> shows a filled in example and a full checklist.</p>
 
     <h2 id="philosophy"><span class="tag">Use one</span>Pressure testing your own coaching philosophy</h2>
 
     <p>This is the single most valuable thing we found AI good for, and it is different from asking it to agree with you. Our own <a href="../youth-soccer-dribbling-before-passing/">guide on developing dribblers before passers</a> exists because we did exactly this: took a real coaching belief and asked an AI research process to go find out what was actually true about it, not what would be comfortable to hear. The useful move is asking directly for the counterargument, not just the support: "find the strongest research or expert opinion that disagrees with this idea," not just "find support for this idea." That single guide ended up citing real, credible research on both sides, including a legitimate school of thought that disagrees with the whole premise, because we asked for it honestly instead of only asking for backup. A coaching philosophy that has only ever heard agreement is a weaker one than it thinks it is.</p>
 
     <blockquote>
-      "I believe [state your coaching belief plainly, for example: young players should learn to dribble before they learn to pass]. Find the strongest research or expert opinion that disagrees with this idea, not just support for it, then tell me which side has the stronger case and why."
-      <cite>Paste this to pressure test a belief, not just confirm it</cite>
-    </blockquote>
-
-    <h2 id="fact-check"><span class="tag">The most important rule</span>Verify before you repeat it</h2>
-
-    <p>Here is the part of this guide that matters most. Over the course of building this site's guides, an AI research pass got things wrong more than once, always stated with total confidence. A rule quoted as "the goalkeeper has six seconds to release the ball" turned out to be outdated, IFAB changed it to eight seconds in 2025, with a different penalty entirely. A widely repeated stat that "70 percent of kids quit organized sports by age 13" did not hold up when we asked for its actual source. A commonly used coaching term, the "W technique" for catching, got presented at first like official curriculum language when it is really just informal shorthand coaches use. None of these were obscure trick questions. They were normal, everyday coaching facts, and an AI stated each one fluently and wrongly before a second, more targeted check caught it.</p>
-
-    <p>This is not a random glitch, it is how these tools work. OpenAI's own research on the subject explains the mechanism plainly: language models are trained to predict text from patterns, so "arbitrary low frequency facts... cannot be predicted from patterns alone and hence lead to hallucinations," and most evaluations of these models reward a confident guess over an honest "I don't know," the same incentive a student has guessing on a multiple choice test instead of leaving it blank. The U.S. government's own standards body describes the same phenomenon in its official AI risk guidance, defining "confabulation" as "the production of confidently stated but erroneous or false content." Anthropic, the company behind Claude, says it plainly about its own product: "even the most advanced language models, like Claude, can sometimes generate text that is factually incorrect or inconsistent with the given context."</p>
-
-    <p>The fix is not to distrust every answer, it is one specific habit: for any factual claim you plan to repeat to a parent, a player, or on your team page, a rule, a statistic, a safety guideline, ask for the exact verbatim quote and the exact source URL, then actually open that source yourself before you repeat the claim. If the AI cannot produce a real, checkable quote, or the source turns out to say something different once you look, that is your answer. Every guide on this site was built exactly this way, and it is the one habit worth taking from all of this even if you use AI for nothing else.</p>
-
-    <blockquote>
-      "You just told me [paste the exact claim, rule, or statistic]. Give me the exact verbatim quote and the exact source URL this comes from. If you cannot produce a real, checkable source, tell me directly instead of restating the claim with more confidence."
-      <cite>Paste this before repeating any factual claim to a parent, player, or team page</cite>
+      "I believe [state your coaching belief plainly, for example: young players should learn to dribble before they learn to pass]. Give me the strongest research or expert opinion on each side, with the source for each. Then tell me where the evidence is thin or disputed, instead of picking a winner."
+      <cite>Paste this to pressure test a belief, then verify every study it names, since invented studies show up here</cite>
     </blockquote>
 
     <h2 id="communication"><span class="tag">Use one</span>Drafting parent communication</h2>
 
-    <p>A first draft is the hardest part of most emails, and this is where AI earns its keep. A preseason meeting agenda built around our own <a href="../preseason-parent-meeting-youth-soccer/">preseason parent meeting checklist</a>, a season ending message that recognizes every player rather than one MVP, a short note explaining a schedule change, all of it starts faster from a draft you edit down to your own voice than from a blank page. The higher value, less obvious use is rehearsal. Before an actually difficult conversation, a playing time dispute, a <a href="../the-disengaged-parent-youth-soccer/">disengaged parent</a>, a <a href="../handling-the-sideline-coaching-parent/">sideline coaching parent</a>, describe the situation and ask the AI to role play the parent's likely reactions so you can practice your response before the real conversation happens. It will not get the specific person right, but it is a genuinely useful way to hear your own talking points out loud before the stakes are real.</p>
+    <p>A preseason meeting agenda built around our own <a href="../preseason-parent-meeting-youth-soccer/">preseason parent meeting checklist</a>, a season ending message that recognizes every player rather than one MVP, a short note explaining a schedule change, all of it starts faster from a draft you edit down to your own voice than from a blank page. The higher value, less obvious use is rehearsal. Before an actually difficult conversation, a playing time dispute, a <a href="../the-disengaged-parent-youth-soccer/">disengaged parent</a>, a <a href="../handling-the-sideline-coaching-parent/">sideline coaching parent</a>, describe the situation and ask the AI to role play the parent's likely reactions so you can practice your response before the real conversation happens. It will not get the specific person right, but it is a genuinely useful way to hear your own talking points out loud before the stakes are real.</p>
 
     <blockquote>
       "Draft a short email to parents about [topic, such as a schedule change or a preseason meeting agenda]. Include these details: [the specifics]. Keep it under [length] and write it in a friendly, direct tone I can edit."
@@ -484,9 +509,9 @@
       <cite>Paste this once you have the raw schedule, then check every date and time yourself</cite>
     </blockquote>
 
-    <p class="note">This is the one administrative use in this guide where a small AI mistake becomes a real problem faster than almost anything else here. A misread date, an AM instead of PM, a time zone assumption that does not match your league, and a parent's calendar now says the game is at the wrong time. Before you send an import file or a reformatted schedule to anyone, open it yourself and check every date and time against the original source. That single check is not optional the way it might be for a caption or a glossary entry.</p>
+    <p class="note">This is the one administrative use in this guide where a small AI mistake becomes a real problem faster than almost anything else here. A misread date, an AM instead of PM, a time zone assumption that does not match your league, and a parent's calendar now says the game is at the wrong time. Before you send an import file or a reformatted schedule to anyone, open it yourself and check every date and time against the original source. That single check is not optional the way it might be for a caption or a glossary entry. Test the file by importing it into a throwaway calendar first, and look closely at any game near a daylight saving change, where time zone handling often goes wrong.</p>
 
-    <p>The same approach works moving a schedule between platforms, handing a season to an assistant coach in whatever layout their spreadsheet uses, or reformatting your league's export into whatever your own team app expects. Ask the AI to reformat the same underlying schedule into the specific columns or layout that platform needs, then confirm against that platform's own current import instructions before you upload anything. Exact required formats vary by product and change over time, and an AI's confident guess at "the format TeamSnap wants" or "the format SportsEngine wants" is exactly the kind of specific, changeable fact worth verifying against that platform's own help page first.</p>
+    <p>The same approach works moving a schedule between platforms, handing a season to an assistant coach in whatever layout their spreadsheet uses, or reformatting your league's export into whatever your own team app expects. Ask the AI to reformat the schedule into the columns that platform needs, then confirm against its own current import instructions before you upload anything. An AI's confident guess at "the format TeamSnap wants" is exactly the kind of changeable fact worth checking on that platform's help page first.</p>
 
     <h2 id="weekly-update"><span class="tag">Use one</span>A consistent weekly update, in your own format, every time</h2>
 
@@ -503,17 +528,15 @@
 
     <ul class="plain">
       <li><strong>Field or facility reservation requests.</strong> Draft the formal request email to a parks department or league facilities coordinator describing your team, the dates and format you need, then confirm the actual submission process and any required form with your real facility contact, since that process is entirely local to your city and league.</li>
-      <li><strong>Volunteer sign up sheets.</strong> Turn a list of jobs a season needs, a snack schedule, tournament staffing, team photo day, into a formatted sign up sheet or a simple shareable table, so parents see open slots at a glance instead of digging through a long email thread.</li>
-      <li><strong>Reimbursement requests.</strong> Draft a short, clear request to a club treasurer describing what was purchased and why, and attach the actual receipt as its own file rather than typing any account or payment information into the draft itself.</li>
+      <li><strong>Volunteer sign up sheets.</strong> Turn a list of jobs a season needs, a snack schedule, tournament staffing, team photo day, into a formatted sign up sheet or a simple shareable table, so parents see open slots at a glance. Use parents' first names only.</li>
       <li><strong>A game day checklist.</strong> Build a one page list of what to bring and confirm before every game, jerseys, water, a first aid kit, cones, the lineup card, so nothing depends on memory on a rushed Saturday morning.</li>
       <li><strong>A new player welcome packet.</strong> For a player joining midseason, draft a short overview of team norms, communication habits, and where to find the schedule, so a new family is not starting from zero on week six.</li>
       <li><strong>Tournament logistics sheets.</strong> Turn a tournament's scattered details, field addresses, check in times, parking notes, into one organized handout for parents, while keeping any hotel confirmation numbers or payment details out of the draft entirely.</li>
-      <li><strong>An attendance summary.</strong> If you track attendance in a spreadsheet, ask for a plain English weekly summary of who has missed multiple sessions, as a prompt to check in with that family personally, not as the check in itself.</li>
       <li><strong>A carpool coordination sheet.</strong> Organize who is riding with whom by first name or initial only. Handle actual home addresses and phone numbers the old fashioned way, in a private conversation or a tool built for that purpose, not inside a general AI chat window.</li>
     </ul>
 
     <blockquote>
-      "I need help with [pick one: a volunteer sign up sheet, a game day checklist, a new player welcome packet, a tournament logistics sheet, an attendance summary]. Here are the details: [describe your specific situation]. Build me a clean, simple version I can share with parents."
+      "I need help with [pick one: a volunteer sign up sheet, a game day checklist, a new player welcome packet, a tournament logistics sheet]. Here are the details: [describe your specific situation]. Build me a clean, simple version I can share with parents."
       <cite>Adjust the bracketed task for whichever administrative job you are tackling</cite>
     </blockquote>
 
@@ -539,10 +562,10 @@
 
     <h2 id="stats"><span class="tag">Use one</span>Turning exported stats into an actual trend</h2>
 
-    <p>If you track games with <a href="../../matchtap/">MatchTap</a> or minutes with <a href="../../subgo/">SubGo</a>, export a season of data as a CSV and ask an AI assistant to summarize it, who is trending up, where the team's completed pass rate has moved over the last five games, whether one player's minutes have been unusually uneven. This turns a spreadsheet nobody wants to read into a plain English summary in a minute. Keep the same caution our own <a href="../youth-soccer-formations-by-age/">formations guide</a> gives about the underlying data: a handful of games is a small sample, and a confident sounding trend from four data points is not the same thing as a real pattern. Ask the AI to say so explicitly, and do not hand a parent a definitive sounding conclusion built on three games.</p>
+    <p>If you track games with <a href="../../matchtap/">MatchTap</a> or minutes with <a href="../../subgo/">SubGo</a>, export a season of data as a CSV and ask an AI assistant to summarize it, who is trending up, where the team's completed pass rate has moved over the last five games, whether one player's minutes have been unusually uneven. This turns a spreadsheet nobody wants to read into a plain English summary in a minute. Keep the same caution our own <a href="../youth-soccer-formations-by-age/">formations guide</a> gives about the underlying data: a handful of games is a small sample, and a confident sounding trend from four data points is not the same thing as a real pattern. Ask the AI to say so explicitly, and do not hand a parent a definitive sounding conclusion built on three games. Language models are also unreliable at arithmetic, so calculate counts and averages in a spreadsheet and use the AI to explain them, or ask it to show the numbers it used so you can check them against your own.</p>
 
     <blockquote>
-      "Here is a season of exported data from [SubGo or MatchTap]: [paste or attach the CSV]. Summarize which players are trending up, how our completed pass rate has moved over the last five games, and whether any player's minutes have been unusually uneven. Say explicitly if the sample size is too small to draw a real conclusion."
+      "Here is a season of exported data from [SubGo or MatchTap]: [paste or attach the CSV]. Summarize which players are trending up, how our completed pass rate has moved over the last five games, and whether any player's minutes have been unusually uneven. Show the numbers you used so I can check them, and say explicitly if the sample size is too small to draw a real conclusion."
       <cite>Paste this after exporting a season of minutes or match events</cite>
     </blockquote>
 
@@ -557,9 +580,9 @@
 
     <h2 id="privacy"><span class="tag">Never do this</span>What does not go into a general AI tool</h2>
 
-    <p>This section is not optional reading. General purpose AI chatbots were not built with children's data in mind, and their own rules say so. OpenAI's own policy states plainly that "ChatGPT is not meant for children under 13," and that even in an approved education setting for that age group, "the actual interaction with ChatGPT must be conducted by an adult." Anthropic's consumer terms for Claude set the bar even higher: "you must be at least 18 years old... to use the Services." Neither product was designed to hold a real child's personal information, and the companies say so directly rather than implying it.</p>
+    <p>This section is not optional reading. The age rules are worth knowing, but they matter for a narrower reason than it first seems. OpenAI's own policy states plainly that "ChatGPT is not meant for children under 13," and that even in an approved education setting for that age group, "the actual interaction with ChatGPT must be conducted by an adult." Anthropic's consumer terms for Claude set the bar even higher: "you must be at least 18 years old... to use the Services." Those rules say who may use the product, not that a coach can never mention a child. The stronger reasons to keep children's details out are practical. You do not control where pasted information goes, some settings let the provider use chats to train its models unless you switch that off in your account's privacy settings, and the parents never agreed to their child's details going into an AI chat. Check your club's own policy on team data before using any of these tools.</p>
 
-    <p>In practice, that means a few concrete habits. Do not upload a photo of a player to a general AI tool. Do not paste a full roster with players' full names, addresses, birthdates, or medical notes into a chat window, even to ask for something as harmless sounding as an alphabetized list. When you want AI's help organizing anything roster related, use a first name only, an initial, or a jersey number instead of a full identity, the same way our own <a href="../youth-soccer-team-social-media-page/">team social media guide</a> recommends keeping full names away from public photos. We could not find a single named authority spelling out this exact "use initials, not photos" rule for AI tools specifically, so treat this paragraph as our own practical recommendation built from the terms of service above, not a quote from a child safety organization. It is a low cost habit regardless, and the downside of skipping it is not.</p>
+    <p>In practice, that means a few concrete habits. Do not upload a photo of a player to a general AI tool. Do not paste a full roster with players' full names, addresses, birthdates, or medical notes into a chat window, even to ask for something as harmless sounding as an alphabetized list. When you want AI's help organizing anything roster related, use a first name only, an initial, or a jersey number instead of a full identity, the same way our own <a href="../youth-soccer-team-social-media-page/">team social media guide</a> recommends keeping full names away from public photos. We could not find a single named authority spelling out this exact "use initials, not photos" rule for AI tools specifically, so treat this paragraph as our own practical recommendation, not a quote from a child safety organization. It is a low cost habit regardless, and the downside of skipping it is not.</p>
 
     <h2 id="limits"><span class="tag">Never do this</span>What AI should not decide for you</h2>
 
@@ -571,7 +594,7 @@
       <li><strong>Repeating a rule or stat without checking the source</strong> the AI provided, especially anything about safety, injury, or a Law of the Game that can genuinely change season to season.</li>
       <li><strong>Pasting a full roster with personal details</strong> into a general purpose AI tool instead of using initials or first names only.</li>
       <li><strong>Importing a schedule or calendar file without checking every date and time</strong> against the original source first, especially across a time zone or an AM and PM mix up.</li>
-      <li><strong>Pasting home addresses or payment details</strong> into a general AI tool while organizing carpools, reimbursements, or tournament logistics.</li>
+      <li><strong>Pasting home addresses or payment details</strong> into a general AI tool while organizing carpools or tournament logistics.</li>
       <li><strong>Sending a drafted parent email unedited,</strong> in a voice that is not actually yours, on a topic where your own tone matters.</li>
       <li><strong>Treating a small sample stat trend as settled fact</strong> instead of a starting point for a real conversation.</li>
       <li><strong>Letting a draft decide a real dispute</strong> about playing time, discipline, or an injury instead of using it only to prepare for that conversation.</li>

@@ -26,6 +26,7 @@
 <meta property="og:image:height" content="512" />
 <meta property="og:image:alt" content="SubGo app icon" />
 <meta property="article:published_time" content="2026-09-27" />
+<meta property="article:modified_time" content="2026-10-19" />
 <meta property="article:author" content="Joseph Warren" />
 
 <!-- Twitter / X -->
@@ -45,7 +46,7 @@
       "headline": "The Parent Handbook: Building a Welcome Packet With AI",
       "description": "What sections a youth soccer parent handbook or welcome packet should actually cover, expectations, communication norms, and season logistics, and how to use AI to turn a short interview into a finished document.",
       "datePublished": "2026-09-27",
-      "dateModified": "2026-09-27",
+      "dateModified": "2026-10-19",
       "inLanguage": "en-US",
       "image": "https://stldev.com/subgo/icon-512.png",
       "mainEntityOfPage": "https://stldev.com/guides/youth-soccer-parent-handbook/",
@@ -372,6 +373,13 @@
     main { padding: 110px 20px 60px; }
     footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
   }
+
+  /* handbook layout diagram */
+  .diagram { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; margin: 26px 0 8px; }
+  .diagram-fig { margin: 0; }
+  .diagram-fig svg { width: 100%; height: auto; display: block; }
+  .diagram-fig figcaption { margin-top: 10px; font-size: 0.86rem; line-height: 1.55; color: var(--body); }
+  .diagram-wide { grid-template-columns: minmax(0, 520px); }
 </style>
 </head>
 <body>
@@ -392,7 +400,7 @@
 
   <article>
     <h1>The Parent Handbook: <span class="accent">Building a Welcome Packet With AI</span></h1>
-    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 27, 2026 &middot; 5 min read</p>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of SubGo &middot; September 27, 2026, updated October 19, 2026 &middot; 8 min read</p>
 
     <p class="lead">A preseason meeting covers a lot in thirty minutes, but half of it is forgotten by the drive home, and the parents who could not make the meeting get none of it at all. A short written handbook, sent once and easy to reference later, fixes both problems, and it is exactly the kind of document an AI assistant can pull together fast once you answer a handful of direct questions about your own team.</p>
 
@@ -407,38 +415,63 @@
         <li><strong>Cover four things:</strong> team goals and style, logistics, communication norms, and sideline and behavior expectations.</li>
         <li><strong>State your communication boundaries plainly,</strong> preferred method, response time, and when not to approach you.</li>
         <li><strong>Keep it to one or two pages.</strong> A handbook nobody finishes reading is not more useful than no handbook at all.</li>
-        <li><strong>Let AI build the first draft from an interview,</strong> then edit it in your own voice rather than publishing it unread.</li>
-        <li><strong>Never include a specific player's name, photo, or personal detail</strong> in the handbook or in the prompt used to draft it.</li>
+        <li><strong>Let AI build the first draft from an interview,</strong> tell it to leave a [FILL IN] marker wherever you give no answer, then edit it in your own voice rather than publishing it unread.</li>
+        <li><strong>Never include a specific player's name, photo, or personal detail</strong> in the handbook or in the prompt used to draft it, and never paste other families' phone numbers or emails into an AI tool.</li>
       </ul>
     </div>
 
     <h2 id="what-to-cover"><span class="tag">The contents</span>What a real parent handbook actually covers</h2>
 
-    <p>Coaching resources on this topic converge on a similar handful of sections. One coach's guide to writing a welcome letter recommends covering team goals stated plainly, for example that "winning will be a by-product of players developing skills and enjoying the game," the actual style of play and what children will be learning, attendance expectations for both players and the coach, behavior and discipline standards, preferred communication methods and boundaries, and a clear statement discouraging sideline coaching from parents during games. A separate guide to writing a youth sports code of conduct adds role specific expectations for parents, athletes, and coaches individually, since each group needs slightly different, direct guidance rather than one generic paragraph aimed at everyone.</p>
+    <p>Two coaching articles overlap on a similar handful of sections. MOJO's guide to writing a welcome letter, by Sue Pierce, suggests covering team goals (its example line, from one coach, is "Winning will be a by-product of our players developing skills and enjoying the game"), the style of play and what kids will be learning, attendance expectations for players and the coach, a discipline policy stated upfront (its example is that after two or three warnings a player sits), communication methods and boundaries, and sideline behavior, where cheering is welcome and yelling or sideline coaching is discouraged. Jersey Watch's guide to youth sports codes of conduct says strong codes address parents, athletes, and coaches separately, and suggests asking people to acknowledge the code when they register. Both articles come from companies that make sports software, so treat them as practical checklists rather than research. The Positive Coaching Alliance's preseason meeting agenda adds a useful reminder for the logistics side: schedules, equipment, contact information, and volunteer jobs such as a team parent or snack coordinator.</p>
 
-    <p>Put together, a complete handbook usually has four real sections: what the team is about and how practice runs, the season's logistics, how and when to communicate with the coach, and what is and is not okay to do on the sideline. That is enough structure without turning into a document nobody actually reads before the season starts.</p>
+    <p>Put together, the common core is four sections: what the team is about and how practice runs, the season's logistics, how and when to communicate with the coach, and what is and is not okay to do on the sideline. That is enough structure without turning into a document nobody actually reads before the season starts. A short list of often forgotten details, covered in step three below, fills the gaps.</p>
+
+    <div class="diagram diagram-wide"><figure class="diagram-fig"><svg viewBox="0 0 360 332" role="img" aria-label="Layout of a one or two page parent handbook: four numbered sections, who we are, logistics, communication, and sideline, plus a strip for often forgotten details"><rect x="20" y="4" width="320" height="324" rx="6" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><text x="180" y="28" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#b8f20a" text-anchor="middle" font-weight="700">PARENT HANDBOOK</text><text x="180" y="43" font-family="'DM Mono', ui-monospace, monospace" font-size="9" fill="#7fa886" text-anchor="middle" font-weight="400">one or two pages</text><rect x="36" y="56" width="288" height="46" rx="4" fill="none" stroke="#b8f20a" stroke-width="1.5"/><circle cx="58" cy="79" r="11" fill="#b8f20a"/><text x="58" y="83" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#0a1f0e" text-anchor="middle" font-weight="700">1</text><text x="78" y="76" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#e8f5e9" text-anchor="start" font-weight="700">Who we are</text><text x="78" y="92" font-family="'DM Mono', ui-monospace, monospace" font-size="9.5" fill="#7fa886" text-anchor="start" font-weight="400">Goals, style of play, what kids learn</text><rect x="36" y="110" width="288" height="46" rx="4" fill="none" stroke="#b8f20a" stroke-width="1.5"/><circle cx="58" cy="133" r="11" fill="#b8f20a"/><text x="58" y="137" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#0a1f0e" text-anchor="middle" font-weight="700">2</text><text x="78" y="130" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#e8f5e9" text-anchor="start" font-weight="700">Logistics</text><text x="78" y="146" font-family="'DM Mono', ui-monospace, monospace" font-size="9.5" fill="#7fa886" text-anchor="start" font-weight="400">Schedule, fields, what to bring, weather</text><rect x="36" y="164" width="288" height="46" rx="4" fill="none" stroke="#b8f20a" stroke-width="1.5"/><circle cx="58" cy="187" r="11" fill="#b8f20a"/><text x="58" y="191" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#0a1f0e" text-anchor="middle" font-weight="700">3</text><text x="78" y="184" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#e8f5e9" text-anchor="start" font-weight="700">Communication</text><text x="78" y="200" font-family="'DM Mono', ui-monospace, monospace" font-size="9.5" fill="#7fa886" text-anchor="start" font-weight="400">Channel, reply time, boundaries</text><rect x="36" y="218" width="288" height="46" rx="4" fill="none" stroke="#b8f20a" stroke-width="1.5"/><circle cx="58" cy="241" r="11" fill="#b8f20a"/><text x="58" y="245" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#0a1f0e" text-anchor="middle" font-weight="700">4</text><text x="78" y="238" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#e8f5e9" text-anchor="start" font-weight="700">Sideline</text><text x="78" y="254" font-family="'DM Mono', ui-monospace, monospace" font-size="9.5" fill="#7fa886" text-anchor="start" font-weight="400">Cheer freely, leave the coaching to us</text><rect x="36" y="276" width="288" height="44" rx="4" fill="none" stroke="#f97316" stroke-width="1.5" stroke-dasharray="6 4"/><text x="48" y="294" font-family="'DM Mono', ui-monospace, monospace" font-size="10" fill="#f97316" text-anchor="start" font-weight="700">OFTEN FORGOTTEN</text><text x="48" y="310" font-family="'DM Mono', ui-monospace, monospace" font-size="9.5" fill="#7fa886" text-anchor="start" font-weight="400">Absences, playing time, safety, volunteers</text></svg><figcaption><strong>The shape of the handbook.</strong> Four core sections on one or two pages, plus a short strip for the details first drafts often miss.</figcaption></figure></div>
 
     <h2 id="interview"><span class="tag">Step one</span>Answer a short interview instead of starting from a blank page</h2>
 
-    <p>The fastest way to get a first draft is the same approach that works for a <a href="../train-ai-on-your-coaching-philosophy/">coaching profile</a>, let the AI ask you direct questions instead of staring at an empty document yourself.</p>
+    <p>The fastest way to get a first draft is the same approach that works for a <a href="../train-ai-on-your-coaching-philosophy/">coaching profile</a>: let the AI ask you direct questions instead of staring at an empty document yourself.</p>
 
     <blockquote>
-      "I coach a youth soccer team and want to build a one to two page parent handbook covering our team goals and style of play, season logistics, how and when parents should communicate with me, and expectations for sideline behavior. Interview me one question at a time to gather what I need for each section, then write a complete draft in a warm but direct tone. Do not include any player names, photos, or personal details, only team level information."
+      "I coach a youth soccer team and want to build a one to two page parent handbook covering our team goals and style of play, season logistics, how and when parents should communicate with me, and expectations for sideline behavior. Interview me one question at a time to gather what I need for each section, then write a complete draft in a warm but direct tone. If I do not give you an answer for something, write [FILL IN] instead of guessing, and do not invent league rules, fees, or policies. Do not include any player names, photos, or personal details, only team level information."
       <cite>Paste this into a new conversation to start the draft</cite>
     </blockquote>
 
-    <p>Answer specifically. "Practice is Tuesday and Thursday from 5:30 to 6:30 at Lindberg Park, games are Saturday mornings starting September 12" is far more useful in the final document than a vague description of a typical week.</p>
+    <p>Answer specifically. "We practice a couple of times a week" tells a parent almost nothing. "Practice is Tuesday and Thursday from 5:30 to 6:30 at Lindberg Park, and games are Saturday mornings with warm up at 8:30 and kickoff at 9:00" is far more useful in the final document. If you do not know something yet, such as the full game schedule, say so and let the draft carry a [FILL IN] marker, rather than letting the AI fill the gap with a believable guess. Add your own phone number or email yourself after the draft is done, and never paste other families' contact details into the conversation.</p>
 
-    <h2 id="communication-section"><span class="tag">Getting specific</span>The communication section is the one worth the most care</h2>
+    <div class="callout">
+      <span class="label">Sample opening, replace every bracket</span>
+      <p>"Welcome to the [Team Name] this [season]. Our goal is for every player to learn, play, and enjoy the game, and for the season to be worth showing up for. We practice [days and times] at [location], and games are on [day] with warm up at [time]. If anything about this page is unclear, ask me at [contact method]."</p>
+    </div>
 
-    <p>Most parent frustration with a coach traces back to unclear expectations about communication, not a disagreement about anything substantive. State plainly which channel you actually check, a team app, email, or text, how quickly parents should expect a reply, and what is not appropriate, for example a request to discuss playing time in the middle of a game or practice. Being specific here upfront prevents far more friction over a season than any other single section of the handbook.</p>
+    <h2 id="communication-section"><span class="tag">Step two</span>The communication section is worth extra care</h2>
+
+    <p>A common source of friction between parents and coaches is unclear expectations about communication rather than a disagreement about anything substantive. State plainly which channel you actually check, a team app, email, or text, how quickly parents should expect a reply, and what is not appropriate, for example a request to discuss playing time in the middle of a game or practice. Putting this in writing upfront removes a lot of avoidable guessing, which is why this section deserves more of your editing time than the others.</p>
 
     <blockquote>
       "Write a short communication section for my parent handbook. I prefer to be contacted by [method], and I check it [how often]. I am not available to discuss anything during a practice or game itself, but I am happy to talk after or by [method] within [timeframe]. For anything about playing time specifically, I prefer parents [describe your actual preference, for example schedule a separate call rather than raising it at pickup]. Write this in two or three warm but direct sentences."
       <cite>Paste this once you know your own actual communication preferences</cite>
     </blockquote>
 
-    <h2 id="review"><span class="tag">Step two</span>Reading it back before it goes out</h2>
+    <h2 id="gaps"><span class="tag">Step three</span>Six things first drafts often leave out</h2>
+
+    <p>The AI will cover the sections you asked for. These are the details it will not think to ask about unless you tell it to, and parents often want answers to them most.</p>
+
+    <ul class="plain">
+      <li><strong>Weather and cancellations.</strong> Who decides, how you will announce it, and roughly how far ahead.</li>
+      <li><strong>Absences.</strong> How and when to tell you a player will miss a practice or game.</li>
+      <li><strong>Playing time.</strong> Your actual approach in a sentence or two, and only what you can really deliver. Our guides on <a href="../equal-playing-time-youth-soccer/">equal playing time</a> and <a href="../talking-to-a-coach-about-playing-time/">talking to a coach about playing time</a> can help you decide what to write.</li>
+      <li><strong>Safety.</strong> Point to your club's own injury and safety procedures instead of inventing your own, and say who carries the first aid kit.</li>
+      <li><strong>When something bothers a parent.</strong> Many coaches ask parents to wait a day after a game before raising a concern. Our guides on the <a href="../handling-the-sideline-coaching-parent/">sideline coaching parent</a> and the <a href="../youth-soccer-parent-sideline-guide/">parent sideline guide</a> pair well with this section.</li>
+      <li><strong>Volunteer jobs.</strong> Team parent, snack schedule, scorekeeper, or whatever your team really needs.</li>
+    </ul>
+
+    <blockquote>
+      "Here is my draft parent handbook: [paste it]. List which of these it does not yet cover: weather and cancellations, reporting absences, playing time, safety and injuries, how to raise a concern, and volunteer jobs. For each missing item, ask me one question so I can supply the real answer. Do not make up any answers."
+      <cite>Paste this after the first draft</cite>
+    </blockquote>
+
+    <h2 id="review"><span class="tag">Step four</span>Reading it back before it goes out</h2>
 
     <p>Read the finished draft the way a parent would, not the way you wrote it. Anything that sounds like it was written by a committee, or anything you would not actually say out loud to a parent at pickup, is worth rewriting in your own words. A handbook that reads like an actual person wrote it gets read. One that reads like a legal document gets skimmed once and forgotten.</p>
 
@@ -447,13 +480,18 @@
       <cite>Paste this before sending the handbook out</cite>
     </blockquote>
 
+    <h2 id="send"><span class="tag">Step five</span>Getting it read</h2>
+
+    <p>Send it before the first practice, through the channel you named in the handbook, and pin it in your team app if you have one. Ask every family to reply with a single word, such as "got it." Jersey Watch suggests asking people to acknowledge a code of conduct at registration, and a simple reply does the same job for a team without any extra paperwork. Bring a few printed copies to the first practice for families who prefer paper. After that, point back to the relevant section when a situation comes up, such as "our handbook covers this under cancellations." If your handbook uses soccer words like offside or build out line, link new families to our <a href="../youth-soccer-glossary-for-parents/">glossary for parents</a>.</p>
+
     <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
 
     <ul class="plain">
       <li><strong>Writing a handbook so long that nobody finishes it,</strong> when one or two focused pages cover everything that actually matters.</li>
-      <li><strong>Leaving the communication section vague,</strong> which is the single section most likely to prevent friction later in the season.</li>
+      <li><strong>Leaving the communication section vague,</strong> which leaves parents guessing how and when to reach you.</li>
       <li><strong>Sending it once and never mentioning it again,</strong> instead of referencing it when a relevant situation actually comes up.</li>
       <li><strong>Copying a generic template without adjusting it</strong> to your team's actual schedule, format, and communication preferences.</li>
+      <li><strong>Letting the AI invent details,</strong> such as fees, league rules, or a weather policy, instead of marking them [FILL IN] for you to answer.</li>
       <li><strong>Including a specific player's name, photo, or personal detail</strong> anywhere in the document or the prompts used to build it.</li>
     </ul>
 
@@ -465,11 +503,11 @@
 
     <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
     <ul class="plain sources">
-      <li><a href="https://mojo.sport/coachs-corner/yes-you-need-to-a-write-a-welcome-letter/" rel="noopener">Yes, Coach, You Need to Write a Welcome Letter</a>, MOJO Sports.</li>
-      <li><a href="https://www.jerseywatch.com/blog/code-of-conduct-for-youth-sports" rel="noopener">How to Create a Code of Conduct for Youth Sports</a>, Jersey Watch.</li>
+      <li><a href="https://mojo.sport/coachs-corner/yes-you-need-to-a-write-a-welcome-letter/" rel="noopener">Yes, Coach, You Need to Write a Welcome Letter</a>, Sue Pierce, MOJO Sports, February 2021.</li>
+      <li><a href="https://www.jerseywatch.com/blog/code-of-conduct-for-youth-sports" rel="noopener">How to Create a Code of Conduct for Youth Sports</a>, Sierra Swigert, Jersey Watch, updated January 2026.</li>
       <li><a href="https://positivecoach.org/resource-zone/pre-season-meeting-agenda/" rel="noopener">Pre-Season Meeting Agenda</a>, Positive Coaching Alliance.</li>
     </ul>
-    <p class="note">The sections and language in this guide are a starting structure to adapt, not a legal or official club document. If your club or league requires a specific code of conduct or liability language, confirm the exact wording with your club's own leadership rather than relying on a self written handbook alone.</p>
+    <p class="note">MOJO and Jersey Watch are company blogs, so their advice is practical guidance rather than research. The sections and language in this guide are a starting structure to adapt, not a legal or official club document. If your club or league requires a specific code of conduct or liability language, confirm the exact wording with your club's own leadership rather than relying on a self written handbook alone.</p>
   </article>
 
 </main>

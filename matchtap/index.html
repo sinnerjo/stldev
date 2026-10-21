@@ -1295,7 +1295,7 @@
 <script>
 const STORAGE_KEY = 'matchtap_state_v1';
 const TUTORIAL_SEEN_KEY = 'matchtap_tutorial_seen_v1';
-const APP_VERSION = 'v1.3.0';
+const APP_VERSION = 'v1.4.0';
 
 const URL_PARAMS = new URLSearchParams(window.location.search);
 const DEV_MODE = URL_PARAMS.get('devmode') === 'true';
@@ -2870,11 +2870,16 @@ function applyImportMerge() {
   alert('Merge applied.');
 }
 
-// ===== Live sharing (Supabase, same project as FlappyBall) =====
-// All database access goes through the mt_* functions in supabase-matchtap.sql.
-// The tables have row level security on with no policies, so the only way in is with a game code.
-const SB_URL = 'https://rwxicipfkhbmcekkxaaq.supabase.co';
-const SB_KEY = 'sb_publishable_lPBsfLiVhYqEJJPUp9fp3g_fLerQWJZ'; // publishable key, safe to be public
+// ===== Live sharing (PocketBase on jrwserver, same server as FlappyBall) =====
+// Collections are defined in pocketbase-matchtap-collections.json. Every API rule requires
+// ?code=<game code> on the request and only matches records for that game, so nobody can
+// list or read a game without knowing its code. Records use ids derived from the game code
+// and event id, which makes every write safe to retry.
+const PB_URL = 'https://jrwserver.ddns.net:8091';
+const PB_GAMES = 'matchtap_games';
+const PB_EVENTS = 'matchtap_events';
+const PB_CLAIMS = 'matchtap_claims';
+const PB_PAGE = 500;
 const SHARE_POLL_MS = 4000;
 const SHARE_HEARTBEAT_MS = 30000;
 const SHARE_AWAY_MS = 90000;
@@ -2890,20 +2895,183 @@ let shareNudgeTimer = null;
 let shareFlushPromise = null;
 let claimDraft = null;
 let claimOthersSig = '';
+let pbServerOffset = 0; // server clock minus this phone's clock, used to tell who is away
 
-function sbRpc(fn, args) {
+function pbFetch(method, coll, recId, code, body, extraQuery) {
+  const qs = new URLSearchParams(Object.assign({ code: code }, extraQuery || {}));
+  const url = PB_URL + '/api/collections/' + coll + '/records' + (recId ? '/' + recId : '') + '?' + qs.toString();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 8000);
-  return fetch(SB_URL + '/rest/v1/rpc/' + fn, {
-    method: 'POST',
+  return fetch(url, {
+    method: method,
     signal: ctrl.signal,
-    headers: { apikey: SB_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify(args || {})
+    headers: body ? { 'Content-Type': 'application/json' } : {},
+    body: body ? JSON.stringify(body) : undefined
   }).then(async r => {
     const txt = await r.text();
-    if (!r.ok) throw new Error('Server said ' + r.status + (txt ? ': ' + txt.slice(0, 160) : ''));
-    return txt ? JSON.parse(txt) : null;
+    let data = null;
+    try { data = txt ? JSON.parse(txt) : null; } catch (e) {}
+    return { ok: r.ok, status: r.status, data: data };
   }).finally(() => clearTimeout(timer));
+}
+
+function pbFail(res, what) {
+  throw new Error('Server said ' + res.status + ' on ' + what + (res.data && res.data.message ? ': ' + res.data.message : ''));
+}
+
+function pbHasFieldErrors(res) {
+  return !!(res && res.data && res.data.data && Object.keys(res.data.data).length);
+}
+
+function cyrb53(str, seed) {
+  let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+}
+
+// PocketBase record ids are 15 lowercase letters or digits. Deriving them from the key
+// means the same event always lands on the same record, no matter which phone sends it.
+function pbRecordId(key) {
+  return (cyrb53(key, 1).toString(36) + cyrb53(key, 2).toString(36) + '000000000000000').slice(0, 15);
+}
+
+function toPbTime(ms) {
+  return new Date(ms).toISOString().replace('T', ' ');
+}
+
+function fromPbTime(s) {
+  return s ? Date.parse(String(s).replace(' ', 'T')) : NaN;
+}
+
+function notePbServerTime(pbTime, sentAt) {
+  const server = fromPbTime(pbTime);
+  if (!isNaN(server)) pbServerOffset = server - (sentAt + Date.now()) / 2;
+}
+
+async function pbListAll(coll, code, filter, sort) {
+  const items = [];
+  for (let page = 1; page < 50; page++) {
+    const r = await pbFetch('GET', coll, null, code, null, { filter: filter, sort: sort || '', page: String(page), perPage: String(PB_PAGE), skipTotal: '1' });
+    if (!r.ok) pbFail(r, 'list ' + coll);
+    const batch = (r.data && r.data.items) || [];
+    items.push(...batch);
+    if (batch.length < PB_PAGE) break;
+  }
+  return items;
+}
+
+async function pbPushEvent(code, row) {
+  const id = pbRecordId('e|' + code + '|' + row.id);
+  const full = { id: id, game: code, event_id: row.id, device_id: (row.device_id || '').slice(0, 40), data: row.data, deleted: !!row.deleted };
+  if (row.deleted) {
+    let r = await pbFetch('PATCH', PB_EVENTS, id, code, { deleted: true });
+    if (r.ok) return;
+    if (r.status === 404) {
+      r = await pbFetch('POST', PB_EVENTS, null, code, full);
+      if (r.ok) return;
+      if (r.status === 400) {
+        const v = await pbFetch('GET', PB_EVENTS, id, code);
+        if (v.ok) return; // already on the server, and already deleted
+        if (pbHasFieldErrors(r)) { console.warn('MatchTap: server rejected an event, skipping it', r.data); return; }
+      }
+    }
+    pbFail(r, 'remove event');
+  } else {
+    const r = await pbFetch('POST', PB_EVENTS, null, code, full);
+    if (r.ok) return;
+    if (r.status === 400) {
+      const v = await pbFetch('GET', PB_EVENTS, id, code);
+      if (v.ok) return; // already uploaded earlier
+      if (pbHasFieldErrors(r)) { console.warn('MatchTap: server rejected an event, skipping it', r.data); return; }
+    }
+    pbFail(r, 'save event');
+  }
+}
+
+// Same calls and return shapes the app used before, now backed by PocketBase
+async function mtApi(fn, a) {
+  const code = normalizeShareCode(a.p_code);
+  const gid = pbRecordId('g|' + code);
+
+  if (fn === 'mt_create_game') {
+    const sentAt = Date.now();
+    const r = await pbFetch('POST', PB_GAMES, null, code, { id: gid, code: code, meta: a.p_meta || {}, meta_rev: 1 });
+    if (r.ok) { notePbServerTime(r.data && r.data.updated, sentAt); return true; }
+    if (r.status === 400) return false; // code already taken
+    pbFail(r, 'create game');
+  }
+
+  if (fn === 'mt_set_meta') {
+    const r = await pbFetch('PATCH', PB_GAMES, gid, code, { meta: a.p_meta || {}, 'meta_rev+': 1 });
+    if (r.ok) return r.data ? r.data.meta_rev : null;
+    if (r.status === 404) return null;
+    pbFail(r, 'update game');
+  }
+
+  if (fn === 'mt_push_events') {
+    const rows = (a.p_rows || []).slice();
+    const workers = [];
+    for (let w = 0; w < 4; w++) {
+      workers.push((async () => {
+        while (rows.length) await pbPushEvent(code, rows.shift());
+      })());
+    }
+    await Promise.all(workers);
+    return (a.p_rows || []).length;
+  }
+
+  if (fn === 'mt_set_claim') {
+    const id = pbRecordId('c|' + code + '|' + a.p_device);
+    const body = { name: String(a.p_name || '').slice(0, 40), claims: a.p_claims || {} };
+    const sentAt = Date.now();
+    let r = await pbFetch('PATCH', PB_CLAIMS, id, code, body);
+    if (r.status === 404) {
+      r = await pbFetch('POST', PB_CLAIMS, null, code, Object.assign({ id: id, game: code, device_id: a.p_device }, body));
+    }
+    if (!r.ok) pbFail(r, 'save what you are tracking');
+    notePbServerTime(r.data && r.data.updated, sentAt);
+    return null;
+  }
+
+  if (fn === 'mt_leave') {
+    await pbFetch('DELETE', PB_CLAIMS, pbRecordId('c|' + code + '|' + a.p_device), code);
+    return null;
+  }
+
+  if (fn === 'mt_pull') {
+    const since = a.p_since || null;
+    const filter = `game='${code}'` + (since ? ` && updated>'${since}'` : '');
+    const [g, eventRecs, claimRecs] = await Promise.all([
+      pbFetch('GET', PB_GAMES, gid, code),
+      pbListAll(PB_EVENTS, code, filter, 'updated'),
+      pbListAll(PB_CLAIMS, code, `game='${code}'`, '')
+    ]);
+    if (g.status === 404) return null;
+    if (!g.ok) pbFail(g, 'load game');
+    let maxUpdated = 0;
+    const events = eventRecs.map(r => {
+      const u = fromPbTime(r.updated);
+      if (u > maxUpdated) maxUpdated = u;
+      return { id: r.event_id, device_id: r.device_id, data: r.data, deleted: !!r.deleted, updated_at: u };
+    });
+    return {
+      now: Date.now() + pbServerOffset,
+      // Look back 10 seconds on the next pull so nothing saved at the same moment slips past
+      next_since: maxUpdated ? toPbTime(maxUpdated - 10000) : since,
+      meta: (g.data && g.data.meta) || {},
+      meta_rev: (g.data && g.data.meta_rev) || 0,
+      events: events,
+      claims: claimRecs.map(c => ({ device_id: c.device_id, name: c.name, claims: c.claims || {}, updated_at: fromPbTime(c.updated) }))
+    };
+  }
+
+  throw new Error('Unknown call ' + fn);
 }
 
 function generateShareCode() {
@@ -3082,7 +3250,7 @@ async function doFlushShareOutbox(sh) {
   if (!sh || state.shared !== sh) return;
   if (sh.metaDirty) {
     const seq = sh.metaLocalSeq;
-    const rev = await sbRpc('mt_set_meta', { p_code: sh.code, p_meta: sharedMetaSnapshot() });
+    const rev = await mtApi('mt_set_meta', { p_code: sh.code, p_meta: sharedMetaSnapshot() });
     if (state.shared === sh) {
       if (typeof rev === 'number') sh.metaRev = rev;
       if (sh.metaLocalSeq === seq) sh.metaDirty = false;
@@ -3101,14 +3269,14 @@ async function doFlushShareOutbox(sh) {
         deleted: !!op.deleted || !!(prev && prev.deleted)
       });
     });
-    await sbRpc('mt_push_events', { p_code: sh.code, p_rows: Array.from(byId.values()) });
+    await mtApi('mt_push_events', { p_code: sh.code, p_rows: Array.from(byId.values()) });
     sh.outbox.splice(0, batch.length);
     save();
   }
 }
 
 async function pushMyClaims(sh) {
-  await sbRpc('mt_set_claim', {
+  await mtApi('mt_set_claim', {
     p_code: sh.code,
     p_device: state.deviceId,
     p_name: state.trackerName || '',
@@ -3146,7 +3314,7 @@ function ingestPull(sh, res) {
 
   const serverNow = res.now ? new Date(res.now).getTime() : Date.now();
   sh.serverNow = serverNow;
-  sh.since = new Date(serverNow - 10000).toISOString();
+  sh.since = res.next_since || null;
   sh.others = (res.claims || [])
     .filter(c => c.device_id !== state.deviceId)
     .map(c => ({
@@ -3167,7 +3335,7 @@ function ingestPull(sh, res) {
 }
 
 async function pullShared(sh) {
-  const res = await sbRpc('mt_pull', { p_code: sh.code, p_since: sh.since });
+  const res = await mtApi('mt_pull', { p_code: sh.code, p_since: sh.since });
   if (state.shared !== sh) return;
   if (!res) { handleSharedGameGone(); return; }
   const changed = ingestPull(sh, res);
@@ -3249,7 +3417,7 @@ async function startSharedGame() {
   try {
     for (let i = 0; i < 5 && !code; i++) {
       const candidate = generateShareCode();
-      const ok = await sbRpc('mt_create_game', { p_code: candidate, p_meta: sharedMetaSnapshot() });
+      const ok = await mtApi('mt_create_game', { p_code: candidate, p_meta: sharedMetaSnapshot() });
       if (ok) code = candidate;
     }
   } catch (e) {
@@ -3296,7 +3464,7 @@ async function joinSharedGame(codeArg) {
   }
   let res;
   try {
-    res = await sbRpc('mt_pull', { p_code: code, p_since: null });
+    res = await mtApi('mt_pull', { p_code: code, p_since: null });
   } catch (e) {
     alert('Could not reach the server. Check your connection and try again.\n\n' + e.message);
     return;
@@ -3335,7 +3503,7 @@ async function leaveSharedGameQuietly(skipPendingCheck) {
     const n = sh.outbox.length;
     if (!confirm(`${n} tap${n === 1 ? '' : 's'} from this phone haven't uploaded yet, probably because there's no signal. If you leave now the other trackers won't get ${n === 1 ? 'it' : 'them'}. Leave anyway?`)) return false;
   }
-  try { await sbRpc('mt_leave', { p_code: sh.code, p_device: state.deviceId }); } catch (e) {}
+  try { await mtApi('mt_leave', { p_code: sh.code, p_device: state.deviceId }); } catch (e) {}
   stopSharePolling();
   state.shared = null;
   claimDraft = null;

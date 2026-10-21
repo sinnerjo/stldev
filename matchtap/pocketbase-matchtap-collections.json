@@ -1,0 +1,66 @@
+[
+  {
+    "name": "matchtap_games",
+    "type": "base",
+    "listRule": "code = @request.query.code",
+    "viewRule": "code = @request.query.code",
+    "createRule": "@request.body.meta_rev = 1",
+    "updateRule": "code = @request.query.code && @request.body.code:isset = false",
+    "deleteRule": null,
+    "fields": [
+      { "name": "id", "type": "text", "system": true, "primaryKey": true, "required": true, "min": 15, "max": 15, "pattern": "^[a-z0-9]+$", "autogeneratePattern": "[a-z0-9]{15}" },
+      { "name": "code", "type": "text", "required": true, "min": 6, "max": 6, "pattern": "^[A-Z0-9]{6}$" },
+      { "name": "meta", "type": "json", "required": false, "maxSize": 20000 },
+      { "name": "meta_rev", "type": "number", "required": false, "onlyInt": true, "min": 0 },
+      { "name": "created", "type": "autodate", "onCreate": true, "onUpdate": false },
+      { "name": "updated", "type": "autodate", "onCreate": true, "onUpdate": true }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX `idx_matchtap_games_code` ON `matchtap_games` (`code`)"
+    ]
+  },
+  {
+    "name": "matchtap_events",
+    "type": "base",
+    "listRule": "game = @request.query.code",
+    "viewRule": "game = @request.query.code",
+    "createRule": "@request.body.game = @request.query.code && @collection.matchtap_games.code ?= @request.query.code",
+    "updateRule": "game = @request.query.code && @request.body.deleted = true && @request.body.game:isset = false && @request.body.event_id:isset = false && @request.body.data:isset = false",
+    "deleteRule": null,
+    "fields": [
+      { "name": "id", "type": "text", "system": true, "primaryKey": true, "required": true, "min": 15, "max": 15, "pattern": "^[a-z0-9]+$", "autogeneratePattern": "[a-z0-9]{15}" },
+      { "name": "game", "type": "text", "required": true, "min": 6, "max": 6, "pattern": "^[A-Z0-9]{6}$" },
+      { "name": "event_id", "type": "text", "required": true, "max": 40 },
+      { "name": "device_id", "type": "text", "required": false, "max": 40 },
+      { "name": "data", "type": "json", "required": true, "maxSize": 20000 },
+      { "name": "deleted", "type": "bool", "required": false },
+      { "name": "created", "type": "autodate", "onCreate": true, "onUpdate": false },
+      { "name": "updated", "type": "autodate", "onCreate": true, "onUpdate": true }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX `idx_matchtap_events_game_event` ON `matchtap_events` (`game`, `event_id`)",
+      "CREATE INDEX `idx_matchtap_events_game_updated` ON `matchtap_events` (`game`, `updated`)"
+    ]
+  },
+  {
+    "name": "matchtap_claims",
+    "type": "base",
+    "listRule": "game = @request.query.code",
+    "viewRule": "game = @request.query.code",
+    "createRule": "@request.body.game = @request.query.code && @collection.matchtap_games.code ?= @request.query.code",
+    "updateRule": "game = @request.query.code && @request.body.game:isset = false && @request.body.device_id:isset = false",
+    "deleteRule": "game = @request.query.code",
+    "fields": [
+      { "name": "id", "type": "text", "system": true, "primaryKey": true, "required": true, "min": 15, "max": 15, "pattern": "^[a-z0-9]+$", "autogeneratePattern": "[a-z0-9]{15}" },
+      { "name": "game", "type": "text", "required": true, "min": 6, "max": 6, "pattern": "^[A-Z0-9]{6}$" },
+      { "name": "device_id", "type": "text", "required": true, "max": 40 },
+      { "name": "name", "type": "text", "required": false, "max": 40 },
+      { "name": "claims", "type": "json", "required": false, "maxSize": 8000 },
+      { "name": "created", "type": "autodate", "onCreate": true, "onUpdate": false },
+      { "name": "updated", "type": "autodate", "onCreate": true, "onUpdate": true }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX `idx_matchtap_claims_game_device` ON `matchtap_claims` (`game`, `device_id`)"
+    ]
+  }
+]

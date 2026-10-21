@@ -194,10 +194,9 @@ const DIFFS={
 };
 let diff='normal',state,player,pipes,score,bests={easy:0,normal:0,hard:0},frame,parts;
 
-// ===== Global Top 10 leaderboard (Supabase) =====
-const SB_URL='https://rwxicipfkhbmcekkxaaq.supabase.co';
-const SB_KEY='sb_publishable_lPBsfLiVhYqEJJPUp9fp3g_fLerQWJZ'; // publishable key, safe to be public
-const MAX_SCORE=500; // keep in sync with the check constraint on the scores table
+// ===== Global Top 10 leaderboard (PocketBase on jrwserver) =====
+const API_URL='https://jrwserver.ddns.net:8091/api/collections/flappyball_scores/records';
+const MAX_SCORE=500; // keep in sync with the max on the score field
 const boards={easy:undefined,normal:undefined,hard:undefined}; // undefined = loading, null = unavailable, array = rows
 const BLOCKED=new Set(['ASS','ARS','CUM','CUN','KUM','COC','COK','KOK','DIC','DIK','DIX','FAG','FAP','FCK','FKU','FUC','FUK','FUQ','FUX','HOE','JIZ','KKK','KYS','NIG','NGR','NGA','NAZ','PIS','SEX','SHT','SLT','TIT','TWT','VAG','WTF','XXX','POS','GFY']);
 let entry=null,saveStatus='',saveToken=0,boardHi=null,deadAt=0;
@@ -206,22 +205,22 @@ function getSaved(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse
 function setSaved(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 (function(){const b=getSaved('fb_bests',{});for(const k in bests){if(Number.isFinite(b[k]))bests[k]=b[k];}})();
 
-function sbFetch(path,opts={}){
+function apiFetch(url,opts={}){
   const ctrl=new AbortController(),t=setTimeout(()=>ctrl.abort(),8000);
-  return fetch(SB_URL+'/rest/v1/'+path,Object.assign({},opts,{signal:ctrl.signal,
-    headers:Object.assign({apikey:SB_KEY,'Content-Type':'application/json'},opts.headers||{})}))
+  return fetch(url,Object.assign({},opts,{signal:ctrl.signal,
+    headers:Object.assign({'Content-Type':'application/json'},opts.headers||{})}))
     .finally(()=>clearTimeout(t));
 }
 async function loadBoard(d){
   try{
-    const r=await sbFetch('scores?select=initials,score&difficulty=eq.'+d+'&order=score.desc,created_at.asc&limit=10');
+    const q='?sort=-score,created&perPage=10&skipTotal=1&fields=initials,score&filter='+encodeURIComponent("(difficulty='"+d+"')");
+    const r=await apiFetch(API_URL+q);
     if(!r.ok)throw new Error('HTTP '+r.status);
-    boards[d]=await r.json();
+    boards[d]=(await r.json()).items.map(x=>({initials:x.initials,score:Number(x.score)}));
   }catch(e){if(boards[d]===undefined)boards[d]=null;}
 }
 async function postScore(initials,s,d){
-  const r=await sbFetch('scores',{method:'POST',headers:{Prefer:'return=minimal'},
-    body:JSON.stringify({initials,score:s,difficulty:d})});
+  const r=await apiFetch(API_URL,{method:'POST',body:JSON.stringify({initials,score:s,difficulty:d})});
   if(!r.ok)throw new Error('HTTP '+r.status);
 }
 function qualifies(s){

@@ -967,7 +967,7 @@
   <div class="screen active" id="screen-setup">
     <div class="setup-block">
       <h2>Opponent</h2>
-      <input type="text" id="opponent-input" placeholder="e.g. StlDev FC" onchange="sharedSetupFieldChanged()">
+      <input type="text" id="opponent-input" placeholder="e.g. StlDev FC" onchange="setupFieldChanged()">
     </div>
 
     <div class="setup-block">
@@ -982,15 +982,15 @@
 
     <div class="setup-block" id="team-name-block" style="display:none;">
       <h2>Team name</h2>
-      <input type="text" id="team-name-input" placeholder="e.g. StlDev FC" onchange="sharedSetupFieldChanged()">
+      <input type="text" id="team-name-input" placeholder="e.g. StlDev FC" onchange="setupFieldChanged()">
     </div>
 
     <div class="setup-block" id="player-name-block" style="display:none;">
       <h2>Player name</h2>
-      <input type="text" id="player-name-input" placeholder="e.g. Emma" onchange="sharedSetupFieldChanged()">
+      <input type="text" id="player-name-input" placeholder="e.g. Emma" onchange="setupFieldChanged()">
       <div class="add-row">
-        <input type="text" id="player-number-input" placeholder="Number (optional)" inputmode="numeric" maxlength="2" style="flex:1;">
-        <select id="player-position-input" style="flex:1;">
+        <input type="text" id="player-number-input" placeholder="Number (optional)" inputmode="numeric" maxlength="2" style="flex:1;" onchange="setupFieldChanged()">
+        <select id="player-position-input" style="flex:1;" onchange="setupFieldChanged()">
           <option value="">Position (optional)</option>
           <option value="GK">GK</option>
           <option value="DEF">DEF</option>
@@ -3115,11 +3115,11 @@ function readSetupFields() {
   }
 }
 
-function sharedSetupFieldChanged() {
-  if (!state.shared) return;
+// Names typed in Setup apply right away, whether or not a game is running or shared
+function setupFieldChanged() {
   readSetupFields();
   save();
-  shareMetaChanged();
+  if (state.shared) shareMetaChanged();
 }
 
 function refreshSetupFieldsFromState() {

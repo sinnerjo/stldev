@@ -1590,7 +1590,8 @@ const MODE_LABELS = {
   team_individual: () => 'Team mode, by player'
 };
 
-function renderTrackScreen() {
+// The line under the MatchTap title, e.g. "Spain vs Rush 2015"
+function renderHeader() {
   const base = (MODE_LABELS[state.mode] || (() => ''))();
   const isTeamMode = state.mode === 'team_whole' || state.mode === 'team_individual';
   let headerText;
@@ -1600,6 +1601,11 @@ function renderTrackScreen() {
     headerText = state.opponent ? base + ' - vs ' + state.opponent : base;
   }
   document.getElementById('header-sub').textContent = headerText;
+}
+
+function renderTrackScreen() {
+  const isTeamMode = state.mode === 'team_whole' || state.mode === 'team_individual';
+  renderHeader();
 
   document.getElementById('end-game-btn').style.display = state.gameDate ? 'block' : 'none';
 
@@ -3119,6 +3125,7 @@ function readSetupFields() {
 function setupFieldChanged() {
   readSetupFields();
   save();
+  renderHeader();
   if (state.shared) shareMetaChanged();
 }
 

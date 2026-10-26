@@ -69,6 +69,7 @@ button:focus-visible{outline:3px solid var(--flood);outline-offset:3px}
 @keyframes bn{0%{opacity:0;transform:scale(1.25)}12%{opacity:1;transform:scale(1)}78%{opacity:1}100%{opacity:0}}
 #bTitle{font-size:clamp(52px,11vw,104px);font-weight:900;line-height:.9;color:var(--chalk);text-shadow:0 5px 0 rgba(0,0,0,.45)}
 #bSub{font-family:var(--body);font-size:18px;color:var(--flood);font-weight:600;margin-top:8px;text-shadow:0 2px 6px rgba(0,0,0,.7)}
+#ver{position:fixed;left:calc(env(safe-area-inset-left,0px) + 10px);bottom:calc(env(safe-area-inset-bottom,0px) + 8px);font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--chalk);background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:2px 7px;opacity:.85;pointer-events:none;z-index:1000;font-variant-numeric:tabular-nums}
 #hurt{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 45%,rgba(220,28,18,.6) 100%)}
 
 /* Touch controls */
@@ -235,6 +236,8 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(52px,12vw,92px);li
     <div class="row"><button class="cta" id="btnAgain" type="button">Rematch</button><button class="ghost" id="btnMenu" type="button">Menu</button></div>
   </div>
 </div>
+
+<div id="ver" aria-label="Version 1.3">v1.3</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>

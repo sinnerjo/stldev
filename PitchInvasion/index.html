@@ -743,7 +743,7 @@ function banner(title,sub){
   const b=$('banner'); $('bTitle').textContent=title; $('bSub').textContent=sub||'';
   b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
 }
-function mult(){ return Math.min(5,1+Math.floor(streak/4)); }
+function mult(){ return Math.min(100,1+Math.floor(streak/4)); }
 
 /* ---------- Enemies ---------- */
 function makeBar(){
@@ -765,9 +765,10 @@ function spawnPoint(){
 function spawnEnemy(type){
   const d=TYPES[type], pp=d.build();
   pp.root.position.copy(spawnPoint());
-  const e={type,d,pp,pos:pp.root.position,hp:d.hp,max:d.hp,knock:new V3(),cd:rand(1,d.rate||2),buff:0,flash:0,dying:false,dieT:0,
+  const hpMax=d.hp+(type==='opp'?D.oppHp:D.hp);
+  const e={type,d,pp,pos:pp.root.position,hp:hpMax,max:hpMax,knock:new V3(),cd:rand(1,d.rate||2),buff:0,flash:0,dying:false,dieT:0,
     lungeT:0,lungeCd:rand(1,3),lungeDir:new V3(),strafe:Math.random()<.5?-1:1,phase:rand(0,6),hopY:0};
-  if(d.hp>1){e.bar=makeBar();drawBar(e);}
+  if(hpMax>1){e.bar=makeBar();drawBar(e);}
   const tg=TAGS[type]; e.tag=makeSprite(badgeTex(tg.text,tg.bg,tg.fg),.44); e.ring=groundRing(tg.ring);
   if(type==='keeper') e.ring.scale.setScalar(1.35);
   enemies.push(e);
@@ -787,6 +788,22 @@ function pickType(w){
   let x=Math.random()*tot; for(const r of table){ if((x-=r[1])<=0) return r[0]; }
   return 'opp';
 }
+// Difficulty: waves 1 to 5 ramp gently, then every cleared wave past 5 stacks more pressure.
+let D={speed:1,dmg:1,proj:1,rate:1,hp:0,oppHp:0,group:0};
+function computeDiff(w){
+  const x=Math.max(0,w-5);
+  D={
+    speed:Math.min(2.2,1+Math.min(.16,(w-1)*.04)+x*.06),
+    dmg:Math.min(2.2,1+x*.07),
+    proj:Math.min(1.8,1+x*.05),
+    rate:Math.max(.4,1-x*.05),
+    hp:Math.floor(x/3),
+    oppHp:Math.floor(x/5),
+    group:Math.min(.6,x*.06)
+  };
+}
+function waveCount(w){ const x=Math.max(0,w-5); return 5+w*3+Math.round(x*x*.35+x*2); }
+function spawnGap(w){ const x=Math.max(0,w-5); return Math.max(.12,Math.max(.28,1.3-w*.07)-x*.03); }
 const WAVE_SUB=['','The opposition storms the pitch','Keepers and rowdy fans join in','The referees want a word','Here come the coaches'];
 function hitEnemy(e,dmg,dir){
   if(e.dying) return;
@@ -828,7 +845,7 @@ function fire(e){
   if(e.d.ranged==='card'){ red=wave>=4&&Math.random()<(wave>=7?.4:.25); t=cardTex(red); h=red?.95:.75; spd=red?14:12; dmg=red?25:12; }
   else { text=pick(SHOUTS); t=shoutTex(text); h=1.05; spd=7.5; dmg=8; }
   const s=makeSprite(t,h); s.position.copy(from);
-  projs.push({s,vel:dir.clone().multiplyScalar(spd),dmg,life:3.4,spin:e.d.ranged==='card'?rand(6,10):0});
+  projs.push({s,vel:dir.clone().multiplyScalar(spd*D.proj),dmg:Math.round(dmg*D.dmg),life:3.4,spin:e.d.ranged==='card'?rand(6,10):0});
 }
 
 /* ---------- Kick and ball ---------- */
@@ -1002,7 +1019,7 @@ function updatePlayer(dt){
 
 /* ---------- Enemies update ---------- */
 function updateEnemies(dt){
-  const ws=1+Math.min(.5,(wave-1)*.04);
+  const ws=D.speed;
   for(let i=enemies.length-1;i>=0;i--){
     const e=enemies[i];
     if(e.dying){
@@ -1031,7 +1048,7 @@ function updateEnemies(dt){
       else { mv.set(-to.z*e.strafe,0,to.x*e.strafe).multiplyScalar(.6); if(Math.random()<dt*.3) e.strafe*=-1; }
       e.cd-=dt;
       if(e.cd<=0&&dist<R+3){
-        e.cd=e.d.rate*rand(.8,1.2);
+        e.cd=e.d.rate*rand(.8,1.2)*D.rate;
         if(e.d.support){
           ring(e.pos,0xff5a3c); popup('PRESS!',e.pos,'#ff7a5a',.8);
           for(const o of enemies){ if(o!==e&&!o.dying&&o.pos.distanceTo(e.pos)<9) o.buff=3; }
@@ -1061,7 +1078,7 @@ function updateEnemies(dt){
     e.ring.position.x=e.pos.x; e.ring.position.z=e.pos.z;
     // contact
     if(dist<e.d.r+.45){
-      damagePlayer(e.d.dmg);
+      damagePlayer(Math.round(e.d.dmg*D.dmg));
       e.knock.addScaledVector(to,-7);
     }
   }
@@ -1118,14 +1135,19 @@ function updateWaves(dt){
   if(W.phase==='break'){
     W.t-=dt;
     if(W.t<=0){
-      wave++; W.toSpawn=5+wave*3; W.spawnT=.4; W.phase='live';
-      banner('WAVE '+wave,WAVE_SUB[wave]||pick(['They keep coming','The whole league is here','Hold the line','No one leaves this pitch']));
+      wave++; computeDiff(wave); W.toSpawn=waveCount(wave); W.spawnT=.4; W.phase='live';
+      const sub=WAVE_SUB[wave]||(wave===6?'Difficulty up. They get faster and tougher every wave now':'Difficulty up · '+pick(['Faster and tougher','They keep coming','The whole league is here','Hold the line','No one leaves this pitch']));
+      banner('WAVE '+wave,sub);
       whistle();
     }
   } else {
     if(W.toSpawn>0){
       W.spawnT-=dt;
-      if(W.spawnT<=0){ spawnEnemy(pickType(wave)); W.toSpawn--; W.spawnT=Math.max(.28,1.3-wave*.07)*rand(.6,1.4); }
+      if(W.spawnT<=0){
+        let n=1; if(Math.random()<D.group) n+=1+(Math.random()<D.group?1:0);
+        for(let k=0;k<n&&W.toSpawn>0;k++){ spawnEnemy(pickType(wave)); W.toSpawn--; }
+        W.spawnT=spawnGap(wave)*rand(.6,1.4);
+      }
     } else if(!enemies.some(e=>!e.dying)){
       const bonus=wave*250; score+=bonus;
       banner('WAVE CLEARED','+'+bonus+' bonus');
@@ -1195,8 +1217,10 @@ function updateAimFx(){
 
 /* ---------- Global top 10 (PocketBase on jrwserver) ---------- */
 const API_URL='https://jrwserver.ddns.net:8091/api/collections/pitchinvasion_scores/records';
-const MAX_SCORE=5000000; // keep in sync with the max on the score field
-const BLOCKED=new Set(['ASS','ARS','CUM','CUN','KUM','COC','COK','KOK','DIC','DIK','DIX','FAG','FAP','FCK','FKU','FUC','FUK','FUQ','FUX','HOE','JIZ','KKK','KYS','NIG','NGR','NGA','NAZ','PIS','SEX','SHT','SLT','TIT','TWT','VAG','WTF','XXX','POS','GFY']);
+const MAX_SCORE=100000000; // keep in sync with the max on the score field
+const BLOCKED=new Set(['ASS','ARS','CUM','CUN','KUM','COC','COK','KOK','DIC','DIK','DIX','FAG','FAP','FCK','FKU','FUC','FUK','FUQ','FUX','HOE','JIZ','KKK','KYS','NIG','NGR','NGA','NAZ','PIS','SEX','SHT','SLT','TIT','TWT','VAG','WTF','XXX','POS','GFY','ANL','AZZ','BCH','CNT','DMN','FKN','FKY','FUG','HOR','JAP','KMS','KIL','NUD','PNS','PRN','PUS','SUK','SUX','WOP','SPK','CHK','GOK','LSD','THC','STD','DIE','FML','STF']);
+// Swapped in when someone tries a word on the blocked list
+const SILLY=['MOO','OOF','BOO','YAY','LOL','GOO','WOW','YUM','ZAP','BAM','BOP','HAT','PUP','ZZZ','NAP','EGG','HUG','POP','FUN','SOX'];
 let board=undefined, boardHi=null, saving=false, lastRun=null;
 function apiFetch(url,opts){
   opts=opts||{};
@@ -1250,17 +1274,19 @@ $('entryForm').addEventListener('submit',async e=>{
   if(saving||!lastRun) return;
   const ini=$('iniInput').value.toUpperCase(), msg=$('entryMsg');
   if(!/^[A-Z]{3}$/.test(ini)){ msg.textContent='Use three letters, A to Z.'; msg.className='err'; return; }
-  if(BLOCKED.has(ini)){ msg.textContent='Please pick different initials.'; msg.className='err'; return; }
-  try{localStorage.setItem('pitchInvasionInitials',ini);}catch(err){}
+  let name=ini, swapped=false;
+  if(BLOCKED.has(ini)){ name=pick(SILLY); swapped=true; $('iniInput').value=name; }
+  try{localStorage.setItem('pitchInvasionInitials',name);}catch(err){}
   saving=true; $('iniInput').disabled=true; $('btnSave').disabled=true;
   msg.textContent='Saving...'; msg.className='';
   const run=lastRun;
   try{
-    const r=await apiFetch(API_URL,{method:'POST',body:JSON.stringify({initials:ini,score:run.score,wave:run.wave})});
+    const r=await apiFetch(API_URL,{method:'POST',body:JSON.stringify({initials:name,score:run.score,wave:run.wave})});
     if(!r.ok) throw new Error('HTTP '+r.status);
-    boardHi={ini,s:run.score}; msg.textContent='Saved. Look for your initials below.';
+    boardHi={ini:name,s:run.score};
+    msg.textContent=swapped?'Nice try. The ref changed your initials to '+name+'.':'Saved. Look for your initials below.';
     await loadBoard();
-    setTimeout(()=>{ if(lastRun===run) $('entryForm').hidden=true; },1800);
+    setTimeout(()=>{ if(lastRun===run) $('entryForm').hidden=true; },swapped?3500:1800);
   }catch(err){
     msg.textContent='Could not save your score. Check your connection and try again.'; msg.className='err';
     $('iniInput').disabled=false; $('btnSave').disabled=false;
@@ -1284,7 +1310,7 @@ function resetGame(){
   player.hp=100; player.inv=0; player.pos.set(0,0,4); player.vel.set(0,0,0); player.facing.set(0,0,-1); player.yaw=Math.PI; player.pp.root.rotation.y=Math.PI;
   ball.state='held'; ballMat.emissive.setHex(0); ball.pos.set(0,BALL_R,3.3);
   charging=false; charge=0; pressed=false; power=null; powerT=0;
-  W.phase='break'; W.t=1.4;
+  W.phase='break'; W.t=1.4; computeDiff(1);
   camTarget.copy(player.pos);
   for(const k in last) delete last[k];
 }

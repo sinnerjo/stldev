@@ -55,6 +55,10 @@ button:focus-visible{outline:3px solid var(--flood);outline-offset:3px}
 #sideStats{position:absolute;top:calc(env(safe-area-inset-top,0px) + 58px);right:calc(env(safe-area-inset-right,0px) + 14px);text-align:right;display:flex;flex-direction:column;gap:2px}
 #hLeft{font-size:20px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.6)}
 #hStreak{font-size:30px;font-weight:900;color:var(--card);line-height:1;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+#hStreakSub{font-family:var(--body);font-size:12.5px;font-weight:600;letter-spacing:.04em;color:var(--chalk);text-shadow:0 1px 4px rgba(0,0,0,.8);font-variant-numeric:tabular-nums}
+#hStreak.bump{animation:bump .22s ease}
+@keyframes bump{0%{transform:scale(1.35)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){#hStreak.bump{animation:none}}
 #ballPill{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 20px 9px;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:150px}
 #hBall{font-size:18px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk)}
 #hBall.out{color:var(--dim)}
@@ -69,7 +73,7 @@ button:focus-visible{outline:3px solid var(--flood);outline-offset:3px}
 @keyframes bn{0%{opacity:0;transform:scale(1.25)}12%{opacity:1;transform:scale(1)}78%{opacity:1}100%{opacity:0}}
 #bTitle{font-size:clamp(52px,11vw,104px);font-weight:900;line-height:.9;color:var(--chalk);text-shadow:0 5px 0 rgba(0,0,0,.45)}
 #bSub{font-family:var(--body);font-size:18px;color:var(--flood);font-weight:600;margin-top:8px;text-shadow:0 2px 6px rgba(0,0,0,.7)}
-#ver{position:fixed;left:calc(env(safe-area-inset-left,0px) + 10px);bottom:calc(env(safe-area-inset-bottom,0px) + 8px);font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--chalk);background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:2px 7px;opacity:.85;pointer-events:none;z-index:1000;font-variant-numeric:tabular-nums}
+#ver{position:fixed;right:calc(env(safe-area-inset-right,0px) + 10px);bottom:calc(env(safe-area-inset-bottom,0px) + 8px);font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--chalk);background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:2px 7px;opacity:.85;pointer-events:none;z-index:1000;font-variant-numeric:tabular-nums}
 #hurt{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 45%,rgba(220,28,18,.6) 100%)}
 
 /* Touch controls */
@@ -148,7 +152,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(52px,12vw,92px);li
     <button class="tbtn" id="btnMute" type="button">Sound on</button>
     <button class="tbtn" id="btnPause" type="button">Pause</button>
   </div>
-  <div id="sideStats"><div id="hLeft">Invaders 0</div><div id="hStreak"></div></div>
+  <div id="sideStats"><div id="hLeft">Invaders 0</div><div id="hStreak"></div><div id="hStreakSub"></div></div>
   <div id="ballPill"><span id="hPower"></span><span id="hBall">Ball at feet</span><div class="charge"><i id="hCharge"></i></div></div>
   <div id="banner"><div id="bTitle"></div><div id="bSub"></div></div>
 </div>
@@ -160,6 +164,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(52px,12vw,92px);li
 </div>
 
 <div class="screen" id="menu">
+  <div id="ver" aria-label="Version 1.6">v1.6</div>
   <div class="panel">
     <div class="kicker">STLDev arcade · Matchday</div>
     <h1>Pitch <span>Invasion</span></h1>
@@ -186,7 +191,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(52px,12vw,92px);li
           <dt>M</dt><dd>Mute</dd>
           <dt>Touch</dt><dd>Left thumb moves, KICK auto aims</dd>
         </dl>
-        <p class="hint" style="margin:12px 0 0">You wear the blue ring. Every invader has a colored ring and a name tag. Hits grow your streak multiplier, and a kick that hits nothing resets it. Score in either goal to earn a rocket ball or an exploding ball for 10 seconds.</p>
+        <p class="hint" style="margin:12px 0 0">You wear the blue ring. Every invader has a colored ring and a name tag. Every kick that hits an invader or scores a goal adds 1 to your multiplier, up to x100. A kick that hits nothing resets it. Score in either goal to earn a rocket ball or an exploding ball for 10 seconds.</p>
       </div>
     </div>
     <div class="row">
@@ -236,8 +241,6 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(52px,12vw,92px);li
     <div class="row"><button class="cta" id="btnAgain" type="button">Rematch</button><button class="ghost" id="btnMenu" type="button">Menu</button></div>
   </div>
 </div>
-
-<div id="ver" aria-label="Version 1.3">v1.3</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -746,7 +749,9 @@ function banner(title,sub){
   const b=$('banner'); $('bTitle').textContent=title; $('bSub').textContent=sub||'';
   b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
 }
-function mult(){ return Math.min(100,1+Math.floor(streak/4)); }
+// Streak counts kicks in a row that hit at least one invader or score a goal. Multiplier equals the streak, up to x100.
+function mult(){ return Math.min(100,Math.max(1,streak)); }
+function creditKick(){ if(kickHits===0){ streak++; bestStreak=Math.max(bestStreak,streak); } kickHits++; }
 
 /* ---------- Enemies ---------- */
 function makeBar(){
@@ -812,7 +817,7 @@ function hitEnemy(e,dmg,dir){
   if(e.dying) return;
   e.hp-=dmg; e.flash=.14;
   e.knock.addScaledVector(dir,e.type==='keeper'?6:10);
-  kickHits++; streak++; bestStreak=Math.max(bestStreak,streak);
+  creditKick();
   sfx.hit(); shake=Math.max(shake,.12);
   burst(e.pos,0xeef2e8,6,5);
   if(e.bar) drawBar(e);
@@ -899,7 +904,7 @@ function updateBall(dt){
       banner('GOAL!',(pw==='rocket'?'Rocket ball':'Exploding ball')+' for '+POWER_TIME+' seconds · +'+pts);
       popup('GOAL +'+pts,ball.pos,'#ffd21f',1.2); sfx.goal();
       burst(ball.pos,0xffd21f,22,8); burst(ball.pos,0xffffff,14,8);
-      kickHits++; streak++; bestStreak=Math.max(bestStreak,streak);
+      creditKick();
       toReturn();
     }
     if(ball.traveled>ball.range){ toReturn(); }
@@ -916,7 +921,7 @@ function updateBall(dt){
     rollBall(ball.vel,dt);
     if(d<1.25){
       ball.state='held'; ballMat.emissive.setHex(0x000000);
-      if(kickHits===0){ if(streak>=4) popup('STREAK LOST',player.pos,'#ff4b3e',.7); streak=0; }
+      if(kickHits===0){ if(streak>=3) popup('STREAK LOST',player.pos,'#ff4b3e',.7); streak=0; }
       sfx.trap();
       if(pressed){charging=true;charge=0;}
     }
@@ -1178,7 +1183,7 @@ function updateCamera(dt){
 }
 
 /* ---------- HUD ---------- */
-const H={wave:$('hWave'),score:$('hScore'),health:$('hHealth'),left:$('hLeft'),streak:$('hStreak'),ballTxt:$('hBall'),charge:$('hCharge'),power:$('hPower')};
+const H={wave:$('hWave'),score:$('hScore'),health:$('hHealth'),left:$('hLeft'),streak:$('hStreak'),streakSub:$('hStreakSub'),ballTxt:$('hBall'),charge:$('hCharge'),power:$('hPower')};
 const last={};
 function setText(k,el,v){ if(last[k]!==v){ last[k]=v; el.textContent=v; } }
 function updateHud(){
@@ -1189,7 +1194,10 @@ function updateHud(){
   const left=enemies.filter(e=>!e.dying).length+(W.phase==='live'?W.toSpawn:0);
   setText('left',H.left,'Invaders '+left);
   const m=mult();
-  setText('streak',H.streak,m>1?'x'+m+' streak':(streak>0?streak+' in a row':''));
+  // Big number is the multiplier; the line under it counts every hit so progress is always visible
+  const mt=streak>0?'x'+m:'';
+  if(last.streak!==mt){ const up=last.streak&&mt&&mt!==last.streak; last.streak=mt; H.streak.textContent=mt; if(up){H.streak.classList.remove('bump');void H.streak.offsetWidth;H.streak.classList.add('bump');} }
+  setText('streakSub',H.streakSub,streak>0?(streak>=100?'max multiplier':streak+(streak===1?' kick':' kicks')+' in a row'):'');
   const bt=ball.state==='held'?(charging?(charge>=.95?'Power shot!':'Charging'):'Ball at feet'):'Ball out';
   if(last.bt!==bt){ last.bt=bt; H.ballTxt.textContent=bt; H.ballTxt.classList.toggle('out',ball.state!=='held'); }
   const pl=power?(power==='rocket'?'Rocket ball ':'Exploding ball ')+Math.ceil(powerT)+'s':'';

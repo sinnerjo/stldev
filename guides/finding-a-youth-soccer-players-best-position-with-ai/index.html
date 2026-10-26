@@ -1,0 +1,612 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Finding a Youth Soccer Player's Best Position With AI</title>
+
+<!-- SEO -->
+<meta name="description" content="Use AI to shortlist positions for a youth soccer player: a skills checklist, copy and paste prompts, a trial plan, and rules to protect the player's identity." />
+<link rel="canonical" href="https://stldev.com/guides/finding-a-youth-soccer-players-best-position-with-ai/" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="author" content="Joseph Warren" />
+<meta name="theme-color" content="#0a1f0e" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="STL Soccer Dev Lab" />
+<meta property="og:title" content="Where Should This Player Play? Using AI to Find Position Candidates" />
+<meta property="og:description" content="A safer way to use AI for position decisions: no names, a fixed checklist, candidates instead of a verdict, and a trial before you decide." />
+<meta property="og:url" content="https://stldev.com/guides/finding-a-youth-soccer-players-best-position-with-ai/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="https://stldev.com/matchtap/icon-512.png" />
+<meta property="og:image:width" content="512" />
+<meta property="og:image:height" content="512" />
+<meta property="og:image:alt" content="MatchTap app icon" />
+<meta property="article:published_time" content="2026-10-26" />
+<meta property="article:modified_time" content="2026-10-26" />
+<meta property="article:author" content="Joseph Warren" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Where Should This Player Play? Using AI to Find Position Candidates" />
+<meta name="twitter:description" content="A safer way to use AI for position decisions: no names, a fixed checklist, candidates instead of a verdict, and a trial before you decide." />
+<meta name="twitter:image" content="https://stldev.com/matchtap/icon-512.png" />
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://stldev.com/guides/finding-a-youth-soccer-players-best-position-with-ai/#article",
+      "headline": "Where Should This Player Play? Using AI to Find Position Candidates",
+      "description": "A guide for youth soccer coaches on using an AI assistant to shortlist two or three positions worth trying for a player, with a skills checklist, game counts, the player's own words, five copy and paste prompts, a trial plan, and clear rules for protecting a child's identity, including options to use instead of a full name.",
+      "datePublished": "2026-10-26",
+      "dateModified": "2026-10-26",
+      "inLanguage": "en-US",
+      "image": "https://stldev.com/matchtap/icon-512.png",
+      "mainEntityOfPage": "https://stldev.com/guides/finding-a-youth-soccer-players-best-position-with-ai/",
+      "author": {
+        "@type": "Person",
+        "name": "Joseph Warren",
+        "url": "https://stldev.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "STL Soccer Dev Lab",
+        "url": "https://stldev.com/"
+      },
+      "about": [
+        "Youth soccer",
+        "Coaching",
+        "Player positions",
+        "AI for coaches"
+      ],
+      "mentions": {
+        "@type": "SoftwareApplication",
+        "name": "MatchTap",
+        "url": "https://stldev.com/matchtap/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "STL Soccer Dev Lab",
+          "item": "https://stldev.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Guides",
+          "item": "https://stldev.com/guides/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Finding a Best Position",
+          "item": "https://stldev.com/guides/finding-a-youth-soccer-players-best-position-with-ai/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XTR1SLXSTX');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pitch: #0a1f0e;
+    --turf: #12320f;
+    --lime: #b8f20a;
+    --lime-dim: #8abc06;
+    --chalk: #e8f5e9;
+    --body: #c9dfcc;
+    --terminal: #1a3a1e;
+    --accent: #f97316;
+    --muted: #7fa886;
+    --grid: rgba(184,242,10,0.06);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--pitch);
+    color: var(--body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(10,31,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,242,10,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    color: var(--lime);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 36px; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover, nav ul a.current { color: var(--lime); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 130px 24px 80px;
+  }
+
+  .crumbs {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .crumbs a { color: var(--lime-dim); text-decoration: none; }
+  .crumbs a:hover { color: var(--lime); }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.02em;
+    color: var(--chalk);
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--lime); }
+
+  .byline {
+    margin-top: 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 32px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: var(--chalk);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    line-height: 1.15;
+    color: var(--chalk);
+    margin: 64px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  h2 .tag {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--lime);
+    margin: 30px 0 8px;
+  }
+
+  p { margin-top: 16px; }
+  strong { color: var(--chalk); font-weight: 600; }
+  a { color: var(--lime); text-underline-offset: 3px; }
+  a:hover { color: var(--chalk); }
+
+  ul.plain, ol.plain { margin: 16px 0 0 22px; }
+  ul.plain li, ol.plain li { margin-top: 10px; padding-left: 4px; }
+  ul.plain li::marker { color: var(--accent); }
+  ol.plain li::marker { color: var(--lime); font-family: 'DM Mono', monospace; }
+
+  .table-wrap { margin-top: 24px; overflow-x: auto; border: 1px solid rgba(184,242,10,0.15); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 520px; }
+  th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--turf);
+    padding: 12px 14px;
+  }
+  td { padding: 12px 14px; border-top: 1px solid rgba(184,242,10,0.1); vertical-align: top; }
+  td:first-child { color: var(--chalk); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(26,58,30,0.35); }
+
+  .callout {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--terminal);
+    border-left: 3px solid var(--lime);
+  }
+  .callout p { margin-top: 0; }
+  .callout .label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 8px;
+  }
+  .callout.orange { border-left-color: var(--accent); }
+  .callout.orange .label { color: var(--accent); }
+
+  blockquote {
+    margin-top: 22px;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--accent);
+    color: var(--chalk);
+    font-size: 1.1rem;
+  }
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .cta {
+    margin-top: 40px;
+    padding: 36px 28px;
+    background: var(--turf);
+    border: 1px solid rgba(184,242,10,0.25);
+    text-align: center;
+  }
+  .cta h2 { margin: 0 0 12px; font-size: 1.7rem; }
+  .cta p { margin: 0 auto; max-width: 520px; }
+  .btn {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 14px 28px;
+    background: var(--lime);
+    color: var(--pitch);
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn:hover { background: var(--chalk); color: var(--pitch); transform: translateY(-2px); }
+
+  .sources { font-size: 0.9rem; }
+  .sources li { margin-top: 8px; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(184,242,10,0.1);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'DM Mono', monospace;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.12em; color: var(--lime); text-decoration: none; }
+  .footer-logo span { color: var(--accent); }
+  footer p { margin: 0; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer a { color: rgba(184,242,10,0.6); }
+
+  @media (max-width: 600px) {
+    table { min-width: 0; font-size: 0.85rem; }
+    th, td { padding: 10px 9px; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    main { padding: 110px 20px 60px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+
+  /* handbook layout diagram */
+  .diagram { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; margin: 26px 0 8px; }
+  .diagram-fig { margin: 0; }
+  .diagram-fig svg { width: 100%; height: auto; display: block; }
+  .diagram-fig figcaption { margin-top: 10px; font-size: 0.86rem; line-height: 1.55; color: var(--body); }
+  .diagram-wide { grid-template-columns: minmax(0, 520px); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <ul>
+    <li><a href="../../#projects">Projects</a></li>
+    <li><a href="../" class="current">Guides</a></li>
+    <li><a href="../../subgo/">SubGo</a></li>
+    <li><a href="../../matchtap/">MatchTap</a></li>
+    <li><a href="../../flappyball/">FlappyBall</a></li>
+  </ul>
+</nav>
+
+<main>
+  <p class="crumbs"><a href="../../">Home</a> / <a href="../">Guides</a> / Best Position</p>
+
+  <article>
+    <h1>Finding a Player's <span class="accent">Best Position</span> With AI</h1>
+    <p class="byline">By Joseph Warren &middot; Youth soccer coach and creator of MatchTap &middot; October 26, 2026 &middot; 14 min read</p>
+
+    <p class="lead">Every coach hits the same question around the middle of a season: where should this player actually play? You have a feeling, but a feeling formed from a few Saturdays, a loud parent, and whoever happened to be tallest is not much to build on. An AI assistant can help you slow down, line up what you have really seen, and turn it into two or three positions worth trying and a plan to test them. It cannot see your player, and it should never be the one that decides. This guide shows how to use it for the first job and not the second, with copy and paste prompts, and with the privacy rules that come first.</p>
+
+    <div class="callout">
+      <span class="label">Who this guide is for</span>
+      <p>Coaches of players roughly ages 9 and up who play 7v7, 9v9, or 11v11 and want a more careful way to choose where a player lines up. For ages 8 and under, there are no positions to find, and our <a href="../youth-soccer-positions-explained-simply/">positions guide</a> explains why. Pair this with our <a href="../growth-and-maturity-in-youth-soccer/">growth and maturity guide</a>, because size is the easiest thing to mistake for skill.</p>
+    </div>
+
+    <div class="callout orange">
+      <span class="label">The short version</span>
+      <ul class="plain">
+        <li><strong>Ask AI for candidates and a trial plan, not a verdict.</strong> Official guidance and the research both say positions should stay flexible through the early teens.</li>
+        <li><strong>Never type a player's full name,</strong> or a photo, birthdate, school, or club, into an AI tool. Use a jersey number, a letter code, or no label at all.</li>
+        <li><strong>Feed it a fixed checklist,</strong> a few game counts, and the player's own words, so the answer comes from what you saw and not from a general impression.</li>
+        <li><strong>Make it argue against itself.</strong> A second prompt that looks for mistakes is the most useful one in this guide.</li>
+        <li><strong>Test each candidate for a few games,</strong> track the minutes, and decide on what happens on the field, with the player's input.</li>
+        <li><strong>Keep size and skill apart.</strong> A tall player is not automatically a defender.</li>
+      </ul>
+    </div>
+
+    <h2 id="verdict"><span class="tag">The idea</span>Why a candidate list beats a verdict</h2>
+
+    <p>U.S. Soccer's page for 7v7 says players "should be encouraged to try all positions at this age group," and its U9 to U10 age group guide tells coaches to encourage players to play multiple positions and roles. The U13 to U14 and U15 to U16 guides, as we noted in our positions guide, still encourage different positions. For 11v11, U.S. Soccer's positional traits page lists six jobs: goalkeepers, full backs, central backs, central mids, wide forwards, and a center forward. In other words, the official guidance treats positions as something to explore, not something to settle early.</p>
+
+    <p>Research gives a second reason for caution. A 2017 study in the <em>International Journal of Sports Medicine</em> (Towlson and colleagues) looked at 465 elite male youth players from U13 to U18. Central defenders and goalkeepers were generally taller and heavier than other players at every age group, and more advanced in maturation at U13 and U14. Position specific physical differences showed up mainly later, at U15 to U16 and more clearly at U17 to U18. The authors concluded that relative age, maturation, and body size push players into key defensive roles early, and that selectors should treat playing positions as plastic until players reach full maturity. That study is of elite academy boys, so it will not describe your team exactly, but the warning travels: the player you want to put at center back may just be the one who grew first.</p>
+
+    <p>There is also no proven test for this. A 2022 scoping review in the <em>Journal of Sports Sciences</em> (McCalman and colleagues) covered 93 studies and 226 skill assessments in youth soccer. About 68 percent were done in settings that do not resemble a match, 99 percent focused on attacking skills, and the authors say there is no consensus on the best way to measure skill. The checklist below is therefore not a validated test. It is a way to organize what you have seen so that a person, or a program, can reason about it.</p>
+
+    <p>Your own memory is the weak link, too. In a study of elite youth coaches that we cover in our <a href="../youth-soccer-stat-tracking/">stat tracking guide</a>, six coaches watched ten players across eight matches, and their unaided observations were accurate only about 39 percent of the time. A structured list and a few counts beat a hunch, which is the whole case for doing this carefully.</p>
+
+    <div class="diagram diagram-wide"><figure class="diagram-fig"><svg viewBox="0 0 360 412" role="img" aria-label="Loop in five steps: observe with a checklist, counts and the words of the player; a safety gate where names come out and codes go in; ask the AI for candidates and then to argue against them; get two or three candidate positions; trial each for two or three games with minutes tracked; decide with your own eyes and the voice of the player, then loop back to observing."><rect x="4" y="4" width="352" height="404" rx="6" fill="#0f2a12" stroke="#b8f20a" stroke-opacity="0.35"/><text x="180" y="28" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#b8f20a" text-anchor="middle" font-weight="700">THE POSITION LOOP</text><rect x="24" y="44" width="280" height="52" rx="4" fill="#12320f" stroke="#b8f20a" stroke-width="1.5"/><text x="38" y="66" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#b8f20a" font-weight="700">1  OBSERVE</text><text x="38" y="84" font-family="'DM Mono', ui-monospace, monospace" font-size="10" fill="#e8f5e9">checklist, game counts, the player's words</text><rect x="24" y="142" width="280" height="52" rx="4" fill="#12320f" stroke="#b8f20a" stroke-width="1.5"/><text x="38" y="164" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#b8f20a" font-weight="700">2  ASK AI</text><text x="38" y="182" font-family="'DM Mono', ui-monospace, monospace" font-size="10" fill="#e8f5e9">candidates first, then argue against them</text><rect x="24" y="210" width="280" height="52" rx="4" fill="#12320f" stroke="#b8f20a" stroke-width="1.5"/><text x="38" y="232" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#b8f20a" font-weight="700">3  CANDIDATES</text><text x="38" y="250" font-family="'DM Mono', ui-monospace, monospace" font-size="10" fill="#e8f5e9">two or three, with missing evidence</text><rect x="24" y="278" width="280" height="52" rx="4" fill="#12320f" stroke="#b8f20a" stroke-width="1.5"/><text x="38" y="300" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#b8f20a" font-weight="700">4  TRIAL</text><text x="38" y="318" font-family="'DM Mono', ui-monospace, monospace" font-size="10" fill="#e8f5e9">two to three games, minutes tracked</text><rect x="24" y="346" width="280" height="52" rx="4" fill="#12320f" stroke="#b8f20a" stroke-width="1.5"/><text x="38" y="368" font-family="'DM Mono', ui-monospace, monospace" font-size="12" fill="#b8f20a" font-weight="700">5  DECIDE</text><text x="38" y="386" font-family="'DM Mono', ui-monospace, monospace" font-size="10" fill="#e8f5e9">your eyes and the player's voice</text><rect x="24" y="106" width="280" height="26" rx="4" fill="#f97316"/><text x="164" y="123" font-family="'DM Mono', ui-monospace, monospace" font-size="11" fill="#0a1f0e" text-anchor="middle" font-weight="700">GATE: NAMES OUT, CODES IN</text><path d="M158 202 L164 210 L170 202 Z" fill="#7fa886"/><path d="M158 270 L164 278 L170 270 Z" fill="#7fa886"/><path d="M158 338 L164 346 L170 338 Z" fill="#7fa886"/><path d="M158 96 L164 104 L170 96 Z" fill="#7fa886"/><path d="M158 132 L164 140 L170 132 Z" fill="#7fa886"/><path d="M304 372 L336 372 L336 70 L312 70" fill="none" stroke="#f97316" stroke-width="1.8"/><path d="M314 64 L304 70 L314 76 Z" fill="#f97316"/><text x="344" y="226" font-family="'DM Mono', ui-monospace, monospace" font-size="9" fill="#f97316" text-anchor="middle" transform="rotate(90 344 226)">REPEAT EACH SEASON</text></svg><figcaption>The loop this guide follows. The orange gate is the safety step: names come out before anything is typed into an AI tool. The last step feeds back into the first, because a trial gives you new observations.</figcaption></figure></div>
+
+    <h2 id="safety"><span class="tag">Safety first</span>Before you type anything: protect the player</h2>
+
+    <p>The prompts in this guide work with no real name at all, so there is no reason to type one. Leave out a full name, a photo or video, a birthdate, an address, a school, a medical detail, a diagnosis, anything a parent told you privately, and the name of the team, club, league, or tournament. A name is not the only way to identify a child. An age group plus a club plus a jersey number can point to one person, so the safest profile has none of the three together.</p>
+
+    <div class="callout orange">
+      <span class="label">The rule</span>
+      <p>Describe the player, never identify the player. If you would not want the text to appear in a parent group chat, do not put it in an AI chat. This is the same standard we use in every guide on this site: jersey numbers or initials, or nothing identifying at all.</p>
+    </div>
+
+    <h3>Options instead of a name</h3>
+    <p>Pick one and use it for the whole conversation.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Option</th><th>Looks like</th><th>Watch out for</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Jersey number</td><td>"Player 7"</td><td>Quick and familiar. Leave the club and team out so the number cannot be traced.</td></tr>
+          <tr><td>Letter code with a private key</td><td>"Player A"</td><td>Good for comparing several players. Keep the key on paper or in a private note, never in the chat.</td></tr>
+          <tr><td>Initials</td><td>"Player M"</td><td>Use only a first initial, and skip it if the team is named or the initial is unusual.</td></tr>
+          <tr><td>An invented label</td><td>"Player Blue"</td><td>Make it up yourself. Do not use a real nickname the child is known by.</td></tr>
+          <tr><td>No label at all</td><td>"A U11 player who..."</td><td>Safest. Use one player per chat and describe the skills only.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Habits that go with it</h3>
+    <ul class="plain">
+      <li><strong>Use age groups,</strong> "U11" or "an 11 year old," never a birthdate.</li>
+      <li><strong>One player per chat.</strong> Start a new conversation for the next player instead of comparing children side by side by name.</li>
+      <li><strong>Strip exported files.</strong> A MatchTap CSV has a player column, and a SubGo CSV includes player names. Delete that column or swap in your codes before pasting anything.</li>
+      <li><strong>Never upload photos, video, or screenshots</strong> that show faces, names, or numbers with a team.</li>
+      <li><strong>Keep sensitive context out.</strong> Behavior notes, a medical condition, or a parent's private comment do not belong in a position prompt. Our <a href="../coaching-players-with-adhd-youth-soccer/">ADHD guide</a> follows the same rule.</li>
+      <li><strong>Check your data settings.</strong> Anthropic says it uses consumer chats for model training only if you allow it, and that incognito chats are never used. OpenAI says turning off "Improve the model for everyone" stops training use of your chats, and that Temporary Chats are removed after 30 days and not used for training. Policies change, so read the current page for the tool you use.</li>
+      <li><strong>Tell families in one line</strong> in your preseason message that you use AI tools for planning without names. Follow any club or league policy on tools and player information.</li>
+    </ul>
+
+    <p>Even a coded profile is something to treat with care. It describes a child, and it lives in a chat history. Delete the conversation when you are done, and do not paste AI output that contains a real name into a team app.</p>
+
+    <h2 id="inputs"><span class="tag">Step one</span>Gather three kinds of input</h2>
+
+    <h3>1. Your observations, in a fixed format</h3>
+    <p>Rate the player on each item as <strong>S</strong> (strong), <strong>D</strong> (developing), or <strong>N</strong> (not seen yet). The "not seen yet" option matters, because the honest answer for many items is that you have not watched closely. These items come from the jobs in our positions guide and from general coaching practice. They are my checklist, not a validated instrument.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Item</th><th>What strong looks like</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>First touch</td><td>Keeps the ball close, even with a defender near.</td></tr>
+          <tr><td>Passing</td><td>Finds teammates, short and, when ready, longer.</td></tr>
+          <tr><td>1v1 with the ball</td><td>Beats a defender or protects the ball.</td></tr>
+          <tr><td>Finishing</td><td>Shoots early, on target, when open.</td></tr>
+          <tr><td>1v1 defending</td><td>Stays on feet, delays, wins it back.</td></tr>
+          <tr><td>Positioning</td><td>Stays between ball and goal, or finds space when attacking.</td></tr>
+          <tr><td>Awareness</td><td>Looks around before the ball arrives.</td></tr>
+          <tr><td>Work rate</td><td>Sprints back after losing the ball.</td></tr>
+          <tr><td>Communication</td><td>Talks to teammates and helps organize.</td></tr>
+          <tr><td>Composure</td><td>Stays calm after a mistake.</td></tr>
+          <tr><td>Speed and stamina</td><td>Keeps pace late in the game. Score it separately from skill.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Goalkeeping is deliberately left off. Ask for volunteers and never push a child into goal, as our <a href="../goalkeeper-basics-for-youth-soccer-coaches/">goalkeeper guide</a> explains. Add a line or two of notes about what you saw in games, not only practice, because a player can look different when the game is fast.</p>
+
+    <h3>2. A few game counts</h3>
+    <p>Counts can add a reality check, but only if you read them carefully. In MatchTap's Player or Team individual modes, every tap is tagged to a player, and each finished game exports as a CSV with the timestamp, game clock, half, player, event, and note. Three details shape how you should use it. MatchTap does not add up season totals, so you build the running table yourself. Its CSV has no position column, so write the job and the minutes beside each game (SubGo's Summary screen shows positions and minutes if you use it). And counts reflect the job as much as the player: a defender will have more tackles than a forward, and that says nothing about talent. Use at least three to five games, which is my rule of thumb, and remember that opponents and weather vary.</p>
+
+    <h3>3. The player's own words</h3>
+    <p>Ask the player which jobs they enjoy, where they feel useful, and what they would like to try, in a relaxed moment and not at halftime. A 2021 study in the <em>International Journal of Environmental Research and Public Health</em> (Sevil-Serrano and colleagues) surveyed 203 youth soccer players aged 10 to 19 in Spain. Coach autonomy support was linked to players feeling more competent, more autonomous, and more connected to teammates, which in turn was linked to stronger commitment to the sport, and intimidation was the controlling behavior most tied to frustrated needs. The design was a single survey, so it shows association and not cause, but it fits the common sense approach: a player who has a say is more likely to want to stay. Parents can add something too. Ask what their child says about the game at home, not where the parent wants them to play.</p>
+
+    <h2 id="prompts"><span class="tag">Step two</span>The prompts</h2>
+
+    <p>Use a fresh chat for each player, and swap each bracket for your own details. Keep the label you chose above in place of any name.</p>
+
+    <h3>Prompt 1: Get candidates, not a verdict</h3>
+    <blockquote>
+      "I coach a [age group] team that plays [format]. I want two or three positions worth trying for one player, not a final answer. Call the player [your code, such as Player 7]. My observations, where S is strong, D is developing and N is not seen yet: [paste your list, such as first touch S, passing S, 1v1 defending D]. Notes from games: [one or two sentences]. The player said: [their own words]. Using only what I gave you, suggest two or three positions with reasons tied to specific items above. For each one, tell me what evidence is missing and what I could watch for to check it. Do not guess anything about the player's size, maturity, or personality that I did not tell you."
+      <cite>Paste your own list in place of the brackets</cite>
+    </blockquote>
+
+    <h3>Prompt 2: Add the counts</h3>
+    <blockquote>
+      "Here are [Player 7]'s counts from [number] games, with the job played and the minutes for each game. [Paste a simple table with no name column.] Tell me what these counts can and cannot show. Compare per game and per 10 minutes, point out which counts depend on the job played, and tell me whether the sample is big enough to say anything. Do not treat a count as a skill rating."
+      <cite>Paste after Prompt 1, in the same chat</cite>
+    </blockquote>
+
+    <h3>Prompt 3: Make it argue against itself</h3>
+    <blockquote>
+      "Here is the recommendation you gave: [paste it]. Argue against it. List three reasons it could be wrong, including the chance that I am mistaking size, speed, or age within the age group for skill, that the player has only played one job, or that I am seeing what I expect to see. Then list three questions I should answer before I change anything."
+      <cite>The most useful of the five, because assistants often go along with the way you frame a question</cite>
+    </blockquote>
+
+    <h3>Prompt 4: Plan the trial</h3>
+    <blockquote>
+      "Design a trial for [Player 7] at [candidate position] over [three] games. Give the minutes per game and which half, two things to watch for, one short cue I can say from the sideline, and a rule for deciding whether to keep, change, or stop, written now, before the games. Keep minutes fair for the whole team."
+      <cite>Write the decision rule down before the first game</cite>
+    </blockquote>
+
+    <h3>Prompt 5: Ask the player without a test feel</h3>
+    <blockquote>
+      "Write four short questions I can ask a [age] year old about which jobs on the field they enjoy and feel useful in, and what they would like to try. No leading questions, no right answers, and nothing about being good or bad at something. Add one sentence I can say first to make clear this is not a test."
+      <cite>Use it before Prompt 1 so their words go in</cite>
+    </blockquote>
+
+    <div class="callout">
+      <span class="label">What a useful answer looks like</span>
+      <p>This is an example of the shape of a good reply, written by me about an invented player, not a recording. For "Player 7," a U11 9v9 player marked strong at passing, first touch and awareness and developing at 1v1 defending and positioning, a useful reply names central midfield first, because passing and looking around fit the job, and says the missing evidence is how the player handles pressure. It names an outside back second, noting that work rate fits but 1v1 defending is still developing, so it is worth a trial and not a verdict. It then lists what to watch (does the player look before receiving, and does she recover quickly after losing the ball) and asks the coach to confirm the player is not simply the oldest or biggest in the group. A weak reply says "Player 7 is a midfielder" and stops.</p>
+    </div>
+
+    <h2 id="trial"><span class="tag">Step three</span>Trial it, then decide with your own eyes</h2>
+
+    <p>A candidate is a hypothesis. Put the player there for a half, or a few practices, across at least three games, which is my suggestion and not a rule. Track minutes by position so you know the trial actually happened, because it is easy to remember it as longer than it was. Watch for the two things from Prompt 4, ask the player how it felt, and compare notes against your original checklist. Write the decision rule down first, such as "keep this up if she looks before receiving in most touches and still enjoys it," so the result is judged against a standard you set in advance.</p>
+
+    <p>Age changes how you use all of this. For ages 8 and under, skip it entirely. For U9 and U10, official guidance says to try all positions, so use AI to plan a fair rotation, not to find a single best fit. For U11 and U12, use candidates and trials, but keep every player rotating. For U13 and up, give the candidates more weight, and still revisit them each season because bodies and skills keep changing. These bands are my suggestions, built from the official guidance above.</p>
+
+    <p>If a player loves one position, you do not have to say no. Let them play it for part of the game, as our positions guide suggests, and use the rest of the time to try another candidate.</p>
+
+    <h2 id="limits"><span class="tag">Honest limits</span>Where AI goes wrong</h2>
+
+    <ul class="plain">
+      <li><strong>It has not seen your player.</strong> It can only reorganize what you wrote, so vague input produces confident sounding nonsense.</li>
+      <li><strong>It often goes along with your framing.</strong> That is why Prompt 3 exists. If you say you think she is a striker, expect to hear reasons she is a striker.</li>
+      <li><strong>It can invent facts.</strong> Delete any line that says "research shows" without a source, and check anything about league rules yourself.</li>
+      <li><strong>It cannot separate size from skill</strong> unless you do. The research above says physical size and maturity steer players into roles early.</li>
+      <li><strong>Counts depend on the job.</strong> Without the position and minutes, a number means little.</li>
+      <li><strong>A small sample misleads.</strong> Our <a href="../youth-soccer-player-development-tracking/">player development tracking guide</a> explains why one game tells you almost nothing.</li>
+    </ul>
+
+    <h2 id="mistakes"><span class="tag">Watch out</span>Common mistakes</h2>
+
+    <ul class="plain">
+      <li><strong>Typing a player's full name,</strong> photo, birthdate, or school into an AI tool. Use a code or nothing at all.</li>
+      <li><strong>Treating the answer as a decision.</strong> It is a list of ideas to test.</li>
+      <li><strong>Locking a young player into one spot</strong> after one good or bad stretch, when official guidance expects rotation.</li>
+      <li><strong>Picking the biggest kid for defense</strong> and the fastest for forward, without checking whether size is the only reason.</li>
+      <li><strong>Pasting an unedited CSV,</strong> with the player column still in it.</li>
+      <li><strong>Skipping the player's voice,</strong> or letting a parent's preference decide.</li>
+      <li><strong>Never rechecking.</strong> A position that fit in September may not in May.</li>
+    </ul>
+
+    <div class="cta">
+      <h2>Count what you saw before you ask</h2>
+      <p>MatchTap tags every pass, tackle, and shot to a player, and exports each game as a CSV you can strip of names and paste into Prompt 2. Its CSV has no position column and it does not add up a season, so note the job and the minutes beside each game. Free, with no account.</p>
+      <a class="btn" href="../../matchtap/">Try MatchTap Free</a>
+    </div>
+
+    <h2 id="sources"><span class="tag">Sources</span>Where these ideas come from</h2>
+    <ul class="plain sources">
+      <li><a href="https://www.ussoccer.com/us-way/player-development/game/formations/u9-u10-7v7" rel="noopener">U9 to U10, 7v7 formation</a>, U.S. Soccer.</li>
+      <li><a href="https://www.ussoccer.com/us-way/player-development/environment/age-group-guide/u9-u10" rel="noopener">U9 to U10 age group guide</a>, U.S. Soccer.</li>
+      <li><a href="https://www.ussoccer.com/us-way/player-development/environment/age-group-guide/u13-u14" rel="noopener">U13 to U14 age group guide</a>, U.S. Soccer, as summarized in our <a href="../youth-soccer-positions-explained-simply/">positions guide</a>.</li>
+      <li><a href="https://www.ussoccer.com/us-way/player-development/player/positional-traits" rel="noopener">Positional Traits</a>, U.S. Soccer.</li>
+      <li><a href="https://research.edgehill.ac.uk/en/publications/relative-age-maturation-and-physical-biases-on-position-allocatio/" rel="noopener">Relative age, maturation and physical biases on position allocation in elite youth soccer</a>, Towlson, Cobley, Midgley, Garrett, Parkin and Lovell, <em>International Journal of Sports Medicine</em>, 2017.</li>
+      <li><a href="https://researchportal.scu.edu.au/esploro/outputs/journalArticle/Skill-assessments-in-youth-soccer-A/991012988296502368" rel="noopener">Skill assessments in youth soccer: A scoping review</a>, McCalman, Crowley-McHattan, Fransen and Bennett, <em>Journal of Sports Sciences</em>, 2022.</li>
+      <li><a href="https://journals.sagepub.com/doi/abs/10.1177/1747954116676109" rel="noopener">The observational analysis of elite coaches within youth soccer: The importance of performance analysis</a>, Nicholls and Worsfold, <em>International Journal of Sports Science and Coaching</em>, 2016.</li>
+      <li><a href="https://mdpi-res.com/d_attachment/ijerph/ijerph-18-08699/article_deploy/ijerph-18-08699.pdf" rel="noopener">The Influence of the Coach's Autonomy Support and Controlling Behaviours on Motivation and Sport Commitment of Youth Soccer Players</a>, Sevil-Serrano, Abós, Diloy-Peña, Egea and García-González, <em>International Journal of Environmental Research and Public Health</em>, 2021.</li>
+      <li><a href="https://privacy.claude.com/en/articles/10023548" rel="noopener">How long do you store my data?</a>, Anthropic privacy center.</li>
+      <li><a href="https://help.openai.com/en/articles/7730893-data-controls" rel="noopener">Data Controls FAQ</a>, OpenAI Help Center.</li>
+    </ul>
+    <p class="note">The skill checklist, the age bands, the three to five game minimums, and the example reply are our own coaching suggestions, not research findings or official guidance. The Towlson study covers elite male academy players, and the Sevil-Serrano study was a single survey, so neither proves cause and effect for a recreational team. Privacy settings and policies change, so confirm them on the tool's own pages. This guide is general information and does not replace your club or league's player information rules.</p>
+
+  </article>
+
+</main>
+
+<footer>
+  <a class="footer-logo" href="../../">STL<span>Dev</span>Lab</a>
+  <p>stldev.com &middot; St. Louis Soccer Software</p>
+  <p>&copy; 2026 Joseph Warren &middot; STLDev &middot; stldev.com</p>
+</footer>
+
+</body>
+</html>

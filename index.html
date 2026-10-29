@@ -7,7 +7,7 @@
   <title>STL Soccer Dev Lab | Free Coaching Apps + AI Guides for Youth Soccer</title>
 
   <!-- SEO -->
-  <meta name="description" content="Free soccer software from St. Louis: SubGo substitution tracker, MatchTap live match stats, and the FlappyBall and Pitch Invasion arcade games, plus coaching guides built around using AI as an assistant coach. Made by a coach." />
+  <meta name="description" content="Free soccer software from St. Louis: SubGo substitution tracker, MatchTap live match stats, PointTap training points tracker, and the FlappyBall and Pitch Invasion arcade games, plus coaching guides built around using AI as an assistant coach. Made by a coach." />
   <link rel="canonical" href="https://stldev.com/" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="author" content="Joseph Warren" />
@@ -18,7 +18,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="STL Soccer Dev Lab" />
   <meta property="og:title" content="STL Soccer Dev Lab | Free Coaching Apps + AI Guides for Youth Soccer" />
-  <meta property="og:description" content="Free soccer software built in St. Louis: SubGo, MatchTap, FlappyBall, and Pitch Invasion, plus coaching guides built around using AI as an assistant coach." />
+  <meta property="og:description" content="Free soccer software built in St. Louis: SubGo, MatchTap, PointTap, FlappyBall, and Pitch Invasion, plus coaching guides built around using AI as an assistant coach." />
   <meta property="og:url" content="https://stldev.com/" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:image" content="https://stldev.com/og-image.png" />
@@ -28,7 +28,7 @@
   <!-- Twitter / X card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="STL Soccer Dev Lab | Free Coaching Apps + AI Guides for Youth Soccer" />
-  <meta name="twitter:description" content="Free soccer software built in St. Louis: SubGo, MatchTap, FlappyBall, and Pitch Invasion, plus coaching guides built around using AI as an assistant coach." />
+  <meta name="twitter:description" content="Free soccer software built in St. Louis: SubGo, MatchTap, PointTap, FlappyBall, and Pitch Invasion, plus coaching guides built around using AI as an assistant coach." />
   <meta name="twitter:image" content="https://stldev.com/og-image.png" />
 
   <!-- Structured data (JSON-LD) -->
@@ -74,6 +74,16 @@
         "name": "MatchTap",
         "url": "https://stldev.com/matchtap/",
         "description": "Live match event tracker for coaches and parents. Log passes, shots, cards, and more, then review the stats after the game.",
+        "applicationCategory": "SportsApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@id": "https://stldev.com/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "PointTap",
+        "url": "https://stldev.com/pointtap/",
+        "description": "Track points for each player during a training activity and see who finished on top. Works offline and installs like an app.",
         "applicationCategory": "SportsApplication",
         "operatingSystem": "Web",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
@@ -561,6 +571,12 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    @media (min-width: 769px) and (max-width: 1180px) {
+      nav { padding: 18px 24px; }
+      nav ul { gap: 16px; margin-left: 16px; }
+      nav a { letter-spacing: 0.06em; white-space: nowrap; }
+    }
+
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
       nav ul { display: none; }
@@ -584,6 +600,7 @@
       <li><a href="./flappyball/">FlappyBall</a></li>
       <li><a href="./PitchInvasion/">Pitch Invasion</a></li>
       <li><a href="./matchtap/">MatchTap</a></li>
+      <li><a href="./pointtap/">PointTap</a></li>
       <li><a href="./guides/">Guides</a></li>
       <li><a href="#about">About</a></li>
     </ul>
@@ -617,6 +634,7 @@
       <div class="ticker-item"><span>&bull;</span> STL Soccer Dev Lab</div>
       <div class="ticker-item"><span>&bull;</span> SubGo App</div>
       <div class="ticker-item"><span>&bull;</span> MatchTap App</div>
+      <div class="ticker-item"><span>&bull;</span> PointTap App</div>
       <div class="ticker-item"><span>&bull;</span> Pitch Invasion Game</div>
       <div class="ticker-item"><span>&bull;</span> Open Source</div>
       <div class="ticker-item"><span>&bull;</span> Built in St. Louis</div>
@@ -625,6 +643,7 @@
       <div class="ticker-item"><span>&bull;</span> STL Soccer Dev Lab</div>
       <div class="ticker-item"><span>&bull;</span> SubGo App</div>
       <div class="ticker-item"><span>&bull;</span> MatchTap App</div>
+      <div class="ticker-item"><span>&bull;</span> PointTap App</div>
       <div class="ticker-item"><span>&bull;</span> Pitch Invasion Game</div>
       <div class="ticker-item"><span>&bull;</span> Open Source</div>
       <div class="ticker-item"><span>&bull;</span> Built in St. Louis</div>
@@ -677,6 +696,17 @@
           shots, cards, and more, then review the stats after the whistle.
         </p>
         <div class="card-arrow">Launch MatchTap &rarr;</div>
+      </a>
+
+      <a href="./pointtap/" class="card">
+        <div class="card-tag">New</div>
+        <h3>PointTap</h3>
+        <p>
+          A simple points tracker for training activities. Add your players,
+          tap + and &minus; as they score, and see the standings the moment
+          the activity ends.
+        </p>
+        <div class="card-arrow">Launch PointTap &rarr;</div>
       </a>
 
       <a href="./guides/" class="card">

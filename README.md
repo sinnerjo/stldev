@@ -10,6 +10,7 @@ Free soccer coaching apps and guides, built in St. Louis by a youth soccer coach
 | --- | --- |
 | [SubGo](https://stldev.com/subgo/) | Substitution and playing time tracker for youth games |
 | [MatchTap](https://stldev.com/matchtap/) | Live match stat tracking from the sideline |
+| [PointTap](https://stldev.com/pointtap/) | Points tracker for training activities, with a standings page |
 | [FlappyBall](https://stldev.com/flappyball/) | Soccer themed arcade game with a leaderboard |
 | [Pitch Invasion](https://stldev.com/PitchInvasion/) | 3D soccer arcade shooter with a global top 10 |
 

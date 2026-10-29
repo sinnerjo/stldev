@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PointTap</title>
+<meta name="description" content="Track points for each player during a training activity and see who finished on top.">
+<meta name="theme-color" content="#00004a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #00001a;
+    --panel: #0a0a3a;
+    --panel2: #12125a;
+    --line: #23237a;
+    --text: #eef0ff;
+    --muted: #9aa0d0;
+    --accent: #e8ff47;
+    --plus: #2ecc71;
+    --minus: #ff5c5c;
+    --gold: #ffd447;
+    --silver: #cfd6e6;
+    --bronze: #e0995e;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', system-ui, sans-serif;
+    display: flex; flex-direction: column;
+    padding-top: env(safe-area-inset-top);
+    overscroll-behavior: none;
+  }
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; background: #00004a; border-bottom: 1px solid var(--line);
+  }
+  .brand { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: .5px; }
+  .brand span { color: var(--accent); }
+  .ver { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  main { flex: 1; overflow-y: auto; padding: 16px 16px 110px; max-width: 720px; width: 100%; margin: 0 auto; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; margin: 0 0 12px; letter-spacing: .3px; }
+  .sub { color: var(--muted); font-size: 14px; margin: -6px 0 14px; }
+
+  .addrow { display: flex; gap: 8px; margin-bottom: 8px; }
+  input[type=text], textarea {
+    flex: 1; min-width: 0; background: var(--panel); color: var(--text);
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+    font: inherit; font-size: 16px;
+  }
+  textarea { width: 100%; min-height: 110px; resize: vertical; }
+  input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .hint { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+
+  button { font: inherit; cursor: pointer; border: none; }
+  .btn {
+    background: var(--accent); color: #00001a; font-weight: 600;
+    border-radius: 10px; padding: 12px 16px; font-size: 16px;
+  }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  .btn.danger { background: transparent; color: var(--minus); border: 1px solid #6a2a3a; }
+  .btn:disabled { opacity: .4; cursor: default; }
+
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .toolbar .btn { flex: 1; padding: 10px 12px; font-size: 15px; }
+
+  .player {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 10px; margin-bottom: 10px;
+  }
+  .player .name { flex: 1; min-width: 0; font-size: 18px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .player .pts {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 700;
+    min-width: 54px; text-align: center; color: var(--accent);
+  }
+  .player .pts.bump { animation: bump .25s ease; }
+  @keyframes bump { 50% { transform: scale(1.25); } }
+  .tap {
+    width: 56px; height: 56px; border-radius: 12px; font-size: 30px; font-weight: 700;
+    display: grid; place-items: center; line-height: 1; user-select: none;
+  }
+  .tap.plus { background: var(--plus); color: #00140a; }
+  .tap.minus { background: transparent; color: var(--minus); border: 2px solid var(--minus); }
+  .tap:active { transform: scale(.94); }
+  .tap:disabled { opacity: .3; }
+
+  .player.edit .tap, .player.edit .pts { display: none; }
+  .player .del, .player .ren { display: none; width: 44px; height: 44px; border-radius: 10px; font-size: 18px; }
+  .player.edit .del, .player.edit .ren { display: grid; place-items: center; }
+  .player .ren { background: var(--panel2); color: var(--text); }
+  .player .del { background: transparent; color: var(--minus); border: 1px solid #6a2a3a; }
+
+  .empty { text-align: center; color: var(--muted); padding: 40px 16px; border: 1px dashed var(--line); border-radius: 14px; }
+
+  /* Standings */
+  .podium { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: end; margin-bottom: 18px; }
+  .pod { background: var(--panel); border: 1px solid var(--line); border-radius: 14px 14px 6px 6px; text-align: center; padding: 12px 6px; }
+  .pod .medal { font-size: 28px; }
+  .pod .pname { font-weight: 600; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pod .ppts { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; }
+  .pod.p1 { min-height: 150px; border-color: var(--gold); }
+  .pod.p1 .ppts { color: var(--gold); }
+  .pod.p2 { min-height: 125px; }
+  .pod.p2 .ppts { color: var(--silver); }
+  .pod.p3 { min-height: 105px; }
+  .pod.p3 .ppts { color: var(--bronze); }
+  .pod.blank { visibility: hidden; }
+
+  .row { display: grid; grid-template-columns: 38px 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .row:last-child { border-bottom: none; }
+  .table { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .rank { font-family: 'DM Mono', monospace; color: var(--muted); font-size: 15px; }
+  .row .rname { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar { height: 6px; background: var(--panel2); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+  .row .rpts { font-family: 'Barlow Condensed', sans-serif; font-size: 24px; font-weight: 700; min-width: 40px; text-align: right; }
+  .row.r1 .rpts { color: var(--gold); }
+  .row.r2 .rpts { color: var(--silver); }
+  .row.r3 .rpts { color: var(--bronze); }
+
+  /* Bottom nav */
+  nav {
+    position: fixed; left: 0; right: 0; bottom: 0; display: flex;
+    background: #00004a; border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  nav button {
+    flex: 1; background: none; color: var(--muted); padding: 10px 0 12px;
+    font-size: 13px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  nav button .ico { font-size: 22px; }
+  nav button.active { color: var(--accent); }
+
+  /* Undo bar */
+  .undo {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(76px + env(safe-area-inset-bottom));
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 6px 6px 16px; display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.5); max-width: calc(100% - 32px);
+    transition: opacity .2s, transform .2s;
+  }
+  .undo.hidden { opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(10px); }
+  .undo .msg { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .undo button { background: var(--accent); color: #00001a; font-weight: 700; border-radius: 999px; padding: 8px 16px; }
+
+  /* Modal */
+  .modal { position: fixed; inset: 0; background: rgba(0,0,10,.7); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 10; }
+  .modal.open { display: flex; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; width: 100%; max-width: 400px; }
+  .card h3 { margin: 0 0 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 22px; }
+  .card p { color: var(--muted); margin: 0 0 16px; }
+  .card input { width: 100%; margin-bottom: 16px; }
+  .card .actions { display: flex; gap: 8px; }
+  .card .actions .btn { flex: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Point<span>Tap</span></div>
+  <div class="ver">v1.0.0</div>
+</header>
+
+<main>
+  <!-- SCORE VIEW -->
+  <section id="view-score" class="view active">
+    <div class="toolbar">
+      <button class="btn ghost" id="btnResetPts">↺ Reset Points</button>
+    </div>
+    <div id="scoreList"></div>
+  </section>
+
+  <!-- STANDINGS VIEW -->
+  <section id="view-standings" class="view">
+    <h2>Standings</h2>
+    <p class="sub" id="standSub"></p>
+    <div id="podium" class="podium"></div>
+    <div id="standTable" class="table"></div>
+  </section>
+
+  <!-- ROSTER VIEW -->
+  <section id="view-roster" class="view">
+    <h2>Players</h2>
+    <div class="addrow">
+      <input type="text" id="nameInput" placeholder="Player name" autocomplete="off" enterkeyhint="done" maxlength="40">
+      <button class="btn" id="btnAdd">Add</button>
+    </div>
+    <p class="hint">Tip: paste a list of names separated by commas or new lines to add a whole roster at once.</p>
+    <div class="toolbar">
+      <button class="btn ghost" id="btnEdit">✎ Edit Players</button>
+      <button class="btn danger" id="btnClearRoster">Clear Roster</button>
+    </div>
+    <div id="rosterList"></div>
+  </section>
+</main>
+
+<div class="undo hidden" id="undoBar">
+  <span class="msg" id="undoMsg"></span>
+  <button id="btnUndo">Undo</button>
+</div>
+
+<nav>
+  <button data-view="score" class="active"><span class="ico">＋</span>Score</button>
+  <button data-view="standings"><span class="ico">🏆</span>Standings</button>
+  <button data-view="roster"><span class="ico">👥</span>Players</button>
+</nav>
+
+<!-- Confirm modal -->
+<div class="modal" id="confirmModal">
+  <div class="card">
+    <h3 id="cfTitle"></h3>
+    <p id="cfText"></p>
+    <div class="actions">
+      <button class="btn ghost" id="cfCancel">Cancel</button>
+      <button class="btn" id="cfOk">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Rename modal -->
+<div class="modal" id="renameModal">
+  <div class="card">
+    <h3>Rename Player</h3>
+    <input type="text" id="renameInput" maxlength="40" autocomplete="off">
+    <div class="actions">
+      <button class="btn ghost" id="rnCancel">Cancel</button>
+      <button class="btn" id="rnOk">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const KEY = 'pointtap.v1';
+  const MAX_UNDO = 50;
+
+  // ---------- State ----------
+  let state = { players: [], undo: [] };
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (Array.isArray(s.players)) state.players = s.players;
+        if (Array.isArray(s.undo)) state.undo = s.undo;
+      }
+    } catch (e) {}
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const byId = id => state.players.find(p => p.id === id);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+  function pushUndo(entry) {
+    state.undo.push(entry);
+    if (state.undo.length > MAX_UNDO) state.undo.shift();
+  }
+
+  // ---------- Actions ----------
+  function addNames(text) {
+    const names = text.split(/[\n,]+/).map(n => n.trim()).filter(Boolean);
+    let added = 0;
+    for (const n of names) {
+      if (state.players.some(p => p.name.toLowerCase() === n.toLowerCase())) continue;
+      state.players.push({ id: uid(), name: n.slice(0, 40), points: 0 });
+      added++;
+    }
+    if (added) { save(); render(); }
+    return { added, skipped: names.length - added };
+  }
+
+  function change(id, delta) {
+    const p = byId(id);
+    if (!p) return;
+    if (delta < 0 && p.points <= 0) return;
+    p.points += delta;
+    pushUndo({ type: 'delta', id, delta, name: p.name });
+    save();
+    renderScore(id);
+    showUndo(`${delta > 0 ? '+1' : '−1'} ${p.name} (now ${p.points})`);
+  }
+
+  function resetPoints() {
+    const snapshot = state.players.map(p => ({ id: p.id, points: p.points }));
+    if (!snapshot.some(s => s.points !== 0)) return;
+    state.players.forEach(p => p.points = 0);
+    pushUndo({ type: 'reset', snapshot });
+    save(); render();
+    showUndo('All points reset to 0');
+  }
+
+  function clearRoster() {
+    const snapshot = JSON.parse(JSON.stringify(state.players));
+    state.players = [];
+    state.undo = [{ type: 'clear', snapshot }];
+    editMode = false;
+    save(); render();
+    showUndo('Roster cleared');
+  }
+
+  function removePlayer(id) {
+    const idx = state.players.findIndex(p => p.id === id);
+    if (idx < 0) return;
+    const [p] = state.players.splice(idx, 1);
+    pushUndo({ type: 'remove', player: p, idx });
+    save(); render();
+    showUndo(`Removed ${p.name}`);
+  }
+
+  function renamePlayer(id, name) {
+    const p = byId(id);
+    name = name.trim().slice(0, 40);
+    if (!p || !name) return;
+    if (state.players.some(o => o.id !== id && o.name.toLowerCase() === name.toLowerCase())) return;
+    p.name = name;
+    save(); render();
+  }
+
+  function undo() {
+    const e = state.undo.pop();
+    if (!e) return;
+    if (e.type === 'delta') {
+      const p = byId(e.id);
+      if (p) p.points = Math.max(0, p.points - e.delta);
+    } else if (e.type === 'reset') {
+      e.snapshot.forEach(s => { const p = byId(s.id); if (p) p.points = s.points; });
+    } else if (e.type === 'clear') {
+      state.players = e.snapshot;
+    } else if (e.type === 'remove') {
+      state.players.splice(Math.min(e.idx, state.players.length), 0, e.player);
+    }
+    save(); render();
+    if (state.undo.length) showUndo('Undone. Tap again to undo more');
+    else hideUndo();
+  }
+
+  // ---------- Undo bar ----------
+  const undoBar = document.getElementById('undoBar');
+  const undoMsg = document.getElementById('undoMsg');
+  let undoTimer;
+  function showUndo(msg) {
+    undoMsg.textContent = msg;
+    document.getElementById('btnUndo').style.display = '';
+    undoBar.classList.remove('hidden');
+    clearTimeout(undoTimer);
+    undoTimer = setTimeout(hideUndo, 5000);
+  }
+  function hideUndo() { undoBar.classList.add('hidden'); }
+  document.getElementById('btnUndo').onclick = undo;
+
+  // ---------- Rendering ----------
+  let editMode = false;
+
+  function renderScore(bumpId) {
+    const el = document.getElementById('scoreList');
+    if (!state.players.length) {
+      el.innerHTML = `<div class="empty">No players yet.<br><br><button class="btn" data-goto="roster">Add Players</button></div>`;
+      return;
+    }
+    el.innerHTML = state.players.map(p => `
+      <div class="player">
+        <button class="tap minus" data-act="minus" data-id="${p.id}" aria-label="Minus one point for ${esc(p.name)}" ${p.points <= 0 ? 'disabled' : ''}>−</button>
+        <div class="name">${esc(p.name)}</div>
+        <div class="pts ${p.id === bumpId ? 'bump' : ''}">${p.points}</div>
+        <button class="tap plus" data-act="plus" data-id="${p.id}" aria-label="Plus one point for ${esc(p.name)}">+</button>
+      </div>`).join('');
+  }
+
+  function rankPlayers() {
+    const sorted = [...state.players].sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
+    let lastPts = null, lastRank = 0;
+    return sorted.map((p, i) => {
+      if (p.points !== lastPts) { lastRank = i + 1; lastPts = p.points; }
+      return { ...p, rank: lastRank };
+    });
+  }
+
+  function renderStandings() {
+    const ranked = rankPlayers();
+    const podium = document.getElementById('podium');
+    const table = document.getElementById('standTable');
+    const sub = document.getElementById('standSub');
+    const total = ranked.reduce((s, p) => s + p.points, 0);
+
+    if (!ranked.length) {
+      sub.textContent = '';
+      podium.innerHTML = '';
+      table.innerHTML = `<div class="empty" style="border:none">Add players and start scoring to see standings.</div>`;
+      return;
+    }
+    if (total === 0) {
+      sub.textContent = 'No points scored yet.';
+    } else {
+      const leaders = ranked.filter(p => p.rank === 1);
+      sub.textContent = leaders.length > 1
+        ? `Tied for first: ${leaders.map(p => p.name).join(', ')} with ${leaders[0].points}`
+        : `${leaders[0].name} leads with ${leaders[0].points} point${leaders[0].points === 1 ? '' : 's'}`;
+    }
+
+    const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
+    const top = ranked.slice(0, 3);
+    if (total > 0) {
+      const slot = (p, cls) => p
+        ? `<div class="pod ${cls}"><div class="medal">${medals[p.rank] || ''}</div><div class="pname">${esc(p.name)}</div><div class="ppts">${p.points}</div></div>`
+        : `<div class="pod blank"></div>`;
+      // Order: 2nd, 1st, 3rd
+      podium.innerHTML = slot(top[1], 'p2') + slot(top[0], 'p1') + slot(top[2], 'p3');
+    } else {
+      podium.innerHTML = '';
+    }
+
+    const max = Math.max(1, ranked[0].points);
+    table.innerHTML = ranked.map(p => `
+      <div class="row ${total > 0 && p.rank <= 3 ? 'r' + p.rank : ''}">
+        <div class="rank">${total > 0 && medals[p.rank] ? medals[p.rank] : '#' + p.rank}</div>
+        <div>
+          <div class="rname">${esc(p.name)}</div>
+          <div class="bar"><i style="width:${(p.points / max) * 100}%"></i></div>
+        </div>
+        <div class="rpts">${p.points}</div>
+      </div>`).join('');
+  }
+
+  function renderRoster() {
+    const el = document.getElementById('rosterList');
+    document.getElementById('btnEdit').textContent = editMode ? '✓ Done Editing' : '✎ Edit Players';
+    document.getElementById('btnEdit').disabled = !state.players.length;
+    document.getElementById('btnClearRoster').disabled = !state.players.length;
+    if (!state.players.length) {
+      el.innerHTML = `<div class="empty">Your roster is empty. Add names above.</div>`;
+      return;
+    }
+    el.innerHTML = state.players.map(p => `
+      <div class="player ${editMode ? 'edit' : ''}">
+        <div class="name">${esc(p.name)}</div>
+        <div class="pts" style="font-size:22px">${p.points}</div>
+        <button class="ren" data-act="rename" data-id="${p.id}" aria-label="Rename ${esc(p.name)}">✎</button>
+        <button class="del" data-act="remove" data-id="${p.id}" aria-label="Remove ${esc(p.name)}">✕</button>
+      </div>`).join('');
+  }
+
+  function render() {
+    renderScore();
+    renderStandings();
+    renderRoster();
+    document.getElementById('btnResetPts').disabled = !state.players.some(p => p.points !== 0);
+  }
+
+  // ---------- Navigation ----------
+  function go(view) {
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
+    document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+    if (view !== 'roster' && editMode) { editMode = false; renderRoster(); }
+    if (view === 'standings') renderStandings();
+    document.querySelector('main').scrollTop = 0;
+  }
+  document.querySelectorAll('nav button').forEach(b => b.onclick = () => go(b.dataset.view));
+
+  // ---------- Events ----------
+  document.addEventListener('click', e => {
+    const g = e.target.closest('[data-goto]');
+    if (g) { go(g.dataset.goto); setTimeout(() => nameInput.focus(), 50); return; }
+    const b = e.target.closest('[data-act]');
+    if (!b) return;
+    const id = b.dataset.id;
+    switch (b.dataset.act) {
+      case 'plus': change(id, 1); break;
+      case 'minus': change(id, -1); break;
+      case 'remove': {
+        const p = byId(id);
+        confirmBox('Remove player?', `Remove ${p.name} from the roster? You can undo this.`, 'Remove', () => removePlayer(id));
+        break;
+      }
+      case 'rename': openRename(id); break;
+    }
+  });
+
+  const nameInput = document.getElementById('nameInput');
+  function submitName() {
+    const v = nameInput.value;
+    if (!v.trim()) return;
+    const r = addNames(v);
+    nameInput.value = '';
+    if (r.skipped && !r.added) showUndoMsgOnly('That name is already on the roster');
+    nameInput.focus();
+  }
+  function showUndoMsgOnly(msg) {
+    undoMsg.textContent = msg;
+    document.getElementById('btnUndo').style.display = 'none';
+    undoBar.classList.remove('hidden');
+    clearTimeout(undoTimer);
+    undoTimer = setTimeout(hideUndo, 2500);
+  }
+  document.getElementById('btnAdd').onclick = submitName;
+  nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') submitName(); });
+  nameInput.addEventListener('paste', e => {
+    const text = (e.clipboardData || window.clipboardData).getData('text');
+    if (/[\n,]/.test(text)) {
+      e.preventDefault();
+      const r = addNames(text);
+      showUndoMsgOnly(`Added ${r.added} player${r.added === 1 ? '' : 's'}${r.skipped ? `, skipped ${r.skipped} duplicate${r.skipped === 1 ? '' : 's'}` : ''}`);
+    }
+  });
+
+  document.getElementById('btnEdit').onclick = () => { editMode = !editMode; renderRoster(); };
+
+  document.getElementById('btnResetPts').onclick = () =>
+    confirmBox('Reset all points?', 'Every player goes back to 0. Names stay on the roster. You can undo this.', 'Reset', resetPoints);
+
+  document.getElementById('btnClearRoster').onclick = () =>
+    confirmBox('Clear the roster?', 'This removes every player and their points. You can undo right after.', 'Clear', clearRoster);
+
+  // ---------- Modals ----------
+  const cfModal = document.getElementById('confirmModal');
+  let cfAction = null;
+  function confirmBox(title, text, okLabel, action) {
+    document.getElementById('cfTitle').textContent = title;
+    document.getElementById('cfText').textContent = text;
+    document.getElementById('cfOk').textContent = okLabel;
+    cfAction = action;
+    cfModal.classList.add('open');
+  }
+  document.getElementById('cfCancel').onclick = () => { cfModal.classList.remove('open'); cfAction = null; };
+  document.getElementById('cfOk').onclick = () => { cfModal.classList.remove('open'); if (cfAction) cfAction(); cfAction = null; };
+
+  const rnModal = document.getElementById('renameModal');
+  const rnInput = document.getElementById('renameInput');
+  let rnId = null;
+  function openRename(id) {
+    rnId = id;
+    rnInput.value = byId(id).name;
+    rnModal.classList.add('open');
+    setTimeout(() => { rnInput.focus(); rnInput.select(); }, 50);
+  }
+  function doRename() { renamePlayer(rnId, rnInput.value); rnModal.classList.remove('open'); }
+  document.getElementById('rnCancel').onclick = () => rnModal.classList.remove('open');
+  document.getElementById('rnOk').onclick = doRename;
+  rnInput.addEventListener('keydown', e => { if (e.key === 'Enter') doRename(); });
+
+  [cfModal, rnModal].forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+
+  // ---------- Init ----------
+  load();
+  render();
+  if (!state.players.length) go('roster');
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
+})();
+</script>
+</body>
+</html>

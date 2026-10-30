@@ -74,6 +74,7 @@
 
   .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
   .toolbar .btn { flex: 1; padding: 10px 12px; font-size: 15px; }
+  .reset-wrap { margin-top: 48px; padding-top: 20px; border-top: 1px dashed var(--line); }
 
   .player {
     display: flex; align-items: center; gap: 10px;
@@ -170,16 +171,16 @@
 
 <header>
   <div class="brand">Point<span>Tap</span></div>
-  <div class="ver">v1.0.2</div>
+  <div class="ver">v1.0.3</div>
 </header>
 
 <main>
   <!-- SCORE VIEW -->
   <section id="view-score" class="view active">
-    <div class="toolbar">
+    <div id="scoreList"></div>
+    <div class="toolbar reset-wrap">
       <button class="btn ghost" id="btnResetPts">↺ Reset Points</button>
     </div>
-    <div id="scoreList"></div>
   </section>
 
   <!-- STANDINGS VIEW -->

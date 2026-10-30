@@ -170,7 +170,7 @@
 
 <header>
   <div class="brand">Point<span>Tap</span></div>
-  <div class="ver">v1.0.0</div>
+  <div class="ver">v1.0.2</div>
 </header>
 
 <main>
@@ -291,6 +291,7 @@
     pushUndo({ type: 'delta', id, delta, name: p.name });
     save();
     renderScore(id);
+    updateResetBtn();
     showUndo(`${delta > 0 ? '+1' : '−1'} ${p.name} (now ${p.points})`);
   }
 
@@ -453,11 +454,15 @@
       </div>`).join('');
   }
 
+  function updateResetBtn() {
+    // Reset Points stays tappable at all times; it shows a note if there is nothing to reset.
+  }
+
   function render() {
     renderScore();
     renderStandings();
     renderRoster();
-    document.getElementById('btnResetPts').disabled = !state.players.some(p => p.points !== 0);
+    updateResetBtn();
   }
 
   // ---------- Navigation ----------
@@ -518,8 +523,10 @@
 
   document.getElementById('btnEdit').onclick = () => { editMode = !editMode; renderRoster(); };
 
-  document.getElementById('btnResetPts').onclick = () =>
+  document.getElementById('btnResetPts').onclick = () => {
+    if (!state.players.some(p => p.points !== 0)) { showUndoMsgOnly('No points to reset yet'); return; }
     confirmBox('Reset all points?', 'Every player goes back to 0. Names stay on the roster. You can undo this.', 'Reset', resetPoints);
+  };
 
   document.getElementById('btnClearRoster').onclick = () =>
     confirmBox('Clear the roster?', 'This removes every player and their points. You can undo right after.', 'Clear', clearRoster);

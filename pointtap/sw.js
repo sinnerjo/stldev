@@ -1,4 +1,4 @@
-const CACHE = 'pointtap-v2';
+const CACHE = 'pointtap-v3';
 const LOCAL_ASSETS = [
   './',
   './index.html',

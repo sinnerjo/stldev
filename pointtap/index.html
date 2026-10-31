@@ -156,6 +156,34 @@
   .undo .msg { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .undo button { background: var(--accent); color: #00001a; font-weight: 700; border-radius: 999px; padding: 8px 16px; }
 
+  /* Team bar */
+  .teambar { background: #000033; border-bottom: 1px solid var(--line); padding: 8px 16px; }
+  .teambtn {
+    width: 100%; max-width: 688px; margin: 0 auto; display: flex; align-items: center; gap: 10px;
+    background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 14px; font-size: 16px; font-weight: 600; text-align: left;
+  }
+  .teambtn .tlabel { color: var(--muted); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .6px; }
+  .teambtn .tname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .teambtn .caret { color: var(--accent); }
+  .teamlist { max-height: 45vh; overflow-y: auto; margin: 0 0 14px; }
+  .teamrow { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .teamrow:last-child { border-bottom: none; }
+  .teamrow .pick {
+    flex: 1; min-width: 0; text-align: left; background: none; color: var(--text); padding: 10px 4px;
+    font-size: 17px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+  }
+  .teamrow .pick .tn { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .teamrow .pick .cnt { color: var(--muted); font-size: 13px; font-weight: 500; white-space: nowrap; }
+  .teamrow .pick .dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--line); flex: none; }
+  .teamrow.current .pick .dot { background: var(--accent); border-color: var(--accent); }
+  .teamrow .ic { width: 40px; height: 40px; border-radius: 10px; font-size: 16px; display: grid; place-items: center; flex: none; }
+  .teamrow .ic.ren { background: var(--panel2); color: var(--text); }
+  .teamrow .ic.del { background: transparent; color: var(--minus); border: 1px solid #6a2a3a; }
+  .card .addrow input { margin-bottom: 0; }
+  .card .closebtn { width: 100%; margin-top: 4px; }
+  #confirmModal, #renameModal { z-index: 20; }
+
   /* Modal */
   .modal { position: fixed; inset: 0; background: rgba(0,0,10,.7); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 10; }
   .modal.open { display: flex; }
@@ -171,8 +199,15 @@
 
 <header>
   <div class="brand">Point<span>Tap</span></div>
-  <div class="ver">v1.0.4</div>
+  <div class="ver">v1.0.5</div>
 </header>
+<div class="teambar">
+  <button class="teambtn" id="teamBtn" aria-label="Switch team">
+    <span class="tlabel">Team</span>
+    <span class="tname" id="teamName"></span>
+    <span class="caret">▾</span>
+  </button>
+</div>
 
 <main>
   <!-- SCORE VIEW -->
@@ -230,10 +265,24 @@
   </div>
 </div>
 
+<!-- Teams modal -->
+<div class="modal" id="teamsModal">
+  <div class="card">
+    <h3>Teams</h3>
+    <p style="margin-bottom:10px">Each team keeps its own players and points. Tap a team to switch.</p>
+    <div class="teamlist" id="teamList"></div>
+    <div class="addrow">
+      <input type="text" id="teamInput" placeholder="New team name" maxlength="40" autocomplete="off" enterkeyhint="done">
+      <button class="btn" id="btnAddTeam">Add</button>
+    </div>
+    <button class="btn ghost closebtn" id="tmClose">Done</button>
+  </div>
+</div>
+
 <!-- Rename modal -->
 <div class="modal" id="renameModal">
   <div class="card">
-    <h3>Rename Player</h3>
+    <h3 id="rnTitle">Rename Player</h3>
     <input type="text" id="renameInput" maxlength="40" autocomplete="off">
     <div class="actions">
       <button class="btn ghost" id="rnCancel">Cancel</button>
@@ -244,25 +293,49 @@
 
 <script>
 (() => {
-  const KEY = 'pointtap.v1';
+  const KEY = 'pointtap.v2';
+  const OLD_KEY = 'pointtap.v1';
   const MAX_UNDO = 50;
 
   // ---------- State ----------
-  let state = { players: [], undo: [] };
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const newTeam = name => ({ id: uid(), name, players: [], undo: [] });
+
+  // db holds every team; "state" always points at the team currently selected
+  let db = { teams: [], currentId: null };
+  const cur = () => db.teams.find(t => t.id === db.currentId) || db.teams[0];
+  const state = {
+    get players() { return cur().players; },
+    set players(v) { cur().players = v; },
+    get undo() { return cur().undo; },
+    set undo(v) { cur().undo = v; }
+  };
+
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) {
         const s = JSON.parse(raw);
-        if (Array.isArray(s.players)) state.players = s.players;
-        if (Array.isArray(s.undo)) state.undo = s.undo;
+        if (Array.isArray(s.teams) && s.teams.length) db = s;
+      } else {
+        // Carry over the roster from before teams existed
+        const old = localStorage.getItem(OLD_KEY);
+        if (old) {
+          const o = JSON.parse(old);
+          const t = newTeam('My Team');
+          if (Array.isArray(o.players)) t.players = o.players;
+          if (Array.isArray(o.undo)) t.undo = o.undo;
+          db = { teams: [t], currentId: t.id };
+        }
       }
     } catch (e) {}
+    if (!db.teams.length) { const t = newTeam('My Team'); db = { teams: [t], currentId: t.id }; }
+    db.teams.forEach(t => { t.players = t.players || []; t.undo = t.undo || []; });
+    if (!db.teams.some(t => t.id === db.currentId)) db.currentId = db.teams[0].id;
   }
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {}
   }
-  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   const byId = id => state.players.find(p => p.id === id);
   const alpha = () => [...state.players].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
@@ -461,6 +534,7 @@
   }
 
   function render() {
+    document.getElementById('teamName').textContent = cur().name;
     renderScore();
     renderStandings();
     renderRoster();
@@ -548,19 +622,90 @@
 
   const rnModal = document.getElementById('renameModal');
   const rnInput = document.getElementById('renameInput');
-  let rnId = null;
-  function openRename(id) {
-    rnId = id;
-    rnInput.value = byId(id).name;
+  let rnSave = null;
+  function openNameBox(title, value, onSave) {
+    document.getElementById('rnTitle').textContent = title;
+    rnInput.value = value;
+    rnSave = onSave;
     rnModal.classList.add('open');
     setTimeout(() => { rnInput.focus(); rnInput.select(); }, 50);
   }
-  function doRename() { renamePlayer(rnId, rnInput.value); rnModal.classList.remove('open'); }
+  function openRename(id) {
+    openNameBox('Rename Player', byId(id).name, v => renamePlayer(id, v));
+  }
+  function doRename() { if (rnSave) rnSave(rnInput.value); rnModal.classList.remove('open'); }
   document.getElementById('rnCancel').onclick = () => rnModal.classList.remove('open');
   document.getElementById('rnOk').onclick = doRename;
   rnInput.addEventListener('keydown', e => { if (e.key === 'Enter') doRename(); });
 
-  [cfModal, rnModal].forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+  // ---------- Teams ----------
+  const tmModal = document.getElementById('teamsModal');
+  const teamInput = document.getElementById('teamInput');
+  const nameTaken = (name, exceptId) => db.teams.some(t => t.id !== exceptId && t.name.toLowerCase() === name.toLowerCase());
+
+  function renderTeams() {
+    const sorted = [...db.teams].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+    document.getElementById('teamList').innerHTML = sorted.map(t => `
+      <div class="teamrow ${t.id === db.currentId ? 'current' : ''}">
+        <button class="pick" data-team="${t.id}"><span class="dot"></span><span class="tn">${esc(t.name)}</span><span class="cnt">${t.players.length} player${t.players.length === 1 ? '' : 's'}</span></button>
+        <button class="ic ren" data-tren="${t.id}" aria-label="Rename ${esc(t.name)}">✎</button>
+        <button class="ic del" data-tdel="${t.id}" aria-label="Delete ${esc(t.name)}">✕</button>
+      </div>`).join('');
+  }
+  function openTeams() { renderTeams(); teamInput.value = ''; tmModal.classList.add('open'); }
+
+  function switchTeam(id) {
+    if (id === db.currentId) return;
+    db.currentId = id;
+    editMode = false;
+    hideUndo();
+    save(); render(); renderTeams();
+  }
+  function addTeam() {
+    const name = teamInput.value.trim().slice(0, 40);
+    if (!name) return;
+    if (nameTaken(name)) { showUndoMsgOnly('A team with that name already exists'); return; }
+    const t = newTeam(name);
+    db.teams.push(t);
+    teamInput.value = '';
+    switchTeam(t.id);
+    tmModal.classList.remove('open');
+    go('roster');
+    setTimeout(() => nameInput.focus(), 50);
+  }
+  function deleteTeam(id) {
+    db.teams = db.teams.filter(t => t.id !== id);
+    if (!db.teams.length) db.teams.push(newTeam('My Team'));
+    if (!db.teams.some(t => t.id === db.currentId)) { db.currentId = db.teams[0].id; editMode = false; hideUndo(); }
+    save(); render(); renderTeams();
+  }
+
+  document.getElementById('teamBtn').onclick = openTeams;
+  document.getElementById('tmClose').onclick = () => tmModal.classList.remove('open');
+  document.getElementById('btnAddTeam').onclick = addTeam;
+  teamInput.addEventListener('keydown', e => { if (e.key === 'Enter') addTeam(); });
+  document.getElementById('teamList').addEventListener('click', e => {
+    const pick = e.target.closest('[data-team]');
+    const ren = e.target.closest('[data-tren]');
+    const del = e.target.closest('[data-tdel]');
+    if (pick) {
+      switchTeam(pick.dataset.team);
+      tmModal.classList.remove('open');
+      if (!state.players.length) go('roster');
+    } else if (ren) {
+      const t = db.teams.find(x => x.id === ren.dataset.tren);
+      openNameBox('Rename Team', t.name, v => {
+        v = v.trim().slice(0, 40);
+        if (!v || nameTaken(v, t.id)) return;
+        t.name = v; save(); render(); renderTeams();
+      });
+    } else if (del) {
+      const t = db.teams.find(x => x.id === del.dataset.tdel);
+      confirmBox('Delete team?', `Delete ${t.name} and all ${t.players.length} of its players and points? This can't be undone.`, 'Delete', () => deleteTeam(t.id));
+    }
+  });
+
+  [cfModal, rnModal, tmModal].forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
 
   // ---------- Init ----------
   load();

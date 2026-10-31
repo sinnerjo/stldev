@@ -171,7 +171,7 @@
 
 <header>
   <div class="brand">Point<span>Tap</span></div>
-  <div class="ver">v1.0.3</div>
+  <div class="ver">v1.0.4</div>
 </header>
 
 <main>
@@ -264,6 +264,7 @@
   }
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   const byId = id => state.players.find(p => p.id === id);
+  const alpha = () => [...state.players].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
   function pushUndo(entry) {
@@ -373,7 +374,7 @@
       el.innerHTML = `<div class="empty">No players yet.<br><br><button class="btn" data-goto="roster">Add Players</button></div>`;
       return;
     }
-    el.innerHTML = state.players.map(p => `
+    el.innerHTML = alpha().map(p => `
       <div class="player">
         <button class="tap minus" data-act="minus" data-id="${p.id}" aria-label="Minus one point for ${esc(p.name)}" ${p.points <= 0 ? 'disabled' : ''}>−</button>
         <div class="name">${esc(p.name)}</div>
@@ -446,7 +447,7 @@
       el.innerHTML = `<div class="empty">Your roster is empty. Add names above.</div>`;
       return;
     }
-    el.innerHTML = state.players.map(p => `
+    el.innerHTML = alpha().map(p => `
       <div class="player ${editMode ? 'edit' : ''}">
         <div class="name">${esc(p.name)}</div>
         <div class="pts" style="font-size:22px">${p.points}</div>

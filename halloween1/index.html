@@ -107,7 +107,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 
 <div class="screen show" id="menu">
   <div class="card">
-    <h1>Candy Catch<br>Spooktacular</h1>
+    <h1>Candy Catch <br>Spooktacular</h1>
     <p class="sub">Catch the falling treats! Dodge the giggly ghosts!</p>
     <div class="label">Pick your costume</div>
     <div id="costumes"></div>
@@ -250,7 +250,11 @@ function vib(f0,f1,dur,type,vol,rate,depth,delay){
   o.connect(g);g.connect(a.destination);o.start(t);l.start(t);o.stop(t+dur+0.05);l.stop(t+dur+0.05);
 }
 const scareSfx={
-  warn(){vib(70,95,1.1,'sawtooth',0.05,3,6);},
+  bell(){ // ding dong
+    tone(659,0.55,'sine',0.2);tone(1318,0.4,'sine',0.04);
+    tone(523,0.9,'sine',0.2,null,0.42);tone(1046,0.6,'sine',0.04,null,0.42);},
+  knock(){[0,0.18,0.36].forEach(d=>{noiseBurst(0.07,0.35,500,250,d);tone(110,0.08,'sine',0.25,60,d);});},
+  creak(){vib(160,340,0.55,'sawtooth',0.05,22,25);},
   pop(loud){const v=loud?0.3:0.16;
     tone(130,0.35,'sine',v*1.2,40);            // thud
     noiseBurst(0.6,v*0.9,2200,500);            // whoosh
@@ -395,7 +399,7 @@ function makeCandy(x,baseV){
 let scareSetting=getS('ccs_scares')||'silly';
 if(!['off','silly','spooky'].includes(scareSetting))scareSetting='silly';
 const SCARE_TEST=/scaretest/.test(location.search); // add ?scaretest to the URL to see a scare at 3 seconds
-const SCARE_T={warn:1.1,pop:1.2,punch:2.6,ready:1.1};
+const SCARE_T={bell:Infinity,open:0.6,pop:1.2,punch:2.6,ready:1.1};
 let lastScarer=-1;
 function scheduleScare(first){
   if(scareSetting==='off'){G.nextScare=Infinity;return;}
@@ -406,13 +410,28 @@ function scheduleScare(first){
 function startScare(){
   let w;do{w=Math.floor(Math.random()*SCARERS.length);}while(w===lastScarer);lastScarer=w;
   const silly=scareSetting==='silly';
-  G.scare={phase:silly?'warn':'pop',t:0,who:w,loud:!silly,go:false};
+  G.scare={phase:'bell',t:0,who:w,loud:!silly,go:false,nextCue:2.4,cueN:0,knockT:0};
   keys.left=keys.right=false;P.target=null;P.vx=0;
   stopMusic();
-  if(silly)scareSfx.warn();else scareSfx.pop(true);
+  scareSfx.bell();
+}
+/* where the door is on screen (also used for the tap target) */
+function doorGeom(){
+  const h=Math.min(H*0.56,W*0.85),w=h*0.6;
+  return {x:W/2,y:H*0.46,w,h};
+}
+function openDoor(){
+  const s=G&&G.scare;
+  if(!s||s.phase!=='bell'||s.t<0.6)return; // short delay so a held key or a finger already on the screen doesn't open it by accident
+  setPhase('open');
+}
+function onDoor(px,py){
+  const d=doorGeom(),pad=Math.max(30,S*0.6);
+  return px>d.x-d.w/2-pad&&px<d.x+d.w/2+pad&&py>d.y-d.h/2-pad&&py<d.y+d.h/2+pad*2;
 }
 function setPhase(p){
   const s=G.scare;s.phase=p;s.t=0;
+  if(p==='open')scareSfx.creak();
   if(p==='pop')scareSfx.pop(s.loud);
   if(p==='punch')scareSfx.punch();
   if(p==='ready')scareSfx.ready(false);
@@ -420,8 +439,13 @@ function setPhase(p){
 function updateScare(dt){
   const s=G.scare;s.t+=dt;
   if(s.phase==='ready'&&!s.go&&s.t>0.55){s.go=true;scareSfx.ready(true);}
+  if(s.phase==='bell'){ // keep knocking and ringing until someone opens the door
+    s.knockT=Math.max(0,s.knockT-dt);
+    if(s.t>=s.nextCue){if(s.cueN%2===0){scareSfx.knock();s.knockT=0.5;}else scareSfx.bell();s.cueN++;s.nextCue+=2.4;}
+    return;
+  }
   if(s.t<SCARE_T[s.phase])return;
-  if(s.phase==='warn')setPhase('pop');
+  if(s.phase==='open')setPhase('pop');
   else if(s.phase==='pop')setPhase('punch');
   else if(s.phase==='punch')setPhase('ready');
   else endScare();
@@ -794,15 +818,69 @@ function outlined(txt,x,y,size,color,lw){
   ctx.font='700 '+Math.round(size)+'px '+UIF;ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.lineWidth=lw||8;ctx.strokeStyle='#1a0b33';ctx.strokeText(txt,x,y);ctx.fillStyle=color;ctx.fillText(txt,x,y);
 }
+/* a friendly front door; open goes 0 (closed) to 1 (swung open) */
+function drawDoor(x,y,w,h,open,t,inviting){
+  const L=x-w/2,T=y-h/2,arch=w/2;
+  const path=(g,l,tp,ww,hh)=>{g.beginPath();g.moveTo(l,tp+hh);g.lineTo(l,tp+ww/2);g.arc(l+ww/2,tp+ww/2,ww/2,Math.PI,0);g.lineTo(l+ww,tp+hh);g.closePath();};
+  // inviting orange glow pulse
+  if(inviting){ctx.save();ctx.shadowColor='#ff8a1f';ctx.shadowBlur=S*(0.5+0.35*Math.sin(t*5));
+    ctx.fillStyle='#ff8a1f';path(ctx,L-w*0.12,T-w*0.12,w*1.24,h+w*0.12);ctx.fill();ctx.restore();}
+  // stone frame
+  ctx.fillStyle='#4a3a6e';path(ctx,L-w*0.12,T-w*0.12,w*1.24,h+w*0.12);ctx.fill();
+  ctx.strokeStyle='#2a1f45';ctx.lineWidth=Math.max(2,w*0.02);ctx.stroke();
+  // dark doorway with peeking eyes
+  ctx.fillStyle='#07030f';path(ctx,L,T,w,h);ctx.fill();
+  if(open>0.3){const blink=Math.sin(t*3)>0.95?0.15:1;ctx.fillStyle='#ffe066';
+    [-1,1].forEach(dd=>{ctx.beginPath();ctx.ellipse(x+dd*w*0.13,y-h*0.08,w*0.06,w*0.06*blink,0,0,7);ctx.fill();});}
+  // the door panel, hinged on the left
+  const sx=1-open*0.88;
+  if(sx>0.02){
+    ctx.save();ctx.translate(L,0);ctx.scale(sx,1);ctx.translate(-L,0);
+    ctx.save();path(ctx,L,T,w,h);ctx.clip();
+    const g=ctx.createLinearGradient(L,0,L+w,0);g.addColorStop(0,open>0?'#5a2f14':'#7a4019');g.addColorStop(1,open>0?'#4a2610':'#9a5525');
+    ctx.fillStyle=g;ctx.fillRect(L,T,w,h);
+    ctx.strokeStyle='rgba(40,18,5,.6)';ctx.lineWidth=Math.max(2,w*0.015);
+    for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(L+w*i/4,T);ctx.lineTo(L+w*i/4,T+h);ctx.stroke();}
+    ctx.restore();
+    // round window with warm light
+    ctx.fillStyle='#ffd34d';ctx.beginPath();ctx.arc(x,T+w*0.42,w*0.17,0,7);ctx.fill();
+    ctx.strokeStyle='#4a2610';ctx.lineWidth=Math.max(3,w*0.03);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x-w*0.17,T+w*0.42);ctx.lineTo(x+w*0.17,T+w*0.42);ctx.moveTo(x,T+w*0.25);ctx.lineTo(x,T+w*0.59);ctx.stroke();
+    // pumpkin wreath, knocker and knob
+    ctx.restore();
+    ctx.save();ctx.translate(L,0);ctx.scale(sx,1);ctx.translate(-L,0);
+    drawEmo('🎃',x,y-h*0.02,w*0.3,inviting?Math.sin(t*4)*0.1:0);
+    ctx.strokeStyle='#d4a017';ctx.lineWidth=Math.max(3,w*0.03);ctx.beginPath();ctx.arc(x,y+h*0.12,w*0.07,0,7);ctx.stroke();
+    ctx.fillStyle='#ffcc33';ctx.beginPath();ctx.arc(L+w*0.82,y+h*0.1,w*0.05,0,7);ctx.fill();
+    ctx.restore();
+  }
+  // welcome mat
+  ctx.fillStyle='#ff8a1f';ctx.fillRect(x-w*0.45,T+h,w*0.9,h*0.06);
+  ctx.fillStyle='#1a0b33';ctx.font='700 '+Math.round(h*0.045)+'px '+UIF;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('TRICK OR TREAT',x,T+h*1.03);
+}
 function drawScare(t){
   const s=G.scare,R=Math.min(W*0.4,H*0.27),cx=W/2,cy=H*0.45,who=SCARERS[s.who];
   ctx.save();
-  if(s.phase==='warn'){
-    const a=Math.min(0.5,s.t/1.1*0.5)*(0.85+0.15*Math.sin(s.t*9));
-    ctx.fillStyle='rgba(8,3,20,'+a+')';ctx.fillRect(0,0,W,H);
-    outlined('Uh oh... 👀',cx+Math.sin(s.t*6)*6,H*0.4,Math.min(W/12,S*0.9),'#d9ccff');
+  const d=doorGeom();
+  if(s.phase==='bell'){
+    ctx.fillStyle='rgba(8,3,20,'+Math.min(0.72,s.t*2)+')';ctx.fillRect(0,0,W,H);
+    const zoom=easeBack(s.t/0.45),wig=s.knockT>0?Math.sin(s.knockT*60)*S*0.06:0;
+    ctx.save();ctx.translate(d.x+wig,d.y);ctx.scale(zoom,zoom);
+    drawDoor(0,0,d.w,d.h,0,t,true);
+    ctx.restore();
+    const fs=Math.min(W/13,S*0.85);
+    outlined(s.cueN%2===1&&s.knockT>0?'Knock knock!':'Ding dong!',d.x,Math.max(fs*0.9+56,d.y-d.h/2-fs*0.75),fs,'#ffe066');
+    const hy=d.y+d.h/2+d.h*0.06+S*0.5+Math.sin(t*6)*S*0.12;
+    drawEmo('👆',d.x,hy,S*0.9);
+    outlined('Tap the door!',d.x,Math.min(H-S*0.35,hy+S*0.75),Math.min(W/20,S*0.5),'#fff4e0',6);
+  }else if(s.phase==='open'){
+    ctx.fillStyle='rgba(8,3,20,0.72)';ctx.fillRect(0,0,W,H);
+    ctx.save();ctx.translate(d.x,d.y);drawDoor(0,0,d.w,d.h,Math.min(1,s.t/0.45),t,false);ctx.restore();
   }else if(s.phase==='pop'){
-    ctx.fillStyle='rgba(8,3,20,'+Math.min(0.88,s.t*12)+')';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='rgba(8,3,20,0.72)';ctx.fillRect(0,0,W,H);
+    ctx.save();ctx.translate(d.x,d.y);drawDoor(0,0,d.w,d.h,1,t,false);ctx.restore();
+    ctx.fillStyle='rgba(8,3,20,'+Math.min(0.55,s.t*4)+')';ctx.fillRect(0,0,W,H);
     const k=0.25+0.75*easeBack(s.t/0.28),sh=Math.max(0,1-s.t/0.9)*S*0.22;
     ctx.translate(cx+Math.sin(s.t*55)*sh,cy+Math.cos(s.t*47)*sh);ctx.scale(k,k);
     who.draw(0,0,R,false,t);
@@ -814,7 +892,7 @@ function drawScare(t){
     who.draw(0,0,R,true,t);
     ctx.setTransform(DPR,0,0,DPR,0,0);
     outlined(who.line,cx,cy+R*1.15,Math.min(W/18,S*0.62),'#ffe066');
-    outlined('Happy Halloween! 🎃',cx,cy+R*1.15+S*0.75,Math.min(W/24,S*0.45),'#fff4e0',6);
+    outlined('Trick or treat! 🍬',cx,cy+R*1.15+S*0.75,Math.min(W/24,S*0.45),'#fff4e0',6);
     ctx.globalAlpha=0.75;outlined('tap or press a key to keep playing',cx,H-S*0.45,Math.min(W/30,S*0.32),'#d9ccff',5);
   }else{
     ctx.fillStyle='rgba(8,3,20,'+Math.max(0,0.8*(1-s.t/1.1))+')';ctx.fillRect(0,0,W,H);
@@ -878,8 +956,8 @@ function buildCostumes(){
 }
 const SCARE_HINTS={
   off:'No surprises. Just candy.',
-  silly:'A little "uh oh" warning first, then a softer BOO.',
-  spooky:'No warning and a louder BLAAAH!'
+  silly:'Ding dong! Tap the door to see who is there. Softer BOO.',
+  spooky:'Ding dong! Tap the door to see who is there. Louder BLAAAH!'
 };
 function buildScareOpts(){
   document.querySelectorAll('#scareOpts button').forEach(b=>{
@@ -895,7 +973,7 @@ addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){keys.left=true;e.preventDefault();}
   if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){keys.right=true;e.preventDefault();}
   if(e.key==='Escape'||e.key==='p'||e.key==='P'){state==='play'?pause():resume();return;}
-  if(state==='play'&&G&&G.scare){skipScare();e.preventDefault();return;}
+  if(state==='play'&&G&&G.scare){e.preventDefault();if(e.repeat)return;if(G.scare.phase==='bell')openDoor();else skipScare();return;}
   if((e.key==='Enter'||e.key===' ')&&state==='over'){e.preventDefault();newGame(mode);}
   if(e.key==='m'||e.key==='M'){$('muteBtn').click();}
 });
@@ -903,8 +981,13 @@ addEventListener('keyup',e=>{
   if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')keys.left=false;
   if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')keys.right=false;
 });
-cv.addEventListener('pointermove',e=>{if(state==='play'&&(e.pointerType==='mouse'||e.buttons))P.target=e.clientX;});
-cv.addEventListener('pointerdown',e=>{if(state!=='play')return;ac();if(G.scare){skipScare();return;}P.target=e.clientX;});
+cv.addEventListener('pointermove',e=>{
+  if(state==='play'&&G&&G.scare){cv.style.cursor=G.scare.phase==='bell'&&onDoor(e.clientX,e.clientY)?'pointer':'';return;}
+  if(state==='play'&&(e.pointerType==='mouse'||e.buttons))P.target=e.clientX;});
+cv.addEventListener('pointerdown',e=>{
+  if(state!=='play')return;ac();
+  if(G.scare){if(G.scare.phase==='bell'){if(onDoor(e.clientX,e.clientY))openDoor();}else skipScare();return;}
+  P.target=e.clientX;});
 addEventListener('blur',()=>{keys.left=keys.right=false;pause();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 addEventListener('resize',resize);

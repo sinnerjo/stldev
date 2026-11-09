@@ -30,6 +30,11 @@
   .diff button.sel { border-color: #3fa34d; background: #e6ffe2; }
   .cast { display: flex; justify-content: center; gap: 4%; flex-wrap: wrap; font-size: clamp(11px, 2.1vmin, 15px); font-weight: 800; margin: .4em 0; }
   .cast span { white-space: nowrap; }
+  .skinbox { display: flex; align-items: center; justify-content: center; gap: 10px; margin: .5em 0; }
+  #skinPrev { width: clamp(64px, 14vmin, 96px); height: clamp(64px, 14vmin, 96px); background: radial-gradient(#fff, #ffe9cf); border: 3px solid #e0b27a; border-radius: 50%; flex: none; }
+  .skins { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .skins button { background: #fff; color: #5a2d0c; border: 3px solid #e0b27a; border-radius: 10px; padding: .25em .35em; font-weight: 800; font-size: clamp(10px, 1.9vmin, 14px); white-space: nowrap; }
+  .skins button.sel { border-color: #c4561b; background: #ffe9cf; }
   .how { font-size: clamp(10px, 2vmin, 14px); color: #8a5a2b; margin-top: .6em; }
   .hi { font-weight: 900; font-size: clamp(12px, 2.4vmin, 18px); margin-top: .4em; }
   .stat { font-size: clamp(14px, 3vmin, 22px); font-weight: 800; margin: .3em 0; }
@@ -61,6 +66,19 @@
         <span>👵 Grandma</span><span>👨‍🌾 Farmer</span><span>🎩 Pilgrim</span><span>👨‍🍳 Chef</span>
       </div>
       <p>🌽 Eat a <b>Golden Corn</b> and the chasers get scared. Bump them to make them dizzy!</p>
+      <div class="skinbox">
+        <canvas id="skinPrev" width="192" height="192"></canvas>
+        <div class="skins">
+          <button data-skin="classic">🦃 Classic</button>
+          <button data-skin="ninja">🥷 Ninja</button>
+          <button data-skin="pirate">🏴‍☠️ Pirate</button>
+          <button data-skin="cowboy">🤠 Cowboy</button>
+          <button data-skin="astronaut">🚀 Astronaut</button>
+          <button data-skin="superhero">🦸 Hero</button>
+          <button data-skin="knight">🛡️ Knight</button>
+          <button data-skin="wizard">🧙 Wizard</button>
+        </div>
+      </div>
       <div class="row diff">
         <button data-diff="easy">🐣 Little Kid<small>5 lives, slow chasers</small></button>
         <button data-diff="normal">🦸 Big Kid<small>3 lives, speedy chasers</small></button>
@@ -134,7 +152,8 @@ const W = COLS * TS, H = OY + ROWS * TS + 42;
 const TUNNEL = 9, DOOR = { c: 9, r: 8 }, OUT = { c: 9, r: 7 }, BONUS = { c: 9, r: 11 };
 
 const cv = document.getElementById('c');
-const ctx = cv.getContext('2d');
+const mainCtx = cv.getContext('2d');
+let ctx = mainCtx;
 const $ = id => document.getElementById(id);
 const rand = (a, b) => a + Math.random() * (b - a);
 const pick = a => a[Math.floor(Math.random() * a.length)];
@@ -152,7 +171,7 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 };
-const settings = Object.assign({ diff: 'easy', sfx: true, music: true }, store.get('gg_settings', {}));
+const settings = Object.assign({ diff: 'easy', sfx: true, music: true, skin: 'classic' }, store.get('gg_settings', {}));
 let hiScore = store.get('gg_hi', 0);
 const saveSettings = () => store.set('gg_settings', settings);
 
@@ -620,6 +639,17 @@ function drawTurkey() {
   else if (T.dir === UP) ctx.rotate(-Math.PI / 2 * T.face);
   else if (T.dir === DOWN) ctx.rotate(Math.PI / 2 * T.face);
   ctx.scale(T.face, 1);
+  turkeyFigure(T.moving, T.mouth, settings.skin);
+  ctx.restore();
+}
+
+/* Draws the turkey facing right at the current origin, wearing the chosen skin */
+function turkeyFigure(moving, mouth, skin) {
+  const t = time;
+  if (skin === 'superhero') {
+    const w = Math.sin(t * 9) * 2;
+    ctx.fillStyle = '#d62828'; ctx.beginPath(); ctx.moveTo(4, -5); ctx.quadraticCurveTo(-8, -6 + w, -17, 6 + w); ctx.lineTo(-6, 8); ctx.quadraticCurveTo(-2, 0, 6, -2); ctx.closePath(); ctx.fill();
+  }
   // tail fan
   const fan = ['#8b4513', '#c0392b', '#e67e22', '#f1c40f', '#e67e22', '#c0392b', '#8b4513'];
   for (let i = 0; i < 7; i++) {
@@ -630,17 +660,66 @@ function drawTurkey() {
   ellipse(1, 2, 6, 5.5, '#a8703a');
   ellipse(-3, -1, 5, 4, '#6e4220', -0.3);
   // feet
-  const st = T.moving ? Math.sin(T.mouth) * 2 : 0;
+  const st = moving ? Math.sin(mouth) * 2 : 0;
   ctx.strokeStyle = '#e8961e'; ctx.lineWidth = 2; ctx.lineCap = 'round';
   ctx.beginPath(); ctx.moveTo(-2, 8); ctx.lineTo(-2 + st, 12); ctx.moveTo(3, 8); ctx.lineTo(3 - st, 12); ctx.stroke();
   // head
   circle(8, -4, 5.8, '#c58b5e');
-  const open = T.moving ? Math.abs(Math.sin(T.mouth)) * 0.6 : 0.15;
+  const open = moving ? Math.abs(Math.sin(mouth)) * 0.6 : 0.15;
   ctx.fillStyle = '#f5a623';
   ctx.beginPath(); ctx.moveTo(12, -5); ctx.lineTo(18, -5 - open * 5); ctx.lineTo(12.5, -3); ctx.fill();
   ctx.beginPath(); ctx.moveTo(12, -3); ctx.lineTo(18, -3 + open * 5); ctx.lineTo(12.5, -1.5); ctx.fill();
   ellipse(12, 1, 1.8, 3.4, '#e63946');
   circle(9.5, -6, 2.3, '#fff'); circle(10.2, -6, 1.2, '#2b1a0f');
+  if (skin && skin !== 'classic') drawSkin(skin, t);
+}
+
+/* Costumes from Turkey Toss. Head pieces are drawn in Turkey Toss coordinates
+   (head centered at 16,-49) and scaled down onto this turkey's head (8,-4). */
+function drawSkin(k, t) {
+  // body extras, in this turkey's own coordinates
+  if (k === 'ninja') { ctx.fillStyle = '#c0392b'; ctx.fillRect(-10, 1, 19, 2.4); }
+  if (k === 'superhero') star5(1, 2, 3.6, '#ffd23f');
+  if (k === 'knight') { circle(9, 5, 5.2, '#c3ccd6'); ctx.strokeStyle = '#7d8894'; ctx.lineWidth = 1.2; ctx.stroke(); ellipse(9, 5, 1.6, 2.8, '#e8792b'); }
+  if (k === 'astronaut') { rrect(-12, -4, 5, 9, 1.5, '#b0b8c4'); }
+  ctx.save();
+  ctx.translate(8, -4); ctx.scale(0.64, 0.64); ctx.translate(-16, 49);
+  if (k === 'ninja') {
+    rrect(7, -56, 19, 7, 2, '#1d1d1d');
+    circle(19, -52, 3.6, '#fff'); circle(20, -52, 1.9, '#2b1a0f');
+    ctx.strokeStyle = '#2b1a0f'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(16, -57); ctx.lineTo(23, -55); ctx.stroke();
+    ctx.strokeStyle = '#1d1d1d'; ctx.lineWidth = 3.5;
+    const w = Math.sin(t * 14) * 4;
+    ctx.beginPath(); ctx.moveTo(8, -53); ctx.quadraticCurveTo(-2, -58 + w, -10, -54 + w); ctx.moveTo(8, -52); ctx.quadraticCurveTo(-2, -48 - w, -9, -46 - w); ctx.stroke();
+  } else if (k === 'pirate') {
+    ctx.fillStyle = '#1d1d1d'; ctx.beginPath(); ctx.moveTo(2, -55); ctx.quadraticCurveTo(16, -74, 30, -55); ctx.quadraticCurveTo(16, -60, 2, -55); ctx.fill();
+    circle(16, -62, 3, '#fff');
+    circle(19, -52, 4, '#1d1d1d');
+    ctx.strokeStyle = '#1d1d1d'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(9, -56); ctx.lineTo(24, -49); ctx.stroke();
+  } else if (k === 'cowboy') {
+    ellipse(16, -57, 18, 3.5, '#7b4a1e');
+    rrect(9, -69, 14, 12, 4, '#8f5a26');
+    ctx.fillStyle = '#5a3412'; ctx.fillRect(9, -60, 14, 3);
+    ctx.fillStyle = '#d62828'; ctx.beginPath(); ctx.moveTo(6, -41); ctx.lineTo(22, -41); ctx.lineTo(13, -32); ctx.fill();
+  } else if (k === 'astronaut') {
+    ctx.beginPath(); ctx.arc(16, -49, 15, 0, Math.PI * 2); ctx.fillStyle = 'rgba(190,230,255,.35)'; ctx.fill();
+    ctx.strokeStyle = '#f2f6fa'; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(16, -49, 10, -2.4, -1.6); ctx.stroke();
+    ctx.strokeStyle = '#b0b8c4'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(16, -64); ctx.lineTo(16, -71); ctx.stroke();
+    circle(16, -72, 2.5, '#ff4d4d');
+  } else if (k === 'superhero') {
+    rrect(9, -55, 18, 6, 2, '#1e63c4');
+    circle(19, -52, 3, '#fff'); circle(20, -52, 1.6, '#2b1a0f');
+  } else if (k === 'knight') {
+    ctx.beginPath(); ctx.arc(16, -50, 11, Math.PI, 0); ctx.lineTo(27, -44); ctx.lineTo(5, -44); ctx.closePath(); ctx.fillStyle = '#aab4bf'; ctx.fill();
+    ctx.fillStyle = '#2b2b2b'; ctx.fillRect(14, -53, 12, 2.5);
+    ctx.fillStyle = '#d62828'; ctx.beginPath(); ctx.moveTo(14, -60); ctx.quadraticCurveTo(4, -76, -6, -66); ctx.quadraticCurveTo(4, -66, 14, -58); ctx.fill();
+  } else if (k === 'wizard') {
+    ctx.fillStyle = '#6a3fb5'; ctx.beginPath(); ctx.moveTo(3, -55); ctx.lineTo(29, -55); ctx.quadraticCurveTo(20, -70, 6, -86); ctx.quadraticCurveTo(10, -68, 3, -55); ctx.fill();
+    ellipse(16, -55, 15, 3, '#5a2f9a');
+    star5(15, -66, 3.5, '#ffe066'); circle(11, -74, 1.6, '#ffe066');
+    ctx.fillStyle = '#f5f5f5'; ctx.beginPath(); ctx.moveTo(19, -43); ctx.lineTo(28, -43); ctx.lineTo(23, -31); ctx.fill();
+  }
   ctx.restore();
 }
 
@@ -714,12 +793,8 @@ function drawChaser(g) {
 }
 
 function drawMiniTurkey(x, y) {
-  ctx.save(); ctx.translate(x, y); ctx.scale(0.7, 0.7);
-  const fan = ['#c0392b', '#e67e22', '#f1c40f', '#e67e22', '#c0392b'];
-  for (let i = 0; i < 5; i++) { ctx.save(); ctx.rotate(Math.PI * 0.7 + i * 0.3); ellipse(9, 0, 8, 3.4, fan[i]); ctx.restore(); }
-  ellipse(0, 0, 9, 8, '#8b5a2b'); circle(7, -4, 5, '#c58b5e');
-  ctx.fillStyle = '#f5a623'; ctx.beginPath(); ctx.moveTo(11, -5); ctx.lineTo(16, -3); ctx.lineTo(11, -2); ctx.fill();
-  circle(8.5, -5.5, 1.6, '#fff');
+  ctx.save(); ctx.translate(x, y); ctx.scale(0.75, 0.75);
+  turkeyFigure(false, 0, settings.skin);
   ctx.restore();
 }
 
@@ -840,10 +915,20 @@ function togglePause() {
 function updateSoundBtns() { $('bSfx').textContent = settings.sfx ? '🔊' : '🔇'; $('bMusic').style.opacity = settings.music ? 1 : 0.4; }
 function goMenu() { state = 'menu'; setHud(false); level = 1; lives = D().lives; bonusTaken = []; parts = []; buildGrid(); refreshMenu(); showOv('ovMenu'); }
 function refreshMenu() {
+  document.querySelectorAll('.skins button').forEach(b => b.classList.toggle('sel', b.dataset.skin === settings.skin));
   document.querySelectorAll('.diff button').forEach(b => b.classList.toggle('sel', b.dataset.diff === settings.diff));
   $('hiVal').textContent = hiScore;
 }
 document.querySelectorAll('.diff button').forEach(b => b.addEventListener('click', () => { settings.diff = b.dataset.diff; saveSettings(); refreshMenu(); Snd.init(); Snd.plate(); }));
+document.querySelectorAll('.skins button').forEach(b => b.addEventListener('click', () => { settings.skin = b.dataset.skin; saveSettings(); refreshMenu(); Snd.init(); Snd.gobble(); }));
+const prevCv = $('skinPrev'), prevCtx = prevCv.getContext('2d');
+function drawPreview() {
+  ctx = prevCtx;
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, 192, 192);
+  ctx.setTransform(4.6, 0, 0, 4.6, 100, 112);
+  turkeyFigure(true, time * 6, settings.skin);
+  ctx = mainCtx;
+}
 $('bPlay').onclick = () => newGame();
 $('bRetry').onclick = () => newGame();
 $('bResume').onclick = () => togglePause();
@@ -862,6 +947,7 @@ function frame(now) {
   if (state === 'menu' || state === 'over') time += dt;
   else if (state !== 'paused') update(dt);
   render();
+  if (state === 'menu') drawPreview();
   requestAnimationFrame(frame);
 }
 window.__gg = { get state() { return state; }, get T() { return T; }, get chasers() { return chasers; }, get score() { return score; }, get level() { return level; }, get lives() { return lives; }, set lives(v) { lives = v; }, get platesLeft() { return platesLeft; }, set platesLeft(v) { platesLeft = v; }, setDir, newGame, settings, grid: () => grid, get scaredT() { return scaredT; } };

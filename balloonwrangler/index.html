@@ -75,10 +75,10 @@
         <button data-diff="normal">🦸 Big Kid<small>gusty wind, more pigeons</small></button>
       </div>
       <div class="row" id="tiltRow" style="display:none">
-        <button class="tilt" id="bTilt">📱 Steer by tilting: OFF</button>
+        <button class="tilt sel" id="bTilt">📱 Tilt to steer: ON</button>
       </div>
       <button class="btn primary" id="bPlay">▶ Let's Parade!</button>
-      <div class="how">← → or A D to steer • P to pause<br>On a tablet or phone: hold the left or right side of the screen (or turn on tilt)</div>
+      <div class="how">← → or A D to steer • P to pause<br>On a tablet or phone: tilt the whole device left or right to steer (or hold either side of the screen)</div>
       <div class="hi">🏆 Best Score: <span id="hiVal">0</span></div>
     </div>
   </div>
@@ -212,7 +212,7 @@ const Snd = {
 
 /* ============ Routes ============ */
 const ROUTES = [
-  { name: 'Main Street', sky: '#a8dcff', road: '#5b5f69', walk: '#c9c2b4', roofs: ['#c96b4b', '#d9a35c', '#8a9bb0', '#b5766a', '#7a9a6a'], len: 4200, speed: 140, wind: 0.5, birds: 0.6, kinds: { signal: 3, tree: 2, flag: 1.5, double: 1 }, tip: 'Hold ← or → to steer. Grab the stars!' },
+  { name: 'Main Street', sky: '#a8dcff', road: '#5b5f69', walk: '#c9c2b4', roofs: ['#c96b4b', '#d9a35c', '#8a9bb0', '#b5766a', '#7a9a6a'], len: 4200, speed: 140, wind: 0.5, birds: 0.6, kinds: { signal: 3, tree: 2, flag: 1.5, double: 1 }, tip: 'Steer left and right. Grab the stars!' },
   { name: 'Windy Avenue', sky: '#cfe6ff', road: '#565a64', walk: '#beb8ab', roofs: ['#9a6b8a', '#c98a3a', '#6b8aa8', '#a86b4a', '#8aa86b'], len: 5200, speed: 160, wind: 1.15, birds: 1, kinds: { signal: 3, tree: 1.5, flag: 1.5, double: 2, crane: 1 }, tip: 'Big gusts! Watch the wind arrows.' },
   { name: 'Snowy Boulevard', sky: '#e8f0ff', road: '#6a6f7a', walk: '#e9edf2', roofs: ['#e9edf2', '#dfe6ee', '#f4f6f9', '#d9e2ec', '#eef2f6'], len: 6200, speed: 178, wind: 1, birds: 1.2, snow: true, kinds: { signal: 2.5, tree: 1.5, flag: 1, double: 2, crane: 1, sign: 1.8 }, tip: 'Swinging signs ahead. Time it right!' }
 ];
@@ -225,7 +225,7 @@ function D() {
 /* ============ State ============ */
 let state = 'menu', ri = 0, R = null, B = null, dist = 0, time = 0, score = 0, routeStartScore = 0;
 let obs = [], pickups = [], birds = [], gusts = [], parts = [], streaks = [], banner = null, shake = 0, bumps = 0, starsGot = 0, finishT = 0;
-let tiltOn = false, tiltVal = 0;
+let tiltOn = false, tiltNow = 0;
 const snow = Array.from({ length: 70 }, () => ({ x: rand(0, W), y: rand(0, H), s: rand(1.5, 3.5), v: rand(30, 70), w: rand(0, 6) }));
 const confetti = [];
 
@@ -305,7 +305,7 @@ function touchSides() {
   for (const x of touches.values()) { if (x < rect.left + rect.width / 2) l = true; else r = true; }
   inp.tl = l; inp.tr = r;
 }
-cv.addEventListener('touchstart', e => { e.preventDefault(); Snd.init(); for (const t of e.changedTouches) touches.set(t.identifier, t.clientX); touchSides(); }, { passive: false });
+cv.addEventListener('touchstart', e => { e.preventDefault(); Snd.init(); if (tiltOn && e.touches.length === 1) recenterTilt(); for (const t of e.changedTouches) touches.set(t.identifier, t.clientX); touchSides(); }, { passive: false });
 cv.addEventListener('touchmove', e => { e.preventDefault(); for (const t of e.changedTouches) touches.set(t.identifier, t.clientX); touchSides(); }, { passive: false });
 const tEnd = e => { for (const t of e.changedTouches) touches.delete(t.identifier); touchSides(); };
 cv.addEventListener('touchend', tEnd); cv.addEventListener('touchcancel', tEnd);
@@ -314,24 +314,61 @@ let mouseSide = 0;
 cv.addEventListener('mousedown', e => { Snd.init(); const r = cv.getBoundingClientRect(); mouseSide = e.clientX < r.left + r.width / 2 ? -1 : 1; });
 addEventListener('mouseup', () => { mouseSide = 0; });
 
-// Optional tilt steering
+// Tilt steering: on by default on phones and tablets
 const canTilt = typeof DeviceOrientationEvent !== 'undefined' && (('ontouchstart' in window) || navigator.maxTouchPoints > 0);
 if (canTilt) $('tiltRow').style.display = 'flex';
+let tiltWanted = canTilt && settings.tilt !== false;
+let tiltRaw = null, tiltNeutral = null, tiltListening = false, tiltAsked = false;
+function tiltAngle(e) {
+  // left/right lean of the device for whichever way it is being held
+  const ang = (screen.orientation && typeof screen.orientation.angle === 'number') ? screen.orientation.angle : (window.orientation || 0);
+  if (ang === 90) return e.beta || 0;
+  if (ang === -90 || ang === 270) return -(e.beta || 0);
+  if (ang === 180) return -(e.gamma || 0);
+  return e.gamma || 0;
+}
 function onTilt(e) {
-  const ang = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
-  let v = e.gamma || 0;
-  if (ang === 90) v = e.beta || 0; else if (ang === -90 || ang === 270) v = -(e.beta || 0);
-  tiltVal = clamp(v / 22, -1, 1);
+  if (e.beta === null && e.gamma === null) return;
+  tiltRaw = tiltAngle(e);
+  if (tiltNeutral === null) tiltNeutral = tiltRaw;
+  if (tiltWanted) tiltOn = true;
+}
+function recenterTilt() { tiltNeutral = tiltRaw; }
+// Must run inside a tap (iPhone and iPad only allow the motion question from a tap)
+async function enableTilt() {
+  if (!tiltWanted) return;
+  if (!tiltListening) {
+    try {
+      if (!tiltAsked && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        tiltAsked = true;
+        const p = await DeviceOrientationEvent.requestPermission();
+        if (p !== 'granted') { tiltWanted = false; tiltOn = false; updateTiltBtn(); return; }
+      }
+      addEventListener('deviceorientation', onTilt);
+      tiltListening = true;
+    } catch (err) { tiltOn = false; return; }
+  }
+  recenterTilt();
+}
+function updateTiltBtn() {
+  $('bTilt').textContent = '📱 Tilt to steer: ' + (tiltWanted ? 'ON' : 'OFF');
+  $('bTilt').classList.toggle('sel', tiltWanted);
 }
 $('bTilt').onclick = async () => {
   Snd.init();
-  if (!tiltOn) {
-    try { if (typeof DeviceOrientationEvent.requestPermission === 'function') { const p = await DeviceOrientationEvent.requestPermission(); if (p !== 'granted') return; } } catch (err) { return; }
-    addEventListener('deviceorientation', onTilt); tiltOn = true;
-  } else { removeEventListener('deviceorientation', onTilt); tiltOn = false; tiltVal = 0; }
-  $('bTilt').textContent = '📱 Steer by tilting: ' + (tiltOn ? 'ON' : 'OFF');
-  $('bTilt').classList.toggle('sel', tiltOn);
+  tiltWanted = !tiltWanted; settings.tilt = tiltWanted; saveSettings();
+  if (tiltWanted) { tiltAsked = false; await enableTilt(); } else { tiltOn = false; }
+  updateTiltBtn();
 };
+updateTiltBtn();
+function tiltSteer() {
+  if (!tiltOn || tiltRaw === null || tiltNeutral === null) return 0;
+  let d = tiltRaw - tiltNeutral;
+  if (d > 180) d -= 360; if (d < -180) d += 360;
+  const dead = 2.5, full = settings.diff === 'easy' ? 16 : 20;
+  if (Math.abs(d) < dead) return 0;
+  return clamp((d - Math.sign(d) * dead) / (full - dead), -1, 1);
+}
 // iOS Safari ignores user-scalable=no: block pinch and double tap zoom
 ['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => document.addEventListener(ev, e => e.preventDefault(), { passive: false }));
 document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
@@ -377,7 +414,8 @@ function update(dt) {
 
   // steering input
   let steer = (inp.right || inp.tr ? 1 : 0) - (inp.left || inp.tl ? 1 : 0) + mouseSide;
-  if (tiltOn) steer = clamp(steer + tiltVal, -1, 1);
+  tiltNow = tiltSteer();
+  steer += tiltNow;
   steer = clamp(steer, -1, 1);
   B.vx += steer * d.steer * dt;
   // wind gusts
@@ -517,11 +555,11 @@ function refreshMenu() {
 }
 document.querySelectorAll('.diff button').forEach(b => b.addEventListener('click', () => { settings.diff = b.dataset.diff; saveSettings(); refreshMenu(); Snd.init(); Snd.star(); }));
 document.querySelectorAll('.skins button').forEach(b => b.addEventListener('click', () => { settings.skin = b.dataset.skin; saveSettings(); refreshMenu(); Snd.init(); Snd.helium(); }));
-$('bPlay').onclick = () => newGame();
-$('bResume').onclick = () => togglePause();
-$('bNext').onclick = () => startRoute(ri + 1);
-$('bRetry').onclick = () => { score = routeStartScore; startRoute(ri); };
-$('bAgain').onclick = () => newGame();
+$('bPlay').onclick = () => { enableTilt(); newGame(); };
+$('bResume').onclick = () => { enableTilt(); togglePause(); };
+$('bNext').onclick = () => { enableTilt(); startRoute(ri + 1); };
+$('bRetry').onclick = () => { enableTilt(); score = routeStartScore; startRoute(ri); };
+$('bAgain').onclick = () => { enableTilt(); newGame(); };
 document.querySelectorAll('[data-menu]').forEach(b => b.onclick = goMenu);
 $('bPause').onclick = () => togglePause();
 $('bSfx').onclick = () => { Snd.init(); settings.sfx = !settings.sfx; saveSettings(); updateSoundBtns(); };
@@ -722,6 +760,13 @@ function drawHUD() {
   txt('🏁', 168, 74, 12, '#fff', 'left', 'rgba(0,0,0,0)');
   if (B.air < 30 && Math.floor(time * 2) % 2 === 0) txt('Find helium!', 18, 96, 14, '#ffb3b3', 'left');
   if (banner) { ctx.globalAlpha = clamp(banner.t, 0, 1); txt(banner.text, (X0 + X1) / 2, 150, 40, '#ffe066'); if (banner.sub) txt(banner.sub, (X0 + X1) / 2, 190, 19, '#fff'); ctx.globalAlpha = 1; }
+  if (tiltOn) {
+    const mx = (X0 + X1) / 2, my = H - 24;
+    rrect(mx - 90, my - 9, 180, 18, 9, 'rgba(0,0,0,.35)');
+    circle(mx + tiltNow * 80, my, 11, Math.abs(tiltNow) > 0.05 ? '#ffd23f' : '#ffffff');
+    ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.fillRect(mx - 1, my - 9, 2, 18);
+    if (time < 6 + startTime) txt('📱 Tilt to steer! Tap the screen to straighten.', mx, my - 30, 16, '#fff');
+  }
   if (isTouchDev && !tiltOn && time < 8 + startTime) { ctx.globalAlpha = 0.5; txt('◀ hold', 70, H - 30, 18, '#fff'); txt('hold ▶', W - 70, H - 30, 18, '#fff'); ctx.globalAlpha = 1; }
 }
 const isTouchDev = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;

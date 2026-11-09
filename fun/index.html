@@ -1,0 +1,202 @@
+<!-- stldev.com - Copyright 2026 Joseph Warren. All rights reserved. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fun Zone | Free Browser Games | STL Soccer Dev Lab</title>
+  <meta name="description" content="Free browser games from stldev.com: Gobble Getaway, Turkey Toss, Candy Catch Spooktacular, FlappyBall and Pitch Invasion. No downloads, no ads, play on a computer, tablet or phone." />
+  <link rel="canonical" href="https://stldev.com/fun/" />
+  <meta name="theme-color" content="#0a1f0e" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="STL Soccer Dev Lab" />
+  <meta property="og:title" content="Fun Zone | Free Browser Games" />
+  <meta property="og:description" content="Free games you can play right in your browser. Holiday games for kids and soccer arcade games." />
+  <meta property="og:url" content="https://stldev.com/fun/" />
+  <meta property="og:image" content="https://stldev.com/og-image.png" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a1f0e'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%23b8f20a' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f97316'/%3E%3C/svg%3E" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XTR1SLXSTX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XTR1SLXSTX');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a1f0e;
+      --bg2: #10301a;
+      --card: #133a20;
+      --line: rgba(184, 242, 10, 0.18);
+      --lime: #b8f20a;
+      --lime-dim: #8abc06;
+      --orange: #f97316;
+      --text: #eaf5e4;
+      --muted: rgba(234, 245, 228, 0.65);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Syne', system-ui, sans-serif;
+      background: radial-gradient(1200px 600px at 80% -10%, #1a4a26 0%, transparent 60%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 22px; }
+
+    header { padding: 22px 0; border-bottom: 1px solid var(--line); }
+    header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 1px; text-decoration: none; }
+    .brand span { color: var(--lime); }
+    .home { font-family: 'DM Mono', monospace; font-size: .8rem; color: var(--muted); text-decoration: none; border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; }
+    .home:hover { color: var(--lime); border-color: var(--lime); }
+
+    .hero { padding: 54px 0 26px; }
+    .eyebrow { font-family: 'DM Mono', monospace; color: var(--lime-dim); font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; }
+    h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 9vw, 6rem); line-height: .95; letter-spacing: 1px; margin: 8px 0 14px; }
+    h1 .accent { color: var(--lime); }
+    .lede { max-width: 640px; color: var(--muted); font-size: 1.05rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .chip { font-family: 'DM Mono', monospace; font-size: .75rem; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,.03); }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 8px; }
+    .filters button { font-family: 'DM Mono', monospace; font-size: .8rem; background: transparent; color: var(--muted); border: 1px solid var(--line); padding: 7px 14px; border-radius: 999px; cursor: pointer; }
+    .filters button.on { background: var(--lime); color: var(--bg); border-color: var(--lime); font-weight: 500; }
+
+    h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.1rem; letter-spacing: 1px; margin: 34px 0 14px; display: flex; align-items: center; gap: 10px; }
+    h2 small { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--muted); letter-spacing: 0; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+    .game { background: linear-gradient(180deg, var(--card), var(--bg2)); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; text-decoration: none; transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+    .game:hover, .game:focus-visible { transform: translateY(-4px); border-color: var(--lime); box-shadow: 0 12px 30px rgba(0,0,0,.35); outline: none; }
+    .art { height: 150px; display: flex; align-items: center; justify-content: center; font-size: 4.2rem; position: relative; overflow: hidden; }
+    .art .badge { position: absolute; top: 12px; left: 12px; font-family: 'DM Mono', monospace; font-size: .7rem; background: rgba(0,0,0,.45); color: #fff; padding: 4px 9px; border-radius: 999px; }
+    .art .new { position: absolute; top: 12px; right: 12px; font-family: 'DM Mono', monospace; font-size: .7rem; background: var(--orange); color: #fff; padding: 4px 9px; border-radius: 999px; font-weight: 500; }
+    .art span.e { filter: drop-shadow(0 6px 8px rgba(0,0,0,.35)); }
+    .t-thanks { background: radial-gradient(circle at 30% 30%, #f6a04d, #b5541c); }
+    .t-thanks2 { background: radial-gradient(circle at 70% 30%, #ffd27a, #c4561b); }
+    .t-halloween { background: radial-gradient(circle at 40% 30%, #8a4fd1, #2b1446); }
+    .t-soccer { background: radial-gradient(circle at 40% 30%, #3fa34d, #0f4a1e); }
+    .t-soccer2 { background: radial-gradient(circle at 60% 30%, #2f6fb5, #0b1f3d); }
+    .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .body h3 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--text); }
+    .body p { color: var(--muted); font-size: .95rem; flex: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--lime); border: 1px solid var(--line); padding: 3px 8px; border-radius: 999px; }
+    .play { margin-top: 6px; align-self: flex-start; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; font-size: 1.25rem; background: var(--lime); color: var(--bg); padding: 6px 18px 4px; border-radius: 10px; }
+    .game:hover .play { background: #d4ff3d; }
+
+    .note { margin: 44px 0 0; padding: 18px 20px; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); font-size: .92rem; }
+    footer { margin-top: 50px; padding: 26px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-family: 'DM Mono', monospace; font-size: .75rem; }
+    footer a { color: var(--lime-dim); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="brand" href="/">STL <span>Soccer</span> Dev Lab</a>
+      <a class="home" href="/">← stldev.com</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">// Fun Zone</div>
+      <h1>Free <span class="accent">Games</span></h1>
+      <p class="lede">Every game on stldev.com in one place. They all run right in your browser, so there's nothing to download and no account to make. Pick one and press play!</p>
+      <div class="chips">
+        <span class="chip">🖥️ Computer</span>
+        <span class="chip">📱 Tablet &amp; phone</span>
+        <span class="chip">🚫 No ads</span>
+        <span class="chip">🆓 Always free</span>
+      </div>
+      <div class="filters" role="group" aria-label="Filter games">
+        <button class="on" data-f="all">All games</button>
+        <button data-f="kids">Great for little kids</button>
+        <button data-f="holiday">Holiday</button>
+        <button data-f="soccer">Soccer</button>
+      </div>
+    </section>
+
+    <section data-group="holiday">
+      <h2>🍂 Holiday Games <small>made for kids</small></h2>
+      <div class="grid">
+        <a class="game" href="/gobblegetaway/" data-tags="kids holiday">
+          <div class="art t-thanks"><span class="badge">Thanksgiving</span><span class="new">NEW</span><span class="e">🦃🍽️</span></div>
+          <div class="body">
+            <h3>Gobble Getaway</h3>
+            <p>You're the turkey! Collect every plate in the maze, grab the Thanksgiving treats, and don't let Grandma, the Farmer, the Pilgrim or the Chef catch you. Pick your turkey's costume first.</p>
+            <div class="tags"><span class="tag">Maze chase</span><span class="tag">8 turkey skins</span><span class="tag">Ages 5+</span></div>
+            <span class="play">▶ Play</span>
+          </div>
+        </a>
+        <a class="game" href="/turkeytoss/" data-tags="kids holiday">
+          <div class="art t-thanks2"><span class="badge">Thanksgiving</span><span class="new">NEW</span><span class="e">🥔🦃</span></div>
+          <div class="body">
+            <h3>Turkey Toss</h3>
+            <p>Run through the farm, the forest and Grandma's backyard throwing mashed potatoes at turkeys dressed as ninjas, pirates, astronauts and more. Beat the Ninja Master to get to dinner!</p>
+            <div class="tags"><span class="tag">Side scroller</span><span class="tag">3 levels + boss</span><span class="tag">Ages 5+</span></div>
+            <span class="play">▶ Play</span>
+          </div>
+        </a>
+        <a class="game" href="/candycatch/" data-tags="kids holiday">
+          <div class="art t-halloween"><span class="badge">Halloween</span><span class="e">🍬👻</span></div>
+          <div class="body">
+            <h3>Candy Catch Spooktacular</h3>
+            <p>Catch the falling treats and dodge the giggly ghosts. Silly, not scary, with a spooky switch you can turn off for the little ones.</p>
+            <div class="tags"><span class="tag">Catch game</span><span class="tag">Kid friendly scares</span><span class="tag">Ages 5+</span></div>
+            <span class="play">▶ Play</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section data-group="soccer">
+      <h2>⚽ Soccer Games <small>for players of every age</small></h2>
+      <div class="grid">
+        <a class="game" href="/flappyball/" data-tags="soccer kids">
+          <div class="art t-soccer"><span class="badge">Arcade</span><span class="e">⚽💨</span></div>
+          <div class="body">
+            <h3>FlappyBall</h3>
+            <p>Tap to dribble through the defenders without getting tackled. Pick Easy, Normal or Hard and chase your best score.</p>
+            <div class="tags"><span class="tag">One button</span><span class="tag">Leaderboard</span><span class="tag">All ages</span></div>
+            <span class="play">▶ Play</span>
+          </div>
+        </a>
+        <a class="game" href="/PitchInvasion/" data-tags="soccer">
+          <div class="art t-soccer2"><span class="badge">3D Arcade</span><span class="e">🏟️⚽</span></div>
+          <div class="body">
+            <h3>Pitch Invasion</h3>
+            <p>The stands have emptied onto the field! Defend the pitch from opponents, keepers, refs, fans and coaches with one ball that comes back to your feet.</p>
+            <div class="tags"><span class="tag">3D</span><span class="tag">Score multiplier</span><span class="tag">Touch or mouse</span></div>
+            <span class="play">▶ Play</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <p class="note">🛠️ Built by a youth soccer coach and dad in St. Louis. Have an idea for the next one? <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" rel="noopener" style="color:var(--lime)">Send it over</a>.</p>
+  </main>
+
+  <footer>
+    <div class="wrap">© 2026 Joseph Warren • <a href="/">stldev.com</a></div>
+  </footer>
+
+  <script>
+    const btns = document.querySelectorAll('.filters button');
+    btns.forEach(b => b.addEventListener('click', () => {
+      btns.forEach(x => x.classList.toggle('on', x === b));
+      const f = b.dataset.f;
+      document.querySelectorAll('.game').forEach(g => g.classList.toggle('hidden', f !== 'all' && !g.dataset.tags.split(' ').includes(f)));
+      document.querySelectorAll('section[data-group]').forEach(s => s.classList.toggle('hidden', !s.querySelector('.game:not(.hidden)')));
+    }));
+  </script>
+</body>
+</html>

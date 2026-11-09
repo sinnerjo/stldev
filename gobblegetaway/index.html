@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Gobble Getaway: A Thanksgiving Maze Chase | STLDev</title>
+<meta name="description" content="A kid friendly Thanksgiving maze game. You're the turkey! Collect the plates, grab the Thanksgiving treats, and dodge Grandma, the Farmer, the Pilgrim and the Chef.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦃</text></svg>">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #2a170c; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+  body { display: flex; align-items: center; justify-content: center; font-family: "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif; color: #fff; }
+  body * { touch-action: none; }
+  #wrap { position: relative; width: min(100vw, calc(100vh * 532 / 678)); height: min(100vh, calc(100vw * 678 / 532)); width: min(100vw, calc(100dvh * 532 / 678)); height: min(100dvh, calc(100vw * 678 / 532)); }
+  canvas { display: block; width: 100%; height: 100%; border-radius: 8px; }
+  .ov { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(40, 20, 8, .6); }
+  .ov.show { display: flex; }
+  .card { background: linear-gradient(#fff6e3, #ffe2b3); color: #5a2d0c; border: 5px solid #c4561b; border-radius: 22px; padding: 4% 5%; text-align: center; width: 90%; max-height: 94%; overflow: auto; box-shadow: 0 8px 0 #8a3a10, 0 14px 30px rgba(0,0,0,.4); }
+  .title { font-size: clamp(26px, 7vmin, 52px); font-weight: 900; color: #c4561b; text-shadow: 3px 3px 0 #ffd27a; line-height: 1.05; }
+  .subtitle { font-size: clamp(13px, 3vmin, 22px); font-weight: 800; color: #8a3a10; margin-top: 4px; }
+  .card p { font-size: clamp(12px, 2.3vmin, 17px); margin: .6em 0; }
+  .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: .5em 0; }
+  button { font-family: inherit; cursor: pointer; border: none; }
+  .btn { background: #e8792b; color: #fff; font-weight: 900; font-size: clamp(14px, 2.6vmin, 20px); padding: .55em 1.1em; border-radius: 14px; box-shadow: 0 5px 0 #a4480f; }
+  .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #a4480f; }
+  .btn.primary { background: #3fa34d; box-shadow: 0 5px 0 #23702d; font-size: clamp(17px, 3.4vmin, 28px); }
+  .btn.alt { background: #8a5a2b; box-shadow: 0 5px 0 #5a3814; }
+  .diff button { background: #fff; color: #5a2d0c; border: 4px solid #e0b27a; border-radius: 16px; padding: .45em .8em; font-weight: 900; font-size: clamp(13px, 2.5vmin, 19px); flex: 1; }
+  .diff button small { display: block; font-weight: 600; font-size: .7em; color: #8a5a2b; }
+  .diff button.sel { border-color: #3fa34d; background: #e6ffe2; }
+  .cast { display: flex; justify-content: center; gap: 4%; flex-wrap: wrap; font-size: clamp(11px, 2.1vmin, 15px); font-weight: 800; margin: .4em 0; }
+  .cast span { white-space: nowrap; }
+  .how { font-size: clamp(10px, 2vmin, 14px); color: #8a5a2b; margin-top: .6em; }
+  .hi { font-weight: 900; font-size: clamp(12px, 2.4vmin, 18px); margin-top: .4em; }
+  .stat { font-size: clamp(14px, 3vmin, 22px); font-weight: 800; margin: .3em 0; }
+  #hudBtns { position: absolute; top: .6%; right: 1%; display: none; gap: 5px; }
+  #hudBtns.show { display: flex; }
+  #hudBtns button { background: rgba(255,255,255,.85); border-radius: 9px; font-size: clamp(12px, 2.4vmin, 18px); width: 2em; height: 2em; box-shadow: 0 3px 0 rgba(0,0,0,.25); }
+  #pad { position: fixed; right: 12px; bottom: 12px; display: none; grid-template-columns: repeat(3, clamp(48px, 9vmin, 72px)); grid-template-rows: repeat(3, clamp(48px, 9vmin, 72px)); gap: 4px; opacity: .8; z-index: 5; }
+  #pad.show { display: grid; }
+  #pad button { border-radius: 14px; background: rgba(255,255,255,.3); border: 3px solid rgba(255,255,255,.7); color: #fff; font-size: clamp(18px, 4vmin, 30px); font-weight: 900; text-shadow: 0 2px 2px rgba(0,0,0,.4); }
+  #pad button.on { background: rgba(255,210,120,.7); }
+  #pad .u { grid-column: 2; grid-row: 1; } #pad .l { grid-column: 1; grid-row: 2; } #pad .r { grid-column: 3; grid-row: 2; } #pad .d { grid-column: 2; grid-row: 3; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="c" width="532" height="678"></canvas>
+  <div id="hudBtns">
+    <button id="bPause" title="Pause (P)">⏸️</button>
+    <button id="bSfx" title="Sound (M)">🔊</button>
+    <button id="bMusic" title="Music">🎵</button>
+  </div>
+
+  <div class="ov show" id="ovMenu">
+    <div class="card">
+      <div class="title">🦃 Gobble Getaway</div>
+      <div class="subtitle">A Thanksgiving Maze Chase</div>
+      <p>You're the turkey, and everyone wants you at the dinner table!<br>Collect every plate, grab the yummy treats, and don't get caught.</p>
+      <div class="cast">
+        <span>👵 Grandma</span><span>👨‍🌾 Farmer</span><span>🎩 Pilgrim</span><span>👨‍🍳 Chef</span>
+      </div>
+      <p>🌽 Eat a <b>Golden Corn</b> and the chasers get scared. Bump them to make them dizzy!</p>
+      <div class="row diff">
+        <button data-diff="easy">🐣 Little Kid<small>5 lives, slow chasers</small></button>
+        <button data-diff="normal">🦸 Big Kid<small>3 lives, speedy chasers</small></button>
+      </div>
+      <button class="btn primary" id="bPlay">▶ Play!</button>
+      <div class="how">Arrow keys or WASD to move • P to pause<br>On a tablet or phone: swipe anywhere, or use the arrow pad</div>
+      <div class="hi">🏆 Best Score: <span id="hiVal">0</span></div>
+    </div>
+  </div>
+
+  <div class="ov" id="ovPause">
+    <div class="card">
+      <div class="title">Paused</div>
+      <div class="row" style="margin-top:.8em">
+        <button class="btn primary" id="bResume">▶ Keep Going</button>
+        <button class="btn alt" data-menu>🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ov" id="ovOver">
+    <div class="card">
+      <div class="title">Caught! 🍽️</div>
+      <div class="subtitle">The turkey got a seat at the table this time.</div>
+      <div class="stat" id="overStats"></div>
+      <div class="row" style="margin-top:.8em">
+        <button class="btn primary" id="bRetry">🔄 Play Again</button>
+        <button class="btn alt" data-menu>🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pad">
+  <button class="u" data-d="up">▲</button>
+  <button class="l" data-d="left">◀</button>
+  <button class="r" data-d="right">▶</button>
+  <button class="d" data-d="down">▼</button>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ============ Maze (original layout) ============ */
+const MAZE = [
+  "###################",
+  "#o.......#.......o#",
+  "#.##.###.#.###.##.#",
+  "#.................#",
+  "#.##.#.#####.#.##.#",
+  "#....#...#...#....#",
+  "####.###.#.###.####",
+  "####.#.......#.####",
+  "####.#.##-##.#.####",
+  ".......#HHH#.......",
+  "####.#.#####.#.####",
+  "####.#.......#.####",
+  "####.#.#####.#.####",
+  "#........#........#",
+  "#.##.###.#.###.##.#",
+  "#o.#.....P.....#.o#",
+  "##.#.#.#####.#.#.##",
+  "#....#...#...#....#",
+  "#.######.#.######.#",
+  "#.................#",
+  "###################"
+];
+const COLS = 19, ROWS = 21, TS = 28, OY = 48;
+const W = COLS * TS, H = OY + ROWS * TS + 42;
+const TUNNEL = 9, DOOR = { c: 9, r: 8 }, OUT = { c: 9, r: 7 }, BONUS = { c: 9, r: 11 };
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const $ = id => document.getElementById(id);
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+
+function resize() {
+  const r = $('wrap').getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.max(200, Math.round(r.width * dpr));
+  cv.height = Math.max(250, Math.round(r.height * dpr));
+}
+addEventListener('resize', resize); resize();
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const settings = Object.assign({ diff: 'easy', sfx: true, music: true }, store.get('gg_settings', {}));
+let hiScore = store.get('gg_hi', 0);
+const saveSettings = () => store.set('gg_settings', settings);
+
+/* ============ Sound (generated) ============ */
+const Snd = {
+  ctx: null, master: null, mTimer: null, mNext: 0, mStep: 0, clink: 0,
+  init() {
+    if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+    try {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.master = this.ctx.createGain(); this.master.gain.value = 0.5; this.master.connect(this.ctx.destination);
+    } catch (e) { this.ctx = null; }
+  },
+  note(f, d, type, v, t, f2) {
+    const c = this.ctx; if (!c) return;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0008, t + d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t + d + 0.03);
+  },
+  tone(f, d, type = 'square', v = 0.12, f2 = null, delay = 0) { if (!this.ctx || !settings.sfx) return; this.note(f, d, type, v, this.ctx.currentTime + delay, f2); },
+  plate() { this.clink = 1 - this.clink; this.tone(this.clink ? 1320 : 1760, 0.05, 'triangle', 0.08); },
+  power() { [392, 523, 659, 784, 1047].forEach((f, i) => this.tone(f, 0.1, 'square', 0.07, null, i * 0.06)); },
+  bonk() { this.tone(180, 0.18, 'sine', 0.25, 600); this.tone(900, 0.25, 'triangle', 0.08, 1800, 0.08); },
+  gobble() { for (let i = 0; i < 5; i++) this.tone(560 - i * 35, 0.07, 'sawtooth', 0.08, 330 - i * 20, i * 0.07); },
+  food() { [784, 988, 1175, 1568].forEach((f, i) => this.tone(f, 0.1, 'square', 0.07, null, i * 0.07)); },
+  caught() { this.tone(700, 0.9, 'sawtooth', 0.1, 120); this.gobble(); },
+  extra() { [523, 659, 784, 1047, 1319].forEach((f, i) => this.tone(f, 0.12, 'triangle', 0.1, null, i * 0.09)); },
+  clear() { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => this.tone(f, i === 6 ? 0.5 : 0.13, 'square', 0.08, null, i * 0.12)); },
+  ready() { [392, 494, 587, 784, 587, 784].forEach((f, i) => this.tone(f, 0.16, 'triangle', 0.1, null, i * 0.17)); },
+  scaredTick() { this.tone(260, 0.12, 'sine', 0.035, 200); },
+  // Original little dinner bell tune
+  MEL: [72,76,79,76, 74,77,81,77, 76,79,84,79, 77,74,72,0, 72,71,69,71, 72,74,76,74, 72,76,74,71, 72,0,0,0],
+  BASS: [48,53,55,48, 45,50,55,48],
+  startMusic() { if (!this.ctx || this.mTimer) return; this.mNext = this.ctx.currentTime + 0.1; this.mTimer = setInterval(() => this.schedule(), 60); },
+  schedule() {
+    const c = this.ctx; if (!c) return;
+    if (!settings.music || state !== 'play' || scaredT > 0) { this.mNext = c.currentTime + 0.1; return; }
+    const midi = n => 440 * Math.pow(2, (n - 69) / 12);
+    while (this.mNext < c.currentTime + 0.25) {
+      const i = this.mStep % this.MEL.length, n = this.MEL[i];
+      if (n) this.note(midi(n), 0.15, 'triangle', 0.035, this.mNext);
+      if (i % 4 === 0) this.note(midi(this.BASS[Math.floor(i / 4) % this.BASS.length]), 0.3, 'square', 0.018, this.mNext);
+      this.mNext += 0.19; this.mStep++;
+    }
+  }
+};
+
+/* ============ Settings per difficulty ============ */
+function D() {
+  const lv = level - 1;
+  return settings.diff === 'easy'
+    ? { lives: 5, tSpd: 6.8, gSpd: Math.min(4.6 + lv * 0.25, 6.2), scared: Math.max(6, 10 - lv * 0.5), scatter: 8, chase: 12, release: [0, 3, 10, 18] }
+    : { lives: 3, tSpd: 7.6, gSpd: Math.min(6.6 + lv * 0.35, 8.2), scared: Math.max(3, 8 - lv), scatter: 6, chase: 20, release: [0, 1, 6, 12] };
+}
+
+const FOODS = [
+  { name: 'Corn on the Cob', pts: 100 },
+  { name: 'Cranberry Sauce', pts: 300 },
+  { name: 'Dinner Roll', pts: 500 },
+  { name: 'Mashed Potatoes', pts: 700 },
+  { name: 'Sweet Potato Casserole', pts: 1000 },
+  { name: 'Green Bean Casserole', pts: 1500 },
+  { name: 'Pumpkin Pie', pts: 2000 }
+];
+const THEMES = [
+  { wall: '#9b5a26', wallHi: '#c98345', wallEdge: '#5e3210', floorA: '#fff4e2', floorB: '#fde3c3' },
+  { wall: '#b5541c', wallHi: '#e8792b', wallEdge: '#6e2c0a', floorA: '#fff7e8', floorB: '#ffe6b8' },
+  { wall: '#6b4a8a', wallHi: '#9a74bd', wallEdge: '#3b2652', floorA: '#fbf3ff', floorB: '#efe0fa' },
+  { wall: '#3f7a4a', wallHi: '#64a86f', wallEdge: '#204a28', floorA: '#f6fff2', floorB: '#e3f5d9' }
+];
+
+/* ============ Directions & grid ============ */
+const UP = { x: 0, y: -1, n: 'up' }, DOWN = { x: 0, y: 1, n: 'down' }, LEFT = { x: -1, y: 0, n: 'left' }, RIGHT = { x: 1, y: 0, n: 'right' };
+const DIRS = [UP, LEFT, DOWN, RIGHT];
+const DIRMAP = { up: UP, down: DOWN, left: LEFT, right: RIGHT };
+const opp = d => d === UP ? DOWN : d === DOWN ? UP : d === LEFT ? RIGHT : LEFT;
+let grid = [];
+function cell(c, r) {
+  if (r < 0 || r >= ROWS) return '#';
+  if (c < 0 || c >= COLS) return r === TUNNEL ? ' ' : '#';
+  return grid[r][c];
+}
+const open = (c, r) => { const ch = cell(c, r); return ch !== '#' && ch !== '-' && ch !== 'H'; };
+const isWall = (c, r) => { if (c < 0 || c >= COLS) return r !== TUNNEL; if (r < 0 || r >= ROWS) return true; return MAZE[r][c] === '#'; };
+
+/* ============ State ============ */
+let state = 'menu', level = 1, score = 0, lives = 3, time = 0;
+let T = null, chasers = [], platesLeft = 0, platesEaten = 0;
+let mode = 'scatter', modeT = 0, scaredT = 0, chain = 0, lifeT = 0;
+let stateT = 0, bonus = null, bonusTaken = [], parts = [], extraGiven = false, flash = 0, scaredTickT = 0;
+
+/* ============ Setup ============ */
+function buildGrid() {
+  grid = MAZE.map(r => r.replace('P', ' ').split(''));
+  platesLeft = 0;
+  for (const r of grid) for (const ch of r) if (ch === '.' || ch === 'o') platesLeft++;
+  platesEaten = 0;
+}
+
+const CAST = [
+  { type: 'grandma', name: 'Grandma', corner: { c: 17, r: -3 }, hx: 9, start: 'out' },
+  { type: 'farmer', name: 'Farmer', corner: { c: 1, r: -3 }, hx: 9, start: 'house' },
+  { type: 'pilgrim', name: 'Pilgrim', corner: { c: 0, r: 23 }, hx: 8, start: 'house' },
+  { type: 'chef', name: 'Chef', corner: { c: 18, r: 23 }, hx: 10, start: 'house' }
+];
+
+function resetActors() {
+  const d = D();
+  T = { cx: 9, cy: 15, prog: 0, dir: LEFT, next: LEFT, moving: true, x: 9, y: 15, face: -1, mouth: 0, spin: 0 };
+  chasers = CAST.map((c, i) => {
+    const g = { ...c, cx: 9, cy: 7, prog: 0, dir: LEFT, x: 9, y: 7, state: 'active', release: d.release[i], t: rand(0, 5), phase: 0, wobble: 0 };
+    if (c.start === 'house') { g.state = 'house'; g.x = c.hx; g.y = 9; }
+    return g;
+  });
+  mode = 'scatter'; modeT = d.scatter; scaredT = 0; lifeT = 0; chain = 0;
+}
+
+function startLevel(first) {
+  buildGrid();
+  bonus = null;
+  resetActors();
+  state = 'ready'; stateT = first ? 2.6 : 1.8;
+  if (first) Snd.ready();
+}
+
+function newGame() {
+  score = 0; level = 1; lives = D().lives; bonusTaken = []; extraGiven = false; parts = [];
+  showOv(null); setHud(true);
+  Snd.init(); Snd.startMusic();
+  startLevel(true);
+}
+
+/* ============ Movement ============ */
+function moveTurkey(dt) {
+  let m = D().tSpd * dt;
+  if (T.next && T.prog > 0 && T.next === opp(T.dir)) {
+    T.cx += T.dir.x; T.cy += T.dir.y; T.prog = 1 - T.prog; T.dir = T.next;
+  }
+  let guard = 0;
+  while (m > 0 && guard++ < 8) {
+    if (T.prog === 0) {
+      if (T.next && open(T.cx + T.next.x, T.cy + T.next.y)) T.dir = T.next;
+      if (!open(T.cx + T.dir.x, T.cy + T.dir.y)) { T.moving = false; break; }
+      T.moving = true;
+    }
+    const rem = 1 - T.prog;
+    if (m < rem) { T.prog += m; m = 0; }
+    else {
+      m -= rem; T.prog = 0; T.cx += T.dir.x; T.cy += T.dir.y;
+      if (T.cx < 0) T.cx = COLS - 1; else if (T.cx >= COLS) T.cx = 0;
+      eatAt(T.cx, T.cy);
+    }
+  }
+  T.x = T.cx + T.dir.x * T.prog; T.y = T.cy + T.dir.y * T.prog;
+  if (T.dir === LEFT) T.face = -1; else if (T.dir === RIGHT) T.face = 1;
+  if (T.moving) T.mouth += dt * 14;
+}
+
+function eatAt(c, r) {
+  const ch = grid[r] && grid[r][c];
+  if (ch === '.') {
+    grid[r][c] = ' '; score += 10; platesLeft--; platesEaten++; Snd.plate();
+  } else if (ch === 'o') {
+    grid[r][c] = ' '; score += 50; platesLeft--; platesEaten++;
+    Snd.power(); scaredT = D().scared; chain = 0;
+    for (const g of chasers) if (g.state === 'active' || g.state === 'scared') { if (g.state === 'active') reverse(g); g.state = 'scared'; }
+    addText(c, r, 'GOLDEN CORN!', '#ffd23f', 18);
+  } else return;
+  if (platesEaten === 60 || platesEaten === 130) {
+    const f = FOODS[Math.min(level - 1, FOODS.length - 1)];
+    bonus = { ...f, idx: Math.min(level - 1, FOODS.length - 1), t: 10 };
+  }
+  checkExtra();
+  if (platesLeft <= 0) { state = 'clear'; stateT = 2.4; Snd.clear(); }
+}
+
+function checkExtra() {
+  if (!extraGiven && score >= 10000) { extraGiven = true; lives++; Snd.extra(); addText(9, 13, 'EXTRA TURKEY!', '#7bd389', 20); }
+}
+
+function reverse(g) {
+  if (g.prog > 0) { g.cx += g.dir.x; g.cy += g.dir.y; g.prog = 1 - g.prog; }
+  g.dir = opp(g.dir);
+}
+
+function chaserTarget(g) {
+  if (g.state === 'dizzy') return OUT;
+  if (mode === 'scatter') return g.corner;
+  const tc = Math.round(T.x), tr = Math.round(T.y);
+  switch (g.type) {
+    case 'grandma': return { c: tc, r: tr };                                   // wants a hug right now
+    case 'farmer': return { c: tc + T.dir.x * 4, r: tr + T.dir.y * 4 };          // heads you off up ahead
+    case 'pilgrim': {                                                        // sneaks up, then gets shy
+      const dd = Math.hypot(tc - g.cx, tr - g.cy);
+      return dd > 7 ? { c: tc, r: tr } : g.corner;
+    }
+    case 'chef': return Math.random() < 0.45 ? { c: Math.floor(rand(0, COLS)), r: Math.floor(rand(0, ROWS)) } : { c: tc, r: tr }; // wanders looking for ingredients
+  }
+  return { c: tc, r: tr };
+}
+
+function chooseDir(g) {
+  const opts = DIRS.filter(d => d !== opp(g.dir) && open(g.cx + d.x, g.cy + d.y));
+  if (!opts.length) return open(g.cx + opp(g.dir).x, g.cy + opp(g.dir).y) ? opp(g.dir) : g.dir;
+  if (g.state === 'scared') return pick(opts);
+  const t = chaserTarget(g);
+  let best = opts[0], bd = Infinity;
+  for (const d of opts) {
+    const dx = g.cx + d.x - t.c, dy = g.cy + d.y - t.r, dd = dx * dx + dy * dy;
+    if (dd < bd) { bd = dd; best = d; }
+  }
+  return best;
+}
+
+function moveChaser(g, dt) {
+  const d = D();
+  g.t += dt;
+  if (g.state === 'house') {
+    g.x = g.hx; g.y = 9 + Math.sin(g.t * 5) * 0.18;
+    if (lifeT >= g.release) { g.state = 'leaving'; g.phase = 0; }
+    return;
+  }
+  if (g.state === 'leaving' || g.state === 'entering') {
+    const sp = 4 * dt;
+    const path = g.state === 'leaving' ? [{ x: 9, y: 9 }, { x: 9, y: 7 }] : [{ x: 9, y: 9 }, { x: g.hx, y: 9 }];
+    const tgt = path[g.phase];
+    const dx = tgt.x - g.x, dy = tgt.y - g.y, dist = Math.hypot(dx, dy);
+    if (dist <= sp) {
+      g.x = tgt.x; g.y = tgt.y; g.phase++;
+      if (g.phase >= path.length) {
+        if (g.state === 'leaving') {
+          g.state = 'active'; g.cx = 9; g.cy = 7; g.prog = 0; g.dir = Math.random() < 0.5 ? LEFT : RIGHT;
+        } else { g.state = 'house'; g.release = lifeT + 1.2; }
+      }
+    } else { g.x += dx / dist * sp; g.y += dy / dist * sp; }
+    return;
+  }
+  // active, scared, dizzy
+  let spd = d.gSpd;
+  if (g.state === 'scared') spd *= 0.55;
+  if (g.state === 'dizzy') spd = 12;
+  if (g.state !== 'dizzy' && g.cy === TUNNEL && (g.cx < 4 || g.cx > 14)) spd *= 0.5;
+  let m = spd * dt, guard = 0;
+  while (m > 0 && guard++ < 8) {
+    const rem = 1 - g.prog;
+    if (m < rem) { g.prog += m; m = 0; break; }
+    m -= rem; g.prog = 0; g.cx += g.dir.x; g.cy += g.dir.y;
+    if (g.cx < 0) g.cx = COLS - 1; else if (g.cx >= COLS) g.cx = 0;
+    if (g.state === 'dizzy' && g.cx === OUT.c && g.cy === OUT.r) {
+      g.state = 'entering'; g.phase = 0; g.x = 9; g.y = 7; return;
+    }
+    g.dir = chooseDir(g);
+  }
+  if (g.prog === 0 && !open(g.cx + g.dir.x, g.cy + g.dir.y)) g.dir = chooseDir(g);
+  g.x = g.cx + g.dir.x * g.prog; g.y = g.cy + g.dir.y * g.prog;
+}
+
+/* ============ Update ============ */
+function update(dt) {
+  time += dt;
+  flash = Math.max(0, flash - dt);
+  for (const p of parts) { p.life -= dt; p.x += p.vx * dt; p.y += p.vy * dt; if (p.g) p.vy += p.g * dt; }
+  parts = parts.filter(p => p.life > 0);
+
+  if (state === 'ready') { stateT -= dt; for (const g of chasers) if (g.state === 'house') { g.t += dt; g.y = 9 + Math.sin(g.t * 5) * 0.18; } if (stateT <= 0) state = 'play'; return; }
+  if (state === 'dying') {
+    stateT -= dt; T.spin += dt * 14;
+    if (stateT <= 0) {
+      lives--;
+      if (lives <= 0) return gameOver();
+      resetActors(); state = 'ready'; stateT = 1.8;
+    }
+    return;
+  }
+  if (state === 'clear') {
+    stateT -= dt;
+    if (stateT <= 0) { level++; addText(9, 11, 'Level ' + level + '!', '#fff', 22); startLevel(false); }
+    return;
+  }
+  if (state !== 'play') return;
+
+  lifeT += dt;
+  const d = D();
+  if (scaredT > 0) {
+    scaredT -= dt;
+    scaredTickT -= dt; if (scaredTickT <= 0) { scaredTickT = 0.32; Snd.scaredTick(); }
+    if (scaredT <= 0) { scaredT = 0; for (const g of chasers) if (g.state === 'scared') g.state = 'active'; }
+  } else {
+    modeT -= dt;
+    if (modeT <= 0) {
+      mode = mode === 'scatter' ? 'chase' : 'scatter';
+      modeT = mode === 'scatter' ? d.scatter : d.chase;
+      for (const g of chasers) if (g.state === 'active') reverse(g);
+    }
+  }
+
+  moveTurkey(dt);
+  if (state !== 'play') return;
+  for (const g of chasers) moveChaser(g, dt);
+
+  // Bonus food
+  if (bonus) {
+    bonus.t -= dt;
+    if (bonus.t <= 0) bonus = null;
+    else if (Math.hypot(T.x - BONUS.c, T.y - BONUS.r) < 0.6) {
+      score += bonus.pts; Snd.food(); addText(BONUS.c, BONUS.r, bonus.name + ' +' + bonus.pts, '#ffd08a', 16);
+      bonusTaken.push(bonus.idx); if (bonusTaken.length > 7) bonusTaken.shift();
+      burst(BONUS.c, BONUS.r, 16, ['#ffd23f', '#ff8c1a', '#fff']);
+      bonus = null; checkExtra();
+    }
+  }
+
+  // Collisions
+  for (const g of chasers) {
+    if (g.state !== 'active' && g.state !== 'scared') continue;
+    let dx = Math.abs(g.x - T.x); if (dx > COLS / 2) dx = COLS - dx;
+    if (dx < 0.62 && Math.abs(g.y - T.y) < 0.62) {
+      if (g.state === 'scared') {
+        chain++;
+        const pts = 200 * Math.pow(2, chain - 1);
+        score += pts; g.state = 'dizzy'; Snd.bonk(); flash = 0.08;
+        addText(g.x, g.y, 'BONK! +' + pts, '#fff', 18);
+        burst(g.x, g.y, 14, ['#ffe066', '#fff', '#6fc3f0']);
+        checkExtra();
+      } else {
+        state = 'dying'; stateT = 1.6; Snd.caught();
+        feathers(T.x, T.y);
+        return;
+      }
+    }
+  }
+}
+
+function gameOver() {
+  state = 'over'; setHud(false);
+  const newHi = score > hiScore;
+  if (newHi) { hiScore = score; store.set('gg_hi', hiScore); }
+  $('overStats').innerHTML = 'Score: ' + score + ' &nbsp;•&nbsp; Level ' + level + (newHi ? '<br>🏆 NEW BEST SCORE! 🏆' : '<br>Best: ' + hiScore);
+  $('hiVal').textContent = hiScore;
+  showOv('ovOver');
+}
+
+/* ============ Particles ============ */
+const px = c => c * TS + TS / 2, py = r => OY + r * TS + TS / 2;
+function addText(c, r, text, color, size) { parts.push({ kind: 'text', x: px(c), y: py(r), vx: 0, vy: -40, life: 1.2, max: 1.2, text, color, size }); }
+function burst(c, r, n, colors) {
+  for (let i = 0; i < n; i++) { const a = rand(0, 6.28), s = rand(40, 160); parts.push({ kind: 'dot', x: px(c), y: py(r), vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rand(0.3, 0.7), max: 0.7, size: rand(2, 4), color: pick(colors) }); }
+}
+function feathers(c, r) {
+  for (let i = 0; i < 16; i++) parts.push({ kind: 'feather', x: px(c), y: py(r), vx: rand(-120, 120), vy: rand(-200, -40), life: rand(1, 1.6), max: 1.6, rot: rand(0, 6), g: 220, color: pick(['#c0392b', '#e67e22', '#f1c40f', '#8b5a2b']) });
+}
+
+/* ============ Drawing helpers ============ */
+function circle(x, y, r, c) { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = c; ctx.fill(); }
+function ellipse(x, y, rx, ry, c, rot = 0) { ctx.beginPath(); ctx.ellipse(x, y, rx, ry, rot, 0, Math.PI * 2); ctx.fillStyle = c; ctx.fill(); }
+function rrect(x, y, w, h, r, c) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); ctx.fillStyle = c; ctx.fill(); }
+function txt(s, x, y, size, color = '#fff', align = 'center', outline = '#3a1d08') {
+  ctx.font = '900 ' + size + 'px "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif';
+  ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  ctx.lineWidth = Math.max(3, size / 5); ctx.strokeStyle = outline; ctx.strokeText(s, x, y);
+  ctx.fillStyle = color; ctx.fillText(s, x, y);
+}
+function star5(x, y, r, c) {
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r; ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); }
+  ctx.closePath(); ctx.fillStyle = c; ctx.fill();
+}
+
+/* ============ Maze drawing ============ */
+function drawMaze() {
+  const th = THEMES[(level - 1) % THEMES.length];
+  const blink = state === 'clear' && Math.floor(stateT * 6) % 2 === 0;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const x = c * TS, y = OY + r * TS, ch = MAZE[r][c];
+    if (ch === '#') continue;
+    ctx.fillStyle = ch === 'H' ? '#e8c9a0' : ((r + c) % 2 ? th.floorB : th.floorA);
+    ctx.fillRect(x, y, TS, TS);
+  }
+  // tablecloth stripes
+  ctx.strokeStyle = 'rgba(200,80,40,.08)'; ctx.lineWidth = 2;
+  for (let c = 0; c <= COLS; c += 2) { ctx.beginPath(); ctx.moveTo(c * TS, OY); ctx.lineTo(c * TS, OY + ROWS * TS); ctx.stroke(); }
+  for (let r = 0; r <= ROWS; r += 2) { ctx.beginPath(); ctx.moveTo(0, OY + r * TS); ctx.lineTo(W, OY + r * TS); ctx.stroke(); }
+
+  const wall = blink ? '#ffffff' : th.wall, hi = blink ? '#ffe9c7' : th.wallHi, edge = blink ? '#ffd08a' : th.wallEdge;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    if (MAZE[r][c] !== '#') continue;
+    const x = c * TS, y = OY + r * TS;
+    ctx.fillStyle = edge; ctx.fillRect(x, y, TS, TS);
+    const l = isWall(c - 1, r) ? 0 : 3, rr = isWall(c + 1, r) ? 0 : 3, t = isWall(c, r - 1) ? 0 : 3, b = isWall(c, r + 1) ? 0 : 3;
+    ctx.fillStyle = wall; ctx.fillRect(x + l, y + t, TS - l - rr, TS - t - b);
+    if (t) { ctx.fillStyle = hi; ctx.fillRect(x + l, y + t, TS - l - rr, 4); }
+    // wood grain
+    if ((r * 7 + c * 3) % 4 === 0) { ctx.fillStyle = 'rgba(0,0,0,.08)'; ctx.fillRect(x + 6, y + 12, TS - 12, 2); }
+  }
+  // farmhouse door (a little picket gate)
+  const dx = DOOR.c * TS, dy = OY + DOOR.r * TS;
+  ctx.fillStyle = '#e8c9a0'; ctx.fillRect(dx, dy, TS, TS);
+  ctx.fillStyle = '#fff';
+  for (let i = 0; i < 4; i++) rrect(dx + 2 + i * 7, dy + 9, 4, 12, 2, '#fff');
+  ctx.fillRect(dx, dy + 13, TS, 3);
+
+  // Plates and golden corn
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const ch = grid[r][c];
+    if (ch === '.') {
+      const x = px(c), y = py(r);
+      circle(x + 0.8, y + 1.6, 6, 'rgba(60,30,10,.35)');
+      circle(x, y, 6, '#ffffff');
+      ctx.lineWidth = 1.6; ctx.strokeStyle = '#5a3a22'; ctx.stroke();
+      ctx.beginPath(); ctx.arc(x, y, 4.1, 0, Math.PI * 2); ctx.lineWidth = 1.4; ctx.strokeStyle = '#2f6fd6'; ctx.stroke();
+      circle(x, y, 2.6, '#f1f5fa');
+    } else if (ch === 'o') {
+      const s = 1 + Math.sin(time * 6) * 0.12;
+      drawCorn(px(c), py(r), 0.9 * s, true);
+    }
+  }
+}
+
+/* ============ Food art ============ */
+function drawCorn(x, y, s, glow) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(-0.5);
+  if (glow) circle(0, 0, 12, 'rgba(255,215,64,.35)');
+  ellipse(0, -1, 5.5, 10, '#ffd23f');
+  for (let i = -7; i <= 5; i += 4) { circle(-2, i, 1.3, '#e8a90f'); circle(2, i + 2, 1.3, '#e8a90f'); }
+  ctx.fillStyle = '#5faa3a';
+  ctx.beginPath(); ctx.moveTo(0, 11); ctx.quadraticCurveTo(-11, 3, -6, -6); ctx.quadraticCurveTo(-4, 5, 0, 11); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(0, 11); ctx.quadraticCurveTo(11, 3, 6, -6); ctx.quadraticCurveTo(4, 5, 0, 11); ctx.fill();
+  ctx.restore();
+}
+function drawFood(i, x, y, s = 1) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  switch (i) {
+    case 0: drawCorn(0, 0, 1, false); break;
+    case 1: // cranberry sauce on a plate
+      ellipse(0, 6, 12, 4, '#fff'); rrect(-7, -6, 14, 12, 3, '#b3123a');
+      ctx.fillStyle = '#8e0b2c'; for (let k = -3; k <= 3; k += 3) ctx.fillRect(-7, k, 14, 1.2);
+      ellipse(0, -6, 7, 2.5, '#d92a55'); break;
+    case 2: // dinner roll
+      ellipse(0, 2, 11, 8, '#c98a3a'); ellipse(0, 0, 10, 7, '#e8b46a'); ellipse(-3, -3, 4, 2, '#f6d29a');
+      ctx.strokeStyle = '#b5762e'; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(-4, -5); ctx.lineTo(-1, 5); ctx.moveTo(2, -5); ctx.lineTo(5, 4); ctx.stroke(); break;
+    case 3: // mashed potatoes
+      ctx.beginPath(); ctx.moveTo(-11, 0); ctx.lineTo(11, 0); ctx.lineTo(8, 8); ctx.lineTo(-8, 8); ctx.closePath(); ctx.fillStyle = '#5b8fd1'; ctx.fill();
+      circle(-4, -2, 6, '#fff8e1'); circle(4, -2, 6, '#fff8e1'); circle(0, -6, 6, '#fffdf3'); rrect(-2, -11, 5, 4, 1, '#ffd23f'); break;
+    case 4: // sweet potato casserole
+      rrect(-12, -5, 24, 12, 3, '#d9d2c5'); rrect(-10, -5, 20, 6, 2, '#e8792b');
+      for (let k = 0; k < 5; k++) circle(-8 + k * 4, -5 + (k % 2), 2.2, '#fff6e0'); break;
+    case 5: // green bean casserole
+      rrect(-12, -5, 24, 12, 3, '#cfc8bb'); rrect(-10, -5, 20, 6, 2, '#5f9c3a');
+      for (let k = 0; k < 6; k++) circle(-8 + k * 3.3, -6 + (k % 2) * 2, 1.6, '#c9883a'); break;
+    default: // pumpkin pie slice
+      ctx.beginPath(); ctx.moveTo(-11, 6); ctx.lineTo(11, 6); ctx.lineTo(0, -10); ctx.closePath(); ctx.fillStyle = '#e07b24'; ctx.fill();
+      ctx.fillStyle = '#c98a3a'; ctx.fillRect(-11, 4, 22, 4);
+      circle(0, -1, 3.5, '#fff');
+  }
+  ctx.restore();
+}
+
+/* ============ Characters ============ */
+function drawTurkey() {
+  const x = px(T.x), y = py(T.y);
+  ctx.save(); ctx.translate(x, y);
+  if (state === 'dying') { ctx.rotate(T.spin); const s = Math.max(0, stateT / 1.6); ctx.scale(s, s); }
+  else if (T.dir === UP) ctx.rotate(-Math.PI / 2 * T.face);
+  else if (T.dir === DOWN) ctx.rotate(Math.PI / 2 * T.face);
+  ctx.scale(T.face, 1);
+  // tail fan
+  const fan = ['#8b4513', '#c0392b', '#e67e22', '#f1c40f', '#e67e22', '#c0392b', '#8b4513'];
+  for (let i = 0; i < 7; i++) {
+    const a = Math.PI * 0.62 + i * (Math.PI * 0.76 / 6);
+    ctx.save(); ctx.rotate(a); ellipse(10, 0, 9, 3.6, fan[i]); ellipse(16, 0, 2.6, 2.4, '#fff3d6'); ctx.restore();
+  }
+  ellipse(-1, 0, 10, 9, '#8b5a2b');
+  ellipse(1, 2, 6, 5.5, '#a8703a');
+  ellipse(-3, -1, 5, 4, '#6e4220', -0.3);
+  // feet
+  const st = T.moving ? Math.sin(T.mouth) * 2 : 0;
+  ctx.strokeStyle = '#e8961e'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-2, 8); ctx.lineTo(-2 + st, 12); ctx.moveTo(3, 8); ctx.lineTo(3 - st, 12); ctx.stroke();
+  // head
+  circle(8, -4, 5.8, '#c58b5e');
+  const open = T.moving ? Math.abs(Math.sin(T.mouth)) * 0.6 : 0.15;
+  ctx.fillStyle = '#f5a623';
+  ctx.beginPath(); ctx.moveTo(12, -5); ctx.lineTo(18, -5 - open * 5); ctx.lineTo(12.5, -3); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(12, -3); ctx.lineTo(18, -3 + open * 5); ctx.lineTo(12.5, -1.5); ctx.fill();
+  ellipse(12, 1, 1.8, 3.4, '#e63946');
+  circle(9.5, -6, 2.3, '#fff'); circle(10.2, -6, 1.2, '#2b1a0f');
+  ctx.restore();
+}
+
+function drawChaser(g) {
+  const x = px(g.x), y = py(g.y);
+  const scared = g.state === 'scared' || (g.state === 'house' && scaredT > 0);
+  const dizzy = g.state === 'dizzy' || g.state === 'entering';
+  const blinkWhite = scared && scaredT < 2 && Math.floor(scaredT * 6) % 2 === 0;
+  const bob = Math.abs(Math.sin(g.t * 10)) * 1.5;
+  ctx.save(); ctx.translate(x, y - bob);
+  if (dizzy) ctx.globalAlpha = 0.55;
+
+  const skin = scared ? (blinkWhite ? '#ffffff' : '#bcd6ff') : '#f2c9a0';
+  let outfit = { grandma: '#e86fa3', farmer: '#2f6fb5', pilgrim: '#2b2b2b', chef: '#f4f4f4' }[g.type];
+  if (scared) outfit = blinkWhite ? '#ffffff' : '#4f7fd9';
+  // feet
+  const st = Math.sin(g.t * 14) * 2;
+  ellipse(-4 + st, 12, 3.4, 2.2, '#3a2614'); ellipse(4 - st, 12, 3.4, 2.2, '#3a2614');
+  // body
+  ctx.beginPath(); ctx.moveTo(-10, 11); ctx.quadraticCurveTo(-10, -1, 0, -1); ctx.quadraticCurveTo(10, -1, 10, 11); ctx.closePath();
+  ctx.fillStyle = outfit; ctx.fill();
+  if (!scared) {
+    if (g.type === 'grandma') { rrect(-5, 2, 10, 9, 2, '#fff'); circle(0, 4, 1.2, '#e86fa3'); }
+    if (g.type === 'farmer') { ctx.fillStyle = '#d64545'; ctx.fillRect(-9, 0, 18, 3); ctx.fillStyle = '#ffd23f'; circle(-4, 4, 1.3, '#ffd23f'); circle(4, 4, 1.3, '#ffd23f'); }
+    if (g.type === 'pilgrim') { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(-7, -1); ctx.lineTo(7, -1); ctx.lineTo(0, 6); ctx.fill(); }
+    if (g.type === 'chef') { ctx.fillStyle = '#d62828'; ctx.beginPath(); ctx.moveTo(-5, -1); ctx.lineTo(5, -1); ctx.lineTo(0, 4); ctx.fill(); circle(0, 7, 1.2, '#999'); }
+  }
+  // arms (reaching when chasing, up in the air when scared)
+  ctx.strokeStyle = scared ? skin : outfit; ctx.lineWidth = 3.2; ctx.lineCap = 'round';
+  ctx.beginPath();
+  if (scared) { ctx.moveTo(-8, 3); ctx.lineTo(-12, -6); ctx.moveTo(8, 3); ctx.lineTo(12, -6); }
+  else { const fx = g.dir.x * 4; ctx.moveTo(-8, 3); ctx.lineTo(-12 + fx, 6); ctx.moveTo(8, 3); ctx.lineTo(12 + fx, 6); }
+  ctx.stroke();
+  // head
+  circle(0, -7, 7.5, skin);
+  // hair & hats
+  if (g.type === 'grandma') {
+    ctx.fillStyle = '#d4d4d4'; ctx.beginPath(); ctx.arc(0, -8, 7.8, Math.PI * 1.05, Math.PI * 1.95); ctx.fill();
+    circle(0, -15.5, 3.6, '#d4d4d4');
+  } else if (g.type === 'farmer') {
+    ellipse(0, -12, 11, 2.6, '#e8c15a'); rrect(-5.5, -18, 11, 6.5, 3, '#d9ad3c'); ctx.fillStyle = '#b3402f'; ctx.fillRect(-5.5, -13.6, 11, 1.8);
+  } else if (g.type === 'pilgrim') {
+    rrect(-10, -13.5, 20, 3, 1.5, '#1b1b1b');
+    ctx.fillStyle = '#1b1b1b'; ctx.beginPath(); ctx.moveTo(-6, -13); ctx.lineTo(-5, -24); ctx.lineTo(5, -24); ctx.lineTo(6, -13); ctx.fill();
+    ctx.strokeStyle = '#ffd23f'; ctx.lineWidth = 1.4; ctx.strokeRect(-2.5, -18.5, 5, 4.2);
+  } else if (g.type === 'chef') {
+    rrect(-6, -16, 12, 5, 1, '#fff'); circle(-4, -18, 4, '#fff'); circle(4, -18, 4, '#fff'); circle(0, -21, 4.5, '#fff');
+    ctx.strokeStyle = '#ddd'; ctx.lineWidth = 0.8; ctx.strokeRect(-6, -16, 12, 5);
+    ctx.strokeStyle = '#5a3a22'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(-3, -3.5); ctx.quadraticCurveTo(0, -5, 3, -3.5); ctx.stroke(); // mustache
+  }
+  // face
+  if (dizzy) {
+    ctx.strokeStyle = '#2b1a0f'; ctx.lineWidth = 1.2;
+    for (const ex of [-3, 3]) { ctx.beginPath(); ctx.arc(ex, -8, 2, 0, Math.PI * 1.6); ctx.stroke(); }
+    ctx.globalAlpha = 1;
+    for (let k = 0; k < 3; k++) { const a = g.t * 6 + k * 2.1; star5(Math.cos(a) * 10, -16 + Math.sin(a) * 3, 2.6, '#ffd23f'); }
+  } else if (scared) {
+    circle(-3, -8, 1.8, '#1b2a55'); circle(3, -8, 1.8, '#1b2a55');
+    ctx.strokeStyle = '#1b2a55'; ctx.lineWidth = 1.2; ctx.beginPath();
+    for (let k = 0; k <= 6; k++) ctx.lineTo(-4 + k * 1.33, -3 + (k % 2 ? -1 : 0.6)); ctx.stroke();
+    ellipse(7, -11, 1.4, 2.2, '#7ec8f0');
+  } else {
+    const lx = g.dir.x * 1.3, ly = g.dir.y * 1.3;
+    circle(-3, -8, 2.5, '#fff'); circle(3, -8, 2.5, '#fff');
+    circle(-3 + lx, -8 + ly, 1.3, '#2b1a0f'); circle(3 + lx, -8 + ly, 1.3, '#2b1a0f');
+    if (g.type === 'grandma') { ctx.strokeStyle = '#6b4a2a'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(-3, -8, 3.2, 0, 7); ctx.moveTo(6.2, -8); ctx.arc(3, -8, 3.2, 0, 7); ctx.stroke(); }
+    ctx.strokeStyle = '#7a3b2a'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(0, -4.5, 2.4, 0.2, Math.PI - 0.2); ctx.stroke();
+    circle(-5.5, -4.5, 1.5, 'rgba(255,120,120,.45)'); circle(5.5, -4.5, 1.5, 'rgba(255,120,120,.45)');
+  }
+  ctx.restore();
+}
+
+function drawMiniTurkey(x, y) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(0.7, 0.7);
+  const fan = ['#c0392b', '#e67e22', '#f1c40f', '#e67e22', '#c0392b'];
+  for (let i = 0; i < 5; i++) { ctx.save(); ctx.rotate(Math.PI * 0.7 + i * 0.3); ellipse(9, 0, 8, 3.4, fan[i]); ctx.restore(); }
+  ellipse(0, 0, 9, 8, '#8b5a2b'); circle(7, -4, 5, '#c58b5e');
+  ctx.fillStyle = '#f5a623'; ctx.beginPath(); ctx.moveTo(11, -5); ctx.lineTo(16, -3); ctx.lineTo(11, -2); ctx.fill();
+  circle(8.5, -5.5, 1.6, '#fff');
+  ctx.restore();
+}
+
+/* ============ HUD & render ============ */
+function render() {
+  ctx.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0);
+  ctx.fillStyle = '#3a2214'; ctx.fillRect(0, 0, W, H);
+  if (!grid.length) buildGrid();
+
+  // top HUD
+  txt('SCORE', 14, 14, 12, '#ffd08a', 'left');
+  txt(String(score), 14, 33, 20, '#fff', 'left');
+  txt('LEVEL ' + level, W / 2, 24, 18, '#ffe066');
+  txt('BEST ' + Math.max(hiScore, score), W - 120, 24, 13, '#ffd08a', 'right');
+
+  ctx.save();
+  ctx.beginPath(); ctx.rect(0, OY, W, ROWS * TS); ctx.clip();
+  drawMaze();
+  if (bonus) {
+    const blink = bonus.t < 2.5 && Math.floor(bonus.t * 6) % 2 === 0;
+    if (!blink) { circle(px(BONUS.c), py(BONUS.r), 14, 'rgba(255,230,150,.55)'); drawFood(bonus.idx, px(BONUS.c), py(BONUS.r), 1); }
+  }
+  if (state !== 'menu') {
+    for (const g of chasers) if (g.state === 'house' || g.state === 'leaving' || g.state === 'entering') drawChaser(g);
+    for (const g of chasers) if (!(g.state === 'house' || g.state === 'leaving' || g.state === 'entering')) drawChaser(g);
+    if (!(state === 'dying' && stateT < 0.2)) drawTurkey();
+  } else {
+    // menu preview: chasers parade
+    for (let i = 0; i < 4; i++) {
+      const g = { type: CAST[i].type, x: ((time * 2 + i * 1.6) % 22) - 2, y: 19, dir: RIGHT, state: 'active', t: time + i };
+      drawChaser(g);
+    }
+  }
+  for (const p of parts) {
+    ctx.globalAlpha = clamp(p.life / p.max, 0, 1);
+    if (p.kind === 'text') txt(p.text, p.x, p.y, p.size, p.color);
+    else if (p.kind === 'feather') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot + time * 4); ellipse(0, 0, 7, 2.6, p.color); ctx.restore(); }
+    else circle(p.x, p.y, p.size, p.color);
+  }
+  ctx.globalAlpha = 1;
+  if (state === 'ready') txt('GET READY!', px(9), py(11), 22, '#ffe066');
+  if (state === 'clear') txt('TABLE SET! 🍽️', px(9), py(11), 22, '#ffe066');
+  if (flash > 0) { ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(0, OY, W, ROWS * TS); }
+  ctx.restore();
+
+  // bottom HUD
+  const by = OY + ROWS * TS + 21;
+  for (let i = 0; i < Math.min(lives - (state === 'menu' ? 0 : 1), 8); i++) drawMiniTurkey(22 + i * 26, by);
+  for (let i = 0; i < bonusTaken.length; i++) drawFood(bonusTaken[i], W - 20 - i * 26, by, 0.8);
+  if (scaredT > 0 && state === 'play') {
+    const w = 120 * scaredT / D().scared;
+    rrect(W / 2 - 60, by - 5, 120, 10, 5, 'rgba(0,0,0,.4)');
+    rrect(W / 2 - 60, by - 5, w, 10, 5, '#ffd23f');
+  }
+}
+
+/* ============ Input ============ */
+function setDir(n) { if (T && (state === 'play' || state === 'ready')) T.next = DIRMAP[n]; }
+const KEYS = { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' };
+addEventListener('keydown', e => {
+  Snd.init();
+  if (!['play', 'ready', 'dying', 'clear'].includes(state) && (e.code === 'Enter' || e.code === 'Space')) {
+    const b = document.querySelector('.ov.show .btn.primary'); if (b) { e.preventDefault(); if (!e.repeat) b.click(); return; }
+  }
+  const k = KEYS[e.code];
+  if (k) { e.preventDefault(); setDir(k); }
+  if ((e.code === 'KeyP' || e.code === 'Escape') && !e.repeat) togglePause();
+  if (e.code === 'KeyM' && !e.repeat) { settings.sfx = !settings.sfx; saveSettings(); updateSoundBtns(); }
+});
+
+// Swipe anywhere
+let sw = null;
+addEventListener('touchstart', e => {
+  Snd.init();
+  if (e.target.closest && (e.target.closest('.card') || e.target.closest('#hudBtns'))) return;
+  const t = e.touches[0]; sw = { x: t.clientX, y: t.clientY };
+  if (!e.target.closest('#pad')) e.preventDefault();
+}, { passive: false });
+addEventListener('touchmove', e => {
+  if (e.touches.length > 1) { e.preventDefault(); return; }
+  if (!sw) return;
+  const t = e.touches[0], dx = t.clientX - sw.x, dy = t.clientY - sw.y;
+  if (Math.max(Math.abs(dx), Math.abs(dy)) > 18) {
+    setDir(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+    sw = { x: t.clientX, y: t.clientY };
+  }
+  e.preventDefault();
+}, { passive: false });
+addEventListener('touchend', () => { sw = null; });
+
+// Arrow pad
+document.querySelectorAll('#pad button').forEach(b => {
+  const on = e => { e.preventDefault(); Snd.init(); setDir(b.dataset.d); b.classList.add('on'); };
+  const off = e => { e.preventDefault(); b.classList.remove('on'); };
+  b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointercancel', off); b.addEventListener('pointerleave', off);
+  b.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+  b.addEventListener('touchend', e => e.preventDefault(), { passive: false });
+});
+// iOS Safari ignores user-scalable=no: block pinch and double tap zoom
+['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => document.addEventListener(ev, e => e.preventDefault(), { passive: false }));
+document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+let lastTouchEnd = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - lastTouchEnd < 350 && !(e.target.closest && e.target.closest('.card'))) e.preventDefault();
+  lastTouchEnd = now;
+}, { passive: false });
+
+/* ============ UI ============ */
+const isTouch = ('ontouchstart' in window) || (window.matchMedia && matchMedia('(pointer: coarse)').matches);
+function showOv(id) { document.querySelectorAll('.ov').forEach(o => o.classList.toggle('show', o.id === id)); }
+function setHud(on) { $('hudBtns').classList.toggle('show', on); $('pad').classList.toggle('show', on && isTouch); }
+let pausedFrom = null;
+function togglePause() {
+  if (['play', 'ready', 'dying', 'clear'].includes(state)) { pausedFrom = state; state = 'paused'; showOv('ovPause'); }
+  else if (state === 'paused') { state = pausedFrom || 'play'; showOv(null); }
+}
+function updateSoundBtns() { $('bSfx').textContent = settings.sfx ? '🔊' : '🔇'; $('bMusic').style.opacity = settings.music ? 1 : 0.4; }
+function goMenu() { state = 'menu'; setHud(false); level = 1; lives = D().lives; bonusTaken = []; parts = []; buildGrid(); refreshMenu(); showOv('ovMenu'); }
+function refreshMenu() {
+  document.querySelectorAll('.diff button').forEach(b => b.classList.toggle('sel', b.dataset.diff === settings.diff));
+  $('hiVal').textContent = hiScore;
+}
+document.querySelectorAll('.diff button').forEach(b => b.addEventListener('click', () => { settings.diff = b.dataset.diff; saveSettings(); refreshMenu(); Snd.init(); Snd.plate(); }));
+$('bPlay').onclick = () => newGame();
+$('bRetry').onclick = () => newGame();
+$('bResume').onclick = () => togglePause();
+document.querySelectorAll('[data-menu]').forEach(b => b.onclick = goMenu);
+$('bPause').onclick = () => togglePause();
+$('bSfx').onclick = () => { Snd.init(); settings.sfx = !settings.sfx; saveSettings(); updateSoundBtns(); };
+$('bMusic').onclick = () => { Snd.init(); settings.music = !settings.music; saveSettings(); updateSoundBtns(); };
+addEventListener('blur', () => { if (['play', 'ready'].includes(state)) togglePause(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && ['play', 'ready'].includes(state)) togglePause(); });
+updateSoundBtns(); refreshMenu();
+
+/* ============ Loop ============ */
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.033, (now - last) / 1000); last = now;
+  if (state === 'menu' || state === 'over') time += dt;
+  else if (state !== 'paused') update(dt);
+  render();
+  requestAnimationFrame(frame);
+}
+window.__gg = { get state() { return state; }, get T() { return T; }, get chasers() { return chasers; }, get score() { return score; }, get level() { return level; }, get lives() { return lives; }, set lives(v) { lives = v; }, get platesLeft() { return platesLeft; }, set platesLeft(v) { platesLeft = v; }, setDir, newGame, settings, grid: () => grid, get scaredT() { return scaredT; } };
+buildGrid();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

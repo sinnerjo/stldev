@@ -102,7 +102,7 @@
 
 /* ============ Basics ============ */
 const W = 960, H = 540;
-const ROAD = 2000, SEG = 200, RUMBLE = 3, FOV = 100, CAMH = 1000, DRAW = 170, LAPS = 3;
+const ROAD = 2000, SEG = 200, RUMBLE = 3, FOV = 100, CAMH = 1350, DRAW = 170, LAPS = 3;
 const DEPTH = 1 / Math.tan((FOV / 2) * Math.PI / 180);
 const PZ = CAMH * DEPTH;
 const MAXS = SEG * 60;
@@ -746,10 +746,10 @@ function render() {
     const hopY = hopT > 0 ? Math.sin(Math.PI * (1 - hopT)) * 90 : 0;
     const bob = Math.sin(time * 30) * (speed / MAXS) * 1.5 + (Math.abs(playerX) > 1 ? Math.sin(time * 50) * 3 : 0) - bounce;
     if (boostT > 0) for (let i = 0; i < 3; i++) ellipse(W / 2 + (i - 1) * 40, H - 12 + rand(0, 10), 18, 26 + rand(0, 16), pick(['#ff8c1a', '#ffd23f', '#ff4d4d']));
-    ctx.save(); ctx.globalAlpha = 0.3; ellipse(W / 2, H - 6, pw * 0.5, 12, '#000'); ctx.restore();
-    drawRacer(W / 2, H - 4 - hopY + bob, pw, settings.ride, 'turkey', settings.skin, spinT > 0 ? time * 16 : 0, steerVis * 0.12);
+    ctx.save(); ctx.globalAlpha = 0.3; ellipse(W / 2, H - 6, pw * 0.34, 10, '#000'); ctx.restore();
+    drawRacer(W / 2, H - 4 - hopY + bob, pw, settings.ride, 'turkey', settings.skin, spinT > 0 ? time * 16 : 0, steerVis * 0.12, true);
   } else {
-    drawRacer(W / 2, H - 4 + Math.sin(time * 3) * 2, DEPTH / PZ * W / 2 * ROAD * PW, settings.ride, 'turkey', settings.skin, 0, Math.sin(time) * 0.06);
+    drawRacer(W / 2, H - 4 + Math.sin(time * 3) * 2, DEPTH / PZ * W / 2 * ROAD * PW, settings.ride, 'turkey', settings.skin, 0, Math.sin(time) * 0.06, true);
   }
   // particles
   for (const p of parts) {
@@ -801,12 +801,12 @@ function drawHUD() {
 }
 
 /* ============ Racers (seen from behind) ============ */
-function drawRacer(cx, by, w, ride, who, skin, spin, tilt) {
-  const s = w / 100 * 0.74;
+function drawRacer(cx, by, w, ride, who, skin, spin, tilt, me) {
+  const s = w / 100 * (me ? 0.5 : 0.62);
   ctx.save(); ctx.translate(cx, by); ctx.rotate(tilt); ctx.scale(s * (spin ? Math.cos(spin) : 1), s);
   if (spin && Math.cos(spin) < 0) ctx.scale(-1, 1);
   drawRideBack(ride, 'back');
-  if (who === 'turkey' || who === 'ninja') drawTurkeyBack(who === 'ninja' ? 'ninja' : skin);
+  if (who === 'turkey' || who === 'ninja') drawTurkeyBack(who === 'ninja' ? 'ninja' : skin, me);
   else drawPersonBack(who);
   drawRideBack(ride, 'front');
   ctx.restore();
@@ -852,13 +852,14 @@ function drawRideBack(ride, layer) {
   }
 }
 
-function drawTurkeyBack(skin) {
+function drawTurkeyBack(skin, me) {
   const t = time;
-  // tail fan (big and proud)
+  // tail fan: big and proud on rivals, tucked in on your own kart so you can see the road
   const fan = ['#8b4513', '#c0392b', '#e67e22', '#f1c40f', '#e67e22', '#c0392b', '#8b4513'];
+  const L = me ? 0.62 : 1;
   for (let i = 0; i < 7; i++) {
-    const a = -Math.PI + 0.2 + i * (Math.PI - 0.4) / 6 + Math.sin(t * 10 + i) * 0.02;
-    ctx.save(); ctx.translate(0, -50); ctx.rotate(a); ellipse(34, 0, 36, 11, fan[i]); ellipse(58, 0, 9, 7, '#fff3d6'); ctx.restore();
+    const a = -Math.PI + (me ? 0.55 : 0.2) + i * (Math.PI - (me ? 1.1 : 0.4)) / 6 + Math.sin(t * 10 + i) * 0.02;
+    ctx.save(); ctx.translate(0, -50); ctx.rotate(a); ellipse(34 * L, 0, 36 * L, 11 * L, fan[i]); ellipse(58 * L, 0, 9 * L, 7 * L, '#fff3d6'); ctx.restore();
   }
   if (skin === 'superhero') { const w = Math.sin(t * 14) * 5; poly([-18, -74, 18, -74, 26 + w, -30, -26 + w, -30], '#d62828'); }
   ellipse(0, -46, 28, 24, '#8b5a2b');

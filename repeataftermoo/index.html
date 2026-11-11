@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Repeat After Moo! | STLDev</title>
+<meta name="description" content="A very silly rhythm and memory game. Listen to the cow, goat, frog and chicken choir, then sing it back in the same rhythm! Free kids game for tablets, phones and computers.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐮</text></svg>">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #1a0d1f; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+  body { display: flex; align-items: center; justify-content: center; font-family: "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif; color: #fff; }
+  body * { touch-action: none; }
+  #wrap { position: relative; width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); width: min(100vw, calc(100dvh * 16 / 9)); height: min(100dvh, calc(100vw * 9 / 16)); }
+  canvas { display: block; width: 100%; height: 100%; border-radius: 6px; }
+  .ov { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(26, 13, 31, .55); }
+  .ov.show { display: flex; }
+  .card { background: linear-gradient(#fff6e3, #ffe2b3); color: #5a2d0c; border: 5px solid #b5172b; border-radius: 22px; padding: 1.8% 3.2%; text-align: center; max-width: 86%; max-height: 94%; overflow: auto; box-shadow: 0 8px 0 #7a0f1d, 0 14px 30px rgba(0,0,0,.4); }
+  .title { font-size: clamp(28px, 5.6vw, 64px); font-weight: 900; color: #b5172b; text-shadow: 3px 3px 0 #ffd27a; line-height: 1; }
+  .subtitle { font-size: clamp(13px, 1.9vw, 22px); font-weight: 800; color: #7a0f1d; margin-top: 4px; }
+  .card p { font-size: clamp(11px, 1.5vw, 17px); margin: .5em 0; }
+  .cast { font-size: clamp(22px, 3.6vw, 40px); letter-spacing: 6px; }
+  .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: .5em 0; }
+  button { font-family: inherit; cursor: pointer; border: none; }
+  .btn { background: #e8792b; color: #fff; font-weight: 900; font-size: clamp(13px, 1.7vw, 20px); padding: .5em 1.1em; border-radius: 14px; box-shadow: 0 5px 0 #a4480f; }
+  .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #a4480f; }
+  .btn.primary { background: #3fa34d; box-shadow: 0 5px 0 #23702d; font-size: clamp(16px, 2.3vw, 28px); }
+  .btn.jam { background: #8a3ad1; box-shadow: 0 5px 0 #5a1f94; font-size: clamp(16px, 2.3vw, 28px); }
+  .btn.alt { background: #8a5a2b; box-shadow: 0 5px 0 #5a3814; }
+  .diff button { background: #fff; color: #5a2d0c; border: 4px solid #e0b27a; border-radius: 16px; padding: .4em .9em; font-weight: 900; font-size: clamp(12px, 1.6vw, 19px); min-width: 30%; }
+  .diff button small { display: block; font-weight: 600; font-size: .7em; color: #8a5a2b; }
+  .diff button.sel { border-color: #3fa34d; background: #e6ffe2; }
+  .how { font-size: clamp(10px, 1.25vw, 14px); color: #8a5a2b; margin-top: .5em; line-height: 1.5; }
+  .hi { font-weight: 900; font-size: clamp(12px, 1.6vw, 18px); margin-top: .3em; }
+  .stat { font-size: clamp(14px, 2.1vw, 24px); font-weight: 800; margin: .3em 0; line-height: 1.5; }
+  #hudBtns { position: absolute; top: 1.2%; right: 1%; display: none; gap: 6px; }
+  #hudBtns.show { display: flex; }
+  #hudBtns button { background: rgba(255,255,255,.88); border-radius: 10px; font-size: clamp(14px, 2vw, 22px); width: 2.1em; height: 2.1em; box-shadow: 0 3px 0 rgba(0,0,0,.25); }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="c" width="960" height="540"></canvas>
+  <div id="hudBtns">
+    <button id="bPause" title="Pause (P)">⏸️</button>
+    <button id="bSfx" title="Sound">🔊</button>
+    <button id="bHome" title="Menu">🏠</button>
+  </div>
+
+  <div class="ov show" id="ovMenu">
+    <div class="card">
+      <div class="title">🎤 Repeat After Moo!</div>
+      <div class="subtitle">The silliest choir in the whole barnyard</div>
+      <div class="cast">🐮 🐐 🐸 🐔</div>
+      <p>Maestro Gobbles conducts a little song. <b>Listen</b> to who sings and <b>when</b>, then sing it back by tapping the singers in the same rhythm!<br>Every round the song gets one note longer. How long can you go?</p>
+      <div class="row diff">
+        <button data-diff="easy">🐣 Little Kid<small>just remember who sings</small></button>
+        <button data-diff="normal">🦸 Big Kid<small>keep the beat too, silly surprises</small></button>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="bPlay">🎵 Start the Show!</button>
+        <button class="btn jam" id="bJam">🥁 Free Jam</button>
+      </div>
+      <div class="how">Tap the singers • or press 1 2 3 4 (or A S D F) on a keyboard • P to pause<br>Free Jam: no rules, just make silly music with the drummer!</div>
+      <div class="hi">🏆 Longest song: <span id="hiRound">0</span> notes • Best score: <span id="hiScore">0</span></div>
+    </div>
+  </div>
+
+  <div class="ov" id="ovPause">
+    <div class="card">
+      <div class="title">Paused</div>
+      <div class="row" style="margin-top:.8em">
+        <button class="btn primary" id="bResume">▶ Keep Singing</button>
+        <button class="btn alt" data-menu>🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ov" id="ovOver">
+    <div class="card">
+      <div class="title" id="overTitle">Show's Over! 🍅</div>
+      <div class="subtitle" id="overSub">The choir got all mixed up!</div>
+      <div class="stat" id="overStats"></div>
+      <div class="row" style="margin-top:.6em">
+        <button class="btn primary" id="bRetry">🔄 Encore!</button>
+        <button class="btn alt" data-menu>🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const W = 960, H = 540;
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const $ = id => document.getElementById(id);
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+
+function resize() {
+  const r = $('wrap').getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.max(320, Math.round(r.width * dpr));
+  cv.height = Math.max(180, Math.round(r.height * dpr));
+}
+addEventListener('resize', resize); resize();
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const settings = Object.assign({ diff: 'easy', sfx: true }, store.get('ram_settings', {}));
+let hiRound = store.get('ram_hiRound', 0), hiScore = store.get('ram_hiScore', 0);
+const saveSettings = () => store.set('ram_settings', settings);
+
+/* ============ The singers ============ */
+// left to right from lowest voice to highest, like a piano
+const SINGERS = [
+  { name: 'Moo-riel', kind: 'cow', word: 'MOOOO!', pad: '#e63946', x: 180 },
+  { name: 'Gerald', kind: 'goat', word: 'BAAAA!', pad: '#ffb703', x: 380 },
+  { name: 'Frank', kind: 'frog', word: 'RIBBIT!', pad: '#2fbf71', x: 580 },
+  { name: 'Clucky', kind: 'chicken', word: 'BAWK!', pad: '#3a86ff', x: 780 }
+];
+const sing = [0, 0, 0, 0];      // how hard each singer is singing right now (0..1)
+const wordT = [0, 0, 0, 0];     // speech bubble timers
+let dizzy = 0, flipT = 0;
+
+/* ============ Sound (all made up on the spot) ============ */
+const Snd = {
+  ctx: null, master: null,
+  init() {
+    if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+    try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); this.master = this.ctx.createGain(); this.master.gain.value = 0.55; this.master.connect(this.ctx.destination); } catch (e) { this.ctx = null; }
+  },
+  osc(type, f, t, d, v, opts = {}) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    if (opts.to) o.frequency.exponentialRampToValueAtTime(opts.to, t + d);
+    let node = o;
+    if (opts.filter) { const fl = c.createBiquadFilter(); fl.type = opts.filter; fl.frequency.value = opts.ff || 800; fl.Q.value = opts.q || 1; o.connect(fl); node = fl; }
+    node.connect(g); g.connect(this.master);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + (opts.att || 0.02)); g.gain.setValueAtTime(v, t + d * 0.7); g.gain.exponentialRampToValueAtTime(0.0008, t + d);
+    if (opts.vib) { const l = c.createOscillator(), lg = c.createGain(); l.frequency.value = opts.vib; lg.gain.value = opts.vibAmt || f * 0.03; l.connect(lg); lg.connect(o.frequency); l.start(t); l.stop(t + d + 0.05); }
+    if (opts.trem) { const l = c.createOscillator(), lg = c.createGain(); l.frequency.value = opts.trem; lg.gain.value = v * 0.7; l.connect(lg); lg.connect(g.gain); l.start(t); l.stop(t + d + 0.05); }
+    o.start(t); o.stop(t + d + 0.05);
+  },
+  noise(t, d, v, freq, type = 'highpass') {
+    const c = this.ctx, len = Math.floor(c.sampleRate * d), buf = c.createBuffer(1, len, c.sampleRate), data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const s = c.createBufferSource(); s.buffer = buf; const f = c.createBiquadFilter(); f.type = type; f.frequency.value = freq; const g = c.createGain(); g.gain.value = v;
+    s.connect(f); f.connect(g); g.connect(this.master); s.start(t);
+  },
+  voice(i, dur, when = 0) {
+    if (!this.ctx || !settings.sfx) return;
+    const t = this.ctx.currentTime + when, m = pitchMul, d = clamp(dur, 0.22, 0.7);
+    if (i === 0) { this.osc('sawtooth', 131 * m, t, d + 0.15, 0.22, { to: 104 * m, filter: 'lowpass', ff: 650, vib: 5, att: 0.06 }); this.osc('sine', 65 * m, t, d + 0.15, 0.12, { to: 52 * m }); }
+    else if (i === 1) { this.osc('sawtooth', 196 * m, t, d + 0.1, 0.2, { filter: 'bandpass', ff: 1100, q: 1.5, trem: 13, att: 0.03 }); }
+    else if (i === 2) { this.osc('square', 330 * m, t, 0.1, 0.12, { to: 260 * m, filter: 'lowpass', ff: 1400 }); this.osc('square', 392 * m, t + 0.14, 0.12, 0.12, { to: 300 * m, filter: 'lowpass', ff: 1400 }); }
+    else { this.osc('square', 523 * m, t, 0.09, 0.09, { to: 800 * m, filter: 'bandpass', ff: 1800 }); this.osc('square', 659 * m, t + 0.11, Math.min(0.25, d), 0.09, { to: 523 * m, filter: 'bandpass', ff: 1800 }); }
+  },
+  kick(when = 0) { if (!this.ctx || !settings.sfx) return; const t = this.ctx.currentTime + when; this.osc('sine', 140, t, 0.18, 0.4, { to: 45, att: 0.005 }); },
+  hat(when = 0, v = 0.08) { if (!this.ctx || !settings.sfx) return; this.noise(this.ctx.currentTime + when, 0.05, v, 7000); },
+  snare(when = 0) { if (!this.ctx || !settings.sfx) return; const t = this.ctx.currentTime + when; this.noise(t, 0.16, 0.25, 1800); this.osc('triangle', 220, t, 0.08, 0.1, { to: 140 }); },
+  cymbal(when = 0) { if (!this.ctx || !settings.sfx) return; this.noise(this.ctx.currentTime + when, 1.2, 0.18, 5000); },
+  splat() { if (!this.ctx || !settings.sfx) return; const t = this.ctx.currentTime; this.noise(t, 0.3, 0.45, 600, 'lowpass'); this.osc('sine', 180, t, 0.25, 0.25, { to: 50, att: 0.005 }); },
+  raspberry() { if (!this.ctx || !settings.sfx) return; const t = this.ctx.currentTime; this.osc('sawtooth', 90, t, 0.7, 0.18, { to: 60, filter: 'lowpass', ff: 500, trem: 28 }); },
+  bonk() { if (!this.ctx || !settings.sfx) return; const t = this.ctx.currentTime; this.osc('sine', 300, t, 0.3, 0.25, { to: 900, att: 0.005 }); },
+  slide(up) { if (!this.ctx || !settings.sfx) return; const t = this.ctx.currentTime; this.osc('sine', up ? 300 : 900, t, 0.5, 0.15, { to: up ? 1200 : 200, vib: 7 }); },
+  cheer() { if (!this.ctx || !settings.sfx) return; const t = this.ctx.currentTime; this.noise(t, 1.4, 0.22, 1500, 'bandpass'); [523, 659, 784, 1047].forEach((f, i) => this.osc('square', f, t + i * 0.08, 0.14, 0.06)); },
+  gobble() { if (!this.ctx || !settings.sfx) return; const t = this.ctx.currentTime; for (let i = 0; i < 5; i++) this.osc('sawtooth', 560 - i * 35, t + i * 0.07, 0.07, 0.08, { to: 330 - i * 20 }); }
+};
+
+/* ============ Game state ============ */
+let state = 'menu', time = 0, pattern = [], round = 0, lives = 3, score = 0, combo = 0;
+let sched = [], inputIdx = 0, inputTimes = [], beat = 0.6, bpm = 100, pitchMul = 1, event = null, nextEventRound = 4;
+let bubble = null, parts = [], tomatoes = [], splats = [], shake = 0, crowdJoy = 0, conductorMood = 'idle', beatPulse = 0, flashT = 0;
+let jamNext = 0, jamStep = 0, statusText = '', statusSub = '', lastJudge = null;
+
+function D() { return settings.diff === 'easy' ? { lives: 5, start: 2, bpm: 92, judge: false, events: ['chipmunk', 'disco', 'upside', 'slowmo'] } : { lives: 3, start: 3, bpm: 104, judge: true, events: ['chipmunk', 'disco', 'upside', 'speedy', 'shuffle', 'slowmo'] }; }
+
+function addNote() {
+  let s;
+  do { s = Math.floor(Math.random() * 4); } while (pattern.length >= 2 && pattern[pattern.length - 1].s === s && pattern[pattern.length - 2].s === s);
+  const d = D().judge ? pick([1, 1, 1, 0.5, 0.5, 2]) : 1;
+  pattern.push({ s, d });
+}
+
+function newGame() {
+  const d = D();
+  pattern = []; round = 0; lives = d.lives; score = 0; combo = 0; event = null; nextEventRound = d.judge ? 4 : 5;
+  for (let i = 0; i < d.start; i++) addNote();
+  layout = [0, 1, 2, 3];
+  showOv(null); setHud(true);
+  Snd.init(); Snd.gobble();
+  state = 'intro'; stateT = 1.6;
+  say('Welcome to the show!', 'Listen carefully...', 1.6);
+}
+
+let stateT = 0, layout = [0, 1, 2, 3]; // layout[slot] = singer index (shuffle event swaps them)
+
+function startRound() {
+  round = pattern.length;
+  const d = D();
+  // silly surprise every few rounds
+  event = null; pitchMul = 1; flipT = 0;
+  let thisBpm = Math.min(d.bpm + (round - d.start) * (d.judge ? 3 : 1.5), d.judge ? 150 : 115);
+  if (round >= nextEventRound) {
+    nextEventRound = round + (d.judge ? 3 : 4);
+    event = pick(d.events.filter(e => e !== 'shuffle' || round >= 6));
+    if (event === 'chipmunk') pitchMul = 1.9;
+    if (event === 'speedy') thisBpm *= 1.25;
+    if (event === 'slowmo') { thisBpm *= 0.75; pitchMul = 0.7; }
+  }
+  bpm = thisBpm; beat = 60 / bpm;
+  layout = [0, 1, 2, 3];
+  // count in, then play the song
+  sched = [];
+  const start = time + (event ? 1.8 : 0.6);
+  for (let k = 0; k < 4; k++) sched.push({ t: start + k * beat, type: 'count', k });
+  let t = start + 4 * beat;
+  for (let i = 0; i < pattern.length; i++) { sched.push({ t, type: 'note', s: pattern[i].s, d: pattern[i].d }); t += pattern[i].d * beat; }
+  sched.push({ t: t + beat * 0.3, type: 'yourturn' });
+  state = 'demo'; conductorMood = 'conduct';
+  const names = { chipmunk: ['🐿️ CHIPMUNK ROUND!', 'Everybody sings super squeaky!'], disco: ['🪩 DISCO ROUND!', 'Groovy lights!'], upside: ['🙃 UPSIDE DOWN ROUND!', 'The choir is doing handstands!'], speedy: ['⚡ SPEEDY ROUND!', 'Faster faster faster!'], shuffle: ['🔀 SHUFFLE ROUND!', 'They switch spots before your turn!'], slowmo: ['🐌 SLOW MOTION ROUND!', 'Everything is s l o w...'] };
+  if (event) { say(names[event][0], names[event][1], 1.8); Snd.slide(true); }
+  else say('Song ' + (round - D().start + 1) + ': ' + pattern.length + ' notes', 'Listen...', 1.2);
+  statusText = 'LISTEN!'; statusSub = '';
+}
+
+function singerSlotX(s) { const slot = layout.indexOf(s); return SINGERS[slot].x; }
+
+function doSing(s, dur, judged) {
+  sing[s] = 1; wordT[s] = 0.7;
+  Snd.voice(s, dur);
+  const x = singerSlotX(s);
+  for (let k = 0; k < 4; k++) parts.push({ k: 'note', x: x + rand(-30, 30), y: 230, vx: rand(-40, 40), vy: rand(-120, -70), life: 1, max: 1, c: SINGERS[s].pad, r: rand(0, 6) });
+}
+
+function tap(slot) {
+  Snd.init();
+  if (state === 'jam') { const s = layout[slot]; doSing(s, 0.4); crowdJoy = Math.min(1, crowdJoy + 0.08); return; }
+  const s = layout[slot];
+  if (state === 'demo' || state === 'intro' || state === 'between') { sing[s] = 0.5; wordT[s] = 0.6; SINGERS[s].shh = 0.8; return; }
+  if (state !== 'input') return;
+  const want = pattern[inputIdx];
+  if (s !== want.s) { fail(s); return; }
+  const now = time;
+  inputTimes.push(now);
+  doSing(s, want.d * beat);
+  if (D().judge && inputIdx > 0) {
+    const exp = pattern[inputIdx - 1].d * beat, act = now - inputTimes[inputIdx - 1];
+    const err = Math.abs(act - exp) / beat;
+    if (err < 0.2) { lastJudge = ['PERFECT!', '#7bd389']; score += 100; combo++; }
+    else if (err < 0.42) { lastJudge = ['GOOD!', '#ffd23f']; score += 50; combo++; }
+    else { lastJudge = [act < exp ? 'TOO FAST!' : 'TOO SLOW!', '#ffb3b3']; score += 10; combo = 0; }
+    parts.push({ k: 'text', x: singerSlotX(s), y: 160, vx: 0, vy: -40, life: 0.9, max: 0.9, text: lastJudge[0], color: lastJudge[1], size: 26 });
+  } else { score += 50; combo++; }
+  inputIdx++;
+  if (inputIdx >= pattern.length) succeed();
+}
+
+function succeed() {
+  state = 'between'; stateT = 1.8; conductorMood = 'happy';
+  const bonus = pattern.length * 20; score += bonus;
+  Snd.cheer(); Snd.cymbal(0.05); crowdJoy = 1;
+  for (let i = 0; i < 40; i++) parts.push({ k: 'conf', x: rand(0, W), y: rand(-60, 0), vx: rand(-40, 40), vy: rand(120, 240), life: 2.5, max: 2.5, c: pick(['#ff4d6d', '#ffd23f', '#4dabf7', '#7bd389', '#b388ff']), r: rand(0, 6) });
+  for (let i = 0; i < 8; i++) parts.push({ k: 'flower', x: rand(80, W - 80), y: H, vx: rand(-60, 60), vy: rand(-520, -380), g: 700, life: 1.4, max: 1.4, r: rand(0, 6) });
+  say(pick(['BRAVO!', 'MAGNIFICENT!', 'ENCORE!', 'WOW WEE!', 'MOOOO-VELOUS!', 'EGG-CELLENT!']), pattern.length + ' notes! +' + bonus, 1.6);
+  if (pattern.length > hiRound) { hiRound = pattern.length; store.set('ram_hiRound', hiRound); }
+  statusText = ''; statusSub = '';
+  addNote();
+}
+
+function fail(wrong) {
+  lives--; combo = 0;
+  Snd.raspberry(); Snd.bonk();
+  state = 'oops'; stateT = 2.2; conductorMood = 'sad'; dizzy = 1.6; shake = 0.4;
+  sing[wrong] = 0.6; wordT[wrong] = 0.8; SINGERS[wrong].oops = 1;
+  // a vegetable in the crowd throws a tomato (it's a tough crowd)
+  tomatoes.push({ x: rand(200, 760), y: H + 20, tx: rand(260, 700), ty: rand(140, 320), t: 0 });
+  const right = pattern[inputIdx].s;
+  say(pick(['OOPSIE!', 'WHOOPSIE DOODLE!', 'UH OH!', 'HONK! WRONG!', 'SILLY GOOSE!']), 'It was ' + SINGERS[right].name + ' the ' + SINGERS[right].kind + '!', 2);
+  sing[right] = 0.4;
+  statusText = ''; statusSub = '';
+  if (lives <= 0) { stateT = 2.4; state = 'ending'; }
+}
+
+function gameOver() {
+  state = 'over'; setHud(false);
+  const newHi = score > hiScore;
+  if (newHi) { hiScore = score; store.set('ram_hiScore', hiScore); }
+  const longest = Math.max(pattern.length - 1, 0);
+  $('overTitle').textContent = longest >= 10 ? 'Standing Ovation! 👏' : "Show's Over! 🍅";
+  $('overSub').textContent = longest >= 10 ? 'The choir has never sounded so silly!' : 'The choir got all mixed up!';
+  $('overStats').innerHTML = '🎵 Longest song: ' + longest + ' notes<br>⭐ Score: ' + score + (newHi ? ' &nbsp;🏆 NEW BEST!' : ' &nbsp;(best ' + hiScore + ')');
+  refreshMenu();
+  showOv('ovOver');
+}
+
+function startJam() {
+  state = 'jam'; layout = [0, 1, 2, 3]; pitchMul = 1; event = null; bpm = 100; beat = 0.6; jamNext = time + 0.2; jamStep = 0;
+  showOv(null); setHud(true); Snd.init(); Snd.gobble();
+  say('FREE JAM!', 'Tap the singers to make a song!', 2);
+  statusText = 'JAM!'; statusSub = 'No wrong notes!';
+}
+
+/* ============ Update ============ */
+function update(dt) {
+  time += dt;
+  for (let i = 0; i < 4; i++) { sing[i] = Math.max(0, sing[i] - dt * 2.4); wordT[i] = Math.max(0, wordT[i] - dt); if (SINGERS[i].shh) SINGERS[i].shh = Math.max(0, SINGERS[i].shh - dt); if (SINGERS[i].oops) SINGERS[i].oops = Math.max(0, SINGERS[i].oops - dt * 0.6); }
+  dizzy = Math.max(0, dizzy - dt); shake = Math.max(0, shake - dt); crowdJoy = Math.max(0, crowdJoy - dt * 0.5); beatPulse = Math.max(0, beatPulse - dt * 4); flashT += dt;
+  if (event === 'upside') flipT = Math.min(1, flipT + dt * 3); else flipT = Math.max(0, flipT - dt * 3);
+
+  if (state === 'intro') { stateT -= dt; if (stateT <= 0) startRound(); }
+  else if (state === 'demo') {
+    while (sched.length && sched[0].t <= time) {
+      const e = sched.shift();
+      if (e.type === 'count') { if (e.k === 0) Snd.kick(); else Snd.hat(0, 0.12); Snd.kick(); beatPulse = 1; statusSub = ['1', '2', '3', '4'][e.k]; }
+      else if (e.type === 'note') { doSing(e.s, e.d * beat); beatPulse = 1; statusSub = ''; }
+      else if (e.type === 'yourturn') {
+        if (event === 'shuffle') { layout = shuffleLayout(); Snd.slide(false); say('SHUFFLE!', 'Find the right singer!', 1.2); }
+        state = 'input'; inputIdx = 0; inputTimes = []; conductorMood = 'point';
+        statusText = 'YOUR TURN!'; statusSub = D().judge ? 'Same singers, same rhythm!' : 'Tap the same singers!';
+        Snd.gobble();
+      }
+    }
+  } else if (state === 'between') { stateT -= dt; if (stateT <= 0) startRound(); }
+  else if (state === 'oops') { stateT -= dt; if (stateT <= 0) { if (D().judge === false) say('Let’s try that one again!', null, 1.2); startRoundSame(); } }
+  else if (state === 'ending') { stateT -= dt; if (stateT <= 0) gameOver(); }
+  else if (state === 'jam') {
+    // drummer keeps a groovy beat
+    while (jamNext <= time) {
+      const k = jamStep % 8;
+      if (k === 0 || k === 4 || k === 6) Snd.kick(); if (k === 2 || k === 6) Snd.snare(); Snd.hat(0, k % 2 ? 0.04 : 0.07);
+      beatPulse = k % 2 ? 0.4 : 1; jamStep++; jamNext += beat / 2;
+    }
+  }
+
+  for (const p of parts) { p.life -= dt; p.x += p.vx * dt; p.y += p.vy * dt; if (p.g) p.vy += p.g * dt; if (p.r !== undefined) p.r += dt * 5; }
+  parts = parts.filter(p => p.life > 0);
+  for (const tm of tomatoes) { tm.t += dt * 1.4; if (tm.t >= 1 && !tm.done) { tm.done = true; splats.push({ x: tm.tx, y: tm.ty, life: 2.4, r: rand(40, 60) }); Snd.splat(); } }
+  tomatoes = tomatoes.filter(t => !t.done);
+  for (const s of splats) s.life -= dt;
+  splats = splats.filter(s => s.life > 0);
+  if (bubble) { bubble.t -= dt; if (bubble.t <= 0) bubble = null; }
+}
+
+function startRoundSame() { addNoteBack = false; startRound(); }
+let addNoteBack = false;
+function shuffleLayout() { let l; do { l = [0, 1, 2, 3].sort(() => Math.random() - 0.5); } while (l.every((v, i) => v === i)); return l; }
+function say(text, sub, t) { bubble = { text, sub, t }; }
+
+/* ============ Input ============ */
+const KEYMAP = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Numpad1: 0, Numpad2: 1, Numpad3: 2, Numpad4: 3, KeyA: 0, KeyS: 1, KeyD: 2, KeyF: 3, KeyJ: 0, KeyK: 1, KeyL: 2, Semicolon: 3, ArrowLeft: 0, ArrowDown: 1, ArrowUp: 2, ArrowRight: 3 };
+addEventListener('keydown', e => {
+  Snd.init();
+  if (['menu', 'over'].includes(state) || state === 'paused') { if (e.code === 'Enter' || e.code === 'Space') { const b = document.querySelector('.ov.show .btn.primary'); if (b) { e.preventDefault(); if (!e.repeat) b.click(); } } if (state !== 'paused') return; }
+  if (e.code in KEYMAP && !e.repeat) { e.preventDefault(); tap(KEYMAP[e.code]); }
+  if ((e.code === 'KeyP' || e.code === 'Escape') && !e.repeat) togglePause();
+});
+cv.addEventListener('pointerdown', e => {
+  Snd.init();
+  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * W, y = (e.clientY - r.top) / r.height * H;
+  if (y < 150 || y > 520) return;
+  let best = -1, bd = 1e9;
+  for (let i = 0; i < 4; i++) { const d = Math.abs(x - SINGERS[i].x); if (d < bd) { bd = d; best = i; } }
+  if (bd < 110) tap(best);
+});
+cv.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => document.addEventListener(ev, e => e.preventDefault(), { passive: false }));
+document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+let lastTouchEnd = 0;
+document.addEventListener('touchend', e => { const now = Date.now(); if (now - lastTouchEnd < 300 && !(e.target.closest && (e.target.closest('.card') || e.target === cv))) e.preventDefault(); lastTouchEnd = now; }, { passive: false });
+document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+
+/* ============ UI ============ */
+function showOv(id) { document.querySelectorAll('.ov').forEach(o => o.classList.toggle('show', o.id === id)); }
+function setHud(on) { $('hudBtns').classList.toggle('show', on); }
+let pausedFrom = null;
+function togglePause() {
+  if (['menu', 'over'].includes(state)) return;
+  if (state === 'paused') { state = pausedFrom; showOv(null); const shift = time - pauseAt; for (const e of sched) e.t += shift; }
+  else { pausedFrom = state; pauseAt = time; state = 'paused'; showOv('ovPause'); }
+}
+let pauseAt = 0;
+function goMenu() { state = 'menu'; setHud(false); event = null; pitchMul = 1; layout = [0, 1, 2, 3]; refreshMenu(); showOv('ovMenu'); }
+function refreshMenu() { document.querySelectorAll('.diff button').forEach(b => b.classList.toggle('sel', b.dataset.diff === settings.diff)); $('hiRound').textContent = hiRound; $('hiScore').textContent = hiScore; }
+document.querySelectorAll('.diff button').forEach(b => b.addEventListener('click', () => { settings.diff = b.dataset.diff; saveSettings(); refreshMenu(); Snd.init(); Snd.voice(Math.floor(Math.random() * 4), 0.3); }));
+$('bPlay').onclick = newGame; $('bRetry').onclick = newGame; $('bJam').onclick = startJam;
+$('bResume').onclick = togglePause; $('bPause').onclick = togglePause; $('bHome').onclick = goMenu;
+document.querySelectorAll('[data-menu]').forEach(b => b.onclick = goMenu);
+$('bSfx').onclick = () => { settings.sfx = !settings.sfx; saveSettings(); $('bSfx').textContent = settings.sfx ? '🔊' : '🔇'; };
+$('bSfx').textContent = settings.sfx ? '🔊' : '🔇';
+addEventListener('blur', () => { if (!['menu', 'over', 'paused'].includes(state)) togglePause(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && !['menu', 'over', 'paused'].includes(state)) togglePause(); });
+refreshMenu();
+
+/* ============ Drawing helpers ============ */
+function circle(x, y, r, c) { ctx.beginPath(); ctx.arc(x, y, Math.max(0.1, r), 0, Math.PI * 2); ctx.fillStyle = c; ctx.fill(); }
+function ellipse(x, y, rx, ry, c, rot = 0) { ctx.beginPath(); ctx.ellipse(x, y, Math.max(0.1, rx), Math.max(0.1, ry), rot, 0, Math.PI * 2); ctx.fillStyle = c; ctx.fill(); }
+function rrect(x, y, w, h, r, c) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); ctx.fillStyle = c; ctx.fill(); }
+function poly(pts, c) { ctx.beginPath(); ctx.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) ctx.lineTo(pts[i], pts[i + 1]); ctx.closePath(); ctx.fillStyle = c; ctx.fill(); }
+function line(x1, y1, x2, y2, c, w) { ctx.strokeStyle = c; ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
+function txt(s, x, y, size, color = '#fff', outline = '#2a0f1e', align = 'center') {
+  ctx.font = '900 ' + size + 'px "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif';
+  ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  ctx.lineWidth = Math.max(3, size / 6); ctx.strokeStyle = outline; ctx.strokeText(s, x, y); ctx.fillStyle = color; ctx.fillText(s, x, y);
+}
+
+/* ============ Stage ============ */
+function drawStage() {
+  const disco = event === 'disco' || state === 'jam';
+  ctx.fillStyle = '#2a0f1e'; ctx.fillRect(0, 0, W, H);
+  // back wall glow
+  const g = ctx.createRadialGradient(W / 2, 260, 40, W / 2, 260, 520);
+  g.addColorStop(0, disco ? `hsl(${(time * 120) % 360},70%,45%)` : '#5a2340'); g.addColorStop(1, '#2a0f1e');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  // spotlights
+  ctx.globalAlpha = 0.12 + beatPulse * 0.08;
+  for (let i = 0; i < 4; i++) { const x = SINGERS[i].x, c = disco ? `hsl(${(time * 200 + i * 90) % 360},90%,60%)` : '#fff6c2'; poly([x - 20 + Math.sin(time + i) * (disco ? 60 : 0), 0, x + 20 + Math.sin(time + i) * (disco ? 60 : 0), 0, x + 110, 460, x - 110, 460], c); }
+  ctx.globalAlpha = 1;
+  // curtains
+  for (const side of [0, 1]) for (let i = 0; i < 4; i++) { const x = side ? W - 26 - i * 22 : 26 + i * 22; rrect(x - 14, 0, 28, 470, 12, i % 2 ? '#8a0f1f' : '#b5172b'); }
+  rrect(0, 0, W, 34, 0, '#7a0f1d'); for (let x = 12; x < W; x += 28) circle(x, 34, 9, '#f4c430');
+  // stage floor
+  ctx.fillStyle = '#6b3d1a'; ctx.fillRect(0, 440, W, 100); ctx.fillStyle = '#8a5a2b'; for (let x = 0; x < W; x += 64) ctx.fillRect(x, 440, 3, 100); ctx.fillStyle = '#4a2810'; ctx.fillRect(0, 440, W, 6);
+  if (disco) {
+    line(W / 2, 34, W / 2, 70, '#ccc', 2);
+    circle(W / 2, 92, 22, '#cfd6dd'); for (let i = 0; i < 14; i++) circle(W / 2 + Math.cos(i * 1.7 + time * 3) * 14, 92 + Math.sin(i * 2.3) * 14, 3, i % 2 ? '#fff' : '#9aa5b1');
+    for (let i = 0; i < 10; i++) { ctx.globalAlpha = 0.3; circle((i * 137 + time * 160) % W, (i * 89 + time * 60) % 420 + 40, 6, `hsl(${(i * 40 + time * 200) % 360},90%,65%)`); } ctx.globalAlpha = 1;
+  }
+}
+
+/* ============ Singers ============ */
+function drawSinger(slot) {
+  const si = layout[slot], S = SINGERS[si], x = S.x, base = 440;
+  const s = sing[si], wob = Math.sin(time * 3 + slot) * 0.03;
+  const oops = S.oops || 0, shh = S.shh || 0;
+  // pedestal (the colour tells kids which singer is which)
+  ellipse(x, base + 6, 92, 18, 'rgba(0,0,0,.35)');
+  rrect(x - 80, base - 22, 160, 30, 12, SINGERS[si].pad); rrect(x - 80, base - 22, 160, 8, 6, 'rgba(255,255,255,.35)');
+  txt(String(slot + 1), x, base - 6, 15, '#fff', 'rgba(0,0,0,.4)');
+  ctx.save();
+  ctx.translate(x, base - 22);
+  if (flipT > 0) { ctx.translate(0, -90); ctx.rotate(Math.PI * flipT); ctx.translate(0, 90); }
+  if (oops > 0) ctx.rotate(Math.sin(time * 20) * 0.15 * oops);
+  const sy = 1 + s * 0.28 + Math.abs(Math.sin(time * 6 + slot)) * 0.03 * (state === 'jam' ? 3 : 1) * (beatPulse + 0.3);
+  const sx = 1 - s * 0.12 + wob;
+  ctx.scale(sx, sy);
+  const k = S.kind;
+  if (k === 'cow') drawCow(s, oops); else if (k === 'goat') drawGoat(s, oops); else if (k === 'frog') drawFrog(s, oops); else drawChicken(s, oops);
+  ctx.restore();
+  if (shh > 0) txt('Shh! Listen!', x, 150, 16, '#fff');
+  if (wordT[si] > 0 && !shh) { const a = Math.min(1, wordT[si] * 3); ctx.globalAlpha = a; txt(pickWord(si), x + Math.sin(time * 30) * 2 * s, 158 - (1 - wordT[si]) * 20, 26 + s * 10, SINGERS[si].pad, '#fff'); ctx.globalAlpha = 1; }
+}
+function pickWord(si) { return pitchMul > 1.5 ? ['moo!', 'baa!', 'rib!', 'bawk!'][si] + ' 🐿️' : pitchMul < 0.8 ? ['M o o o o', 'B a a a a', 'R i b b i t', 'B a w w k'][si] : SINGERS[si].word; }
+
+function eyes(xs, y, r, look, oops, s) {
+  for (const ex of xs) {
+    if (oops > 0.2 || dizzy > 0) { circle(ex, y, r, '#fff'); ctx.strokeStyle = '#222'; ctx.lineWidth = 2.5; ctx.beginPath(); for (let a = 0; a < 12; a += 0.4) { const rr = a / 12 * r * 0.85; ctx.lineTo(ex + Math.cos(a + time * 10) * rr, y + Math.sin(a + time * 10) * rr); } ctx.stroke(); }
+    else { circle(ex, y, r * (1 + s * 0.35), '#fff'); circle(ex + look, y + (s > 0.3 ? -2 : 1), r * 0.45, '#1a1a1a'); circle(ex + look + 2, y - 3, r * 0.15, '#fff'); }
+  }
+}
+function bigMouth(x, y, w, s, oops) {
+  if (oops > 0.2) { ctx.strokeStyle = '#3a1a1a'; ctx.lineWidth = 4; ctx.beginPath(); for (let i = 0; i <= 8; i++) ctx.lineTo(x - w / 2 + i * w / 8, y + (i % 2 ? -4 : 4)); ctx.stroke(); return; }
+  if (s > 0.08) { ellipse(x, y + s * 12, w * 0.5, 6 + s * 26, '#5a0f1a'); ellipse(x, y + s * 26, w * 0.28, 4 + s * 8, '#ff6f91'); circle(x, y - 2, 3 + s * 2, '#ff8fa3'); }
+  else { ctx.strokeStyle = '#3a1a1a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x, y - 6, w * 0.32, 0.25, Math.PI - 0.25); ctx.stroke(); }
+}
+const lookX = () => Math.sin(time * 0.9) * 3;
+
+function drawCow(s, oops) {
+  ellipse(0, -96, 74, 88, '#ffffff');
+  ellipse(-30, -130, 22, 16, '#222', 0.4); ellipse(34, -70, 18, 24, '#222', -0.3); ellipse(-40, -50, 14, 10, '#222');
+  ellipse(-62, -168, 22, 10, '#f2c9d0', -0.5); ellipse(62, -168, 22, 10, '#f2c9d0', 0.5);
+  poly([-34, -176, -44, -204, -24, -180], '#f4e3b5'); poly([34, -176, 44, -204, 24, -180], '#f4e3b5');
+  eyes([-24, 24], -136, 12, lookX(), oops, s);
+  ellipse(0, -86, 46, 32 + s * 10, '#f7a8b8');
+  circle(-16, -96, 6, '#c96a80'); circle(16, -96, 6, '#c96a80');
+  bigMouth(0, -72, 50, s, oops);
+  rrect(-14, -20, 28, 10, 4, '#8a5a2b'); ellipse(0, -2, 14, 14, '#f4c430'); circle(0, 4, 3, '#8a5a00');
+}
+function drawGoat(s, oops) {
+  ellipse(0, -96, 66, 90, '#d8cfe8');
+  for (const sd of [-1, 1]) { ctx.strokeStyle = '#8a7a5a'; ctx.lineWidth = 9; ctx.beginPath(); ctx.arc(sd * 30, -176, 22, sd > 0 ? Math.PI : 0, sd > 0 ? Math.PI * 2.4 : -Math.PI * 1.4, sd < 0); ctx.stroke(); }
+  ellipse(-66, -150, 24, 9, '#c7bcd9', 0.3); ellipse(66, -150, 24, 9, '#c7bcd9', -0.3);
+  // goats have rectangle pupils, which is extremely silly
+  for (const ex of [-22, 22]) {
+    if (oops > 0.2 || dizzy > 0) eyes([ex], -136, 13, 0, 1, 0);
+    else { circle(ex, -136, 13 * (1 + s * 0.3), '#fff4b0'); rrect(ex - 8 + lookX(), -139, 16, 6, 3, '#1a1a1a'); }
+  }
+  ellipse(0, -96, 34, 24, '#c7bcd9');
+  bigMouth(0, -82, 44, s, oops);
+  poly([-12, -60, 12, -60, 0 + Math.sin(time * 8) * 4 * (s + 0.2), -14], '#f5f5f5');
+}
+function drawFrog(s, oops) {
+  ellipse(0, -80, 84, 72, '#2fbf71');
+  ellipse(0, -60, 60, 44, '#9ee6b8');
+  circle(-38, -150, 30, '#2fbf71'); circle(38, -150, 30, '#2fbf71');
+  eyes([-38, 38], -152, 20, lookX(), oops, s);
+  circle(-58, -100, 10, 'rgba(255,120,150,.6)'); circle(58, -100, 10, 'rgba(255,120,150,.6)');
+  if (s > 0.08 && oops < 0.2) { ellipse(0, -100 + s * 16, 56, 8 + s * 30, '#5a0f1a'); ellipse(0, -84 + s * 24, 30, 6 + s * 8, '#ff6f91'); ellipse(0, -66, 36 * s, 28 * s, 'rgba(255,240,200,.75)'); }
+  else bigMouth(0, -104, 90, 0, oops);
+  for (const sd of [-1, 1]) ellipse(sd * 56, -10, 28, 12, '#27a35f');
+}
+function drawChicken(s, oops) {
+  ellipse(0, -90, 64, 82, '#fff7e0');
+  const fl = Math.sin(time * (s > 0.1 ? 40 : 4)) * (s > 0.1 ? 0.6 : 0.1);
+  ctx.save(); ctx.translate(-60, -96); ctx.rotate(-0.3 - fl); ellipse(-10, 0, 26, 14, '#f2e6c4'); ctx.restore();
+  ctx.save(); ctx.translate(60, -96); ctx.rotate(0.3 + fl); ellipse(10, 0, 26, 14, '#f2e6c4'); ctx.restore();
+  for (let i = 0; i < 3; i++) circle(-18 + i * 18, -176 - (i === 1 ? 10 : 0) + Math.sin(time * 8 + i) * 2, 13, '#e63946');
+  eyes([-20, 20], -136, 12, lookX(), oops, s);
+  const open = oops > 0.2 ? 0.1 : s;
+  poly([-16, -112, 16, -112, 0, -96 + open * 4], '#ff9f1c');
+  poly([-14, -108 + open * 22, 14, -108 + open * 22, 0, -92 + open * 26], '#f08a00');
+  if (open > 0.1) ellipse(0, -104 + open * 10, 8, open * 10, '#5a0f1a');
+  ellipse(0, -84 + open * 22, 7, 12, '#e63946');
+  ctx.strokeStyle = '#ff9f1c'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(-18, -10); ctx.lineTo(-22, 0); ctx.moveTo(18, -10); ctx.lineTo(22, 0); ctx.stroke();
+}
+
+/* ============ Maestro Gobbles and the drummer ============ */
+function drawConductor() {
+  const x = W / 2, y = 120, mood = conductorMood;
+  ctx.save(); ctx.translate(x, y);
+  const bob = mood === 'conduct' || state === 'jam' ? Math.sin(time * Math.PI * 2 / beat) * 4 : Math.sin(time * 2) * 2;
+  ctx.translate(0, bob);
+  const fan = ['#8b4513', '#c0392b', '#e67e22', '#f1c40f', '#e67e22', '#c0392b', '#8b4513'];
+  for (let i = 0; i < 7; i++) { ctx.save(); ctx.translate(0, 10); ctx.rotate(-Math.PI + 0.25 + i * (Math.PI - 0.5) / 6); ellipse(30, 0, 30, 9, fan[i]); ctx.restore(); }
+  ellipse(0, 22, 26, 24, '#1d1d24'); poly([-8, 0, 8, 0, 0, 30], '#ffffff'); poly([-9, 2, 0, 7, -9, 12], '#d62828'); poly([9, 2, 0, 7, 9, 12], '#d62828');
+  circle(0, -16, 15, '#c58b5e');
+  poly([-5, -14, 5, -14, 0, -4], '#f5a623'); ellipse(6, -6, 3, 7, '#e63946');
+  if (mood === 'sad') { ctx.strokeStyle = '#222'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(-6, -18, 3, Math.PI * 1.1, Math.PI * 1.9); ctx.moveTo(9, -18); ctx.arc(6, -18, 3, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke(); circle(10, -10, 2.5, '#7ec8f0'); }
+  else { circle(-6, -19, 4, '#fff'); circle(6, -19, 4, '#fff'); circle(-6, -18, 2, '#222'); circle(6, -18, 2, '#222'); }
+  // baton arm
+  const swing = mood === 'conduct' || state === 'jam' ? Math.sin(time * Math.PI * 2 / beat) * 0.9 : mood === 'point' ? -0.4 : mood === 'happy' ? Math.sin(time * 14) * 0.6 : 0.6;
+  ctx.save(); ctx.translate(20, 14); ctx.rotate(-0.8 + swing); ctx.strokeStyle = '#1d1d24'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(22, -10); ctx.stroke(); line(22, -10, 48, -24, '#fff', 3); circle(48, -24, 3, '#ffd23f'); ctx.restore();
+  rrect(-10, -38, 20, 10, 2, '#1d1d24'); rrect(-15, -30, 30, 4, 2, '#1d1d24');
+  ctx.restore();
+  if (state === 'menu' || state === 'jam') txt('Maestro Gobbles', x, 196, 12, '#ffd08a');
+}
+
+function drawDrummer() {
+  const x = 74, y = 446;
+  ctx.save(); ctx.translate(x, y);
+  ellipse(0, -14, 40, 16, '#d62828'); rrect(-40, -30, 80, 18, 6, '#b5172b'); ellipse(0, -30, 40, 10, '#f2f2f2');
+  ellipse(32, -64, 16, 4, '#f4c430'); line(32, -60, 32, -30, '#999', 2);
+  // hamster drummer
+  ellipse(0, -72, 26, 28, '#e8b47a'); ellipse(0, -66, 16, 18, '#fff3dc');
+  circle(-18, -96, 8, '#e8b47a'); circle(18, -96, 8, '#e8b47a'); circle(-18, -96, 4, '#ff8fa3'); circle(18, -96, 4, '#ff8fa3');
+  circle(-8, -82, 3, '#222'); circle(8, -82, 3, '#222'); circle(0, -76, 2.5, '#ff6f91');
+  const hit = beatPulse;
+  line(-14, -60, -24 + hit * 8, -36 - hit * 10, '#8a5a2b', 3); line(14, -60, 28 - hit * 4, -56 - hit * 6, '#8a5a2b', 3);
+  ctx.restore();
+}
+
+function drawCrowd() {
+  const veggies = ['carrot', 'broccoli', 'potato', 'tomato', 'corn', 'eggplant', 'carrot', 'potato', 'broccoli', 'tomato', 'corn', 'eggplant'];
+  for (let i = 0; i < veggies.length; i++) {
+    const x = 40 + i * 80 + (i % 2) * 10, jump = crowdJoy * Math.abs(Math.sin(time * 10 + i)) * 26, sway = Math.sin(time * 2 + i) * 3;
+    ctx.save(); ctx.translate(x + sway, 560 - jump + (i % 2) * 8);
+    const v = veggies[i];
+    if (v === 'carrot') { poly([-18, -60, 18, -60, 0, 10], '#ff8c1a'); for (let k = -1; k <= 1; k++) ellipse(k * 8, -70, 5, 14, '#3fa34d', k * 0.4); }
+    else if (v === 'broccoli') { rrect(-8, -40, 16, 40, 5, '#9ccc65'); circle(-14, -50, 16, '#3a8a3a'); circle(14, -50, 16, '#3a8a3a'); circle(0, -64, 18, '#2f7a30'); }
+    else if (v === 'potato') { ellipse(0, -36, 26, 34, '#c98a4a'); circle(-8, -50, 2, '#8a5a2b'); circle(10, -26, 2, '#8a5a2b'); }
+    else if (v === 'tomato') { circle(0, -34, 28, '#e63946'); poly([-10, -62, 0, -54, 10, -62, 0, -58], '#3fa34d'); }
+    else if (v === 'corn') { ellipse(0, -40, 18, 36, '#ffd23f'); poly([-20, -20, -6, -2, -4, -44], '#5fae3e'); poly([20, -20, 6, -2, 4, -44], '#5fae3e'); }
+    else { ellipse(0, -36, 22, 36, '#6a3fb5'); rrect(-8, -76, 16, 10, 3, '#3fa34d'); }
+    circle(-7, -42, 4, '#fff'); circle(7, -42, 4, '#fff'); circle(-7, -41, 2, '#222'); circle(7, -41, 2, '#222');
+    if (crowdJoy > 0.2) { ctx.fillStyle = '#5a0f1a'; ctx.beginPath(); ctx.arc(0, -30, 6, 0, Math.PI); ctx.fill(); }
+    ctx.restore();
+  }
+}
+
+/* ============ HUD ============ */
+function drawHUD() {
+  if (state === 'jam') {
+    txt('🥁 FREE JAM', 120, 30, 22, '#ffd23f', '#2a0f1e', 'center');
+  } else {
+    rrect(12, 46, 200, 84, 14, 'rgba(0,0,0,.4)');
+    txt('Song length: ' + pattern.length, 26, 66, 16, '#fff', '#2a0f1e', 'left');
+    txt('⭐ ' + score, 26, 92, 22, '#ffe066', '#2a0f1e', 'left');
+    txt('🎤'.repeat(Math.max(0, lives)), 26, 116, 16, '#fff', 'rgba(0,0,0,0)', 'left');
+    if (combo >= 3) txt('🔥 ' + combo + ' in a row!', W - 120, 66, 16, '#ffb347', '#2a0f1e');
+  }
+  // big status in the middle
+  if (statusText) {
+    const pulse = state === 'input' ? 1 + Math.sin(time * 8) * 0.04 : 1;
+    txt(statusText, W / 2, 226, 34 * pulse, state === 'input' ? '#7bd389' : '#ffd23f');
+    if (statusSub) txt(statusSub, W / 2, 256, 16, '#fff');
+  }
+  // progress dots while it's your turn
+  if (state === 'input' || state === 'demo') {
+    const n = pattern.length, w = Math.min(26, 560 / n);
+    for (let i = 0; i < n; i++) {
+      const done = state === 'input' && i < inputIdx;
+      circle(W / 2 - (n - 1) * w / 2 + i * w, 282, Math.min(8, w / 3), done ? SINGERS[pattern[i].s].pad : 'rgba(255,255,255,.3)');
+    }
+  }
+  if (bubble) {
+    const a = clamp(bubble.t * 2, 0, 1); ctx.globalAlpha = a;
+    const by = bubble.sub ? 454 : 466;
+    rrect(W / 2 - 250, by, 500, bubble.sub ? 76 : 54, 20, 'rgba(255,255,255,.95)');
+    txt(bubble.text, W / 2, by + 26, 28, '#b5172b', '#fff');
+    if (bubble.sub) txt(bubble.sub, W / 2, by + 56, 17, '#5a2d0c', '#fff');
+    ctx.globalAlpha = 1;
+  }
+}
+
+function render() {
+  ctx.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0);
+  ctx.save();
+  if (shake > 0) ctx.translate(rand(-6, 6) * shake * 2, rand(-6, 6) * shake * 2);
+  drawStage();
+  drawConductor();
+  drawDrummer();
+  for (let slot = 0; slot < 4; slot++) drawSinger(slot);
+  for (const p of parts) {
+    ctx.globalAlpha = clamp(p.life / p.max, 0, 1);
+    if (p.k === 'note') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(Math.sin(p.r) * 0.3); ellipse(0, 0, 7, 5, p.c, -0.4); line(6, -1, 6, -22, p.c, 3); line(6, -22, 14, -16, p.c, 3); ctx.restore(); }
+    else if (p.k === 'text') txt(p.text, p.x, p.y, p.size, p.color);
+    else if (p.k === 'conf') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-5, -3, 10, 6); ctx.restore(); }
+    else if (p.k === 'flower') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); for (let k = 0; k < 5; k++) circle(Math.cos(k * 1.26) * 8, Math.sin(k * 1.26) * 8, 6, '#ff8fc0'); circle(0, 0, 5, '#ffd23f'); ctx.restore(); }
+  }
+  ctx.globalAlpha = 1;
+  drawCrowd();
+  for (const tm of tomatoes) { const x = tm.x + (tm.tx - tm.x) * tm.t, y = tm.y + (tm.ty - tm.y) * tm.t - Math.sin(tm.t * Math.PI) * 180, r = 14 + tm.t * 14; circle(x, y, r, '#e63946'); circle(x - r * 0.3, y - r * 0.3, r * 0.3, '#ff8a8a'); }
+  for (const s of splats) { ctx.globalAlpha = clamp(s.life, 0, 0.9); circle(s.x, s.y, s.r, '#d62828'); for (let k = 0; k < 8; k++) circle(s.x + Math.cos(k) * s.r * 1.1, s.y + Math.sin(k * 1.7) * s.r * 1.1, s.r * 0.3, '#e63946'); circle(s.x - 12, s.y - 10, 8, '#ffb3b3'); ctx.globalAlpha = 1; }
+  ctx.restore();
+  if (state !== 'menu') drawHUD();
+}
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (state !== 'paused') {
+    if (state === 'menu' || state === 'over') {
+      time += dt;
+      if (Math.random() < dt * 1.4) { const s = Math.floor(Math.random() * 4); sing[s] = 1; wordT[s] = 0.6; }
+      for (let i = 0; i < 4; i++) { sing[i] = Math.max(0, sing[i] - dt * 2.4); wordT[i] = Math.max(0, wordT[i] - dt); }
+      beatPulse = Math.max(0, beatPulse - dt * 4);
+    } else update(dt);
+  }
+  render();
+  requestAnimationFrame(frame);
+}
+window.__ram = { get state() { return state; }, get pattern() { return pattern; }, get inputIdx() { return inputIdx; }, get layout() { return layout; }, get beat() { return beat; }, get lives() { return lives; }, get score() { return score; }, get event() { return event; }, tap, newGame, startJam, settings };
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

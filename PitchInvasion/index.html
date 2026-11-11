@@ -56,6 +56,7 @@ button:focus-visible{outline:3px solid var(--flood);outline-offset:3px}
 #hLeft{font-size:20px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-shadow:0 2px 6px rgba(0,0,0,.6)}
 #hStreak{font-size:30px;font-weight:900;color:var(--card);line-height:1;text-shadow:0 2px 8px rgba(0,0,0,.6)}
 #hStreakSub{font-family:var(--body);font-size:12.5px;font-weight:600;letter-spacing:.04em;color:var(--chalk);text-shadow:0 1px 4px rgba(0,0,0,.8);font-variant-numeric:tabular-nums}
+#hGoal{font-family:var(--body);font-size:12.5px;font-weight:600;letter-spacing:.04em;color:var(--card);text-shadow:0 1px 4px rgba(0,0,0,.8);margin-top:6px}
 #hStreak.bump{animation:bump .22s ease}
 @keyframes bump{0%{transform:scale(1.35)}100%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){#hStreak.bump{animation:none}}
@@ -152,7 +153,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(52px,12vw,92px);li
     <button class="tbtn" id="btnMute" type="button">Sound on</button>
     <button class="tbtn" id="btnPause" type="button">Pause</button>
   </div>
-  <div id="sideStats"><div id="hLeft">Invaders 0</div><div id="hStreak"></div><div id="hStreakSub"></div></div>
+  <div id="sideStats"><div id="hLeft">Invaders 0</div><div id="hStreak"></div><div id="hStreakSub"></div><div id="hGoal"></div></div>
   <div id="ballPill"><span id="hPower"></span><span id="hBall">Ball at feet</span><div class="charge"><i id="hCharge"></i></div></div>
   <div id="banner"><div id="bTitle"></div><div id="bSub"></div></div>
 </div>
@@ -164,7 +165,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(52px,12vw,92px);li
 </div>
 
 <div class="screen" id="menu">
-  <div id="ver" aria-label="Version 1.6">v1.6</div>
+  <div id="ver" aria-label="Version 1.7">v1.7</div>
   <div class="panel">
     <div class="kicker">STLDev arcade · Matchday</div>
     <h1>Pitch <span>Invasion</span></h1>
@@ -191,7 +192,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(52px,12vw,92px);li
           <dt>M</dt><dd>Mute</dd>
           <dt>Touch</dt><dd>Left thumb moves, KICK auto aims</dd>
         </dl>
-        <p class="hint" style="margin:12px 0 0">You wear the blue ring. Every invader has a colored ring and a name tag. Every kick that hits an invader or scores a goal adds 1 to your multiplier, up to x100. A kick that hits nothing resets it. Score in either goal to earn a rocket ball or an exploding ball for 10 seconds.</p>
+        <p class="hint" style="margin:12px 0 0">You wear the blue ring. Every invader has a colored ring and a name tag. Every kick that hits an invader or scores a goal adds 1 to your multiplier, up to x100. A kick that hits nothing resets it. Score a goal to earn a rocket ball or an exploding ball for 10 seconds. Goals have to alternate ends, so after scoring, the next one only counts at the other end.</p>
       </div>
     </div>
     <div class="row">
@@ -598,6 +599,8 @@ const W={phase:'break',t:1.5,toSpawn:0,spawnT:0};
 let charging=false, charge=0, pressed=false, kickHits=0;
 let shake=0, hurtFx=0, touchMode=false;
 let power=null, powerT=0, lastPower='bomb';
+// Goals alternate ends: 0 = either goal is live, -1 = left goal only, 1 = right goal only
+let nextGoal=0;
 const POWER_TIME=10;
 try{best=parseInt(localStorage.getItem('pitchInvasionBest')||'0',10)||0;}catch(e){}
 
@@ -899,13 +902,22 @@ function updateBall(dt){
     if(Math.abs(ball.pos.x)>BX-.35){ball.pos.x=Math.sign(ball.pos.x)*(BX-.35);ball.vel.x*=-1;burst(ball.pos,0xffe6a0,4,3);}
     // goal
     if(!ball.scored && Math.abs(ball.pos.x)>HW+.2 && Math.abs(ball.pos.z)<GOAL_Z-.2){
-      ball.scored=true; const pts=500*mult(); score+=pts;
-      const pw=lastPower==='bomb'?'rocket':'bomb'; lastPower=pw; power=pw; powerT=POWER_TIME;
-      banner('GOAL!',(pw==='rocket'?'Rocket ball':'Exploding ball')+' for '+POWER_TIME+' seconds · +'+pts);
-      popup('GOAL +'+pts,ball.pos,'#ffd21f',1.2); sfx.goal();
-      burst(ball.pos,0xffd21f,22,8); burst(ball.pos,0xffffff,14,8);
-      creditKick();
-      toReturn();
+      ball.scored=true;
+      const side=ball.pos.x<0?-1:1;
+      if(nextGoal!==0&&side!==nextGoal){
+        // Same goal twice in a row: no points, no power up, no streak credit
+        popup('WRONG END',ball.pos,'#ff4b3e',1); sfx.block();
+        toReturn();
+      } else {
+        nextGoal=-side;
+        const pts=500*mult(); score+=pts;
+        const pw=lastPower==='bomb'?'rocket':'bomb'; lastPower=pw; power=pw; powerT=POWER_TIME;
+        banner('GOAL!',(pw==='rocket'?'Rocket ball':'Exploding ball')+' for '+POWER_TIME+' seconds · +'+pts+' · next goal at the other end');
+        popup('GOAL +'+pts,ball.pos,'#ffd21f',1.2); sfx.goal();
+        burst(ball.pos,0xffd21f,22,8); burst(ball.pos,0xffffff,14,8);
+        creditKick();
+        toReturn();
+      }
     }
     if(ball.traveled>ball.range){ toReturn(); }
     ball.pos.y=BALL_R+(ball.charged?Math.sin(ball.traveled*.25)*.05:0);
@@ -1183,7 +1195,7 @@ function updateCamera(dt){
 }
 
 /* ---------- HUD ---------- */
-const H={wave:$('hWave'),score:$('hScore'),health:$('hHealth'),left:$('hLeft'),streak:$('hStreak'),streakSub:$('hStreakSub'),ballTxt:$('hBall'),charge:$('hCharge'),power:$('hPower')};
+const H={wave:$('hWave'),score:$('hScore'),health:$('hHealth'),left:$('hLeft'),streak:$('hStreak'),streakSub:$('hStreakSub'),goal:$('hGoal'),ballTxt:$('hBall'),charge:$('hCharge'),power:$('hPower')};
 const last={};
 function setText(k,el,v){ if(last[k]!==v){ last[k]=v; el.textContent=v; } }
 function updateHud(){
@@ -1200,6 +1212,7 @@ function updateHud(){
   setText('streakSub',H.streakSub,streak>0?(streak>=100?'max multiplier':streak+(streak===1?' kick':' kicks')+' in a row'):'');
   const bt=ball.state==='held'?(charging?(charge>=.95?'Power shot!':'Charging'):'Ball at feet'):'Ball out';
   if(last.bt!==bt){ last.bt=bt; H.ballTxt.textContent=bt; H.ballTxt.classList.toggle('out',ball.state!=='held'); }
+  setText('goal',H.goal,nextGoal===0?'Next goal: either end':nextGoal<0?'Next goal: left end':'Next goal: right end');
   const pl=power?(power==='rocket'?'Rocket ball ':'Exploding ball ')+Math.ceil(powerT)+'s':'';
   if(last.pl!==pl){ last.pl=pl; H.power.textContent=pl; H.power.classList.toggle('bomb',power==='bomb'); }
   const cw=charging?Math.round(charge*100):0;
@@ -1306,6 +1319,23 @@ $('entryForm').addEventListener('submit',async e=>{
 });
 loadBoard();
 
+/* ---------- Live goal beacons ---------- */
+const beacons=[-1,1].map(side=>{
+  const g=new THREE.Group(); g.position.set(side*(HW+.8),0,0); scene.add(g);
+  const tag=makeSprite(badgeTex('SCORE HERE','#ffd21f','#111111'),.75); tag.position.set(0,GOAL_H+1.3,0); g.add(tag);
+  const mouth=new THREE.Mesh(new THREE.PlaneGeometry(GOAL_D+.4,GOAL_Z*2),new THREE.MeshBasicMaterial({color:0xffd21f,transparent:true,opacity:.22,depthWrite:false}));
+  mouth.rotation.x=-Math.PI/2; mouth.position.y=.05; g.add(mouth);
+  return {side,g,tag,mouth};
+});
+function updateBeacons(){
+  const t=performance.now()/1000, show=state==='play'||state==='pause';
+  for(const b of beacons){
+    const live=show&&(nextGoal===0||nextGoal===b.side);
+    b.g.visible=live;
+    if(live){ b.tag.position.y=GOAL_H+1.3+Math.sin(t*3)*.18; b.mouth.material.opacity=.16+Math.sin(t*4)*.08; }
+  }
+}
+
 /* ---------- Flow ---------- */
 function clearWorld(){
   for(const e of enemies) removeEnemy(e); enemies=[];
@@ -1320,7 +1350,7 @@ function resetGame(){
   score=0; wave=0; streak=0; bestStreak=0; kickHits=0;
   player.hp=100; player.inv=0; player.pos.set(0,0,4); player.vel.set(0,0,0); player.facing.set(0,0,-1); player.yaw=Math.PI; player.pp.root.rotation.y=Math.PI;
   ball.state='held'; ballMat.emissive.setHex(0); ball.pos.set(0,BALL_R,3.3);
-  charging=false; charge=0; pressed=false; power=null; powerT=0;
+  charging=false; charge=0; pressed=false; power=null; powerT=0; nextGoal=0;
   W.phase='break'; W.t=1.4; computeDiff(1);
   camTarget.copy(player.pos);
   for(const k in last) delete last[k];
@@ -1390,6 +1420,7 @@ function frame(){
   }
   updateCamera(dt);
   updateAimFx();
+  updateBeacons();
   renderer.render(scene,camera);
   requestAnimationFrame(frame);
 }

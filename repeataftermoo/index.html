@@ -30,6 +30,10 @@
   .diff button { background: #fff; color: #5a2d0c; border: 4px solid #e0b27a; border-radius: 16px; padding: .4em .9em; font-weight: 900; font-size: clamp(12px, 1.6vw, 19px); min-width: 30%; }
   .diff button small { display: block; font-weight: 600; font-size: .7em; color: #8a5a2b; }
   .diff button.sel { border-color: #3fa34d; background: #e6ffe2; }
+  .choirs { gap: 6px; }
+  .choirs button { background: #fff; color: #5a2d0c; border: 3px solid #e0b27a; border-radius: 14px; padding: .25em .4em; font-weight: 900; font-size: clamp(10px, 1.25vw, 15px); }
+  .choirs button .em { display: block; font-size: 1.35em; letter-spacing: 1px; }
+  .choirs button.sel { border-color: #3fa34d; background: #e6ffe2; }
   .how { font-size: clamp(10px, 1.25vw, 14px); color: #8a5a2b; margin-top: .5em; line-height: 1.5; }
   .hi { font-weight: 900; font-size: clamp(12px, 1.6vw, 18px); margin-top: .3em; }
   .stat { font-size: clamp(14px, 2.1vw, 24px); font-weight: 800; margin: .3em 0; line-height: 1.5; }
@@ -51,7 +55,8 @@
     <div class="card">
       <div class="title">🎤 Repeat After Moo!</div>
       <div class="subtitle">The silliest choir in the whole barnyard</div>
-      <div class="cast">🐮 🐐 🐸 🐔</div>
+      <div class="lbl" style="font-weight:900;color:#7a0f1d;margin-top:.4em;font-size:clamp(12px,1.5vw,16px)">🎶 Pick your choir</div>
+      <div class="row choirs" id="choirChips"></div>
       <p>Maestro Gobbles conducts a little song. <b>Listen</b> to who sings and <b>when</b>, then sing it back by tapping the singers in the same rhythm!<br>Every round the song gets one note longer. How long can you go?</p>
       <div class="row diff">
         <button data-diff="easy">🐣 Little Kid<small>just remember who sings</small></button>
@@ -115,15 +120,27 @@ const store = {
 const settings = Object.assign({ diff: 'easy', sfx: true }, store.get('ram_settings', {}));
 let hiRound = store.get('ram_hiRound', 0), hiScore = store.get('ram_hiScore', 0);
 const saveSettings = () => store.set('ram_settings', settings);
+if (!settings.choir) settings.choir = 'barnyard';
 
 /* ============ The singers ============ */
 // left to right from lowest voice to highest, like a piano
+const CHOIRS = {
+  barnyard: { label: 'Barnyard', em: '🐮🐐🐸🐔', style: 'barnyard', who: [['Moo-riel', 'cow', 'cow', 'MOOOO!'], ['Gerald', 'goat', 'goat', 'BAAAA!'], ['Frank', 'frog', 'frog', 'RIBBIT!'], ['Clucky', 'chicken', 'chicken', 'BAWK!']] },
+  fruit: { label: 'Fruit Salad', em: '🍉🍌🍊🍓', style: 'pluck', who: [['Wally', 'watermelon', 'watermelon', 'BLOOP!'], ['Bonnie', 'banana', 'banana', 'NANA!'], ['Ollie', 'orange', 'orange', 'SQUISH!'], ['Berry', 'strawberry', 'strawberry', 'YAY!']] },
+  veggie: { label: 'Veggie Patch', em: '🥔🥦🥕🫛', style: 'crunch', who: [['Spud', 'potato', 'potato', 'SPUD!'], ['Brock', 'broccoli', 'broccoli', 'BROC!'], ['Carrie', 'carrot', 'carrot', 'CRUNCH!'], ['Petey', 'pea', 'pea', 'PEEP!']] },
+  kids: { label: 'Crazy Kids', em: '🤪😜😝👶', style: 'voice', who: [['Max', 'kid', 'kid0', 'HUUUH?'], ['Lulu', 'kid', 'kid1', 'LA LA!'], ['Zeke', 'kid', 'kid2', 'YIPPEE!'], ['Baby Pip', 'baby', 'kid3', 'GOO GOO!']] },
+  robots: { label: 'Robot Band', em: '🤖📡⚙️🔋', style: 'robot', who: [['Bolt', 'robot', 'robot0', 'BZZZT!'], ['Dome-O', 'robot', 'robot1', 'BEEP!'], ['Roly', 'robot', 'robot2', 'BOOP!'], ['Zip', 'robot', 'robot3', 'DING!']] },
+  monsters: { label: 'Silly Monsters', em: '👾👁️🫧👻', style: 'monster', who: [['Blobby', 'blob monster', 'blob', 'BLORP!'], ['Cy', 'cyclops', 'cyclops', 'RAWR!'], ['Fuzz', 'fuzzball', 'fuzz', 'GRRUMBLE!'], ['Boo', 'ghost', 'ghost', 'WOOO!']] }
+};
+// left to right from lowest voice to highest, like a piano; pads keep their colours in every choir
 const SINGERS = [
-  { name: 'Moo-riel', kind: 'cow', word: 'MOOOO!', pad: '#e63946', x: 180 },
-  { name: 'Gerald', kind: 'goat', word: 'BAAAA!', pad: '#ffb703', x: 380 },
-  { name: 'Frank', kind: 'frog', word: 'RIBBIT!', pad: '#2fbf71', x: 580 },
-  { name: 'Clucky', kind: 'chicken', word: 'BAWK!', pad: '#3a86ff', x: 780 }
+  { pad: '#e63946', x: 180 }, { pad: '#ffb703', x: 380 }, { pad: '#2fbf71', x: 580 }, { pad: '#3a86ff', x: 780 }
 ];
+function setChoir(id) {
+  if (!CHOIRS[id]) id = 'barnyard';
+  settings.choir = id;
+  CHOIRS[id].who.forEach(([name, kind, art, word], i) => Object.assign(SINGERS[i], { name, kind, art, word }));
+}
 const sing = [0, 0, 0, 0];      // how hard each singer is singing right now (0..1)
 const wordT = [0, 0, 0, 0];     // speech bubble timers
 let dizzy = 0, flipT = 0;
@@ -156,10 +173,46 @@ const Snd = {
   voice(i, dur, when = 0) {
     if (!this.ctx || !settings.sfx) return;
     const t = this.ctx.currentTime + when, m = pitchMul, d = clamp(dur, 0.22, 0.7);
-    if (i === 0) { this.osc('sawtooth', 131 * m, t, d + 0.15, 0.22, { to: 104 * m, filter: 'lowpass', ff: 650, vib: 5, att: 0.06 }); this.osc('sine', 65 * m, t, d + 0.15, 0.12, { to: 52 * m }); }
-    else if (i === 1) { this.osc('sawtooth', 196 * m, t, d + 0.1, 0.2, { filter: 'bandpass', ff: 1100, q: 1.5, trem: 13, att: 0.03 }); }
-    else if (i === 2) { this.osc('square', 330 * m, t, 0.1, 0.12, { to: 260 * m, filter: 'lowpass', ff: 1400 }); this.osc('square', 392 * m, t + 0.14, 0.12, 0.12, { to: 300 * m, filter: 'lowpass', ff: 1400 }); }
-    else { this.osc('square', 523 * m, t, 0.09, 0.09, { to: 800 * m, filter: 'bandpass', ff: 1800 }); this.osc('square', 659 * m, t + 0.11, Math.min(0.25, d), 0.09, { to: 523 * m, filter: 'bandpass', ff: 1800 }); }
+    const P = [131, 196, 330, 523].map(f => f * m)[i];
+    const style = CHOIRS[settings.choir].style;
+    if (style === 'barnyard') {
+      if (i === 0) { this.osc('sawtooth', P, t, d + 0.15, 0.22, { to: P * 0.8, filter: 'lowpass', ff: 650, vib: 5, att: 0.06 }); this.osc('sine', P / 2, t, d + 0.15, 0.12, { to: P * 0.4 }); }
+      else if (i === 1) { this.osc('sawtooth', P, t, d + 0.1, 0.2, { filter: 'bandpass', ff: 1100, q: 1.5, trem: 13, att: 0.03 }); }
+      else if (i === 2) { this.osc('square', P, t, 0.1, 0.12, { to: P * 0.8, filter: 'lowpass', ff: 1400 }); this.osc('square', P * 1.19, t + 0.14, 0.12, 0.12, { to: P * 0.9, filter: 'lowpass', ff: 1400 }); }
+      else { this.osc('square', P, t, 0.09, 0.09, { to: P * 1.5, filter: 'bandpass', ff: 1800 }); this.osc('square', P * 1.26, t + 0.11, Math.min(0.25, d), 0.09, { to: P, filter: 'bandpass', ff: 1800 }); }
+    } else if (style === 'pluck') {
+      // juicy water drop plinks
+      this.osc('sine', P, t, 0.22, 0.3, { to: P * 1.6, att: 0.005 });
+      this.osc('triangle', P * 2, t + 0.02, 0.12, 0.08, { to: P * 2.4, att: 0.005 });
+      if (i === 1 || i === 3) this.osc('sine', P * 1.26, t + 0.16, 0.18, 0.25, { to: P * 1.9, att: 0.005 });
+      if (i === 2) this.noise(t + 0.02, 0.12, 0.12, 2500);
+    } else if (style === 'crunch') {
+      // crunchy munchy veggie voices
+      this.osc('square', P, t, d * 0.7, 0.1, { to: P * 0.9, filter: 'lowpass', ff: 1200 + i * 400 });
+      this.noise(t, 0.09, 0.22, 1500 + i * 800);
+      if (i === 2) { this.noise(t + 0.1, 0.08, 0.2, 2500); this.noise(t + 0.2, 0.06, 0.15, 3000); }
+      if (i === 3) this.osc('sine', P * 2, t + 0.05, 0.1, 0.12, { to: P * 2.5 });
+    } else if (style === 'voice') {
+      // goofy singing voices
+      const o = { filter: 'bandpass', ff: 1000 + i * 300, q: 2, vib: 6, vibAmt: P * 0.04, att: 0.03 };
+      if (i === 0) this.osc('sawtooth', P * 1.3, t, d + 0.2, 0.22, Object.assign({ to: P * 0.8 }, o));
+      else if (i === 1) { this.osc('sawtooth', P, t, 0.16, 0.2, o); this.osc('sawtooth', P * 1.33, t + 0.18, 0.18, 0.2, o); }
+      else if (i === 2) { this.osc('sawtooth', P * 0.9, t, 0.12, 0.2, o); this.osc('sawtooth', P * 1.1, t + 0.13, d, 0.2, Object.assign({ to: P * 1.7 }, o)); }
+      else { this.osc('triangle', P, t, 0.12, 0.2, { to: P * 0.85 }); this.osc('triangle', P, t + 0.17, 0.14, 0.2, { to: P * 0.85 }); }
+    } else if (style === 'robot') {
+      // beeps and boops
+      if (i === 0) this.osc('sawtooth', P, t, d, 0.12, { filter: 'lowpass', ff: 900, trem: 40 });
+      else if (i === 1) this.osc('square', P, t, 0.16, 0.1, { att: 0.002 });
+      else if (i === 2) this.osc('square', P, t, 0.18, 0.1, { to: P * 0.6, att: 0.002 });
+      else { this.osc('sine', P * 1.5, t, 0.5, 0.18, { att: 0.002 }); this.osc('sine', P * 3, t, 0.3, 0.06, { att: 0.002 }); }
+      this.osc('square', P * 4, t, 0.03, 0.03, { att: 0.001 });
+    } else {
+      // friendly monster noises
+      if (i === 0) { this.osc('sawtooth', P, t, d + 0.1, 0.2, { to: P * 0.7, filter: 'lowpass', ff: 380, trem: 9 }); }
+      else if (i === 1) this.osc('sawtooth', P * 0.8, t, d, 0.2, { to: P * 1.3, filter: 'bandpass', ff: 700, q: 2, att: 0.04 });
+      else if (i === 2) this.osc('sawtooth', P * 0.7, t, d + 0.1, 0.16, { filter: 'lowpass', ff: 600, trem: 26 });
+      else this.osc('sine', P * 0.8, t, d + 0.25, 0.22, { to: P * 1.15, vib: 6, vibAmt: P * 0.05, att: 0.08 });
+    }
   },
   kick(when = 0) { if (!this.ctx || !settings.sfx) return; const t = this.ctx.currentTime + when; this.osc('sine', 140, t, 0.18, 0.4, { to: 45, att: 0.005 }); },
   hat(when = 0, v = 0.08) { if (!this.ctx || !settings.sfx) return; this.noise(this.ctx.currentTime + when, 0.05, v, 7000); },
@@ -387,7 +440,17 @@ function togglePause() {
 }
 let pauseAt = 0;
 function goMenu() { state = 'menu'; setHud(false); event = null; pitchMul = 1; layout = [0, 1, 2, 3]; refreshMenu(); showOv('ovMenu'); }
-function refreshMenu() { document.querySelectorAll('.diff button').forEach(b => b.classList.toggle('sel', b.dataset.diff === settings.diff)); $('hiRound').textContent = hiRound; $('hiScore').textContent = hiScore; }
+function buildChoirChips() {
+  const box = $('choirChips'); box.innerHTML = '';
+  for (const id in CHOIRS) {
+    const b = document.createElement('button');
+    b.innerHTML = '<span class="em">' + CHOIRS[id].em + '</span>' + CHOIRS[id].label;
+    b.classList.toggle('sel', settings.choir === id);
+    b.onclick = () => { setChoir(id); saveSettings(); buildChoirChips(); Snd.init(); for (let i = 0; i < 4; i++) setTimeout(() => { sing[i] = 1; wordT[i] = 0.6; Snd.voice(i, 0.3); }, i * 170); };
+    box.appendChild(b);
+  }
+}
+function refreshMenu() { buildChoirChips(); document.querySelectorAll('.diff button').forEach(b => b.classList.toggle('sel', b.dataset.diff === settings.diff)); $('hiRound').textContent = hiRound; $('hiScore').textContent = hiScore; }
 document.querySelectorAll('.diff button').forEach(b => b.addEventListener('click', () => { settings.diff = b.dataset.diff; saveSettings(); refreshMenu(); Snd.init(); Snd.voice(Math.floor(Math.random() * 4), 0.3); }));
 $('bPlay').onclick = newGame; $('bRetry').onclick = newGame; $('bJam').onclick = startJam;
 $('bResume').onclick = togglePause; $('bPause').onclick = togglePause; $('bHome').onclick = goMenu;
@@ -396,6 +459,7 @@ $('bSfx').onclick = () => { settings.sfx = !settings.sfx; saveSettings(); $('bSf
 $('bSfx').textContent = settings.sfx ? '🔊' : '🔇';
 addEventListener('blur', () => { if (!['menu', 'over', 'paused'].includes(state)) togglePause(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden && !['menu', 'over', 'paused'].includes(state)) togglePause(); });
+setChoir(settings.choir);
 refreshMenu();
 
 /* ============ Drawing helpers ============ */
@@ -436,7 +500,7 @@ function drawStage() {
 
 /* ============ Singers ============ */
 function drawSinger(slot) {
-  const si = layout[slot], S = SINGERS[si], x = S.x, base = 440;
+  const si = layout[slot], S = SINGERS[si], x = SINGERS[slot].x, base = 440;
   const s = sing[si], wob = Math.sin(time * 3 + slot) * 0.03;
   const oops = S.oops || 0, shh = S.shh || 0;
   // pedestal (the colour tells kids which singer is which)
@@ -450,13 +514,12 @@ function drawSinger(slot) {
   const sy = 1 + s * 0.28 + Math.abs(Math.sin(time * 6 + slot)) * 0.03 * (state === 'jam' ? 3 : 1) * (beatPulse + 0.3);
   const sx = 1 - s * 0.12 + wob;
   ctx.scale(sx, sy);
-  const k = S.kind;
-  if (k === 'cow') drawCow(s, oops); else if (k === 'goat') drawGoat(s, oops); else if (k === 'frog') drawFrog(s, oops); else drawChicken(s, oops);
+  (ART[S.art] || drawCow)(s, oops);
   ctx.restore();
   if (shh > 0) txt('Shh! Listen!', x, 150, 16, '#fff');
   if (wordT[si] > 0 && !shh) { const a = Math.min(1, wordT[si] * 3); ctx.globalAlpha = a; txt(pickWord(si), x + Math.sin(time * 30) * 2 * s, 158 - (1 - wordT[si]) * 20, 26 + s * 10, SINGERS[si].pad, '#fff'); ctx.globalAlpha = 1; }
 }
-function pickWord(si) { return pitchMul > 1.5 ? ['moo!', 'baa!', 'rib!', 'bawk!'][si] + ' 🐿️' : pitchMul < 0.8 ? ['M o o o o', 'B a a a a', 'R i b b i t', 'B a w w k'][si] : SINGERS[si].word; }
+function pickWord(si) { const w = SINGERS[si].word; return pitchMul > 1.5 ? w.toLowerCase() + ' 🐿️' : pitchMul < 0.8 ? w.replace(/!/g, '').split('').join(' ') : w; }
 
 function eyes(xs, y, r, look, oops, s) {
   for (const ex of xs) {
@@ -519,6 +582,147 @@ function drawChicken(s, oops) {
   ellipse(0, -84 + open * 22, 7, 12, '#e63946');
   ctx.strokeStyle = '#ff9f1c'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(-18, -10); ctx.lineTo(-22, 0); ctx.moveTo(18, -10); ctx.lineTo(22, 0); ctx.stroke();
 }
+
+
+/* ============ More choirs ============ */
+function face(y, gap, r, s, oops, mouthY, mouthW) { eyes([-gap, gap], y, r, lookX(), oops, s); bigMouth(0, mouthY, mouthW, s, oops); }
+function cheeks(y, gap, c = 'rgba(255,120,150,.55)') { circle(-gap, y, 9, c); circle(gap, y, 9, c); }
+function drawWatermelon(s, oops) {
+  ellipse(0, -96, 80, 86, '#2d9a4a');
+  ctx.strokeStyle = '#1d6a32'; ctx.lineWidth = 9; for (const k of [-50, -20, 10, 40]) { ctx.beginPath(); ctx.ellipse(k * 0.5, -96, Math.abs(80 - Math.abs(k)) * 0.35 + 8, 84, 0, -Math.PI / 2, Math.PI / 2, k < 0); ctx.stroke(); }
+  ellipse(14, -184, 16, 8, '#3fa34d', -0.4); rrect(-3, -192, 6, 14, 3, '#5a3a22');
+  cheeks(-104, 40); face(-128, 26, 14, s, oops, -88, 56);
+}
+function drawBanana(s, oops) {
+  ctx.save(); ctx.rotate(0.12);
+  ctx.fillStyle = '#ffe14d'; ctx.beginPath(); ctx.moveTo(-10, -196); ctx.quadraticCurveTo(78, -150, 40, -4); ctx.quadraticCurveTo(-10, 6, -40, -6); ctx.quadraticCurveTo(-4, -96, -24, -190); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#e8c21a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-14, -180); ctx.quadraticCurveTo(30, -110, 4, -10); ctx.stroke();
+  rrect(-24, -204, 14, 16, 4, '#6b4a1a'); circle(-34, -4, 6, '#6b4a1a');
+  ctx.restore();
+  cheeks(-96, 30); face(-124, 18, 12, s, oops, -82, 40);
+}
+function drawOrange(s, oops) {
+  circle(0, -92, 82, '#ff8c1a'); circle(-24, -118, 30, 'rgba(255,255,255,.15)');
+  for (let i = 0; i < 26; i++) circle(Math.cos(i * 2.4) * 64 * ((i % 3) / 3 + 0.4), -92 + Math.sin(i * 2.4) * 64 * ((i % 3) / 3 + 0.4), 2, '#e8761a');
+  ellipse(14, -178, 20, 9, '#3fa34d', -0.5); rrect(-3, -182, 6, 10, 3, '#5a3a22');
+  cheeks(-86, 44); face(-112, 26, 14, s, oops, -70, 58);
+}
+function drawStrawberry(s, oops) {
+  ctx.fillStyle = '#e63946'; ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(-90, -70, -86, -176, 0, -168); ctx.bezierCurveTo(86, -176, 90, -70, 0, 0); ctx.fill();
+  for (let i = 0; i < 18; i++) { const x = ((i * 37) % 120) - 60, y = -30 - ((i * 53) % 120); if (Math.abs(x) < 70 - (y + 160) * 0.1) ellipse(x * 0.8, y, 2.5, 4, '#ffe066'); }
+  for (let k = 0; k < 5; k++) { ctx.save(); ctx.translate(0, -166); ctx.rotate(-Math.PI / 2 + (k - 2) * 0.55); ellipse(26, 0, 26, 10, '#3fa34d'); ctx.restore(); }
+  cheeks(-104, 36); face(-128, 22, 13, s, oops, -84, 44);
+}
+function drawPotato(s, oops) {
+  ellipse(0, -90, 76, 88, '#c98a4a'); ellipse(-30, -120, 22, 14, 'rgba(255,255,255,.12)');
+  for (const [x, y] of [[-40, -60], [44, -130], [30, -40], [-50, -140], [0, -30]]) circle(x, y, 4, '#8a5a2b');
+  face(-124, 26, 14, s, oops, -84, 54);
+}
+function drawBroccoli(s, oops) {
+  rrect(-30, -110, 60, 110, 22, '#9ccc65');
+  for (const [x, y, r] of [[-46, -150, 34], [46, -150, 34], [0, -176, 40], [-24, -196, 26], [26, -196, 26], [0, -138, 36]]) circle(x, y, r, '#2f7a30');
+  for (let i = 0; i < 16; i++) circle(Math.cos(i * 2.1) * 60, -160 + Math.sin(i * 1.7) * 36, 6, '#3f9a3f');
+  face(-82, 16, 11, s, oops, -46, 36);
+}
+function drawCarrot(s, oops) {
+  ctx.fillStyle = '#ff8c1a'; ctx.beginPath(); ctx.moveTo(-58, -168); ctx.quadraticCurveTo(0, -186, 58, -168); ctx.quadraticCurveTo(30, -60, 0, 0); ctx.quadraticCurveTo(-30, -60, -58, -168); ctx.fill();
+  ctx.strokeStyle = '#e06c00'; ctx.lineWidth = 3; for (const y of [-130, -90, -50]) { ctx.beginPath(); ctx.moveTo(-30 + (y + 168) * 0.12, y); ctx.lineTo(-10 + (y + 168) * 0.08, y + 4); ctx.stroke(); }
+  for (let k = -1; k <= 1; k++) { ctx.save(); ctx.translate(k * 14, -176); ctx.rotate(k * 0.4 + Math.sin(time * 4 + k) * 0.08); ellipse(0, -26, 9, 30, '#3fa34d'); ctx.restore(); }
+  cheeks(-112, 32); face(-136, 18, 12, s, oops, -100, 36);
+}
+function drawPea(s, oops) {
+  ellipse(0, -70, 92, 44, '#5fae3e'); ellipse(0, -80, 84, 30, '#9ee67a');
+  circle(-52, -82, 22, '#4f9e30'); circle(52, -82, 22, '#4f9e30');
+  circle(0, -116, 58, '#6cc04a'); circle(-18, -134, 16, 'rgba(255,255,255,.25)');
+  rrect(-3, -184, 6, 14, 3, '#3f7a2a'); ellipse(12, -180, 12, 5, '#3fa34d', -0.4);
+  cheeks(-104, 32); face(-124, 20, 12, s, oops, -94, 36);
+}
+const KID = [
+  { skin: '#f2c9a0', shirt: '#e63946', hair: '#4a2a10' }, { skin: '#c68642', shirt: '#ffb703', hair: '#1a1a1a' },
+  { skin: '#8d5524', shirt: '#2fbf71', hair: '#1a1a1a' }, { skin: '#f6d7c3', shirt: '#7ec8f0', hair: '#e8b04a' }
+];
+function drawKid(n, s, oops) {
+  const k = KID[n];
+  rrect(-60, -66, 120, 66, 30, k.shirt); rrect(-60, -66, 120, 12, 8, 'rgba(255,255,255,.25)');
+  if (n === 2) { ctx.fillStyle = '#fff'; ctx.font = '900 24px Trebuchet MS'; ctx.textAlign = 'center'; ctx.fillText('★', 0, -26); }
+  if (n === 3) rrect(-22, -40, 44, 30, 10, '#ffffff');
+  // hair behind
+  if (n === 1) { circle(-66, -142, 22, k.hair); circle(66, -142, 22, k.hair); circle(-80, -142, 9, '#ff4d8d'); circle(80, -142, 9, '#ff4d8d'); }
+  if (n === 2) for (let i = 0; i < 12; i++) circle(Math.cos(i * 0.52 + Math.PI) * 62, -138 + Math.sin(i * 0.52 + Math.PI) * 56, 22, k.hair);
+  circle(0, -128, 62, k.skin);
+  circle(-62, -126, 12, k.skin); circle(62, -126, 12, k.skin);
+  if (n === 0) { for (let i = 0; i < 7; i++) poly([-48 + i * 16, -168, -40 + i * 16, -206 + (i % 2) * 10, -32 + i * 16, -168], k.hair); ctx.fillStyle = k.hair; ctx.beginPath(); ctx.arc(0, -150, 52, Math.PI * 1.05, Math.PI * 1.95); ctx.fill(); }
+  if (n === 1) { ctx.fillStyle = k.hair; ctx.beginPath(); ctx.arc(0, -140, 60, Math.PI, 0); ctx.fill(); }
+  if (n === 3) { ctx.strokeStyle = k.hair; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(4, -196, 10, Math.PI * 0.2, Math.PI * 1.9); ctx.stroke(); }
+  // silly face
+  for (let i = 0; i < 5; i++) if (n === 0 || n === 3) circle(-34 + (i % 3) * 6 + (i > 2 ? 62 : 0), -110 + Math.floor(i / 3) * 6, 1.8, 'rgba(160,80,40,.5)');
+  cheeks(-104, 40); face(-134, 24, n === 3 ? 15 : 13, s, oops, -98, 48);
+  if (s < 0.08 && oops < 0.2) { if (n === 0) { rrect(-8, -95, 7, 9, 1, '#fff'); rrect(1, -95, 7, 9, 1, '#fff'); } if (n === 2) ellipse(0, -84, 10, 8, '#ff6f91'); if (n === 3) { circle(0, -92, 10, '#7ec8f0'); circle(0, -92, 5, '#fff'); } }
+}
+const BOT = [['#9aa3ad', '#6b7480'], ['#f4c430', '#c99a10'], ['#2ec4b6', '#1a8f85'], ['#ff8fc0', '#d9628f']];
+function drawRobot(n, s, oops) {
+  const [c, d] = BOT[n];
+  if (n === 0) { rrect(-70, -40, 140, 40, 14, '#444'); for (let x = -56; x <= 56; x += 28) circle(x, -20, 10, '#777'); rrect(-60, -120, 120, 84, 10, d); }
+  else if (n === 1) { rrect(-40, -70, 80, 70, 10, d); }
+  else if (n === 2) { circle(0, -40, 40, d); }
+  else { rrect(-30, -50, 60, 50, 8, d); }
+  const hy = n === 2 ? -120 : -150, hw = n === 0 ? 70 : 62;
+  if (n === 2) circle(0, hy, 66, c); else rrect(-hw, hy - 58, hw * 2, 116, n === 1 ? 40 : 14, c);
+  if (n === 1) { ctx.beginPath(); ctx.arc(0, hy - 56, 40, Math.PI, 0); ctx.fillStyle = 'rgba(190,230,255,.6)'; ctx.fill(); }
+  // antenna
+  const ay = n === 2 ? hy - 66 : hy - 58;
+  line(0, ay, 0, ay - 24, '#555', 4); circle(0, ay - 28, 8, Math.sin(time * 8 + n) > 0 ? '#ff4d4d' : '#ffb3b3');
+  if (n === 3) { const p = Math.cos(time * 25); ellipse(p * 16, ay - 36, 18 * Math.abs(p) + 2, 4, '#555'); }
+  // screen face
+  rrect(-46, hy - 36, 92, 70, 12, '#1d2433');
+  if (oops > 0.2 || dizzy > 0) { txt('x', -20, hy - 12, 22, '#ff4d4d', '#1d2433'); txt('x', 20, hy - 12, 22, '#ff4d4d', '#1d2433'); }
+  else { const lk = lookX(); rrect(-28 + lk, hy - 24 - s * 4, 14, 16 + s * 8, 3, '#7bf1a8'); rrect(14 + lk, hy - 24 - s * 4, 14, 16 + s * 8, 3, '#7bf1a8'); }
+  for (let i = 0; i < 7; i++) { const h = s > 0.05 ? 4 + Math.abs(Math.sin(time * 30 + i * 1.3)) * 18 * s : 3; rrect(-30 + i * 9, hy + 18 - h / 2, 6, h, 2, '#7bf1a8'); }
+  circle(-hw + 10, hy - 46, 4, d); circle(hw - 10, hy - 46, 4, d);
+}
+function drawBlob(s, oops) {
+  ctx.fillStyle = '#9b5de5'; ctx.beginPath(); ctx.moveTo(-80, 0);
+  for (let i = 0; i <= 20; i++) { const a = Math.PI + i * Math.PI / 20; ctx.lineTo(Math.cos(a) * 80 + Math.sin(time * 3 + i) * 4, -60 + Math.sin(a) * 110); }
+  ctx.lineTo(80, 0); ctx.fill();
+  for (const x of [-60, -10, 50]) ellipse(x, 4 + Math.sin(time * 2 + x) * 3, 10, 14, '#9b5de5');
+  circle(-30, -130, 20, 'rgba(255,255,255,.2)');
+  eyes([-32, 0, 32], -128, 13, lookX(), oops, s); bigMouth(0, -80, 60, s, oops);
+}
+function drawCyclops(s, oops) {
+  ellipse(0, -96, 74, 90, '#ff8c42');
+  for (let i = 0; i < 18; i++) { const a = i / 18 * Math.PI * 2; circle(Math.cos(a) * 70, -96 + Math.sin(a) * 84, 10, '#ff8c42'); }
+  poly([-40, -170, -52, -214, -24, -178], '#fff3d6'); poly([40, -170, 52, -214, 24, -178], '#fff3d6');
+  eyes([0], -126, 30, lookX() * 2, oops, s);
+  bigMouth(0, -70, 70, s, oops);
+  if (s < 0.08 && oops < 0.2) { poly([-14, -66, -8, -54, -2, -66], '#fff'); poly([2, -66, 8, -54, 14, -66], '#fff'); }
+}
+function drawFuzz(s, oops) {
+  for (let i = 0; i < 40; i++) { const a = i / 40 * Math.PI * 2, r = 78 + (i % 2) * 8; circle(Math.cos(a) * r * 0.9, -92 + Math.sin(a) * r, 14, '#3a86ff'); }
+  circle(0, -92, 76, '#4d96ff');
+  for (const sd of [-1, 1]) { line(sd * 22, -160, sd * 34 + Math.sin(time * 5 + sd) * 6, -206, '#3a86ff', 6); eyes([sd * 34 + Math.sin(time * 5 + sd) * 6], -212, 15, lookX(), oops, s); }
+  bigMouth(0, -86, 70, s, oops);
+  ellipse(-58, -20, 18, 10, '#3a86ff'); ellipse(58, -20, 18, 10, '#3a86ff');
+}
+function drawGhost(s, oops) {
+  ctx.save(); ctx.translate(0, Math.sin(time * 2.5) * 8 - 10);
+  ctx.globalAlpha = 0.95; ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(-70, -10);
+  ctx.lineTo(-70, -110); ctx.arc(0, -110, 70, Math.PI, 0); ctx.lineTo(70, -10);
+  for (let i = 0; i <= 6; i++) ctx.lineTo(70 - i * 140 / 6, -10 + (i % 2 ? 16 : 0) + Math.sin(time * 6 + i) * 4);
+  ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1;
+  circle(-36, -100, 10, 'rgba(255,150,180,.6)'); circle(36, -100, 10, 'rgba(255,150,180,.6)');
+  if (oops > 0.2 || dizzy > 0) eyes([-24, 24], -130, 13, 0, 1, 0);
+  else { ellipse(-24, -130, 10, 14 + s * 4, '#1d2433'); ellipse(24, -130, 10, 14 + s * 4, '#1d2433'); circle(-21, -135, 3, '#fff'); circle(27, -135, 3, '#fff'); }
+  if (s > 0.08) ellipse(0, -90, 14, 8 + s * 18, '#1d2433'); else ellipse(0, -96, 9, 7, '#1d2433');
+  ctx.restore();
+}
+const ART = {
+  cow: (s, o) => drawCow(s, o), goat: (s, o) => drawGoat(s, o), frog: (s, o) => drawFrog(s, o), chicken: (s, o) => drawChicken(s, o),
+  watermelon: drawWatermelon, banana: drawBanana, orange: drawOrange, strawberry: drawStrawberry,
+  potato: drawPotato, broccoli: drawBroccoli, carrot: drawCarrot, pea: drawPea,
+  kid0: (s, o) => drawKid(0, s, o), kid1: (s, o) => drawKid(1, s, o), kid2: (s, o) => drawKid(2, s, o), kid3: (s, o) => drawKid(3, s, o),
+  robot0: (s, o) => drawRobot(0, s, o), robot1: (s, o) => drawRobot(1, s, o), robot2: (s, o) => drawRobot(2, s, o), robot3: (s, o) => drawRobot(3, s, o),
+  blob: drawBlob, cyclops: drawCyclops, fuzz: drawFuzz, ghost: drawGhost
+};
 
 /* ============ Maestro Gobbles and the drummer ============ */
 function drawConductor() {

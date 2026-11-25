@@ -62,7 +62,7 @@
     <div class="card">
       <div class="title">🛋️ Race to the Couch!</div>
       <div class="subtitle">Sneak past the bossy sisters and get to the TV!</div>
-      <p>Big Sis has the controllers ready for <b>Minecraft</b>... but two bossy sisters are guarding every room.<br>Stay out of their eyes, hide in baskets and blanket forts, and toss cookies to distract them!</p>
+      <p>Big Sis has the controllers ready for <b>Minecraft</b>... but two bossy sisters are guarding the house, and <b>Mom</b> says it's time for a break from video games!<br>Stay out of their eyes, hide in baskets and blanket forts, toss cookies, and zip through <b>swirly portals</b> when they open!</p>
       <div class="names">
         <label><span class="em">👦</span>The Hero<input id="nBoy" maxlength="12" autocomplete="off"></label>
         <label><span class="em">😤</span>Bossy Sister<input id="nS1" maxlength="12" autocomplete="off"></label>
@@ -171,6 +171,9 @@ const Snd = {
   pickup() { this.tone(880, 0.07, 'square', 0.07); this.tone(1320, 0.1, 'square', 0.07, null, 0.07); },
   ouch() { this.tone(900, 0.25, 'sawtooth', 0.1, 400); },
   phone() { for (let i = 0; i < 3; i++) { this.tone(1300, 0.08, 'square', 0.06, null, i * 0.2); this.tone(1000, 0.08, 'square', 0.06, null, i * 0.2 + 0.09); } },
+  zap() { this.tone(300, 0.35, 'sawtooth', 0.08, 1800); this.tone(1200, 0.3, 'sine', 0.08, 200, 0.05); this.noise(0.3, 0.12, 3000, 0, 'highpass'); },
+  portalOpen() { this.tone(200, 0.4, 'sine', 0.06, 700); },
+  mom() { this.tone(330, 0.15, 'square', 0.08); this.tone(262, 0.3, 'square', 0.08, null, 0.16); },
   door() { [523, 659, 784, 1047].forEach((f, i) => this.tone(f, 0.12, 'triangle', 0.09, null, i * 0.08)); },
   win() { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => this.tone(f, i === 6 ? 0.6 : 0.14, 'square', 0.08, null, i * 0.13)); },
   sad() { [392, 370, 349, 330].forEach((f, i) => this.tone(f, 0.3, 'triangle', 0.12, null, i * 0.25)); },
@@ -196,7 +199,7 @@ const Snd = {
 // # wall  B bed  S shelf  T table  K counter  F fridge  X toy box  C couch  V TV  H laundry basket (hide)  O blanket fort (hide)
 // r rug  L toy bricks (OUCH!)  c cookie  P start  E door  N big sister  1 2 bossy sisters
 const LEVELS = [
-  { name: 'Escape Your Room!', tip: 'Sneak behind the sister when she looks away!', map: [
+  { name: 'Escape Your Room!', tip: 'Sneak behind her when she looks away! Swirly portals zap you across the room while they are open.', portals: [[[3, 8], [20, 11]]], map: [
     "########################",
     "#BB...S#.....S.........#",
     "#BB....#...............#",
@@ -211,7 +214,7 @@ const LEVELS = [
     "#......#...............#",
     "########################"],
     routes: { 1: [[10, 3], [20, 3], [20, 10], [10, 10]] } },
-  { name: 'Kitchen Sneak', tip: 'Grab cookies! Toss one and the sisters go get it.', map: [
+  { name: 'Kitchen Sneak', tip: 'Uh oh, MOM is here too! Toss cookies to distract everyone.', portals: [[[5, 7], [20, 10]], [[2, 2], [15, 2]]], mom: { start: [16, 10], route: [[16, 10], [21, 10], [21, 4], [11, 4]] }, map: [
     "########################",
     "#KKKKKKFF#....SSSS.....#",
     "#........#.............#",
@@ -226,7 +229,7 @@ const LEVELS = [
     "#........#......c......#",
     "########################"],
     routes: { 1: [[11, 7], [21, 7], [21, 2], [11, 2]], 2: [[7, 10], [7, 2], [2, 2], [2, 10]] } },
-  { name: 'The Toy Room', tip: 'Watch out for toy bricks! Stepping on one goes OUCH!', map: [
+  { name: 'The Toy Room', tip: 'Watch out for toy bricks! Stepping on one goes OUCH!', portals: [[[2, 9], [21, 3]], [[9, 1], [12, 11]]], mom: { start: [8, 11], route: [[8, 11], [1, 11], [1, 3], [8, 6]] }, map: [
     "########################",
     "#P....X.....L.....XX...#",
     "#.....X..L.....L.......#",
@@ -241,7 +244,7 @@ const LEVELS = [
     "#........c.....L.......#",
     "########################"],
     routes: { 1: [[16, 4], [21, 2], [21, 10], [14, 11], [14, 5]], 2: [[12, 8], [3, 9], [3, 2], [9, 4]] } },
-  { name: 'The Living Room', tip: 'Big Sis is on the couch with the controllers. Almost there!', map: [
+  { name: 'The Living Room', tip: 'Big Sis is on the couch with the controllers. Almost there!', portals: [[[6, 2], [21, 10]], [[2, 11], [14, 1]]], mom: { start: [13, 10], route: [[13, 10], [5, 9], [5, 2], [13, 2]] }, map: [
     "########################",
     "#P.....SS.........SS...#",
     "#......................#",
@@ -267,7 +270,7 @@ function D() {
 }
 
 /* ============ State ============ */
-let state = 'menu', time = 0, levelIdx = 0, map = [], boy = null, sisters = [], big = null, cookies = [], parts = [];
+let state = 'menu', time = 0, levelIdx = 0, map = [], boy = null, sisters = [], big = null, cookies = [], parts = [], portals = [];
 let hearts = 3, cookieCount = 1, callUsed = false, calledT = 0, banner = null, shake = 0, caughtT = 0, totalT = 0, catches = 0, winT = 0, stepT = 0;
 const tileAt = (c, r) => (r < 0 || r >= ROWS || c < 0 || c >= COLS) ? '#' : map[r][c];
 const solidAt = (c, r) => SOLID.has(tileAt(c, r));
@@ -290,7 +293,12 @@ function loadLevel(n) {
     }
     if (ch === 'N') big = center(c, r);
   }
-  boy = { x: start.x, y: start.y, start, face: 1, hidden: null, walk: 0, moving: false, ouchT: 0, say: null, sayT: 0, noogieT: 0 };
+  if (L.mom) {
+    const p = center(L.mom.start[0], L.mom.start[1]);
+    sisters.push({ id: 'mom', x: p.x, y: p.y, home: { x: p.x, y: p.y }, dir: Math.PI, state: 'patrol', route: L.mom.route, wp: 0, path: [], pathT: 0, lookT: 0, lostT: 0, last: null, say: null, sayT: 0, walk: 0, snack: null, eatT: 0, alertT: 0 });
+  }
+  portals = (L.portals || []).map((pr, i) => ({ a: center(pr[0][0], pr[0][1]), b: center(pr[1][0], pr[1][1]), open: i % 2 === 0, t: i % 2 === 0 ? 4.5 : 2.5, hue: [275, 175][i % 2] }));
+  boy = { x: start.x, y: start.y, start, face: 1, hidden: null, walk: 0, moving: false, ouchT: 0, say: null, sayT: 0, noogieT: 0, portalT: 0 };
   banner = { text: 'Room ' + (n + 1) + ': ' + L.name, sub: L.tip, t: 3.2 };
   updateButtons();
 }
@@ -354,7 +362,8 @@ function walkTo(s, target, speed, dt) {
 function turnTo(s, a, k) { let d = a - s.dir; while (d > Math.PI) d -= Math.PI * 2; while (d < -Math.PI) d += Math.PI * 2; s.dir += d * Math.min(1, k); }
 
 function sisterSay(s, text, t = 1.6) { s.say = text; s.sayT = t; }
-function nameOf(s) { return s.id === 1 ? settings.s1 : settings.s2; }
+function nameOf(s) { return s.id === 'mom' ? 'Mom' : s.id === 1 ? settings.s1 : settings.s2; }
+const isMom = s => s.id === 'mom';
 
 /* ============ Input ============ */
 const keys = {};
@@ -428,8 +437,10 @@ function action() {
 function callBigSis() {
   if (state !== 'play' || callUsed || caughtT > 0) return;
   callUsed = true; calledT = 4.5; Snd.phone();
-  banner = { text: '📱 ' + settings.big + ': "Hey! Mom says come help with the pie!"', sub: 'The bossy sisters are busy for a few seconds. GO GO GO!', t: 2.6 };
-  for (const s of sisters) { s.state = 'called'; s.path = []; sisterSay(s, pick(['Ugh, FINE!', 'Coming, Mom!', 'Pie? Where?']), 2); }
+  const momHere = sisters.some(isMom);
+  banner = momHere ? { text: '📱 ' + settings.big + ': "Mom! The pie timer is beeping!"', sub: 'Everyone is busy for a few seconds. GO GO GO!', t: 2.6 }
+                   : { text: '📱 ' + settings.big + ': "Hey! Mom says come help with the pie!"', sub: 'The bossy sisters are busy for a few seconds. GO GO GO!', t: 2.6 };
+  for (const s of sisters) { s.state = 'called'; s.path = []; sisterSay(s, isMom(s) ? pick(['Oh no, my PIE!', 'Coming, coming!']) : pick(['Ugh, FINE!', 'Coming, Mom!', 'Pie? Where?']), 2); }
   updateButtons();
 }
 function boySay(text, t = 1.4) { boy.say = text; boy.sayT = t; }
@@ -479,6 +490,23 @@ function update(dt) {
   if (here === 'L' && boy.ouchT <= 0 && !boy.hidden) { boy.ouchT = 1.2; Snd.ouch(); boySay('OUCH! OUCH! OUCH!', 1.1); shake = 0.2; noise(boy, 260); }
   if (here === 'E' && levelIdx < LEVELS.length - 1) { Snd.door(); loadLevel(levelIdx + 1); return; }
   if (big && dist(boy, big) < 54) { winGame(); return; }
+  // portals open and close on their own timers
+  boy.portalT -= dt;
+  for (const pt of portals) {
+    pt.t -= dt;
+    if (pt.t <= 0) { pt.open = !pt.open; pt.t = pt.open ? 4.5 : 3; if (pt.open && (dist(boy, pt.a) < 300 || dist(boy, pt.b) < 300)) Snd.portalOpen(); }
+    if (pt.open && !boy.hidden && boy.portalT <= 0) {
+      for (const [from, to] of [[pt.a, pt.b], [pt.b, pt.a]]) {
+        if (dist(boy, from) < 17) {
+          boy.x = to.x; boy.y = to.y; boy.portalT = 1.2; Snd.zap(); shake = 0.15;
+          for (let i = 0; i < 18; i++) { const a = rand(0, 6.28), sp = rand(60, 200); parts.push({ k: 'spark', x: to.x, y: to.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 0.6, max: 0.6, hue: pt.hue }); parts.push({ k: 'spark', x: from.x, y: from.y, vx: Math.cos(a) * sp * 0.6, vy: Math.sin(a) * sp * 0.6, life: 0.5, max: 0.5, hue: pt.hue }); }
+          boySay(pick(['ZAAAP!', 'Wheee!', 'Portal power!', 'Woooosh!']), 1);
+          for (const s of sisters) if (s.state === 'chase') { s.lostT = Math.max(s.lostT, 0.5); }
+          break;
+        }
+      }
+    }
+  }
 
   // cookies flying and getting eaten
   for (const ck of cookies) {
@@ -486,7 +514,7 @@ function update(dt) {
       ck.fly -= dt; ck.z = Math.sin(clamp(1 - ck.fly / 0.5, 0, 1) * Math.PI) * 26;
       const nx = ck.x + ck.vx * dt, ny = ck.y + ck.vy * dt;
       if (blockedAt(nx, ny, 6)) { ck.vx = 0; ck.vy = 0; } else { ck.x = nx; ck.y = ny; }
-      if (ck.fly <= 0) { ck.landed = true; ck.z = 0; for (const s of sisters) if (s.state !== 'called' && dist(s, ck) < (s.state === 'chase' ? 230 : 300)) { s.state = 'snack'; s.snack = ck; s.path = []; sisterSay(s, pick(['OOH! COOKIE!', 'Is that a COOKIE?!', 'MINE! MINE!'])); } }
+      if (ck.fly <= 0) { ck.landed = true; ck.z = 0; for (const s of sisters) if (s.state !== 'called' && dist(s, ck) < (s.state === 'chase' ? 230 : 300)) { s.state = 'snack'; s.snack = ck; s.path = []; sisterSay(s, isMom(s) ? 'Who is throwing COOKIES?!' : pick(['OOH! COOKIE!', 'Is that a COOKIE?!', 'MINE! MINE!'])); } }
     }
   }
   cookies = cookies.filter(c => !c.eaten);
@@ -508,20 +536,21 @@ function updateSister(s, dt, d) {
     else { turnTo(s, -Math.PI / 2, dt * 3); return; }
   }
   if (s.state !== 'chase' && s.state !== 'snack' && canSee) {
-    s.state = 'chase'; s.path = []; s.alertT = 0.8; Snd.spotted();
-    sisterSay(s, pick(['HEY! Get back here!', 'MOOOM! He’s out!', 'It’s MY turn on the TV!', 'Nope! Not today!', 'Ew, boy germs!', 'GOTCHA!']));
+    s.state = 'chase'; s.path = []; s.alertT = 0.8;
+    if (isMom(s)) { Snd.mom(); sisterSay(s, pick(['YOUNG MAN!', 'Freeze, mister!', 'Is that a controller in your hand?!', 'Where do you think YOU’RE going?'])); }
+    else { Snd.spotted(); sisterSay(s, pick(['HEY! Get back here!', 'MOOOM! He’s out!', 'It’s MY turn on the TV!', 'Nope! Not today!', 'Ew, boy germs!', 'GOTCHA!'])); }
   }
   if (s.state === 'patrol') {
     const wp = s.route[s.wp % s.route.length];
-    if (walkTo(s, center(wp[0], wp[1]), d.patrol, dt)) { s.state = 'look'; s.lookT = 1.3; s.lookBase = s.dir; }
-    if (Math.random() < dt * 0.05 && s.sayT <= 0) sisterSay(s, pick(['La la la...', 'Nobody gets the TV!', 'I’m watching you...', '*hums loudly*']), 1.6);
+    if (walkTo(s, center(wp[0], wp[1]), d.patrol * (isMom(s) ? 0.8 : 1), dt)) { s.state = 'look'; s.lookT = 1.3; s.lookBase = s.dir; }
+    if (Math.random() < dt * 0.05 && s.sayT <= 0) sisterSay(s, isMom(s) ? pick(['Who left these toys out?', 'Dinner in 5 minutes!', 'Has anyone seen the remote?', 'Screen time is OVER!']) : pick(['La la la...', 'Nobody gets the TV!', 'I’m watching you...', '*hums loudly*']), 1.6);
   } else if (s.state === 'look') {
     s.lookT -= dt; s.dir = s.lookBase + Math.sin((1.3 - s.lookT) * 3) * 1.1;
     if (s.lookT <= 0) { s.wp++; s.state = 'patrol'; s.path = []; }
   } else if (s.state === 'chase') {
     if (canSee) { s.last = { x: boy.x, y: boy.y }; s.lostT = 0; } else s.lostT += dt;
     const target = s.last || boy;
-    walkTo(s, target, d.chase, dt);
+    walkTo(s, target, d.chase * (isMom(s) ? 0.85 : 1), dt);
     if (s.lostT > d.give) { s.state = 'search'; s.lookT = 1.8; s.path = []; sisterSay(s, pick(['Where’d he go?', 'Hmph.', 'He’s too sneaky!'])); Snd.lost(); }
     if (!boy.hidden && dist(s, boy) < d.catchR) catchBoy(s);
   } else if (s.state === 'search' || s.state === 'investigate') {
@@ -529,11 +558,11 @@ function updateSister(s, dt, d) {
     else { s.lookT -= dt; s.dir += dt * 3; if (s.lookT <= 0) { s.state = 'patrol'; s.path = []; } }
   } else if (s.state === 'snack') {
     const ck = s.snack;
-    if (!ck || ck.eaten) { s.state = 'patrol'; s.path = []; sisterSay(s, 'Aww! No fair!'); }
+    if (!ck || ck.eaten) { s.state = 'patrol'; s.path = []; sisterSay(s, isMom(s) ? 'Hmm. Crumbs everywhere.' : 'Aww! No fair!'); }
     else if (ck.landed && walkTo(s, ck, d.chase * 0.9, dt)) {
       s.eatT = (s.eatT || 0) + dt;
-      if (s.eatT === dt) { Snd.crunch(); sisterSay(s, 'NOM NOM NOM', 2.2); }
-      if (s.eatT > 2.4) { ck.eaten = true; s.eatT = 0; s.state = 'patrol'; s.path = []; sisterSay(s, 'Mmm... wait, where was I?'); }
+      if (s.eatT === dt) { if (isMom(s)) sisterSay(s, 'No cookies before dinner!', 2.2); else { Snd.crunch(); sisterSay(s, 'NOM NOM NOM', 2.2); } }
+      if (s.eatT > 2.4) { ck.eaten = true; s.eatT = 0; s.state = 'patrol'; s.path = []; sisterSay(s, isMom(s) ? 'I’m keeping this one.' : 'Mmm... wait, where was I?'); }
     }
   }
   if (!boy.hidden && s.state !== 'called' && s.state !== 'snack' && dist(s, boy) < d.catchR - 4) catchBoy(s);
@@ -542,7 +571,7 @@ function updateSister(s, dt, d) {
 function seesBoy(s, d) {
   const dd = dist(s, boy);
   if (dd < 30) return true;
-  if (dd > d.range) return false;
+  if (dd > d.range + (isMom(s) ? 40 : 0)) return false;
   let a = Math.atan2(boy.y - s.y, boy.x - s.x) - s.dir;
   while (a > Math.PI) a -= Math.PI * 2; while (a < -Math.PI) a += Math.PI * 2;
   if (Math.abs(a) > d.cone) return false;
@@ -553,9 +582,11 @@ function catchBoy(s) {
   if (caughtT > 0) return;
   hearts--; catches++; caughtT = 1.8; boy.noogieT = 1.8; shake = 0.4;
   Snd.caught();
-  const move = pick(['NOOGIE ATTACK!', 'TICKLE ATTACK!', 'SISTER HUG OF DOOM!', 'RASPBERRY ATTACK!']);
-  sisterSay(s, move, 1.8); boySay(pick(['NOOOOO!', 'HAHAHA STOP!', 'NOT FAIR!']), 1.8);
-  banner = { text: move, sub: hearts > 0 ? 'Back to the start of the room!' : 'Oh no...', t: 1.7 };
+  const momCatch = isMom(s);
+  const move = momCatch ? 'You need to take a break from video games!' : pick(['NOOGIE ATTACK!', 'TICKLE ATTACK!', 'SISTER HUG OF DOOM!', 'RASPBERRY ATTACK!']);
+  if (momCatch) { caughtT = 2.4; boy.noogieT = 2.4; Snd.mom(); }
+  sisterSay(s, momCatch ? 'Break time, buddy!' : move, 1.8); boySay(momCatch ? pick(['But MOOOM!', 'Just 5 more minutes!', 'AWWW MAN!']) : pick(['NOOOOO!', 'HAHAHA STOP!', 'NOT FAIR!']), 2);
+  banner = { text: momCatch ? '👩 MOM: "You need to take a break from video games!"' : move, sub: hearts > 0 ? 'Back to the start of the room!' : 'Oh no...', t: momCatch ? 2.3 : 1.7 };
   for (const o of sisters) if (o !== s) o.state = 'patrol';
 }
 
@@ -628,6 +659,7 @@ function txt(s, x, y, size, color = '#fff', outline = '#1e1a2e', align = 'center
 }
 function bubble(x, y, text, color = '#4a2a10') {
   ctx.font = '900 14px "Trebuchet MS", sans-serif';
+  if (ctx.measureText(text).width > 208) ctx.font = '900 12px "Trebuchet MS", sans-serif';
   const w = Math.min(230, ctx.measureText(text).width + 22);
   const bx = clamp(x - w / 2, 4, W - w - 4), by = y - 34;
   rrect(bx, by, w, 26, 12, '#ffffff'); poly([x - 6, by + 25, x + 6, by + 25, x, by + 34], '#ffffff');
@@ -666,6 +698,28 @@ function drawTile(c, r, ch) {
     case 'E': { ctx.fillStyle = '#7bd389'; ctx.fillRect(x, y, T, T); txt('➜', x + 20, y + 20 + Math.sin(time * 6) * 2, 24, '#fff', '#2d7a38'); break; }
   }
 }
+function drawPortal(p, pt) {
+  const closing = pt.open && pt.t < 1, opening = !pt.open && pt.t < 1;
+  const h = pt.hue;
+  if (pt.open && !(closing && Math.floor(time * 12) % 2)) {
+    ctx.save(); ctx.translate(p.x, p.y);
+    circle(0, 0, 21, `hsla(${h},90%,60%,.35)`);
+    for (let k = 0; k < 3; k++) {
+      ctx.save(); ctx.rotate(time * (3 + k) * (k % 2 ? -1 : 1));
+      ctx.strokeStyle = `hsl(${h + k * 20},95%,${60 + k * 10}%)`; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.ellipse(0, 0, 17 - k * 4, 11 - k * 3, 0, 0, Math.PI * 1.6); ctx.stroke(); ctx.restore();
+    }
+    circle(0, 0, 5, '#ffffff');
+    ctx.restore();
+  } else {
+    ctx.save(); ctx.translate(p.x, p.y);
+    ctx.strokeStyle = `hsla(${h},40%,45%,.6)`; ctx.lineWidth = 3; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.ellipse(0, 0, 15, 9, 0, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+    if (opening) { ctx.globalAlpha = 0.6; circle(0, 0, 6 + Math.sin(time * 20) * 2, `hsl(${h},90%,65%)`); ctx.globalAlpha = 1; }
+    else txt(String(Math.ceil(pt.t)), 0, 0, 11, `hsl(${h},60%,80%)`, 'rgba(0,0,0,.4)');
+    ctx.restore();
+  }
+}
 function drawCookie(x, y, r) { circle(x, y, r, '#c98a3a'); circle(x, y, r * 0.85, '#e0a85a'); for (let k = 0; k < 5; k++) circle(x + Math.cos(k * 1.3) * r * 0.5, y + Math.sin(k * 2.1) * r * 0.45, r * 0.14, '#5a3412'); }
 
 /* ============ Kids ============ */
@@ -673,7 +727,8 @@ const LOOK = {
   boy: { skin: '#f2c9a0', hair: '#6b4220', shirt: '#3a86ff', pants: '#2b3a5a', style: 'cap' },
   s1: { skin: '#f2c9a0', hair: '#3a2416', shirt: '#9b5de5', pants: '#4a3a5a', style: 'pigtails', bow: '#ff4d8d' },
   s2: { skin: '#f2c9a0', hair: '#e0b050', shirt: '#ff6fae', pants: '#5a3a4a', style: 'ponytail', bow: '#ffd23f' },
-  big: { skin: '#f2c9a0', hair: '#5a3418', shirt: '#2fbf71', pants: '#2b3a5a', style: 'long' }
+  big: { skin: '#f2c9a0', hair: '#5a3418', shirt: '#2fbf71', pants: '#2b3a5a', style: 'long' },
+  mom: { skin: '#f2c9a0', hair: '#7a4a24', shirt: '#e76f51', pants: '#3a3f58', style: 'bun', apron: true }
 };
 function drawKid(x, y, L, opt = {}) {
   const face = opt.face || 1, walk = opt.walk || 0, mood = opt.mood || 'happy', moving = opt.moving;
@@ -683,6 +738,7 @@ function drawKid(x, y, L, opt = {}) {
   ellipse(-5, 12 + st * 0.3, 5, 4, '#333'); ellipse(5, 12 - st * 0.3, 5, 4, '#333');
   rrect(-8, 4, 16, 8, 3, L.pants);
   rrect(-11, -10, 22, 17, 7, L.shirt);
+  if (L.apron) { rrect(-7, -6, 14, 15, 3, '#ffffff'); ctx.fillStyle = '#ff8fa3'; ctx.fillRect(-4, -1, 8, 2); }
   // arms
   ctx.strokeStyle = L.skin; ctx.lineWidth = 4; ctx.lineCap = 'round';
   if (opt.arms === 'up') { ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-16, -20); ctx.moveTo(10, -6); ctx.lineTo(16, -20); ctx.stroke(); }
@@ -699,6 +755,7 @@ function drawKid(x, y, L, opt = {}) {
   ctx.fillStyle = L.hair; ctx.beginPath(); ctx.arc(0, -24, 13.5, Math.PI * 1.02, Math.PI * 1.98); ctx.fill();
   if (L.style === 'cap') { ctx.fillStyle = '#e63946'; ctx.beginPath(); ctx.arc(0, -25, 13.5, Math.PI, 0); ctx.fill(); ellipse(face * 10, -26, 10, 3, '#c41e33'); circle(0, -37, 2, '#fff'); }
   if (L.style === 'long') { ctx.fillStyle = L.hair; ctx.fillRect(-13, -28, 5, 14); ctx.fillRect(8, -28, 5, 14); }
+  if (L.style === 'bun') { circle(0, -38, 7, L.hair); rrect(-7, -40, 14, 3, 1, '#ffd23f'); }
   // face
   const ex = face * 2;
   if (mood === 'dizzy') { txt('@', -5 + ex, -21, 9, '#333', 'rgba(0,0,0,0)'); txt('@', 5 + ex, -21, 9, '#333', 'rgba(0,0,0,0)'); ellipse(ex, -14, 4, 3, '#7a2b2b'); }
@@ -717,7 +774,7 @@ function drawKid(x, y, L, opt = {}) {
 function drawCone(s, d) {
   if (s.state === 'called' || s.state === 'snack') return;
   const chasing = s.state === 'chase';
-  const range = d.range, cone = d.cone;
+  const range = d.range + (isMom(s) ? 40 : 0), cone = d.cone;
   ctx.save();
   ctx.beginPath(); ctx.moveTo(s.x, s.y);
   const steps = 18;
@@ -743,19 +800,21 @@ function render() {
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) drawTile(c, r, map[r][c]);
   const d = D();
   for (const s of sisters) drawCone(s, d);
+  for (const pt of portals) for (const p of [pt.a, pt.b]) drawPortal(p, pt);
   for (const ck of cookies) { if (ck.landed) drawCookie(ck.x, ck.y, 8); else { ctx.globalAlpha = 0.25; ellipse(ck.x, ck.y + 6, 7, 3, '#000'); ctx.globalAlpha = 1; drawCookie(ck.x, ck.y - ck.z, 8); } }
   // draw in depth order
   const actors = [];
   if (big) actors.push({ y: big.y, f: () => { drawKid(big.x, big.y, LOOK.big, { face: -1, arms: 'controller', mood: 'happy' }); txt(settings.big, big.x, big.y + 26, 12, '#7bd389'); if (dist(boy, big) < 260 && Math.sin(time * 3) > 0) bubble(big.x, big.y - 36, 'Over here! ' + settings.boy + '! 🎮', '#1d7a45'); } });
   for (const s of sisters) actors.push({ y: s.y, f: () => {
-    const L = s.id === 1 ? LOOK.s1 : LOOK.s2;
+    const L = isMom(s) ? LOOK.mom : s.id === 1 ? LOOK.s1 : LOOK.s2;
     const face = Math.cos(s.dir) >= 0 ? 1 : -1;
     const mood = caughtT > 0 && s.sayT > 0 ? 'mean' : s.state === 'snack' && s.eatT > 0 ? 'eat' : s.state === 'called' ? 'shock' : 'mean';
-    drawKid(s.x, s.y, L, { face, walk: s.walk, moving: s.state === 'patrol' || s.state === 'chase', mood, arms: s.state === 'chase' ? 'grab' : s.state === 'look' ? 'crossed' : null });
+    if (isMom(s)) { ctx.save(); ctx.translate(s.x, s.y); ctx.scale(1.3, 1.3); drawKid(0, 0, L, { face, walk: s.walk, moving: s.state === 'patrol' || s.state === 'chase', mood: s.state === 'chase' ? 'mean' : 'happy', arms: s.state === 'chase' ? 'grab' : s.state === 'look' ? 'crossed' : null }); ctx.restore(); }
+    else drawKid(s.x, s.y, L, { face, walk: s.walk, moving: s.state === 'patrol' || s.state === 'chase', mood, arms: s.state === 'chase' ? 'grab' : s.state === 'look' ? 'crossed' : null });
     if (s.alertT > 0) txt('!', s.x, s.y - 50 - Math.sin(s.alertT * 20) * 3, 28, '#ff4d4d', '#fff');
     if (s.state === 'search' || s.state === 'investigate') txt('?', s.x + 14, s.y - 44, 20, '#ffb347', '#fff');
-    txt(nameOf(s), s.x, s.y + 26, 11, '#ffd0e6');
-    if (s.sayT > 0 && s.say) bubble(s.x, s.y - 40, s.say, '#b5172b');
+    txt(nameOf(s), s.x, s.y + (isMom(s) ? 30 : 26), 11, isMom(s) ? '#ffd08a' : '#ffd0e6');
+    if (s.sayT > 0 && s.say) bubble(s.x, s.y - (isMom(s) ? 50 : 40), s.say, isMom(s) ? '#c4561b' : '#b5172b');
   } });
   if (boy) actors.push({ y: boy.y, f: () => {
     if (boy.hidden) {
@@ -771,7 +830,7 @@ function render() {
     if (boy.sayT > 0 && boy.say) bubble(boy.x, caughtT > 0 ? boy.y + 72 : boy.y - 40, boy.say, '#1f4fa8');
   } });
   actors.sort((a, b) => a.y - b.y).forEach(a => a.f());
-  for (const p of parts) { ctx.globalAlpha = clamp(p.life / p.max, 0, 1); if (p.k === 'text') txt(p.text, p.x, p.y, p.size, p.color); ctx.globalAlpha = 1; }
+  for (const p of parts) { ctx.globalAlpha = clamp(p.life / p.max, 0, 1); if (p.k === 'text') txt(p.text, p.x, p.y, p.size, p.color); else if (p.k === 'spark') circle(p.x, p.y, 3, `hsl(${p.hue},95%,70%)`); ctx.globalAlpha = 1; }
   ctx.restore();
   drawHUD();
 }
@@ -835,9 +894,10 @@ function renderWin() {
     ctx.save(); ctx.translate(880 + (1 - slide) * 120, 420); ctx.scale(2.2, 2.2); drawKid(0, 0, LOOK.s2, { face: -1, mood: 'happy', arms: 'up' }); ctx.restore();
     if (t > 3.6 && t < 6.5) { bubble(110, 330, 'Can we play too? Pleeeease?', '#b5172b'); }
     if (t > 5) bubble(560, 270, 'Okay! Grab a controller! 🎮', '#1d7a45');
+    if (t > 6.6) { const ms = Math.min(1, (t - 6.6) * 1.5); ctx.save(); ctx.translate(1010 - ms * 250, 470); ctx.scale(2.2, 2.2); drawKid(0, 0, LOOK.mom, { face: -1, mood: 'happy', arms: 'crossed' }); ctx.restore(); if (t > 7.2) bubble(720, 362, t > 8.6 ? 'Then DINNER! 🍗' : 'Fine... 30 more minutes!', '#c4561b'); }
     if (t > 6.5) { for (let i = 0; i < 6; i++) { const hx = (i * 160 + t * 30) % W, hy = 200 - ((t * 50 + i * 60) % 200); txt('💖', hx, hy, 22, '#fff', 'rgba(0,0,0,0)'); } }
   } else bubble(480, 270, settings.boy + ' made it! Best day ever!', '#1f4fa8');
-  if (t > 7.5 && !$('ovWin').classList.contains('show')) showWinCard();
+  if (t > 9.5 && !$('ovWin').classList.contains('show')) showWinCard();
 }
 
 /* ============ Loop ============ */
@@ -849,7 +909,7 @@ function frame(now) {
   render();
   requestAnimationFrame(frame);
 }
-window.__rtc = { get state() { return state; }, get boy() { return boy; }, get sisters() { return sisters; }, get level() { return levelIdx; }, get hearts() { return hearts; }, set hearts(v) { hearts = v; }, get big() { return big; }, keys, action, callBigSis, startGame, settings, map: () => map, tileOf, center, solidAt, bfs, loadLevel: n => loadLevel(n) };
+window.__rtc = { get state() { return state; }, get boy() { return boy; }, get sisters() { return sisters; }, get level() { return levelIdx; }, get hearts() { return hearts; }, set hearts(v) { hearts = v; }, get big() { return big; }, keys, action, callBigSis, startGame, settings, map: () => map, tileOf, center, solidAt, bfs, loadLevel: n => loadLevel(n), get portals() { return portals; }, get banner() { return banner; } };
 fillMenu();
 loadLevel(0);
 requestAnimationFrame(frame);

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Race to the Couch | STLDev</title>
+<meta name="description" content="A silly sneaking game! Tiptoe past your bossy sisters, hide in laundry baskets, toss cookies, and make it to the TV where your big sister is waiting to play.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛋️</text></svg>">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #1e1a2e; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+  body { display: flex; align-items: center; justify-content: center; font-family: "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif; color: #fff; }
+  #wrap { position: relative; width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); width: min(100vw, calc(100dvh * 16 / 9)); height: min(100dvh, calc(100vw * 9 / 16)); }
+  canvas { display: block; width: 100%; height: 100%; border-radius: 6px; touch-action: none; }
+  .ov { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(30, 26, 46, .6); }
+  .ov.show { display: flex; }
+  .card { background: linear-gradient(#fff6e3, #ffe2b3); color: #4a2a10; border: 5px solid #3a86ff; border-radius: 22px; padding: 1.6% 3%; text-align: center; max-width: 88%; max-height: 95%; overflow: auto; box-shadow: 0 8px 0 #1f4fa8, 0 14px 30px rgba(0,0,0,.4); touch-action: manipulation; }
+  .title { font-size: clamp(26px, 5vw, 58px); font-weight: 900; color: #3a86ff; text-shadow: 3px 3px 0 #ffd27a; line-height: 1; }
+  .subtitle { font-size: clamp(12px, 1.8vw, 21px); font-weight: 800; color: #1f4fa8; margin-top: 4px; }
+  .card p { font-size: clamp(11px, 1.45vw, 16px); margin: .45em 0; }
+  .names { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: .5em 0; }
+  .names label { display: flex; flex-direction: column; align-items: center; font-weight: 900; font-size: clamp(10px, 1.3vw, 14px); gap: 3px; }
+  .names .em { font-size: clamp(20px, 3vw, 32px); }
+  .names input { width: 100%; font: inherit; font-size: 16px; font-weight: 800; text-align: center; padding: 6px 4px; border-radius: 10px; border: 3px solid #e0b27a; color: #4a2a10; background: #fff; touch-action: manipulation; }
+  .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: .45em 0; }
+  button { font-family: inherit; cursor: pointer; border: none; touch-action: manipulation; }
+  .btn { background: #e8792b; color: #fff; font-weight: 900; font-size: clamp(13px, 1.7vw, 20px); padding: .5em 1.1em; border-radius: 14px; box-shadow: 0 5px 0 #a4480f; }
+  .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #a4480f; }
+  .btn.primary { background: #3fa34d; box-shadow: 0 5px 0 #23702d; font-size: clamp(16px, 2.3vw, 28px); }
+  .btn.alt { background: #8a5a2b; box-shadow: 0 5px 0 #5a3814; }
+  .diff button { background: #fff; color: #4a2a10; border: 4px solid #e0b27a; border-radius: 16px; padding: .35em .9em; font-weight: 900; font-size: clamp(12px, 1.5vw, 18px); min-width: 30%; }
+  .diff button small { display: block; font-weight: 600; font-size: .72em; color: #8a5a2b; }
+  .diff button.sel { border-color: #3fa34d; background: #e6ffe2; }
+  .how { font-size: clamp(10px, 1.2vw, 14px); color: #8a5a2b; margin-top: .45em; line-height: 1.5; }
+  .stat { font-size: clamp(14px, 2vw, 22px); font-weight: 800; margin: .3em 0; line-height: 1.5; }
+  #ovWin { align-items: flex-end; background: transparent; padding-bottom: 1.5%; }
+  #ovWin .card { padding: 1% 2.6%; }
+  #hudBtns { position: absolute; top: 1%; right: 1%; display: none; gap: 6px; }
+  #hudBtns.show { display: flex; }
+  #hudBtns button { background: rgba(255,255,255,.88); border-radius: 10px; font-size: clamp(13px, 1.8vw, 20px); width: 2.1em; height: 2.1em; box-shadow: 0 3px 0 rgba(0,0,0,.25); }
+  #actBtns { position: absolute; right: 1.5%; bottom: 3%; display: none; gap: 10px; align-items: flex-end; }
+  #actBtns.show { display: flex; }
+  #actBtns button { width: clamp(64px, 10vw, 100px); height: clamp(64px, 10vw, 100px); border-radius: 50%; background: rgba(255,255,255,.88); border: 4px solid #3a86ff; color: #1f4fa8; font-weight: 900; font-size: clamp(11px, 1.6vw, 16px); line-height: 1.1; box-shadow: 0 4px 0 rgba(0,0,0,.3); }
+  #actBtns button .big { display: block; font-size: 2em; }
+  #actBtns button:disabled { opacity: .4; }
+  #bCall { border-color: #2fbf71 !important; color: #1d7a45 !important; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="c" width="960" height="540"></canvas>
+  <div id="hudBtns">
+    <button id="bPause" title="Pause (P)">⏸️</button>
+    <button id="bSfx" title="Sound">🔊</button>
+  </div>
+  <div id="actBtns">
+    <button id="bCall" title="Call big sister (Q)"><span class="big">📱</span>Big Sis</button>
+    <button id="bAct" title="Hide or throw a cookie (Space)"><span class="big" id="actIcon">🍪</span><span id="actLabel">Throw</span></button>
+  </div>
+
+  <div class="ov show" id="ovMenu">
+    <div class="card">
+      <div class="title">🛋️ Race to the Couch!</div>
+      <div class="subtitle">Sneak past the bossy sisters and get to the TV!</div>
+      <p>Big Sis has the controllers ready for <b>Minecraft</b>... but two bossy sisters are guarding every room.<br>Stay out of their eyes, hide in baskets and blanket forts, and toss cookies to distract them!</p>
+      <div class="names">
+        <label><span class="em">👦</span>The Hero<input id="nBoy" maxlength="12" autocomplete="off"></label>
+        <label><span class="em">😤</span>Bossy Sister<input id="nS1" maxlength="12" autocomplete="off"></label>
+        <label><span class="em">😠</span>Bossy Sister<input id="nS2" maxlength="12" autocomplete="off"></label>
+        <label><span class="em">😊</span>Nice Big Sister<input id="nBig" maxlength="12" autocomplete="off"></label>
+      </div>
+      <div class="row diff">
+        <button data-diff="easy">🐣 Little Kid<small>slow sisters, 5 hearts</small></button>
+        <button data-diff="normal">🦸 Big Kid<small>sharp eyed sisters, 3 hearts</small></button>
+      </div>
+      <button class="btn primary" id="bPlay">▶ Let's Sneak!</button>
+      <div class="how">Move: arrow keys or WASD • Hide or throw a cookie: Space • Call Big Sis for help: Q • Pause: P<br>On a tablet: drag on the left side to move, and use the buttons on the right</div>
+    </div>
+  </div>
+
+  <div class="ov" id="ovPause">
+    <div class="card">
+      <div class="title">Paused</div>
+      <div class="row" style="margin-top:.8em">
+        <button class="btn primary" id="bResume">▶ Keep Sneaking</button>
+        <button class="btn alt" data-menu>🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ov" id="ovOver">
+    <div class="card">
+      <div class="title">Sent back to your room! 😩</div>
+      <div class="subtitle" id="overSub">The bossy sisters got you this time.</div>
+      <div class="row" style="margin-top:.7em">
+        <button class="btn primary" id="bRetry">🔄 Try This Room Again</button>
+        <button class="btn alt" data-menu>🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ov" id="ovWin">
+    <div class="card">
+      <div class="title" id="winTitle">You made it! 🎮</div>
+      <div class="subtitle" id="winSub"></div>
+      <div class="stat" id="winStats"></div>
+      <div class="row" style="margin-top:.6em">
+        <button class="btn primary" id="bAgain">🔄 Play Again</button>
+        <button class="btn alt" data-menu>🏠 Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const W = 960, H = 540, T = 40, COLS = 24, ROWS = 13, OY = 10;
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const $ = id => document.getElementById(id);
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+function resize() {
+  const r = $('wrap').getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.max(320, Math.round(r.width * dpr));
+  cv.height = Math.max(180, Math.round(r.height * dpr));
+}
+addEventListener('resize', resize); resize();
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const settings = Object.assign({ diff: 'easy', sfx: true, boy: 'Bro', s1: 'Sister 1', s2: 'Sister 2', big: 'Big Sis' }, store.get('rtc_settings', {}));
+const saveSettings = () => store.set('rtc_settings', settings);
+let bestTime = store.get('rtc_best', 0);
+
+/* ============ Sound ============ */
+const Snd = {
+  ctx: null, master: null,
+  init() {
+    if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+    try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); this.master = this.ctx.createGain(); this.master.gain.value = 0.5; this.master.connect(this.ctx.destination); } catch (e) { this.ctx = null; }
+  },
+  tone(f, d, type = 'square', v = 0.1, f2 = null, delay = 0) {
+    if (!this.ctx || !settings.sfx) return;
+    const c = this.ctx, t = c.currentTime + delay, o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(0.0008, t + d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t + d + 0.03);
+  },
+  noise(d, v, freq, delay = 0, type = 'lowpass') {
+    if (!this.ctx || !settings.sfx) return;
+    const c = this.ctx, t = c.currentTime + delay, len = Math.floor(c.sampleRate * d), buf = c.createBuffer(1, len, c.sampleRate), data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const s = c.createBufferSource(); s.buffer = buf; const f = c.createBiquadFilter(); f.type = type; f.frequency.value = freq; const g = c.createGain(); g.gain.value = v;
+    s.connect(f); f.connect(g); g.connect(this.master); s.start(t);
+  },
+  step() { this.tone(rand(180, 220), 0.04, 'triangle', 0.03); },
+  spotted() { this.tone(880, 0.12, 'square', 0.1); this.tone(1175, 0.2, 'square', 0.1, null, 0.12); },
+  lost() { this.tone(500, 0.3, 'sine', 0.08, 300); },
+  caught() { this.noise(0.4, 0.3, 1500); [700, 600, 500, 400].forEach((f, i) => this.tone(f, 0.1, 'square', 0.08, null, i * 0.1)); },
+  hide() { this.noise(0.25, 0.25, 900); this.tone(300, 0.15, 'sine', 0.08, 200); },
+  throwC() { this.noise(0.15, 0.1, 3000, 0, 'highpass'); this.tone(500, 0.2, 'sine', 0.06, 900); },
+  crunch() { this.noise(0.08, 0.3, 2200); this.noise(0.08, 0.3, 2200, 0.15); this.noise(0.08, 0.3, 2200, 0.3); },
+  pickup() { this.tone(880, 0.07, 'square', 0.07); this.tone(1320, 0.1, 'square', 0.07, null, 0.07); },
+  ouch() { this.tone(900, 0.25, 'sawtooth', 0.1, 400); },
+  phone() { for (let i = 0; i < 3; i++) { this.tone(1300, 0.08, 'square', 0.06, null, i * 0.2); this.tone(1000, 0.08, 'square', 0.06, null, i * 0.2 + 0.09); } },
+  door() { [523, 659, 784, 1047].forEach((f, i) => this.tone(f, 0.12, 'triangle', 0.09, null, i * 0.08)); },
+  win() { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => this.tone(f, i === 6 ? 0.6 : 0.14, 'square', 0.08, null, i * 0.13)); },
+  sad() { [392, 370, 349, 330].forEach((f, i) => this.tone(f, 0.3, 'triangle', 0.12, null, i * 0.25)); },
+  // sneaky tiptoe music, plays only while sneaking
+  mTimer: null, mNext: 0, mStep: 0,
+  MEL: [57, 0, 60, 0, 64, 0, 63, 0, 62, 0, 60, 0, 57, 0, 0, 0, 57, 0, 60, 0, 64, 0, 67, 0, 65, 0, 64, 62, 60, 0, 0, 0],
+  startMusic() { if (!this.ctx || this.mTimer) return; this.mNext = this.ctx.currentTime + 0.1; this.mTimer = setInterval(() => this.schedule(), 60); },
+  schedule() {
+    const c = this.ctx; if (!c) return;
+    if (!settings.sfx || state !== 'play') { this.mNext = c.currentTime + 0.1; return; }
+    const chasing = sisters.some(s => s.state === 'chase');
+    const sp = chasing ? 0.11 : 0.19;
+    while (this.mNext < c.currentTime + 0.25) {
+      const i = this.mStep % this.MEL.length, n = this.MEL[i];
+      if (n) { const o = c.createOscillator(), g = c.createGain(); o.type = 'triangle'; o.frequency.value = 440 * Math.pow(2, (n - 69 + (chasing ? 12 : 0)) / 12); g.gain.setValueAtTime(0.035, this.mNext); g.gain.exponentialRampToValueAtTime(0.0008, this.mNext + 0.15); o.connect(g); g.connect(this.master); o.start(this.mNext); o.stop(this.mNext + 0.2); }
+      if (i % 4 === 0) { const o = c.createOscillator(), g = c.createGain(); o.type = 'sine'; o.frequency.value = 110; g.gain.setValueAtTime(0.06, this.mNext); g.gain.exponentialRampToValueAtTime(0.0008, this.mNext + 0.12); o.connect(g); g.connect(this.master); o.start(this.mNext); o.stop(this.mNext + 0.15); }
+      this.mNext += sp; this.mStep++;
+    }
+  }
+};
+
+/* ============ Levels ============ */
+// # wall  B bed  S shelf  T table  K counter  F fridge  X toy box  C couch  V TV  H laundry basket (hide)  O blanket fort (hide)
+// r rug  L toy bricks (OUCH!)  c cookie  P start  E door  N big sister  1 2 bossy sisters
+const LEVELS = [
+  { name: 'Escape Your Room!', tip: 'Sneak behind the sister when she looks away!', map: [
+    "########################",
+    "#BB...S#.....S.........#",
+    "#BB....#...............#",
+    "#......#..1............#",
+    "#...P......rrrrrr......#",
+    "#......#..rrrrrrrr.....E",
+    "#..c...#..rrrrrrrr.....E",
+    "#......#...rrrrrr..H...#",
+    "#T.....#...............#",
+    "#......#...........L...#",
+    "#..O...#...............#",
+    "#......#...............#",
+    "########################"],
+    routes: { 1: [[10, 3], [20, 3], [20, 10], [10, 10]] } },
+  { name: 'Kitchen Sneak', tip: 'Grab cookies! Toss one and the sisters go get it.', map: [
+    "########################",
+    "#KKKKKKFF#....SSSS.....#",
+    "#........#.............#",
+    "#...c....#...TTTT......#",
+    "#P...........TTTT...c..#",
+    "#........#...TTTT......E",
+    "#KKKK....#.............E",
+    "#........#..1......H...#",
+    "#..H.....#.............#",
+    "#....c...#....KKKK.....#",
+    "#......2...............#",
+    "#........#......c......#",
+    "########################"],
+    routes: { 1: [[11, 7], [21, 7], [21, 2], [11, 2]], 2: [[7, 10], [7, 2], [2, 2], [2, 10]] } },
+  { name: 'The Toy Room', tip: 'Watch out for toy bricks! Stepping on one goes OUCH!', map: [
+    "########################",
+    "#P....X.....L.....XX...#",
+    "#.....X..L.....L.......#",
+    "#..L.......XXX.....L...#",
+    "#......O...XXX..1......#",
+    "#.L.................L..E",
+    "#.....L......L.........E",
+    "#...XXX..........O.....#",
+    "#...XXX...L.2......L...#",
+    "#..........c.....XX....#",
+    "#.L....L.........XX....#",
+    "#........c.....L.......#",
+    "########################"],
+    routes: { 1: [[16, 4], [21, 2], [21, 10], [14, 11], [14, 5]], 2: [[12, 8], [3, 9], [3, 2], [9, 4]] } },
+  { name: 'The Living Room', tip: 'Big Sis is on the couch with the controllers. Almost there!', map: [
+    "########################",
+    "#P.....SS.........SS...#",
+    "#......................#",
+    "#..H.....rrrrrrr.......#",
+    "#.......rrrrrrrrr.C....#",
+    "#..TT...rrrrrrrrr.CN..V#",
+    "#..TT...rrrrrrrrr.C...V#",
+    "#.......rrrrrrrrr.C....#",
+    "#........rrrrrrr.......#",
+    "#...O..........1.......#",
+    "#..........2...........#",
+    "#..........c.......H...#",
+    "########################"],
+    routes: { 1: [[15, 9], [21, 9], [21, 2], [16, 2]], 2: [[11, 10], [4, 7], [10, 2], [16, 8]] } }
+];
+const SOLID = new Set('#BTCKFSXVHON'.split(''));
+const HIDE = new Set(['H', 'O']);
+
+function D() {
+  return settings.diff === 'easy'
+    ? { hearts: 5, cone: 0.55, range: 150, patrol: 55, chase: 98, boy: 150, give: 2.0, catchR: 22 }
+    : { hearts: 3, cone: 0.72, range: 195, patrol: 72, chase: 128, boy: 158, give: 2.8, catchR: 25 };
+}
+
+/* ============ State ============ */
+let state = 'menu', time = 0, levelIdx = 0, map = [], boy = null, sisters = [], big = null, cookies = [], parts = [];
+let hearts = 3, cookieCount = 1, callUsed = false, calledT = 0, banner = null, shake = 0, caughtT = 0, totalT = 0, catches = 0, winT = 0, stepT = 0;
+const tileAt = (c, r) => (r < 0 || r >= ROWS || c < 0 || c >= COLS) ? '#' : map[r][c];
+const solidAt = (c, r) => SOLID.has(tileAt(c, r));
+const center = (c, r) => ({ x: c * T + T / 2, y: OY + r * T + T / 2 });
+const tileOf = p => ({ c: Math.floor(p.x / T), r: Math.floor((p.y - OY) / T) });
+
+function loadLevel(n) {
+  levelIdx = n;
+  const L = LEVELS[n];
+  map = L.map.map(r => r.split(''));
+  cookies = []; parts = []; sisters = []; big = null; callUsed = false; calledT = 0;
+  let start = null;
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const ch = map[r][c];
+    if (ch === 'P') { start = center(c, r); map[r][c] = '.'; }
+    if (ch === '1' || ch === '2') {
+      const id = +ch; map[r][c] = '.';
+      const p = center(c, r);
+      sisters.push({ id, x: p.x, y: p.y, home: { x: p.x, y: p.y }, dir: 0, state: 'patrol', route: L.routes[id] || [[c, r]], wp: 0, path: [], pathT: 0, lookT: 0, lostT: 0, last: null, say: null, sayT: 0, walk: 0, snack: null, eatT: 0, alertT: 0 });
+    }
+    if (ch === 'N') big = center(c, r);
+  }
+  boy = { x: start.x, y: start.y, start, face: 1, hidden: null, walk: 0, moving: false, ouchT: 0, say: null, sayT: 0, noogieT: 0 };
+  banner = { text: 'Room ' + (n + 1) + ': ' + L.name, sub: L.tip, t: 3.2 };
+  updateButtons();
+}
+
+function resetRoom() {
+  boy.x = boy.start.x; boy.y = boy.start.y; boy.hidden = null;
+  for (const s of sisters) { s.x = s.home.x; s.y = s.home.y; s.state = 'patrol'; s.wp = 0; s.path = []; s.snack = null; s.alertT = 0; }
+}
+
+/* ============ Movement helpers ============ */
+function blockedAt(x, y, r) {
+  const c0 = Math.floor((x - r) / T), c1 = Math.floor((x + r) / T), r0 = Math.floor((y - r - OY) / T), r1 = Math.floor((y + r - OY) / T);
+  for (let rr = r0; rr <= r1; rr++) for (let cc = c0; cc <= c1; cc++) {
+    if (!solidAt(cc, rr)) continue;
+    const nx = clamp(x, cc * T, cc * T + T), ny = clamp(y, OY + rr * T, OY + rr * T + T);
+    if ((x - nx) ** 2 + (y - ny) ** 2 < r * r) return true;
+  }
+  return false;
+}
+function moveBody(b, dx, dy, r = 13) {
+  if (!blockedAt(b.x + dx, b.y, r)) b.x += dx;
+  if (!blockedAt(b.x, b.y + dy, r)) b.y += dy;
+}
+function lineOfSight(a, b) {
+  const d = dist(a, b), n = Math.ceil(d / 8);
+  for (let i = 1; i < n; i++) { const t = i / n, x = a.x + (b.x - a.x) * t, y = a.y + (b.y - a.y) * t; const tl = tileOf({ x, y }); if (solidAt(tl.c, tl.r)) return false; }
+  return true;
+}
+function bfs(from, to) {
+  const key = (c, r) => r * COLS + c;
+  const prev = new Map(); const q = [from]; prev.set(key(from.c, from.r), null);
+  while (q.length) {
+    const p = q.shift();
+    if (p.c === to.c && p.r === to.r) break;
+    for (const [dc, dr] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const n = { c: p.c + dc, r: p.r + dr }, k = key(n.c, n.r);
+      if (prev.has(k) || solidAt(n.c, n.r)) continue;
+      prev.set(k, p); q.push(n);
+    }
+  }
+  if (!prev.has(key(to.c, to.r))) return [];
+  const path = []; let cur = to;
+  while (cur && !(cur.c === from.c && cur.r === from.r)) { path.unshift(cur); cur = prev.get(key(cur.c, cur.r)); }
+  return path;
+}
+function walkTo(s, target, speed, dt) {
+  // follow a grid path to target (recomputed often)
+  s.pathT -= dt;
+  if (s.pathT <= 0 || !s.path.length) { s.path = bfs(tileOf(s), tileOf(target)); s.pathT = 0.35; }
+  let goal = s.path.length ? center(s.path[0].c, s.path[0].r) : target;
+  if (s.path.length && dist(s, goal) < 6) { s.path.shift(); goal = s.path.length ? center(s.path[0].c, s.path[0].r) : target; }
+  if (!s.path.length && tileOf(s).c === tileOf(target).c && tileOf(s).r === tileOf(target).r) goal = target;
+  const d = dist(s, goal);
+  if (d < 2) return dist(s, target) < 10;
+  const vx = (goal.x - s.x) / d * speed * dt, vy = (goal.y - s.y) / d * speed * dt;
+  moveBody(s, vx, vy, 12);
+  turnTo(s, Math.atan2(vy, vx), dt * 8);
+  s.walk += dt * 10;
+  return dist(s, target) < 10;
+}
+function turnTo(s, a, k) { let d = a - s.dir; while (d > Math.PI) d -= Math.PI * 2; while (d < -Math.PI) d += Math.PI * 2; s.dir += d * Math.min(1, k); }
+
+function sisterSay(s, text, t = 1.6) { s.say = text; s.sayT = t; }
+function nameOf(s) { return s.id === 1 ? settings.s1 : settings.s2; }
+
+/* ============ Input ============ */
+const keys = {};
+const joy = { on: false, id: null, sx: 0, sy: 0, dx: 0, dy: 0 };
+addEventListener('keydown', e => {
+  if (e.target && e.target.tagName === 'INPUT') return;
+  Snd.init();
+  if (state !== 'play' && (e.code === 'Enter' || e.code === 'Space')) { const b = document.querySelector('.ov.show .btn.primary'); if (b) { e.preventDefault(); if (!e.repeat) b.click(); return; } }
+  keys[e.code] = true;
+  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) e.preventDefault();
+  if ((e.code === 'Space' || e.code === 'KeyE' || e.code === 'Enter') && !e.repeat && state === 'play') action();
+  if (e.code === 'KeyQ' && !e.repeat && state === 'play') callBigSis();
+  if ((e.code === 'KeyP' || e.code === 'Escape') && !e.repeat) togglePause();
+});
+addEventListener('keyup', e => { keys[e.code] = false; });
+cv.addEventListener('pointerdown', e => {
+  Snd.init();
+  if (state !== 'play') return;
+  joy.on = true; joy.id = e.pointerId; joy.sx = e.clientX; joy.sy = e.clientY; joy.dx = 0; joy.dy = 0;
+  try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+});
+cv.addEventListener('pointermove', e => {
+  if (!joy.on || e.pointerId !== joy.id) return;
+  const r = cv.getBoundingClientRect(), k = W / r.width;
+  joy.dx = (e.clientX - joy.sx) * k; joy.dy = (e.clientY - joy.sy) * k;
+});
+const joyOff = e => { if (e.pointerId === joy.id) { joy.on = false; joy.dx = joy.dy = 0; } };
+cv.addEventListener('pointerup', joyOff); cv.addEventListener('pointercancel', joyOff);
+cv.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+for (const id of ['bAct', 'bCall']) {
+  const b = $(id);
+  b.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+  b.addEventListener('touchend', e => e.preventDefault(), { passive: false });
+}
+$('bAct').addEventListener('pointerdown', e => { e.preventDefault(); Snd.init(); action(); });
+$('bCall').addEventListener('pointerdown', e => { e.preventDefault(); Snd.init(); callBigSis(); });
+['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => document.addEventListener(ev, e => e.preventDefault(), { passive: false }));
+document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+
+/* ============ Actions ============ */
+function nearHide() {
+  const t = tileOf(boy);
+  let best = null, bd = 1e9;
+  for (let r = t.r - 1; r <= t.r + 1; r++) for (let c = t.c - 1; c <= t.c + 1; c++) {
+    if (!HIDE.has(tileAt(c, r))) continue;
+    const p = center(c, r), d = dist(boy, p);
+    if (d < 52 && d < bd) { bd = d; best = { c, r, p, kind: tileAt(c, r) }; }
+  }
+  return best;
+}
+function action() {
+  if (state !== 'play' || caughtT > 0) return;
+  if (boy.hidden) {
+    boy.hidden = null; Snd.hide(); boySay(pick(['Coast is clear?', 'Sneaky sneaky...', 'Here I go!']), 1.2);
+    return;
+  }
+  const h = nearHide();
+  if (h) {
+    boy.hidden = h; boy.hx = boy.x; boy.hy = boy.y; Snd.hide();
+    for (const s of sisters) if (s.state === 'chase') { s.state = 'search'; s.last = { x: boy.x, y: boy.y }; s.lookT = 2.2; sisterSay(s, pick(['Where did he GO?!', 'Hmm... suspicious.', 'I KNOW you’re here!'])); }
+    return;
+  }
+  if (cookieCount > 0) {
+    cookieCount--;
+    const ang = boy.faceAng || 0;
+    const ck = { x: boy.x, y: boy.y, vx: Math.cos(ang) * 320, vy: Math.sin(ang) * 320, fly: 0.5, landed: false, eaten: false, z: 0 };
+    cookies.push(ck); Snd.throwC();
+  } else boySay('No cookies left!', 1.2);
+  updateButtons();
+}
+function callBigSis() {
+  if (state !== 'play' || callUsed || caughtT > 0) return;
+  callUsed = true; calledT = 4.5; Snd.phone();
+  banner = { text: '📱 ' + settings.big + ': "Hey! Mom says come help with the pie!"', sub: 'The bossy sisters are busy for a few seconds. GO GO GO!', t: 2.6 };
+  for (const s of sisters) { s.state = 'called'; s.path = []; sisterSay(s, pick(['Ugh, FINE!', 'Coming, Mom!', 'Pie? Where?']), 2); }
+  updateButtons();
+}
+function boySay(text, t = 1.4) { boy.say = text; boy.sayT = t; }
+function updateButtons() {
+  const near = boy && (boy.hidden || nearHide());
+  $('actIcon').textContent = boy && boy.hidden ? '👀' : near ? '🙈' : '🍪';
+  $('actLabel').textContent = boy && boy.hidden ? 'Peek out' : near ? 'Hide!' : 'Throw (' + cookieCount + ')';
+  $('bAct').disabled = !(boy && (boy.hidden || near || cookieCount > 0));
+  $('bCall').disabled = callUsed;
+}
+function noise(at, loud) {
+  for (const s of sisters) {
+    if (s.state === 'chase' || s.state === 'called' || s.state === 'snack') continue;
+    if (dist(s, at) < loud) { s.state = 'investigate'; s.last = { x: at.x, y: at.y }; s.path = []; s.lookT = 1.6; sisterSay(s, pick(['What was that?', 'I heard that!', 'Hmm?'])); }
+  }
+}
+
+/* ============ Update ============ */
+function update(dt) {
+  time += dt; totalT += dt;
+  const d = D();
+  if (caughtT > 0) {
+    caughtT -= dt; boy.noogieT -= dt;
+    if (caughtT <= 0) { if (hearts <= 0) return gameOver(); resetRoom(); }
+    updateParts(dt); return;
+  }
+  // move the boy
+  let mx = (keys.ArrowRight || keys.KeyD ? 1 : 0) - (keys.ArrowLeft || keys.KeyA ? 1 : 0);
+  let my = (keys.ArrowDown || keys.KeyS ? 1 : 0) - (keys.ArrowUp || keys.KeyW ? 1 : 0);
+  if (joy.on) { const m = Math.hypot(joy.dx, joy.dy); if (m > 12) { mx = joy.dx / Math.max(m, 50); my = joy.dy / Math.max(m, 50); } }
+  const mag = Math.hypot(mx, my);
+  if (mag > 1) { mx /= mag; my /= mag; }
+  boy.moving = false;
+  if (boy.hidden) {
+    if (mag > 0.3 && joy.on === false && (keys.ArrowRight || keys.ArrowLeft || keys.ArrowUp || keys.ArrowDown || keys.KeyW || keys.KeyA || keys.KeyS || keys.KeyD)) { /* stay hidden until they press the button */ }
+  } else if (mag > 0.05) {
+    moveBody(boy, mx * d.boy * dt, my * d.boy * dt, 13);
+    boy.moving = true; boy.walk += dt * 12; boy.faceAng = Math.atan2(my, mx);
+    if (Math.abs(mx) > 0.2) boy.face = mx > 0 ? 1 : -1;
+    stepT -= dt; if (stepT <= 0) { stepT = 0.28; Snd.step(); }
+  }
+  boy.ouchT -= dt; boy.sayT -= dt;
+  // pickups and hazards
+  const bt = tileOf(boy);
+  const here = tileAt(bt.c, bt.r);
+  if (here === 'c') { map[bt.r][bt.c] = '.'; cookieCount = Math.min(6, cookieCount + 1); Snd.pickup(); parts.push({ k: 'text', x: boy.x, y: boy.y - 40, vy: -40, life: 1, max: 1, text: '+1 🍪', color: '#ffe066', size: 18 }); }
+  if (here === 'L' && boy.ouchT <= 0 && !boy.hidden) { boy.ouchT = 1.2; Snd.ouch(); boySay('OUCH! OUCH! OUCH!', 1.1); shake = 0.2; noise(boy, 260); }
+  if (here === 'E' && levelIdx < LEVELS.length - 1) { Snd.door(); loadLevel(levelIdx + 1); return; }
+  if (big && dist(boy, big) < 54) { winGame(); return; }
+
+  // cookies flying and getting eaten
+  for (const ck of cookies) {
+    if (!ck.landed) {
+      ck.fly -= dt; ck.z = Math.sin(clamp(1 - ck.fly / 0.5, 0, 1) * Math.PI) * 26;
+      const nx = ck.x + ck.vx * dt, ny = ck.y + ck.vy * dt;
+      if (blockedAt(nx, ny, 6)) { ck.vx = 0; ck.vy = 0; } else { ck.x = nx; ck.y = ny; }
+      if (ck.fly <= 0) { ck.landed = true; ck.z = 0; for (const s of sisters) if (s.state !== 'called' && dist(s, ck) < (s.state === 'chase' ? 230 : 300)) { s.state = 'snack'; s.snack = ck; s.path = []; sisterSay(s, pick(['OOH! COOKIE!', 'Is that a COOKIE?!', 'MINE! MINE!'])); } }
+    }
+  }
+  cookies = cookies.filter(c => !c.eaten);
+
+  // bossy sisters
+  if (calledT > 0) calledT -= dt;
+  for (const s of sisters) updateSister(s, dt, d);
+  updateParts(dt);
+  if (banner) { banner.t -= dt; if (banner.t <= 0) banner = null; }
+  shake = Math.max(0, shake - dt);
+  updateButtons();
+}
+
+function updateSister(s, dt, d) {
+  s.sayT -= dt; s.alertT = Math.max(0, s.alertT - dt);
+  const canSee = !boy.hidden && seesBoy(s, d);
+  if (s.state === 'called') {
+    if (calledT <= 0) { s.state = 'patrol'; s.path = []; }
+    else { turnTo(s, -Math.PI / 2, dt * 3); return; }
+  }
+  if (s.state !== 'chase' && s.state !== 'snack' && canSee) {
+    s.state = 'chase'; s.path = []; s.alertT = 0.8; Snd.spotted();
+    sisterSay(s, pick(['HEY! Get back here!', 'MOOOM! He’s out!', 'It’s MY turn on the TV!', 'Nope! Not today!', 'Ew, boy germs!', 'GOTCHA!']));
+  }
+  if (s.state === 'patrol') {
+    const wp = s.route[s.wp % s.route.length];
+    if (walkTo(s, center(wp[0], wp[1]), d.patrol, dt)) { s.state = 'look'; s.lookT = 1.3; s.lookBase = s.dir; }
+    if (Math.random() < dt * 0.05 && s.sayT <= 0) sisterSay(s, pick(['La la la...', 'Nobody gets the TV!', 'I’m watching you...', '*hums loudly*']), 1.6);
+  } else if (s.state === 'look') {
+    s.lookT -= dt; s.dir = s.lookBase + Math.sin((1.3 - s.lookT) * 3) * 1.1;
+    if (s.lookT <= 0) { s.wp++; s.state = 'patrol'; s.path = []; }
+  } else if (s.state === 'chase') {
+    if (canSee) { s.last = { x: boy.x, y: boy.y }; s.lostT = 0; } else s.lostT += dt;
+    const target = s.last || boy;
+    walkTo(s, target, d.chase, dt);
+    if (s.lostT > d.give) { s.state = 'search'; s.lookT = 1.8; s.path = []; sisterSay(s, pick(['Where’d he go?', 'Hmph.', 'He’s too sneaky!'])); Snd.lost(); }
+    if (!boy.hidden && dist(s, boy) < d.catchR) catchBoy(s);
+  } else if (s.state === 'search' || s.state === 'investigate') {
+    if (s.last && dist(s, s.last) > 14 && s.state === 'investigate') walkTo(s, s.last, d.patrol * 1.2, dt);
+    else { s.lookT -= dt; s.dir += dt * 3; if (s.lookT <= 0) { s.state = 'patrol'; s.path = []; } }
+  } else if (s.state === 'snack') {
+    const ck = s.snack;
+    if (!ck || ck.eaten) { s.state = 'patrol'; s.path = []; sisterSay(s, 'Aww! No fair!'); }
+    else if (ck.landed && walkTo(s, ck, d.chase * 0.9, dt)) {
+      s.eatT = (s.eatT || 0) + dt;
+      if (s.eatT === dt) { Snd.crunch(); sisterSay(s, 'NOM NOM NOM', 2.2); }
+      if (s.eatT > 2.4) { ck.eaten = true; s.eatT = 0; s.state = 'patrol'; s.path = []; sisterSay(s, 'Mmm... wait, where was I?'); }
+    }
+  }
+  if (!boy.hidden && s.state !== 'called' && s.state !== 'snack' && dist(s, boy) < d.catchR - 4) catchBoy(s);
+}
+
+function seesBoy(s, d) {
+  const dd = dist(s, boy);
+  if (dd < 30) return true;
+  if (dd > d.range) return false;
+  let a = Math.atan2(boy.y - s.y, boy.x - s.x) - s.dir;
+  while (a > Math.PI) a -= Math.PI * 2; while (a < -Math.PI) a += Math.PI * 2;
+  if (Math.abs(a) > d.cone) return false;
+  return lineOfSight(s, boy);
+}
+
+function catchBoy(s) {
+  if (caughtT > 0) return;
+  hearts--; catches++; caughtT = 1.8; boy.noogieT = 1.8; shake = 0.4;
+  Snd.caught();
+  const move = pick(['NOOGIE ATTACK!', 'TICKLE ATTACK!', 'SISTER HUG OF DOOM!', 'RASPBERRY ATTACK!']);
+  sisterSay(s, move, 1.8); boySay(pick(['NOOOOO!', 'HAHAHA STOP!', 'NOT FAIR!']), 1.8);
+  banner = { text: move, sub: hearts > 0 ? 'Back to the start of the room!' : 'Oh no...', t: 1.7 };
+  for (const o of sisters) if (o !== s) o.state = 'patrol';
+}
+
+function updateParts(dt) {
+  for (const p of parts) { p.life -= dt; p.x += (p.vx || 0) * dt; p.y += (p.vy || 0) * dt; if (p.g) p.vy += p.g * dt; if (p.r !== undefined) p.r += dt * 5; }
+  parts = parts.filter(p => p.life > 0);
+}
+
+/* ============ Flow ============ */
+function showOv(id) { document.querySelectorAll('.ov').forEach(o => o.classList.toggle('show', o.id === id)); }
+function setHud(on) { $('hudBtns').classList.toggle('show', on); $('actBtns').classList.toggle('show', on); }
+function readNames() {
+  const v = (id, d) => ($(id).value || '').trim().slice(0, 12) || d;
+  settings.boy = v('nBoy', 'Bro'); settings.s1 = v('nS1', 'Sister 1'); settings.s2 = v('nS2', 'Sister 2'); settings.big = v('nBig', 'Big Sis');
+  saveSettings();
+}
+function startGame(level = 0) {
+  readNames();
+  hearts = D().hearts; cookieCount = 1; totalT = 0; catches = 0;
+  loadLevel(level);
+  state = 'play'; showOv(null); setHud(true); Snd.init(); Snd.startMusic();
+}
+function retryRoom() { hearts = D().hearts; cookieCount = Math.max(cookieCount, 1); loadLevel(levelIdx); state = 'play'; showOv(null); setHud(true); }
+function gameOver() {
+  state = 'over'; setHud(false); Snd.sad();
+  $('overSub').textContent = settings.s1 + ' and ' + settings.s2 + ' got you this time. ' + settings.big + ' is still saving you a controller!';
+  showOv('ovOver');
+}
+function winGame() {
+  state = 'win'; winT = 0; setHud(false); Snd.win();
+  if (!bestTime || totalT < bestTime) { bestTime = totalT; store.set('rtc_best', bestTime); }
+}
+function showWinCard() {
+  $('winTitle').textContent = 'Minecraft time! 🎮';
+  $('winSub').textContent = settings.boy + ' made it to the couch! ' + settings.big + ' saved the best controller.';
+  const m = Math.floor(totalT / 60), sec = Math.floor(totalT % 60);
+  $('winStats').innerHTML = '⏱️ Time: ' + m + ':' + String(sec).padStart(2, '0') + ' &nbsp; 😩 Times caught: ' + catches + (catches === 0 ? '<br>🥷 SUPER SNEAKY! Never caught!' : '');
+  showOv('ovWin');
+}
+function togglePause() {
+  if (state === 'play') { state = 'paused'; showOv('ovPause'); for (const k in keys) keys[k] = false; joy.on = false; }
+  else if (state === 'paused') { state = 'play'; showOv(null); }
+}
+function goMenu() { state = 'menu'; setHud(false); loadLevel(0); fillMenu(); showOv('ovMenu'); }
+function fillMenu() {
+  $('nBoy').value = settings.boy; $('nS1').value = settings.s1; $('nS2').value = settings.s2; $('nBig').value = settings.big;
+  document.querySelectorAll('.diff button').forEach(b => b.classList.toggle('sel', b.dataset.diff === settings.diff));
+}
+document.querySelectorAll('.diff button').forEach(b => b.addEventListener('click', () => { settings.diff = b.dataset.diff; saveSettings(); fillMenu(); Snd.init(); Snd.pickup(); }));
+for (const id of ['nBoy', 'nS1', 'nS2', 'nBig']) $(id).addEventListener('change', readNames);
+$('bPlay').onclick = () => startGame(0);
+$('bRetry').onclick = retryRoom;
+$('bAgain').onclick = () => startGame(0);
+$('bResume').onclick = togglePause; $('bPause').onclick = togglePause;
+document.querySelectorAll('[data-menu]').forEach(b => b.onclick = goMenu);
+$('bSfx').onclick = () => { settings.sfx = !settings.sfx; saveSettings(); $('bSfx').textContent = settings.sfx ? '🔊' : '🔇'; };
+$('bSfx').textContent = settings.sfx ? '🔊' : '🔇';
+addEventListener('blur', () => { if (state === 'play') togglePause(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'play') togglePause(); });
+
+/* ============ Drawing helpers ============ */
+function circle(x, y, r, c) { ctx.beginPath(); ctx.arc(x, y, Math.max(0.1, r), 0, Math.PI * 2); ctx.fillStyle = c; ctx.fill(); }
+function ellipse(x, y, rx, ry, c, rot = 0) { ctx.beginPath(); ctx.ellipse(x, y, Math.max(0.1, rx), Math.max(0.1, ry), rot, 0, Math.PI * 2); ctx.fillStyle = c; ctx.fill(); }
+function rrect(x, y, w, h, r, c) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); ctx.fillStyle = c; ctx.fill(); }
+function poly(pts, c) { ctx.beginPath(); ctx.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) ctx.lineTo(pts[i], pts[i + 1]); ctx.closePath(); ctx.fillStyle = c; ctx.fill(); }
+function txt(s, x, y, size, color = '#fff', outline = '#1e1a2e', align = 'center') {
+  ctx.font = '900 ' + size + 'px "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif';
+  ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  ctx.lineWidth = Math.max(3, size / 6); ctx.strokeStyle = outline; ctx.strokeText(s, x, y); ctx.fillStyle = color; ctx.fillText(s, x, y);
+}
+function bubble(x, y, text, color = '#4a2a10') {
+  ctx.font = '900 14px "Trebuchet MS", sans-serif';
+  const w = Math.min(230, ctx.measureText(text).width + 22);
+  const bx = clamp(x - w / 2, 4, W - w - 4), by = y - 34;
+  rrect(bx, by, w, 26, 12, '#ffffff'); poly([x - 6, by + 25, x + 6, by + 25, x, by + 34], '#ffffff');
+  ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, bx + w / 2, by + 13);
+}
+
+/* ============ House drawing ============ */
+function drawTile(c, r, ch) {
+  const x = c * T, y = OY + r * T;
+  // floors
+  const floorA = ['#e8c99a', '#cfe2c8', '#f2d6e4', '#d9c7a8'][levelIdx], floorB = ['#dfbd8a', '#c2d8ba', '#e9c8d8', '#cfbb98'][levelIdx];
+  if (ch !== '#') {
+    ctx.fillStyle = (c + Math.floor(r / 2)) % 2 ? floorA : floorB; ctx.fillRect(x, y, T, T);
+    ctx.fillStyle = 'rgba(0,0,0,.05)'; ctx.fillRect(x, y + T - 2, T, 2);
+  }
+  switch (ch) {
+    case '#': {
+      ctx.fillStyle = '#5a4a72'; ctx.fillRect(x, y, T, T);
+      const below = tileAt(c, r + 1);
+      if (below !== '#') { ctx.fillStyle = ['#8ec5ff', '#ffe08a', '#ffb3d1', '#b8e6a8'][levelIdx]; ctx.fillRect(x, y + T - 14, T, 14); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(x, y + T - 14, T, 3); }
+      break;
+    }
+    case 'r': ctx.fillStyle = '#c0392b'; ctx.fillRect(x, y, T, T); ctx.fillStyle = '#e8792b'; ctx.fillRect(x + 4, y + 4, T - 8, T - 8); ctx.fillStyle = '#c0392b'; ctx.fillRect(x + 12, y + 12, T - 24, T - 24); break;
+    case 'B': { const left = tileAt(c - 1, r) !== 'B'; rrect(x + 1, y + 1, T - 2, T - 2, 4, '#7ec8f0'); ctx.fillStyle = '#5aa8d8'; for (let k = 0; k < 3; k++) ctx.fillRect(x + 4 + k * 12, y + 6, 6, T - 12); if (left && tileAt(c, r - 1) !== 'B') rrect(x + 4, y + 4, 30, 14, 6, '#ffffff'); break; }
+    case 'S': rrect(x + 2, y + 4, T - 4, T - 8, 3, '#8a5a2b'); for (let k = 0; k < 5; k++) rrect(x + 5 + k * 6, y + 8, 5, 22, 1, ['#e63946', '#3a86ff', '#ffb703', '#2fbf71', '#9b5de5'][k]); break;
+    case 'T': rrect(x + 1, y + 1, T - 2, T - 2, 4, '#a8743f'); ctx.fillStyle = '#c99357'; ctx.fillRect(x + 4, y + 4, T - 8, 4); if ((c + r) % 3 === 0) circle(x + 20, y + 22, 7, '#fff'); break;
+    case 'K': rrect(x, y + 2, T, T - 4, 2, '#cfd6dd'); ctx.fillStyle = '#9aa3ad'; ctx.fillRect(x, y + T - 10, T, 8); if ((c * 7 + r) % 4 === 0) { circle(x + 20, y + 16, 8, '#555'); circle(x + 20, y + 16, 5, '#777'); } break;
+    case 'F': rrect(x + 1, y + 1, T - 2, T - 2, 4, '#f4f6f9'); ctx.fillStyle = '#c3ccd6'; ctx.fillRect(x + 1, y + 18, T - 2, 2); ctx.fillRect(x + T - 8, y + 6, 3, 10); break;
+    case 'X': rrect(x + 2, y + 2, T - 4, T - 4, 5, ['#e63946', '#3a86ff', '#ffb703'][(c + r) % 3]); circle(x + 14, y + 12, 6, '#2fbf71'); rrect(x + 20, y + 8, 12, 10, 2, '#9b5de5'); break;
+    case 'C': rrect(x + 1, y + 1, T - 2, T - 2, 8, '#3a6fc4'); rrect(x + 6, y + 6, T - 12, T - 12, 6, '#4f86e0'); break;
+    case 'V': rrect(x + 4, y + 1, T - 8, T - 2, 4, '#1d1d24'); { const g = ctx.createLinearGradient(x, y, x, y + T); g.addColorStop(0, '#6fc3f0'); g.addColorStop(1, '#5fae3e'); ctx.fillStyle = g; ctx.fillRect(x + 7, y + 4, T - 14, T - 8); ctx.fillStyle = '#8a5a2b'; ctx.fillRect(x + 7, y + T - 10, T - 14, 6); } break;
+    case 'H': ellipse(x + 20, y + 24, 18, 15, '#c9a36a'); ctx.strokeStyle = '#a8803e'; ctx.lineWidth = 2; for (let k = -12; k <= 12; k += 6) { ctx.beginPath(); ctx.moveTo(x + 20 + k, y + 12); ctx.lineTo(x + 20 + k, y + 36); ctx.stroke(); } circle(x + 13, y + 14, 6, '#ff8fc0'); circle(x + 25, y + 12, 7, '#7ec8f0'); circle(x + 20, y + 10, 5, '#ffe066'); break;
+    case 'O': poly([x + 2, y + T - 2, x + 20, y + 3, x + T - 2, y + T - 2], '#b388ff'); poly([x + 13, y + T - 2, x + 20, y + 16, x + 27, y + T - 2], '#3a2660'); ctx.fillStyle = '#ffe066'; for (let k = 0; k < 4; k++) circle(x + 10 + k * 7, y + 26 - k * 3, 1.6, '#ffe066'); break;
+    case 'L': for (let k = 0; k < 4; k++) { const bx = x + 6 + ((k * 13 + c * 7) % 24), by = y + 6 + ((k * 17 + r * 5) % 24); rrect(bx, by, 10, 7, 2, ['#e63946', '#3a86ff', '#ffb703', '#2fbf71'][k]); circle(bx + 3, by + 3.5, 1.4, 'rgba(255,255,255,.6)'); circle(bx + 7, by + 3.5, 1.4, 'rgba(255,255,255,.6)'); } break;
+    case 'c': { const b = Math.sin(time * 4 + c) * 2; circle(x + 20, y + 20 + b, 15, 'rgba(255,230,120,.4)'); drawCookie(x + 20, y + 20 + b, 10); break; }
+    case 'E': { ctx.fillStyle = '#7bd389'; ctx.fillRect(x, y, T, T); txt('➜', x + 20, y + 20 + Math.sin(time * 6) * 2, 24, '#fff', '#2d7a38'); break; }
+  }
+}
+function drawCookie(x, y, r) { circle(x, y, r, '#c98a3a'); circle(x, y, r * 0.85, '#e0a85a'); for (let k = 0; k < 5; k++) circle(x + Math.cos(k * 1.3) * r * 0.5, y + Math.sin(k * 2.1) * r * 0.45, r * 0.14, '#5a3412'); }
+
+/* ============ Kids ============ */
+const LOOK = {
+  boy: { skin: '#f2c9a0', hair: '#6b4220', shirt: '#3a86ff', pants: '#2b3a5a', style: 'cap' },
+  s1: { skin: '#f2c9a0', hair: '#3a2416', shirt: '#9b5de5', pants: '#4a3a5a', style: 'pigtails', bow: '#ff4d8d' },
+  s2: { skin: '#f2c9a0', hair: '#e0b050', shirt: '#ff6fae', pants: '#5a3a4a', style: 'ponytail', bow: '#ffd23f' },
+  big: { skin: '#f2c9a0', hair: '#5a3418', shirt: '#2fbf71', pants: '#2b3a5a', style: 'long' }
+};
+function drawKid(x, y, L, opt = {}) {
+  const face = opt.face || 1, walk = opt.walk || 0, mood = opt.mood || 'happy', moving = opt.moving;
+  ctx.save(); ctx.translate(x, y);
+  ctx.globalAlpha = 0.25; ellipse(0, 14, 15, 5, '#000'); ctx.globalAlpha = 1;
+  const st = moving ? Math.sin(walk) * 3 : 0;
+  ellipse(-5, 12 + st * 0.3, 5, 4, '#333'); ellipse(5, 12 - st * 0.3, 5, 4, '#333');
+  rrect(-8, 4, 16, 8, 3, L.pants);
+  rrect(-11, -10, 22, 17, 7, L.shirt);
+  // arms
+  ctx.strokeStyle = L.skin; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  if (opt.arms === 'up') { ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-16, -20); ctx.moveTo(10, -6); ctx.lineTo(16, -20); ctx.stroke(); }
+  else if (opt.arms === 'grab') { ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(face * 18 - 2, -6); ctx.moveTo(10, -6); ctx.lineTo(face * 18 + 2, -2); ctx.stroke(); }
+  else if (opt.arms === 'controller') { ctx.beginPath(); ctx.moveTo(-10, -5); ctx.lineTo(-4, 0); ctx.moveTo(10, -5); ctx.lineTo(4, 0); ctx.stroke(); rrect(-8, -3, 16, 7, 3, '#333'); circle(-4, 0.5, 1.3, '#e63946'); circle(4, 0.5, 1.3, '#3a86ff'); }
+  else if (opt.arms === 'crossed') { ctx.beginPath(); ctx.moveTo(-10, -5); ctx.lineTo(8, -1); ctx.moveTo(10, -5); ctx.lineTo(-8, -1); ctx.stroke(); }
+  else { ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-13, 2 - st); ctx.moveTo(10, -6); ctx.lineTo(13, 2 + st); ctx.stroke(); }
+  // hair behind head
+  if (L.style === 'long') { rrect(-14, -30, 28, 26, 10, L.hair); }
+  if (L.style === 'ponytail') { ellipse(-face * 13, -20, 6, 11, L.hair, -face * 0.4); circle(-face * 10, -27, 3.5, L.bow); }
+  if (L.style === 'pigtails') { circle(-15, -22, 6, L.hair); circle(15, -22, 6, L.hair); circle(-12, -26, 3, L.bow); circle(12, -26, 3, L.bow); }
+  circle(0, -22, 13, L.skin);
+  // hair on top
+  ctx.fillStyle = L.hair; ctx.beginPath(); ctx.arc(0, -24, 13.5, Math.PI * 1.02, Math.PI * 1.98); ctx.fill();
+  if (L.style === 'cap') { ctx.fillStyle = '#e63946'; ctx.beginPath(); ctx.arc(0, -25, 13.5, Math.PI, 0); ctx.fill(); ellipse(face * 10, -26, 10, 3, '#c41e33'); circle(0, -37, 2, '#fff'); }
+  if (L.style === 'long') { ctx.fillStyle = L.hair; ctx.fillRect(-13, -28, 5, 14); ctx.fillRect(8, -28, 5, 14); }
+  // face
+  const ex = face * 2;
+  if (mood === 'dizzy') { txt('@', -5 + ex, -21, 9, '#333', 'rgba(0,0,0,0)'); txt('@', 5 + ex, -21, 9, '#333', 'rgba(0,0,0,0)'); ellipse(ex, -14, 4, 3, '#7a2b2b'); }
+  else {
+    circle(-4.5 + ex, -21, 2, '#222'); circle(4.5 + ex, -21, 2, '#222');
+    ctx.strokeStyle = '#3a2210'; ctx.lineWidth = 1.6; ctx.beginPath();
+    if (mood === 'mean') { ctx.moveTo(-8 + ex, -27); ctx.lineTo(-2 + ex, -25); ctx.moveTo(8 + ex, -27); ctx.lineTo(2 + ex, -25); ctx.stroke(); ctx.beginPath(); ctx.arc(ex, -12, 4, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke(); }
+    else if (mood === 'shock') { ctx.stroke(); ellipse(ex, -14, 3, 4, '#7a2b2b'); }
+    else if (mood === 'eat') { ctx.stroke(); ellipse(ex, -14, 4, 2 + Math.abs(Math.sin(time * 14)) * 3, '#7a2b2b'); }
+    else { ctx.stroke(); ctx.beginPath(); ctx.arc(ex, -17, 4.5, 0.2, Math.PI - 0.2); ctx.stroke(); }
+    circle(-8 + ex, -16, 2, 'rgba(255,120,120,.4)'); circle(8 + ex, -16, 2, 'rgba(255,120,120,.4)');
+  }
+  ctx.restore();
+}
+
+function drawCone(s, d) {
+  if (s.state === 'called' || s.state === 'snack') return;
+  const chasing = s.state === 'chase';
+  const range = d.range, cone = d.cone;
+  ctx.save();
+  ctx.beginPath(); ctx.moveTo(s.x, s.y);
+  const steps = 18;
+  for (let i = 0; i <= steps; i++) {
+    const a = s.dir - cone + (2 * cone) * i / steps;
+    // shorten the ray where a wall or furniture blocks the view
+    let rr = range;
+    for (let k = 8; k <= range; k += 8) { const tl = tileOf({ x: s.x + Math.cos(a) * k, y: s.y + Math.sin(a) * k }); if (solidAt(tl.c, tl.r)) { rr = k; break; } }
+    ctx.lineTo(s.x + Math.cos(a) * rr, s.y + Math.sin(a) * rr);
+  }
+  ctx.closePath();
+  ctx.fillStyle = chasing ? 'rgba(255,60,60,.28)' : s.state === 'investigate' || s.state === 'search' ? 'rgba(255,170,40,.25)' : 'rgba(255,240,120,.22)';
+  ctx.fill();
+  ctx.restore();
+}
+
+function render() {
+  ctx.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0);
+  ctx.fillStyle = '#1e1a2e'; ctx.fillRect(0, 0, W, H);
+  if (state === 'win') return renderWin();
+  ctx.save();
+  if (shake > 0) ctx.translate(rand(-5, 5) * shake * 2, rand(-5, 5) * shake * 2);
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) drawTile(c, r, map[r][c]);
+  const d = D();
+  for (const s of sisters) drawCone(s, d);
+  for (const ck of cookies) { if (ck.landed) drawCookie(ck.x, ck.y, 8); else { ctx.globalAlpha = 0.25; ellipse(ck.x, ck.y + 6, 7, 3, '#000'); ctx.globalAlpha = 1; drawCookie(ck.x, ck.y - ck.z, 8); } }
+  // draw in depth order
+  const actors = [];
+  if (big) actors.push({ y: big.y, f: () => { drawKid(big.x, big.y, LOOK.big, { face: -1, arms: 'controller', mood: 'happy' }); txt(settings.big, big.x, big.y + 26, 12, '#7bd389'); if (dist(boy, big) < 260 && Math.sin(time * 3) > 0) bubble(big.x, big.y - 36, 'Over here! ' + settings.boy + '! 🎮', '#1d7a45'); } });
+  for (const s of sisters) actors.push({ y: s.y, f: () => {
+    const L = s.id === 1 ? LOOK.s1 : LOOK.s2;
+    const face = Math.cos(s.dir) >= 0 ? 1 : -1;
+    const mood = caughtT > 0 && s.sayT > 0 ? 'mean' : s.state === 'snack' && s.eatT > 0 ? 'eat' : s.state === 'called' ? 'shock' : 'mean';
+    drawKid(s.x, s.y, L, { face, walk: s.walk, moving: s.state === 'patrol' || s.state === 'chase', mood, arms: s.state === 'chase' ? 'grab' : s.state === 'look' ? 'crossed' : null });
+    if (s.alertT > 0) txt('!', s.x, s.y - 50 - Math.sin(s.alertT * 20) * 3, 28, '#ff4d4d', '#fff');
+    if (s.state === 'search' || s.state === 'investigate') txt('?', s.x + 14, s.y - 44, 20, '#ffb347', '#fff');
+    txt(nameOf(s), s.x, s.y + 26, 11, '#ffd0e6');
+    if (s.sayT > 0 && s.say) bubble(s.x, s.y - 40, s.say, '#b5172b');
+  } });
+  if (boy) actors.push({ y: boy.y, f: () => {
+    if (boy.hidden) {
+      const h = boy.hidden.p;
+      const peek = Math.sin(time * 2) > 0.3;
+      if (peek) { ctx.save(); ctx.beginPath(); ctx.rect(h.x - 20, h.y - 40, 40, 30); ctx.clip(); drawKid(h.x, h.y + 6, LOOK.boy, { face: boy.face, mood: 'happy' }); ctx.restore(); drawTile(boy.hidden.c, boy.hidden.r, boy.hidden.kind); }
+      txt('🙈', h.x, h.y - 30, 16, '#fff', 'rgba(0,0,0,0)');
+      return;
+    }
+    const mood = caughtT > 0 ? 'dizzy' : boy.ouchT > 0.6 ? 'shock' : 'happy';
+    drawKid(boy.x, boy.y + (caughtT > 0 ? Math.sin(time * 30) * 2 : 0), LOOK.boy, { face: boy.face, walk: boy.walk, moving: boy.moving, mood, arms: caughtT > 0 ? 'up' : null });
+    txt(settings.boy, boy.x, boy.y + 26, 12, '#bfe0ff');
+    if (boy.sayT > 0 && boy.say) bubble(boy.x, caughtT > 0 ? boy.y + 72 : boy.y - 40, boy.say, '#1f4fa8');
+  } });
+  actors.sort((a, b) => a.y - b.y).forEach(a => a.f());
+  for (const p of parts) { ctx.globalAlpha = clamp(p.life / p.max, 0, 1); if (p.k === 'text') txt(p.text, p.x, p.y, p.size, p.color); ctx.globalAlpha = 1; }
+  ctx.restore();
+  drawHUD();
+}
+
+function drawHUD() {
+  if (state === 'menu') return;
+  rrect(8, 4, 300, 30, 12, 'rgba(30,26,46,.75)');
+  txt('❤️'.repeat(Math.max(0, hearts)) + '🖤'.repeat(Math.max(0, D().hearts - hearts)), 18, 19, 15, '#fff', 'rgba(0,0,0,0)', 'left');
+  txt('🍪 x' + cookieCount, 150, 19, 15, '#ffe066', '#1e1a2e', 'left');
+  txt('Room ' + (levelIdx + 1) + '/4', 236, 19, 14, '#fff', '#1e1a2e', 'left');
+  if (calledT > 0) txt('📱 Sisters distracted: ' + Math.ceil(calledT), W / 2, 20, 16, '#7bd389');
+  if (banner) {
+    ctx.globalAlpha = clamp(banner.t * 2, 0, 1);
+    rrect(W / 2 - 330, 196, 660, banner.sub ? 78 : 52, 18, 'rgba(255,255,255,.94)');
+    txt(banner.text, W / 2, 220, 24, '#3a86ff', '#fff');
+    if (banner.sub) txt(banner.sub, W / 2, 252, 15, '#4a2a10', '#fff');
+    ctx.globalAlpha = 1;
+  }
+  if (joy.on && Math.hypot(joy.dx, joy.dy) > 4) {
+    const r = cv.getBoundingClientRect();
+    const sx = (joy.sx - r.left) / r.width * W, sy = (joy.sy - r.top) / r.height * H;
+    ctx.globalAlpha = 0.35; circle(sx, sy, 46, '#fff'); ctx.globalAlpha = 0.7;
+    const m = Math.hypot(joy.dx, joy.dy), k = Math.min(1, 40 / m);
+    circle(sx + joy.dx * k, sy + joy.dy * k, 20, '#3a86ff'); ctx.globalAlpha = 1;
+  }
+}
+
+/* ============ Victory scene: couch, controllers and Minecraft ============ */
+function renderWin() {
+  winT += 1 / 60;
+  const t = winT;
+  // living room wall
+  ctx.fillStyle = '#b8e6a8'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#9ccf8e'; for (let x = 0; x < W; x += 60) ctx.fillRect(x, 0, 24, 380);
+  ctx.fillStyle = '#8a5a2b'; ctx.fillRect(0, 380, W, H - 380);
+  // TV with a blocky game world
+  rrect(250, 40, 460, 270, 14, '#1d1d24');
+  ctx.save(); ctx.beginPath(); ctx.rect(266, 56, 428, 238); ctx.clip();
+  ctx.fillStyle = '#7ec8f0'; ctx.fillRect(266, 56, 428, 238);
+  rrect(620, 76, 34, 34, 2, '#ffe066');
+  const off = (t * 40) % 28;
+  for (let i = 0; i < 18; i++) {
+    const bx = 266 + i * 28 - off, h = 3 + Math.floor((Math.sin(i * 0.9 + Math.floor((t * 40) / 28) * 0.9) + 1) * 2);
+    for (let k = 0; k < h; k++) { const by = 294 - (k + 1) * 28; ctx.fillStyle = k === h - 1 ? '#5fae3e' : k > h - 3 ? '#8a5a2b' : '#7d7d85'; ctx.fillRect(bx, by, 27, 27); ctx.fillStyle = 'rgba(0,0,0,.12)'; ctx.fillRect(bx, by + 22, 27, 5); }
+    if (i % 5 === 2) { ctx.fillStyle = '#6b4220'; ctx.fillRect(bx + 9, 294 - (h + 3) * 28, 10, 84); ctx.fillStyle = '#2f8a3a'; ctx.fillRect(bx - 18, 294 - (h + 5) * 28, 64, 56); }
+  }
+  for (let i = 0; i < 3; i++) { const cx = ((i * 180 + t * 20) % 500) + 240; ctx.fillStyle = '#fff'; ctx.fillRect(cx, 74 + i * 14, 70, 18); }
+  ctx.restore();
+  txt('🎮 MINECRAFT TIME! 🎮', W / 2, 26, 26, '#ffe066', '#1d1d24');
+  // couch
+  rrect(150, 330, 660, 120, 30, '#3a6fc4'); rrect(170, 300, 620, 70, 24, '#4f86e0');
+  // the heroes on the couch
+  const bounce = k => Math.abs(Math.sin(t * 6 + k)) * 6;
+  ctx.save(); ctx.translate(400, 372 - bounce(0)); ctx.scale(2.6, 2.6); drawKid(0, 0, LOOK.boy, { face: 1, arms: 'controller', mood: 'happy' }); ctx.restore();
+  ctx.save(); ctx.translate(560, 372 - bounce(1)); ctx.scale(2.6, 2.6); drawKid(0, 0, LOOK.big, { face: -1, arms: 'controller', mood: 'happy' }); ctx.restore();
+  txt(settings.boy, 400, 472, 20, '#bfe0ff'); txt(settings.big, 560, 472, 20, '#7bd389');
+  // after a moment the bossy sisters peek in and ask to play too
+  if (t > 3) {
+    const slide = Math.min(1, (t - 3) * 1.5);
+    ctx.save(); ctx.translate(90 + (1 - slide) * -120, 420); ctx.scale(2.2, 2.2); drawKid(0, 0, LOOK.s1, { face: 1, mood: 'happy', arms: 'up' }); ctx.restore();
+    ctx.save(); ctx.translate(880 + (1 - slide) * 120, 420); ctx.scale(2.2, 2.2); drawKid(0, 0, LOOK.s2, { face: -1, mood: 'happy', arms: 'up' }); ctx.restore();
+    if (t > 3.6 && t < 6.5) { bubble(110, 330, 'Can we play too? Pleeeease?', '#b5172b'); }
+    if (t > 5) bubble(560, 270, 'Okay! Grab a controller! 🎮', '#1d7a45');
+    if (t > 6.5) { for (let i = 0; i < 6; i++) { const hx = (i * 160 + t * 30) % W, hy = 200 - ((t * 50 + i * 60) % 200); txt('💖', hx, hy, 22, '#fff', 'rgba(0,0,0,0)'); } }
+  } else bubble(480, 270, settings.boy + ' made it! Best day ever!', '#1f4fa8');
+  if (t > 7.5 && !$('ovWin').classList.contains('show')) showWinCard();
+}
+
+/* ============ Loop ============ */
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (state === 'play') update(dt);
+  else if (state === 'menu') { time += dt; for (const s of sisters) { s.dir += dt * 0.6; } }
+  render();
+  requestAnimationFrame(frame);
+}
+window.__rtc = { get state() { return state; }, get boy() { return boy; }, get sisters() { return sisters; }, get level() { return levelIdx; }, get hearts() { return hearts; }, set hearts(v) { hearts = v; }, get big() { return big; }, keys, action, callBigSis, startGame, settings, map: () => map, tileOf, center, solidAt, bfs, loadLevel: n => loadLevel(n) };
+fillMenu();
+loadLevel(0);
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

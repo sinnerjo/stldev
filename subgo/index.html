@@ -494,6 +494,17 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   .rotation-sheet,.wave-review-sheet{border-radius:12px;border-bottom:2px solid var(--ac);padding-bottom:1.25rem}
 }
 
+/* FORMATIONS */
+.form-presets{display:flex;flex-wrap:wrap;gap:.35rem}
+.form-presets .btn{font-size:.72rem;min-height:32px;padding:.2rem .65rem}
+.form-presets .btn.form-current{border-color:var(--ac);color:var(--ac)}
+.form-slot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem .5rem;background:var(--cb);border:1px solid var(--br);border-radius:8px;padding:.6rem}
+.form-slot-grid label{display:flex;align-items:center;gap:.35rem;cursor:pointer;font-size:.8rem;color:var(--gr)}
+.form-slot-grid input{width:16px;height:16px}
+.form-count{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gr);text-align:center}
+.form-item.form-current{border-color:var(--ac)}
+.form-section-lbl{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gr)}
+
 /* LINEUPS */
 .lineup-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,20,.92);align-items:flex-end;justify-content:center}
 .lineup-overlay.active{display:flex}
@@ -631,7 +642,7 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
   </div>
   <div class="roster-list" id="rosterList">
   </div>
-  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.48 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
+  <p style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;color:var(--grd);text-align:center;margin-top:1.25rem">Welcome to SubGo v1.0.49 · <button onclick="startOnboard()" style="background:none;border:none;color:var(--grd);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline;padding:0">Setup guide</button> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYU6wZb-KbDBxoNFoMNk_alvBSAmEVA7Ncbrq6xvCTzCd51g/viewform" target="_blank" style="color:var(--grd);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.04em;text-decoration:underline">Feedback</a></p>
   <p style="font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:.03em;color:var(--grd);text-align:center;margin-top:.4rem">© 2026 Joseph Warren · STLDev · stldev.com</p>
 </div>
 
@@ -642,8 +653,9 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <input type="text" id="gameOpponent" placeholder="Opponent name">
       <button class="btn btn-ac" onclick="newGame()">New Game</button>
     </div>
-    <div style="padding:.35rem 0 .1rem">
-      <button class="btn btn-ol" style="width:100%;font-size:.82rem;min-height:38px" onclick="openLineupOverlay()">📋 Saved Lineups</button>
+    <div style="padding:.35rem 0 .1rem;display:flex;gap:.4rem">
+      <button class="btn btn-ol" style="flex:1;font-size:.82rem;min-height:38px" onclick="openFormationOverlay()">📐 Formations</button>
+      <button class="btn btn-ol" style="flex:1;font-size:.82rem;min-height:38px" onclick="openLineupOverlay()">📋 Saved Lineups</button>
     </div>
     <div style="padding:.2rem 0 .1rem">
       <button class="btn btn-ol" style="width:100%;font-size:.82rem;min-height:38px" onclick="openRotationPlan()">📅 Rotation Plan</button>
@@ -886,6 +898,10 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <span class="hval">Tap <span class="help-badge">📅 Rotation Plan</span> to build a pre-game substitution plan. Add waves — each wave picks a target half and minute, a From lineup (or current field), and a To lineup. The diff between the two lineups determines proposed subs and position moves. When the clock reaches a wave's minute a banner appears with Review and Skip buttons. Reviewing shows proposed changes which the coach can apply or skip. The stop toggle at the top of the plan pauses all wave alerts without clearing the plan.</span>
     </div>
     <div class="help-item">
+      <span class="hkey">Formations</span>
+      <span class="hval">Tap <span class="help-badge">📐 Formations</span> on the Game tab to switch the field shape. Use a built in preset (11v11, 9v9, 7v7, 5v5, 3v3) or turn individual positions on and off, then type a name and tap Save Current to keep that shape (for example "9v9 3-3-2"). Tap Use on a saved formation to apply it. If a player is standing in a position the new formation hides, you will be asked before they go back to the bench. Formations only store which positions are shown, not players; use Saved Lineups for players. Formations are saved per team.</span>
+    </div>
+    <div class="help-item">
       <span class="hkey">Saved Lineups</span>
       <span class="hval">Tap <span class="help-badge">📋 Saved Lineups</span> below the New Game button to open the lineup manager. Set up players on the field, then type a name and tap Save Current to store the lineup. Load a saved lineup at any time to restore it — players not on the roster are skipped automatically. Lineups are saved per team.</span>
     </div>
@@ -1043,6 +1059,25 @@ nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
       <button class="btn btn-ol" style="flex:1" onclick="skipCurrentWave()">Skip</button>
       <button class="btn btn-ac" style="flex:1" onclick="confirmCurrentWave()">✓ Apply</button>
     </div>
+  </div>
+</div>
+
+<!-- FORMATION OVERLAY -->
+<div class="lineup-overlay" id="formationOverlay">
+  <div class="lineup-sheet">
+    <h2>📐 Formations</h2>
+    <div class="form-section-lbl">Presets</div>
+    <div class="form-presets" id="formPresetBtns"></div>
+    <div class="form-section-lbl">Positions on field</div>
+    <div class="form-slot-grid" id="formSlotGrid"></div>
+    <div class="form-count" id="formCount"></div>
+    <div class="form-section-lbl">My formations</div>
+    <div class="lineup-save-form">
+      <input type="text" id="formationSaveName" placeholder="Formation name (e.g. 9v9 3-3-2)" maxlength="40" onkeydown="if(event.key==='Enter')saveCurrentFormation()">
+      <button class="btn btn-ac btn-sm" onclick="saveCurrentFormation()">Save Current</button>
+    </div>
+    <div class="lineup-list" id="formationList"></div>
+    <button class="btn btn-ol" onclick="closeFormationOverlay()">Close</button>
   </div>
 </div>
 
@@ -1854,6 +1889,143 @@ function openLineupOverlay(){
 
 function closeLineupOverlay(){
   document.getElementById('lineupOverlay').classList.remove('active');
+}
+
+// ── FORMATIONS ─────────────────────────────────────────────
+// A formation is a named set of visible slot keys, saved per team.
+const PRESET_LABELS={'11v11':'11v11','9v9':'9v9','7v7':'7v7','5v5':'5v5','3v3':'3v3','all':'Show All'};
+
+function getFormations(){
+  return getTeam()?.formations || [];
+}
+
+function currentSlotSet(){
+  return SLOT_KEYS.filter(k=>slotVisible[k]);
+}
+
+function sameSlotSet(a,b){
+  if(a.length!==b.length) return false;
+  const sb=new Set(b);
+  return a.every(k=>sb.has(k));
+}
+
+function slotsDisplaced(slotKeys){
+  // Players currently standing in slots the new set would hide
+  const show=new Set(slotKeys);
+  return SLOTS.map((s,i)=>(!show.has(s.pos)&&fieldSlots[i])?fieldSlots[i]:null).filter(Boolean);
+}
+
+function applySlotSet(slotKeys,label){
+  const displaced=slotsDisplaced(slotKeys);
+  if(displaced.length){
+    const names=displaced.map(id=>roster.find(p=>p.id===id)?.name||'?').join(', ');
+    if(!confirm(`Switch to ${label}?\n\nThese players are in positions this formation hides and will go back to the bench:\n${names}`)) return false;
+  }
+  const show=new Set(slotKeys);
+  SLOT_KEYS.forEach(k=>{
+    slotVisible[k]=show.has(k);
+    localStorage.setItem('sc_slot_'+k, slotVisible[k]?'true':'false');
+  });
+  applySlotVisibility();
+  saveData();
+  renderGame();
+  SLOT_KEYS.forEach(k=>{
+    const el=document.getElementById('settingSlot_'+k);
+    if(el) el.checked=slotVisible[k];
+  });
+  return true;
+}
+
+function useFormation(formId){
+  const f=getFormations().find(x=>x.id===formId);
+  if(!f) return;
+  if(applySlotSet(f.slots,`"${f.name}"`)) renderFormationOverlay();
+}
+
+function useFormationPreset(name){
+  if(applySlotSet(PRESETS[name]||SLOT_KEYS,PRESET_LABELS[name]||name)) renderFormationOverlay();
+}
+
+function toggleFormationSlot(pos,on){
+  const next=SLOT_KEYS.filter(k=>k===pos?on:slotVisible[k]);
+  if(!applySlotSet(next,'this formation')){
+    // Cancelled: put the checkbox back
+    const cb=document.getElementById('formSlot_'+pos);
+    if(cb) cb.checked=!on;
+    return;
+  }
+  renderFormationOverlay();
+}
+
+function saveCurrentFormation(){
+  const input=document.getElementById('formationSaveName');
+  const name=input.value.trim();
+  if(!name){input.focus();return;}
+  const slots=currentSlotSet();
+  if(!slots.length){alert('Turn on at least one position first.');return;}
+  const t=getTeam();
+  if(!t.formations) t.formations=[];
+  const existing=t.formations.find(f=>f.name.toLowerCase()===name.toLowerCase());
+  if(existing){
+    if(!confirm(`Replace the saved formation "${existing.name}" with the current positions?`)) return;
+    existing.slots=slots;
+  } else {
+    t.formations.push({id:Date.now(),name,slots});
+  }
+  saveData();
+  input.value='';
+  renderFormationOverlay();
+}
+
+function deleteFormation(formId){
+  const f=getFormations().find(x=>x.id===formId);
+  if(!f) return;
+  if(!confirm(`Delete formation "${f.name}"?`)) return;
+  getTeam().formations=getFormations().filter(x=>x.id!==formId);
+  saveData();
+  renderFormationOverlay();
+}
+
+function renderFormationOverlay(){
+  const cur=currentSlotSet();
+  document.getElementById('formPresetBtns').innerHTML=Object.keys(PRESET_LABELS).map(k=>
+    `<button class="btn btn-ol btn-sm${sameSlotSet(cur,PRESETS[k])?' form-current':''}" onclick="useFormationPreset('${k}')">${PRESET_LABELS[k]}</button>`
+  ).join('');
+  document.getElementById('formSlotGrid').innerHTML=SLOT_KEYS.map(k=>{
+    const lbl=k.replace(/(\d)$/,' ($1)');
+    return `<label><input type="checkbox" id="formSlot_${k}" ${slotVisible[k]?'checked':''} onchange="toggleFormationSlot('${k}',this.checked)">${lbl}</label>`;
+  }).join('');
+  document.getElementById('formCount').textContent=`${cur.length} position${cur.length===1?'':'s'} on field`;
+  const list=document.getElementById('formationList');
+  const forms=getFormations();
+  if(!forms.length){
+    list.innerHTML='<p style="font-size:.82rem;color:var(--grd);text-align:center;padding:.5rem 0">No saved formations yet. Pick the positions above, name it, and tap Save Current.</p>';
+    return;
+  }
+  list.innerHTML=forms.map(f=>{
+    const isCur=sameSlotSet(cur,f.slots);
+    const chips=SLOT_KEYS.filter(k=>f.slots.includes(k)).map(k=>`<span class="lineup-pos-chip">${esc(slotLabel(k))}</span>`).join('');
+    return `<div class="lineup-item form-item${isCur?' form-current':''}">
+      <div class="lineup-item-header">
+        <span class="lineup-item-name">${esc(f.name)} <span style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--gr)">${f.slots.length}</span></span>
+        <div class="lineup-item-actions">
+          ${isCur?'<span style="font-size:.72rem;color:var(--ac);align-self:center">In use</span>':`<button class="btn btn-ac btn-sm" onclick="useFormation(${f.id})">Use</button>`}
+          <button class="btn btn-rd btn-sm" onclick="deleteFormation(${f.id})">✕</button>
+        </div>
+      </div>
+      <div class="lineup-positions">${chips}</div>
+    </div>`;
+  }).join('');
+}
+
+function openFormationOverlay(){
+  renderFormationOverlay();
+  document.getElementById('formationOverlay').classList.add('active');
+}
+
+function closeFormationOverlay(){
+  document.getElementById('formationOverlay').classList.remove('active');
+  document.getElementById('formationSaveName').value='';
 }
 
 function restoreStartingLineup(){
@@ -3498,6 +3670,32 @@ function testSettings(){
   document.getElementById('settingPositionNumbers').checked=usePositionNumbers;
   tpass('localStorage persistence verified');
 
+  // Formations
+  const savedVis={...slotVisible};
+  const t=getTeam();
+  const savedForms=t.formations?JSON.parse(JSON.stringify(t.formations)):undefined;
+  const savedConfirm=window.confirm;
+  window.confirm=()=>true;
+  try{
+    applySlotSet(PRESETS['7v7'],'7v7');
+    assert(sameSlotSet(currentSlotSet(),PRESETS['7v7']),'applySlotSet applies 7v7 preset');
+    document.getElementById('formationSaveName').value='__test formation';
+    saveCurrentFormation();
+    const f=getFormations().find(x=>x.name==='__test formation');
+    assert(f&&f.slots.length===7,'saveCurrentFormation stores 7 visible positions');
+    applySlotSet(PRESETS['11v11'],'11v11');
+    useFormation(f.id);
+    assert(sameSlotSet(currentSlotSet(),f.slots),'useFormation restores saved positions');
+    deleteFormation(f.id);
+    assert(!getFormations().find(x=>x.name==='__test formation'),'deleteFormation removes it');
+  } finally {
+    window.confirm=savedConfirm;
+    if(savedForms===undefined) delete t.formations; else t.formations=savedForms;
+    SLOT_KEYS.forEach(k=>{slotVisible[k]=savedVis[k];localStorage.setItem('sc_slot_'+k,savedVis[k]?'true':'false');
+      const el=document.getElementById('settingSlot_'+k); if(el) el.checked=savedVis[k];});
+    saveData();renderGame();
+  }
+
   // Score functions
   assert(typeof renderScore==='function','renderScore function exists');
   assert(typeof undoGoal==='function','undoGoal function exists');
@@ -3603,10 +3801,10 @@ function runAllTests(){
   tlog('Done. See summary below.','info');
 }
 </script>
-<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.48</div>
+<div style="position:fixed;bottom:6px;right:8px;font-family:'DM Mono',monospace;font-size:.6rem;color:#00004a;z-index:999;pointer-events:none" id="verTag">v1.0.49</div>
 <script>
 if(new URLSearchParams(window.location.search).get('devmode')==='true'){
-  document.getElementById('verTag').textContent='v1.0.48 [DEV]';
+  document.getElementById('verTag').textContent='v1.0.49 [DEV]';
   document.getElementById('verTag').style.color='#f0a030';
 }
 </script>
